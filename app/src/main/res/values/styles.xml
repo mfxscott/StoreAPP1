@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/dialog_btn</item>
+        <item name="colorPrimaryDark">@color/dialog_btn</item>
+        <item name="colorAccent">@color/dialog_btn</item>
+    </style>
+    <!--<style name="Splash_Theme" parent="@android:style/Theme.NoTitleBar">-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+    <!--</style>-->
+    <!-- 处理程序在启动出现短暂白屏-->
+    <style name="Splash_Theme" parent="@android:style/Theme.NoTitleBar">
+        <item      name="android:windowBackground">@mipmap/launch_logo</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+    <!-- 首页底部导航栏样式-->
+    <style name="sl_main_frag">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:drawablePadding">1dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingTop">0dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:background">#FFFFFF</item>
+        <item name="android:textColor">@drawable/main_tab_txcolor_selector</item>
+        <item name="android:button">@null</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!-- 加载方法stye -->
+    <style name="common_progressloading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+</resources>

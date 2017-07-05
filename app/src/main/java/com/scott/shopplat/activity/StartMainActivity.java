@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -23,13 +25,19 @@ import android.widget.TextView;
 
 import com.scott.shopplat.R;
 import com.scott.shopplat.fragment.MainFragmentActivity;
+import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.checkPermission.PermissionsActivity;
 import com.scott.shopplat.utils.checkPermission.PermissionsChecker;
+import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.httpClient.OKManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 /**
  * ***************************
@@ -41,11 +49,11 @@ import java.util.List;
  * ***************************
  */
 public class StartMainActivity extends Activity {
-    private Activity activity;
     private OKManager manager;//工具类
+
     // 所需的全部权限
     static final String[] PERMISSIONS = new String[]{
-            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.READ_PHONE_STATE
     };
     private PermissionsChecker mPermissionsChecker; // 权限检测器
     private static final int REQUEST_CODE = 0; // 请求码
@@ -57,6 +65,8 @@ public class StartMainActivity extends Activity {
     private TextView  countTv;
     private ImageView  addLogoIv;
     private RelativeLayout addLoglLin;
+    private Activity activity;
+    private Handler hand;
     /**
      * 图片资源id
      */
@@ -80,6 +90,7 @@ public class StartMainActivity extends Activity {
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
         setContentView(R.layout.activity_main);
+        activity = this;
         mPermissionsChecker = new PermissionsChecker(this);
         activity =this;
         mc = new MyCountDownTimer(3000, 1000);
@@ -96,6 +107,27 @@ public class StartMainActivity extends Activity {
         initView();
     }
     private void initView(){
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1000:
+
+                        break;
+                    case AppClient.UPDATEVER:
+                        Map<String,String> map = (Map<String, String>) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(map.get("verUrl")+"==");
+                        break;
+                    case AppClient.ERRORCODE:
+                        String errormsg = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+                        break;
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
+        LauncherHttp();
+//        RequestReqMsgData.UpdateVersion(activity,hand);
         logoIv = (ImageView) findViewById(R.id.start_logo_iv);
         guideLinlay = (LinearLayout) findViewById(R.id.start_guide_linlay);
 
@@ -105,7 +137,6 @@ public class StartMainActivity extends Activity {
         countTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
                 startActivity(intent);
                 mc.cancel();
@@ -150,7 +181,7 @@ public class StartMainActivity extends Activity {
                         public void onClick(View v) {
                             guideLinlay.setVisibility(View.GONE);
                             addLoglLin.setVisibility(View.VISIBLE);
-                            mc = new MyCountDownTimer(5000, 1000);
+                            mc = new MyCountDownTimer(2000, 1000);
                             mc.start();
 //                            Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
 //                            startActivity(intent);
@@ -208,7 +239,7 @@ public class StartMainActivity extends Activity {
                 else{
                     guideLinlay.setVisibility(View.GONE);
                     addLoglLin.setVisibility(View.VISIBLE);
-                    mc = new MyCountDownTimer(5000, 1000);
+                    mc = new MyCountDownTimer(3000, 1000);
                     mc.start();
                 }
             }else{
@@ -230,5 +261,31 @@ public class StartMainActivity extends Activity {
             System.exit(0);
         }
         return true;
+    }
+    public void LauncherHttp(){
+        RequestBody requestBody = new FormBody.Builder()
+//                .add("mobile", mobile)
+//                .add("vcode", codeStr)
+//                .add("registerType", "0")//0=手机,1=微信,2=QQ
+//                .add("password", psdStr)
+//                .add("tag","64")
+                .build();
+        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.APP_LAUNCH, new OKManager.Func4() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("启动图发送成功返回参数=======",jsonObject.toString());
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = "";
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
     }
 }

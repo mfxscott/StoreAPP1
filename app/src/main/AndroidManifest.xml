@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.scott.shopplat">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- 高德地图权限 -->
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+     
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <!-- 要求设备有摄像头 -->
+    <!-- <uses-permission android:name="android.permission.CAMERA"/> -->
+    <!-- <uses-permission android:name="android.permission.FLASHLIGHT"/> -->
+    <!-- <uses-permission android:name="android.permission.VIBRATE"/> -->
+    <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
+    <!-- <uses-feature android:name="android.hardware.camera"/> -->
+    <!-- <uses-feature android:name="android.hardware.camera.autofocus"/> -->
+    <application
+        android:name=".activity.MyApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Splash_Theme"
+        tools:replace="android:icon, android:theme,android:label">
+
+        <!-- 高德地图key -->
+        <meta-data
+            android:name="com.scott.shopplat"
+            android:value="79da2bfea04745404bb35c171de99291"/>
+        <!--<service android:name="com.amap.api.location.APSService"></service>-->
+
+
+
+        <activity android:name=".activity.StartMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".fragment.MainFragmentActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".fragment.CommonWebViewMainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".utils.checkPermission.PermissionsActivity">
+        </activity>
+        <activity android:name=".activity.member.Regis1Activity">
+        </activity>
+        <activity
+            android:name=".activity.member.LoginCodeActivity"
+            android:label="@string/title_activity_login">
+        </activity>
+        <activity
+            android:name=".activity.member.LoginNameActivity"
+            android:label="@string/title_activity_login_name">
+        </activity>
+        <activity
+            android:name=".activity.member.ForGetPsdActivity"
+            android:label="@string/title_activity_for_get_psd">
+        </activity>
+        <activity android:name=".activity.member.StoreMapActivity">
+        </activity>
+    </application>
+
+</manifest>
