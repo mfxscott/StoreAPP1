@@ -47,10 +47,12 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     private TextView registRuleTv;//注册条款
     private Activity activity;
     private Handler   hand;
+    private String Tag; //64 个人 32 商户判断用户商户还是个人注册
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regis1);
+        Tag = this.getIntent().getStringExtra("registRole");
         activity = this;
         initView();
 
@@ -129,12 +131,18 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                 switch (msg.what) {
                     case 1000:
                         if(LoginNameActivity.activity != null)
-                        LoginNameActivity.activity.finish();
+                            LoginNameActivity.activity.finish();
                         if(LoginCodeActivity.activity != null)
-                        LoginCodeActivity.activity.finish();
+                            LoginCodeActivity.activity.finish();
                         SXUtils.getInstance(activity).ToastCenter("注册成功"+"");
-                        Intent intent = new Intent(activity,LoginNameActivity.class);
-                        startActivity(intent);
+
+                        if(Tag.equals("64")){
+                            Intent intent = new Intent(activity,LoginNameActivity.class);
+                            startActivity(intent);
+                        }else {
+                            Intent aa = new Intent(activity, StoreMapActivity.class);
+                            activity.startActivity(aa);
+                        }
                         finish();
                         break;
                     //验证码发送成功
@@ -175,7 +183,7 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                 mobilestr = registInputPhoneEdt.getText().toString();
                 if(!TextUtils.isEmpty(mobilestr) && mobilestr.length() == 11 && mobilestr.substring(0,1).equals("1")){
                     SXUtils.showMyProgressDialog(activity,true);
-                   SXUtils.getInstance(activity).getCodeMsgHttp(activity,mobilestr,"2",hand);
+                    SXUtils.getInstance(activity).getCodeMsgHttp(activity,mobilestr,"2",hand);
                 }
                 else{
                     SXUtils.getInstance(activity).ToastCenter("输入手机格式不正确");
@@ -224,13 +232,15 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
         }
     }
     public void RegistHttp(String mobile,String psdStr,String codeStr){
+
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobile", mobile)
                 .add("vcode", codeStr)
                 .add("registerType", "0")//0=手机,1=微信,2=QQ
                 .add("password", psdStr)
-                .add("tag","64")
+                .add("tag",Tag)
                 .build();
+        Logs.i("注册请求字段===","=="+mobile+"=="+codeStr+"==="+psdStr+"===="+Tag);
         new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_REGIST, new OKManager.Func4() {
             @Override
             public void onResponse(Object jsonObject) {

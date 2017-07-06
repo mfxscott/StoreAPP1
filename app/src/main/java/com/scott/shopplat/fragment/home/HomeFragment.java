@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.member.LoginNameActivity;
+import com.scott.shopplat.activity.member.StoreMapActivity;
 import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
@@ -135,6 +136,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         switch (v.getId()) {
             case R.id.home_goweb_btn:
                 MainFragmentActivity.getInstance().setBadge(false,1);
+
+
+
+                Intent aa = new Intent(activity, StoreMapActivity.class);
+                activity.startActivity(aa);
                 break;
             case R.id.home_gopay_btn:
 

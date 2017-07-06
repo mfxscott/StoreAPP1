@@ -1,12 +1,12 @@
 package com.scott.shopplat.activity.member;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.BaseActivity;
 
-public class StoreMapActivity extends Activity implements View.OnClickListener{
+public class StoreMapActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +19,8 @@ public class StoreMapActivity extends Activity implements View.OnClickListener{
      * 初始化AMap对象
      */
     private void init() {
+        registerBack();
+        setTitle(getString(R.string.check_store_str));
     }
 
     /**

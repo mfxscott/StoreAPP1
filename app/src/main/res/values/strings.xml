@@ -31,6 +31,8 @@
     <string name="save_str">保存</string>
     <string name="psd_two_error">新密码两次输入不一致</string>
 
+    <string name="check_store_str">选择门店</string>
+    <string name="comfirm_str">确定</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>

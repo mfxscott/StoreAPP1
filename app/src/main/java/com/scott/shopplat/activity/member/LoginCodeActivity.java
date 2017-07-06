@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -122,7 +123,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
                         break;
                 }
-                SXUtils.DialogDismiss();
+//                SXUtils.DialogDismiss();
                 return true;
             }
         });
@@ -137,9 +138,14 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                 codeLoginHttp(mobilestr,codestr);
                 break;
             case R.id.login_getcode_tv:
-                 mobilestr = loginInputPhoneEdt.getText().toString();
-                SXUtils.showMyProgressDialog(activity,true);
-                SXUtils.getInstance(activity).getCodeMsgHttp(activity,mobilestr,"1",hand);
+                mobilestr = loginInputPhoneEdt.getText().toString();
+                if(!TextUtils.isEmpty(mobilestr) && mobilestr.length() == 11 && mobilestr.substring(0,1).equals("1")){
+                    SXUtils.showMyProgressDialog(activity,true);
+                    SXUtils.getInstance(activity).getCodeMsgHttp(activity,mobilestr,"1",hand);
+                }
+                else{
+                    SXUtils.getInstance(activity).ToastCenter("输入手机格式不正确");
+                }
                 break;
             case R.id.login_use_psd_login_tv:
                 Intent intent = new Intent(LoginCodeActivity.this, LoginNameActivity.class);
@@ -147,7 +153,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                 finish();
                 break;
             case R.id.all_title_right:
-                Intent regist = new Intent(LoginCodeActivity.this, Regis1Activity.class);
+                Intent regist = new Intent(LoginCodeActivity.this, RegistCheckActivity.class);
                 startActivity(regist);
                 break;
         }
@@ -199,10 +205,9 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                 Logs.i("code登录发送成功返回参数=======",jsonObject.toString());
                 try {
                     JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
-                    JSONObject jso = jsonObject1.getJSONObject("responseData");
-                    AppClient.USER_ID = jso.getString("uid");
-                    AppClient.USER_SESSION = jso.getString("sid");
-                    AppClient.TAG = jso.getString("tag");
+                    AppClient.USER_ID = jsonObject1.getString("uid");
+                    AppClient.USER_SESSION = jsonObject1.getString("sid");
+                    AppClient.TAG = jsonObject1.getString("tag");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

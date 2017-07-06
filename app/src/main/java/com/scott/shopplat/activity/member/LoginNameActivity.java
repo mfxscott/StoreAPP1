@@ -55,7 +55,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
         TextView  titleRight = (TextView) findViewById(R.id.all_title_right);
         titleRight.setText(getString(R.string.regist_str));
         titleRight.setVisibility(View.VISIBLE);
-        titleRight.setTextColor(getColor(R.color.qblue));
+        titleRight.setTextColor(getResources().getColor(R.color.qblue));
         titleRight.setOnClickListener(this);
 
 
@@ -132,7 +132,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                 startActivity(forget);
                 break;
             case R.id.all_title_right:
-                Intent regist = new Intent(LoginNameActivity.this, Regis1Activity.class);
+                Intent regist = new Intent(LoginNameActivity.this, RegistCheckActivity.class);
                 startActivity(regist);
                 break;
         }
@@ -162,10 +162,9 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                 Logs.i("密码登录发送成功返回参数=======",jsonObject.toString());
                 try {
                     JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
-                      JSONObject jso = jsonObject1.getJSONObject("responseData");
-                    AppClient.USER_ID = jso.getString("uid");
-                    AppClient.USER_SESSION = jso.getString("sid");
-                    AppClient.TAG = jso.getString("tag");
+                    AppClient.USER_ID = jsonObject1.getString("uid");
+                    AppClient.USER_SESSION = jsonObject1.getString("sid");
+                    AppClient.TAG = jsonObject1.getString("tag");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

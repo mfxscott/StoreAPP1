@@ -58,7 +58,6 @@ public class MainFragmentActivity extends FragmentActivity {
     //    public  static boolean isShow=true;//判断是否主页打开过
     private String gesturePhone;//获取用户登录手机号用于判断是否使用手势密码登录
     public static BadgeView badge1;
-     private String isMy = "2";//2 为登录状态为摊主，1 为个人用户
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -207,19 +206,20 @@ public class MainFragmentActivity extends FragmentActivity {
                 }
                 addFragmentToStack(goodsFrag);
             } else if (myRb.getId() == checkedId) {
-                if(isMy.equals("1")){
-                    if (myFrag == null) {
-                        myFrag = new MyFragment();
-                        transaction.add(R.id.content, myFrag);
-                    }
-                    addFragmentToStack(myFrag);
-                }else if(isMy.equals("2")){
+//                if(AppClient.TAG.equals("32")){
+//                    if (myFrag == null) {
+//                        myFrag = new MyFragment();
+//                        transaction.add(R.id.content, myFrag);
+//                    }
+//                    addFragmentToStack(myFrag);
+//                }else
+//                    if(AppClient.TAG.equals("64")){
                     if (storeFrag == null) {
                         storeFrag = new StoreMyFragment();
                         transaction.add(R.id.content, storeFrag);
                     }
                     addFragmentToStack(storeFrag);
-                }
+//                }
 
             }else if(carRb.getId() == checkedId){
                 if (carFrag == null) {

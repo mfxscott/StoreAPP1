@@ -132,9 +132,7 @@ public class SXUtils {
      * @param isBack  true可按返回取消
      */
     public static void showMyProgressDialog(Activity activity,boolean isBack) {
-        params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         inflater = LayoutInflater.from(activity);
         View v = inflater.inflate(R.layout.common_loading, null);// 得到加载view
         RelativeLayout layout = (RelativeLayout) v.findViewById(R.id.progressdialog_view);// 加载布局
@@ -142,6 +140,7 @@ public class SXUtils {
         tipTextView.setText("");// 设置加载信息
         dialog = new Dialog(activity, R.style.common_progressloading_dialog);// 创建自定义样式dialog
         dialog.setCancelable(isBack);// 不可以用“返回键”取消
+        dialog.setCanceledOnTouchOutside(false);
         dialog.setContentView(layout, params);// 设置布局
         if (dialog != null && !dialog.isShowing()) {
             dialog.show();
