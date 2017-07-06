@@ -3,11 +3,14 @@ package com.scott.shopplat.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
@@ -392,4 +395,61 @@ public class SXUtils {
             }
         });
     }
+    /**
+     * 公共fragment 跳转
+     *
+     * @param fm       FragmentManager
+     * @param fragment 跳转fragment
+     * @param tag      标签
+     * @param bundle   传递数据
+     */
+    public  void CommonFragment(FragmentManager fm, Fragment fragment, String tag, Bundle bundle) {
+        if (bundle != null)
+            fragment.setArguments(bundle);
+        if (fm != null) {
+            fm.beginTransaction()
+                    .add(R.id.my_content, fragment, tag)
+                    .addToBackStack(null).commit();
+//            utils.addFragmentTag(tag);
+        }
+    }
+    /**
+     * 已经是最后一个fragmentgetSupportFragmentManager()或者getFragmentManager()
+     * 具体要看你add to back stack 是用哪个
+     * fragmeng 返回一级级返回
+     * @param
+     * @param activity
+     * @author mfx
+     */
+    public  void FragmentGoBack(Activity activity) {
+        int num = activity.getFragmentManager().getBackStackEntryCount();
+        //实名认证成功
+        Fragment realAuthfinsh = activity.getFragmentManager().findFragmentByTag("realAuthfinsh");
+        //上传银行成功
+        Fragment uploadCardimgfinish = activity.getFragmentManager().findFragmentByTag("realNameUploadFinish");
+        //支付成功点击返回关闭所有回到个人中心
+        Fragment payresult = activity.getFragmentManager().findFragmentByTag("payresult");
+
+//添加银行卡成功
+        Fragment addbanksuc = activity.getFragmentManager().findFragmentByTag("addbankcardsucceed");
+
+        Fragment realauthone = activity.getFragmentManager().findFragmentByTag("real1");
+        Fragment realauthTwo = activity.getFragmentManager().findFragmentByTag("realAuthTwo");
+        Fragment realNameBindCard = activity.getFragmentManager().findFragmentByTag("realNameBindCard");
+        Fragment uploadcard = activity.getFragmentManager().findFragmentByTag("uploadcard");
+
+        if(realauthTwo != null || realauthone!= null ||realNameBindCard != null || uploadcard != null){
+            activity.finish();
+            return;
+        }
+        //等于1为第一个界面
+        if (num == 1) {
+            activity.finish();
+        } else {
+            activity.getFragmentManager().popBackStack();
+        }
+//        }
+
+    }
+
 }

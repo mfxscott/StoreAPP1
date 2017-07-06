@@ -123,7 +123,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
                         break;
                 }
-//                SXUtils.DialogDismiss();
+                SXUtils.DialogDismiss();
                 return true;
             }
         });

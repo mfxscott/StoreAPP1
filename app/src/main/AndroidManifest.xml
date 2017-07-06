@@ -74,6 +74,21 @@
         </activity>
         <activity android:name=".activity.member.RegistCheckActivity">
         </activity>
+        <activity android:name=".fragment.my.store.AccManageActivity"/>
+        <activity
+            android:name=".fragment.my.store.AccInfoActivity"
+            android:label="@string/title_activity_acc_info">
+        </activity>
+        <activity android:name=".fragment.my.store.AccSecurityActivity">
+        </activity>
+        <activity android:name=".fragment.my.store.MessageActivity">
+        </activity>
+        <activity
+            android:name=".fragment.my.store.MyWalletActivity"
+            android:label="@string/title_activity_my_wallet">
+        </activity>
+        <activity android:name=".fragment.my.store.TopUpActivity">
+        </activity>
     </application>
 
 </manifest>

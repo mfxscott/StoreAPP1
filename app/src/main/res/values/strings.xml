@@ -47,4 +47,6 @@
     </string>
     <string name="title_activity_login_name">LoginNameActivity</string>
     <string name="title_activity_for_get_psd">ForGetPsdActivity</string>
+    <string name="title_activity_acc_info">AccInfoActivity</string>
+    <string name="title_activity_my_wallet">MyWalletActivity</string>
 </resources>

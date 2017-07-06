@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
              */
 
             //Glide 加载图片简单用法
-            Glide.with(context).load(path).into(imageView);
+            Glide.with(context).load(path).placeholder(R.mipmap.ic_launcher).error(R.mipmap.default_head).into(imageView);
 
             //Picasso 加载图片简单用法
 //            Picasso.with(context).load(path).into(imageView);

@@ -8,12 +8,16 @@
     <color name="sblue">#015F2B</color>
     <color name="qblue">#389333</color>
     <color name="orange">#F29200</color>
+    <color name="qorange">#EEC900</color>
+
     <color name="btn_gray">#E1E1E1</color>
     <color name="app_bg">#F5F5F5</color>
     <color name="col_hint">#CBCBCB</color>
     <color name="title_black">#656565</color>
     <color name="col_333">#333333</color>
     <color name="col_999">#999999</color>
+
+    <color name="col_888">#888888</color>
     <!-- 灰色 -->
     <color name="white">#FFFFFF</color>
     <!-- 白色 -->
@@ -30,6 +34,7 @@
     <color name="dialog_btn">#006ace</color>
     <!-- 红色 -->
     <color name="red">#FF0000</color>
+    <color name="qred">#FF4D4D</color>
     <!-- 暗绿色 -->
     <color name="blue">#32508d</color>
 </resources>

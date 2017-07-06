@@ -58,7 +58,6 @@
     </RelativeLayout>
     <View
         android:visibility="visible"
-        android:id="@+id/all_title_lin_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/line_bg" />

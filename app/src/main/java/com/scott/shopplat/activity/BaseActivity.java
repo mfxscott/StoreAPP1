@@ -1,19 +1,18 @@
 package com.scott.shopplat.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.scott.shopplat.R;
-import com.scott.shopplat.utils.httpClient.OKManager;
 
 /**
  * Created by mfx-t224 on 2017/6/29.
  */
 
-public class BaseActivity extends Activity{
+public class BaseActivity extends FragmentActivity {
     private MyApplication application;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

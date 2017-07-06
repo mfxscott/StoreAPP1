@@ -59,7 +59,7 @@ public class AppClient{
     public static String APP_SWIPER="svc.swiper";//轮播广告图
     public static String STORE_LOCATION="svc.shop.location";//查询门店地理位置
 
-
+   public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";
 
 
     public static int  fullWidth; //屏幕宽，高

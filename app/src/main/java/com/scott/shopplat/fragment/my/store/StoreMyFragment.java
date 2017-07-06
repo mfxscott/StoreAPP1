@@ -2,15 +2,20 @@ package com.scott.shopplat.fragment.my.store;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.utils.httpClient.AppClient;
+import com.scott.shopplat.utils.view.GlideRoundTransform;
 
 /**
  * 摊主或者个人登录进入我的界面
@@ -57,6 +62,21 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         return view;
     }
     private void initView(){
+        ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
+        Glide.with(activity).load(AppClient.headImg).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+//        Glide.with(activity).load("https://www.baidu.com/img/bdlogo.png").transform(new GlideRoundTransform(activity, 10)).into(headimg);
+
+//        Glide.with(activity)
+//                .load("")
+//                .placeholder(R.mipmap.ic_launcher)
+//                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                .bitmapTransform(new RoundedCornersTransformation(activity)) //使用圆形变换，还可以使用其他的变换
+//                .into(headimg);
+//
+//
+//        Glide.with(this).load("").bitmapTransform(new RoundedCornersTransformation(this, 30, 0, RoundedCornersTransformation.CornerType.BOTTOM)).crossFade(1000).into(image5);
+
         RelativeLayout rel = (RelativeLayout) view.findViewById(R.id.my_per_wallet);
         rel.setOnClickListener(this);
 
@@ -69,6 +89,10 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             perLin.setVisibility(View.GONE);
             storeLin.setVisibility(View.VISIBLE);
         }
+        TextView accTv = (TextView) view.findViewById(R.id.my_acc_mamage_tv);
+        accTv.setOnClickListener(this);
+        ImageView messageIv = (ImageView) view.findViewById(R.id.per_my_message_iv);
+        messageIv.setOnClickListener(this);
 
         myStoreMyorderRel = (RelativeLayout) view.findViewById(R.id.my_store_myorder_rel);
         myStoreWaitpayLin = (LinearLayout) view.findViewById(R.id.my_store_waitpay_lin);
@@ -98,15 +122,21 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         myStoreFwcenterLin.setOnClickListener(this);
         myStoreZxserviceLin.setOnClickListener(this);
         myStoreKffwLin.setOnClickListener(this);
-
-
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.my_per_wallet:
-
+                Intent wall = new Intent(activity,MyWalletActivity.class);
+                startActivity(wall);
+                break;
+            case R.id.my_acc_mamage_tv:
+                Intent intent = new Intent(activity,AccManageActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.per_my_message_iv:
+                Intent msg = new Intent(activity,MessageActivity.class);
+                startActivity(msg);
                 break;
         }
     }
