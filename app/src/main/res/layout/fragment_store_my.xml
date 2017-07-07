@@ -20,7 +20,7 @@
                 <ImageView
                     android:layout_alignParentRight="true"
                     android:id="@+id/per_my_message_iv"
-                    android:src="@mipmap/icon_main_message"
+                    android:src="@mipmap/my_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <LinearLayout

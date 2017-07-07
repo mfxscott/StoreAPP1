@@ -21,17 +21,17 @@
             android:layout_margin="10dp"
             android:textSize="@dimen/ac_text_size_14"
             android:textColor="@color/col_888"
-            android:paddingLeft="5dp"
             android:text="充值金额(元)"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <EditText
+            android:textSize="@dimen/ac_text_size_14"
             android:maxLength="10"
             android:digits="1234567890."
             android:inputType="number"
             android:textColorHint="@color/col_hint"
             android:textColor="@color/col_333"
-            android:padding="15dp"
+            android:padding="10dp"
             android:hint="请输入充值金额"
             android:background="@drawable/white_round_shap"
             android:layout_width="match_parent"
@@ -100,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
+            android:visibility="gone"
             android:id="@+id/topup_zfb_check_img"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -133,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/topup_yhk_check_img"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"

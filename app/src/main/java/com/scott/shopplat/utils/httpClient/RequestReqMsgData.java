@@ -67,7 +67,7 @@ public class RequestReqMsgData {
             //随机数
             headMsgJson.put("reqsn",getReqsn());// "98d8b2e92be8c8fe640ef291c4fa843e305358e4f0652955b4dd9a5b5bfddef1"
             //交易时间
-            headMsgJson.put("trandatetime", GetNowDateTime());
+            headMsgJson.put("trandatetime", SXUtils.getInstance(context).GetNowDateTime());
             //渠道标示 007 移动端 005 PC端
             headMsgJson.put("tranchannel", "007");
             //交易名称
@@ -115,7 +115,7 @@ public class RequestReqMsgData {
             //随机数
             headMsgJson.put("X-Method",serviceCodeEnum);// "98d8b2e92be8c8fe640ef291c4fa843e305358e4f0652955b4dd9a5b5bfddef1"
             //
-            headMsgJson.put("X-Timestamp", GetNowDateTime());
+            headMsgJson.put("X-Timestamp", SXUtils.getInstance(context).GetNowDateTime());
             //签名值（动态设值，获取方法 EBT.sign 见第2节）
 //            try {
 //                headMsgJson.put("X-Sign",MD5Utils.encrypt("123"));
@@ -245,14 +245,7 @@ public class RequestReqMsgData {
         }
         return rspno;
     }
-    /**
-     * 获取系统时间
-     * @return
-     */
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static String GetNowDateTime() {
-        return sdf.format(new Date());
-    }
+
 
     /**
      * 获取版本号

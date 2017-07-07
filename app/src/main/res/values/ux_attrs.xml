@@ -22,5 +22,12 @@
         <attr name="activeRadius" format="dimension" />
     </declare-styleable>
 
-
+    <!-- 下拉刷新-->
+    <declare-styleable name="SwipyRefreshLayout">
+        <attr name="direction">
+            <enum name="top" value="0" />
+            <enum name="bottom" value="1" />
+            <enum name="both" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

@@ -34,6 +34,9 @@ import com.scott.shopplat.utils.httpClient.OKManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -451,5 +454,12 @@ public class SXUtils {
 //        }
 
     }
-
+    /**
+     * 获取系统时间
+     * @return
+     */
+    private  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public  String GetNowDateTime() {
+        return sdf.format(new Date());
+    }
 }

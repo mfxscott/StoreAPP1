@@ -22,7 +22,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.scott.shopplat.utils.httpClient.RequestReqMsgData.GetNowDateTime;
 import static com.scott.shopplat.utils.httpClient.RequestReqMsgData.getReqsn;
 
 /**
@@ -103,7 +102,7 @@ public class OKManager {
 //        headMsgJson.put("X-Nonce",getReqsn());
                 .addHeader("X-App-Key","xianhao365")
                 .addHeader("X-Method",rspMsgName)
-                .addHeader("X-Timestamp", GetNowDateTime())
+                .addHeader("X-Timestamp", SXUtils.getInstance(activity).GetNowDateTime())
                 .addHeader("X-Version","1.0")
                 .addHeader("X-User-ID", TextUtils.isEmpty(AppClient.USER_ID) ? "" : AppClient.USER_ID)
                 .addHeader("X-User-Session",TextUtils.isEmpty(AppClient.USER_SESSION) ? "" : AppClient.USER_SESSION)

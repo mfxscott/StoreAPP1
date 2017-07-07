@@ -46,5 +46,6 @@ public class BaseActivity extends FragmentActivity {
         super.onDestroy();
 //        OKManager.cancelTag(this);//取消以Activity.this作为tag的请求
     }
+
 //    }
 }

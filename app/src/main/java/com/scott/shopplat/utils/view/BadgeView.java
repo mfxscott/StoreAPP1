@@ -186,7 +186,7 @@ public class BadgeView extends AppCompatTextView {
     /**
      * Make the badge visible in the UI.
      *
-     * @param animate flag to apply the default fade-in animation.
+     * @param animate flag to apply the default_res fade-in animation.
      */
     public void show(boolean animate) {
         show(animate, fadeIn);
@@ -211,7 +211,7 @@ public class BadgeView extends AppCompatTextView {
     /**
      * Make the badge non-visible in the UI.
      *
-     * @param animate flag to apply the default fade-out animation.
+     * @param animate flag to apply the default_res fade-out animation.
      */
     public void hide(boolean animate) {
         hide(animate, fadeOut);
@@ -236,7 +236,7 @@ public class BadgeView extends AppCompatTextView {
     /**
      * Toggle the badge visibility in the UI.
      *
-     * @param animate flag to apply the default fade-in/out animation.
+     * @param animate flag to apply the default_res fade-in/out animation.
      */
     public void toggle(boolean animate) {
         toggle(animate, fadeIn, fadeOut);
