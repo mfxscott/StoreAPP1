@@ -20,8 +20,6 @@ import java.util.List;
  * ***************************
  * 首页广告
  * @author mfx
- * 深圳市优讯信息技术有限公司
- * 17/2/23 下午1:51
  * ***************************
  */
 public class BannerAdapter extends BaseAdapter {

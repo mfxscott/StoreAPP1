@@ -3,7 +3,6 @@ package com.scott.shopplat.fragment.home;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,21 +10,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.androidkun.xtablayout.XTabLayout;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
-import com.scott.shopplat.activity.member.LoginNameActivity;
-import com.scott.shopplat.activity.member.StoreMapActivity;
+import com.scott.shopplat.adapter.HomeGridViewAdapter;
 import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.httpClient.OKManager;
+import com.scott.shopplat.utils.view.MyGridView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -37,7 +38,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -60,6 +63,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private Button mainGopayBtn;
     private Banner channelBanner ,banner;
     private RelativeLayout searchRel,searchRels;
+    private MyGridView gridView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +77,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         int height = bannerLin.getMeasuredHeight();
         Logs.i("==========","========="+height);
         return view;
+    }
+    /**
+     * 首页九宫格
+     * @return
+     */
+    private List<Map<String,String>> getGrideData(){
+        List<Map<String,String>> list = new ArrayList<>();
+
+        for(int i=0;i<4;i++){
+            Map<String,String>  map = new HashMap<>();
+              switch (i){
+                  case 0:
+                      map.put("name","开始购买");
+                      map.put("imageUrl","http://pic.qiantucdn.com/58pic/11/72/82/37I58PICgk5.jpg");
+                      break;
+                  case 1:
+                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                      map.put("name","常购清单");
+                      break;
+                  case 2:
+                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                      map.put("name","我的红包");
+                      break;
+                  case 3:
+                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                      map.put("name","我的订单");
+                      break;
+              }
+            map.put("state",""+i);
+            list.add(map);
+        }
+        return list;
     }
     /**
      * 轮播图
@@ -133,51 +169,93 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     }
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.home_goweb_btn:
-                MainFragmentActivity.getInstance().setBadge(false,1);
-
-
-
-                Intent aa = new Intent(activity, StoreMapActivity.class);
-                activity.startActivity(aa);
-                break;
-            case R.id.home_gopay_btn:
-
-                Intent intent = new Intent(activity, LoginNameActivity.class);
-                activity.startActivity(intent);
-                //购物车远点加减
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-                break;
-            case R.id.home_scan_btn:
-
-               int h =  bannerLin.getHeight();
-                int hh = mainGowebBtn.getHeight();
-                //scrollview 滚动指定位置
-                scro.scrollTo(0, h+hh);
-
-//                Intent intent = new Intent(activity, Regis1Activity.class);
+//        switch (v.getId()) {
+//            case R.id.home_goweb_btn:
+//                MainFragmentActivity.getInstance().setBadge(false,1);
+//                Intent aa = new Intent(activity, StoreMapActivity.class);
+//                activity.startActivity(aa);
+//                break;
+//            case R.id.home_gopay_btn:
+//
+//                Intent intent = new Intent(activity, LoginNameActivity.class);
 //                activity.startActivity(intent);
-                break;
-        }
+//                //购物车远点加减
+////                MainFragmentActivity.getInstance().setBadge(true,1);
+//                break;
+//            case R.id.home_scan_btn:
+//
+//                int h =  bannerLin.getHeight();
+//                int hh = mainGowebBtn.getHeight();
+//                //scrollview 滚动指定位置
+//                scro.scrollTo(0, h+hh);
+//
+////                Intent intent = new Intent(activity, Regis1Activity.class);
+////                activity.startActivity(intent);
+//                break;
+//        }
+    }
+    private void initViewPager() {
+        XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
+//        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.addTab(tabLayout.newTab().setText("未使用"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 5"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 6"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 7"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 8"));
+        tabLayout.addTab(tabLayout.newTab().setText("Tab 9"));
+        tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(XTabLayout.Tab tab) {
+                Logs.i("tab===============111111="+ tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(XTabLayout.Tab tab) {
+                Logs.i("tab===============222222222="+ tab.getPosition());
+            }
+
+            @Override
+            public void onTabReselected(XTabLayout.Tab tab) {
+                Logs.i("tab===============3333333333="+ tab.getPosition());
+            }
+        });
+
     }
     private void initView(View view) {
         setBanner();
         setChannel();
+        initViewPager();
+        gridView = (MyGridView) view.findViewById(R.id.main_gridv);
+        gridView.setAdapter(new HomeGridViewAdapter(activity,getGrideData()));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SXUtils.getInstance(activity).ToastCenter("=="+position);
+            }
+        });
+
         searchRel = (RelativeLayout) view.findViewById(R.id.main_search_rel);
         searchRels = (RelativeLayout) view.findViewById(R.id.main_search_rels);
 
 
-        mainGowebBtn = (Button) view.findViewById(R.id.home_goweb_btn);
 
-        mainGowebBtn.setOnClickListener(this);
+
         scro = (ObservableScrollView) view.findViewById(R.id.main_scroll_view);
         scro.setScrollViewListener(this);
 
         bannerLin = (RelativeLayout) view.findViewById(R.id.main_banner_lin);
 
-        scanBtn = (Button) view.findViewById(R.id.home_scan_btn);
-        scanBtn.setOnClickListener(this);
+
+//        mainGowebBtn = (Button) view.findViewById(R.id.home_goweb_btn);
+//        mainGowebBtn.setOnClickListener(this);
+//        scanBtn = (Button) view.findViewById(R.id.home_scan_btn);
+//        scanBtn.setOnClickListener(this);
+////        RequestReqMsgData.UpdateVersion(manager, activity, hand);
+//        mainGopayBtn = (Button) view.findViewById(R.id.home_gopay_btn);
+//        mainGopayBtn.setOnClickListener(this);
+
+
+
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -194,10 +272,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 return true;
             }
         });
-//        RequestReqMsgData.UpdateVersion(manager, activity, hand);
-        mainGopayBtn = (Button) view.findViewById(R.id.home_gopay_btn);
-        mainGopayBtn.setOnClickListener(this);
     }
+
+
+
     private void setBanner(){
         banner = (Banner) view.findViewById(R.id.banner);
         List<String> images = new ArrayList<String>();

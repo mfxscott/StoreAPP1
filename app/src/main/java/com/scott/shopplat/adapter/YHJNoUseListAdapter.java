@@ -17,8 +17,6 @@ import java.util.ArrayList;
  * ***************************
  * 优惠券未使用
  * @author mfx
- * 深圳市优讯信息技术有限公司
- * 16/10/26 下午1:57
  * ***************************
  */
 public class YHJNoUseListAdapter extends BaseAdapter {

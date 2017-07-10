@@ -46,6 +46,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.MainFragmentActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>

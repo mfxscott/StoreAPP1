@@ -9,7 +9,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -40,7 +40,7 @@ import com.scott.shopplat.utils.view.BadgeView;
  * 深圳市优讯信息技术有限公司
  * ***************************
  */
-public class MainFragmentActivity extends FragmentActivity {
+public class MainFragmentActivity extends AppCompatActivity {
     public static RadioButton homeRb, goodsRb, billRb,carRb,myRb;
     private RadioGroup radioGroup;
     public FragmentManager fragmentManager;
@@ -62,6 +62,7 @@ public class MainFragmentActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_fragment);
+
 //        isShow = false;
 //        //透明状态栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -69,7 +70,7 @@ public class MainFragmentActivity extends FragmentActivity {
         //透明导航栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         init();
-        compat(this);
+//        compat(this);
     }
 
     private static final int INVALID_VAL = -1;
@@ -77,10 +78,9 @@ public class MainFragmentActivity extends FragmentActivity {
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-                activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.red));//activity.getResources().getColor(R.color.blue));
+                activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.qblue));//activity.getResources().getColor(R.color.blue));
             return;
         }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
         {
             ViewGroup contentView = (ViewGroup) activity.findViewById(android.R.id.content);
@@ -89,7 +89,7 @@ public class MainFragmentActivity extends FragmentActivity {
             activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
             int statusBarHeight = frame.top;
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,statusBarHeight);
-            statusBarView.setBackgroundColor(activity.getResources().getColor(R.color.blue));
+            statusBarView.setBackgroundColor(activity.getResources().getColor(R.color.qblue));
             contentView.addView(statusBarView, lp);
         }
     }

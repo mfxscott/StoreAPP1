@@ -93,7 +93,6 @@ public class YHJActivity extends AppCompatActivity {
         TextView allTitleName = (TextView) findViewById(R.id.all_title_name);
         allTitleName.setText("优惠券");
 
-
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
         titles.add("未使用");
