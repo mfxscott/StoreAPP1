@@ -18,7 +18,7 @@
             android:layout_width="35dp"
             android:layout_height="35dp"/>
         <LinearLayout
-            android:padding="5dp"
+            android:padding="8dp"
             android:layout_centerVertical="true"
             android:gravity="center_horizontal"
             android:layout_marginLeft="10dp"
@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.androidkun.xtablayout.XTabLayout
+            android:visibility="gone"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:id="@+id/goods_xTablayout"
@@ -102,13 +103,13 @@
                     />
             </LinearLayout>
             <LinearLayout
+                android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@color/btn_gray"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-                <GridView
+                <android.support.v7.widget.RecyclerView
                     android:scrollbars="none"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"

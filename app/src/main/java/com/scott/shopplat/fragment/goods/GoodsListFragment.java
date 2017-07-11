@@ -3,6 +3,9 @@ package com.scott.shopplat.fragment.goods;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +15,10 @@ import android.widget.GridView;
 import com.androidkun.xtablayout.XTabLayout;
 import com.scott.shopplat.R;
 import com.scott.shopplat.adapter.MainGoodsTypeAdapter;
-import com.scott.shopplat.adapter.MainTypeInfoAdapter;
+import com.scott.shopplat.adapter.TypeInfoRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.entity.MainGoodsTypeEntity;
 import com.scott.shopplat.utils.Logs;
-import com.scott.shopplat.utils.SXUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ public class GoodsListFragment extends Fragment {
     private  View view;
     private Activity activity;
     private GridView typeGridView;
-    private GridView infoGridView;
+    private RecyclerView recyclerView;
     private  MainGoodsTypeAdapter  typeAdapter;
 
     @Override
@@ -118,15 +120,21 @@ public class GoodsListFragment extends Fragment {
                 typeAdapter.changeSelected(position);//刷新
             }
         });
+        recyclerView = (RecyclerView) view.findViewById(R.id.main_goods_info_gridv);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        final TypeInfoRecyclerViewAdapter simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),getTypeInfoData());
+        recyclerView.setAdapter(simpAdapter);
 
-        infoGridView = (GridView) view.findViewById(R.id.main_goods_info_gridv);
-        infoGridView.setAdapter(new MainTypeInfoAdapter(activity,getTypeInfoData()));
-        infoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SXUtils.getInstance(activity).ToastCenter("=="+position);
-            }
-        });
+
+//        infoGridView = (GridView) view.findViewById(R.id.main_goods_info_gridv);
+//        infoGridView.setAdapter(new MainTypeInfoAdapter(activity,getTypeInfoData()));
+//        infoGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                SXUtils.getInstance(activity).ToastCenter("=="+position);
+//            }
+//        });
 
     }
     private void initViewPager() {

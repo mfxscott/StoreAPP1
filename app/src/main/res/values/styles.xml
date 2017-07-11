@@ -65,4 +65,10 @@
         <!-- 背景透明度-->
         <item name="android:backgroundDimAmount">0.0</item>
     </style>
+
+    <style name="MyCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+    <item name="android:button">@drawable/check_box_type_info</item>
+    <item name="android:paddingRight">25.0dip</item>
+    <item name="android:maxHeight">10.0dip</item>
+    </style>
 </resources>

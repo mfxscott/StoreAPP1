@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout
-        android:background="@drawable/white_gray_selector"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <LinearLayout
         android:padding="10dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView
+            android:id="@+id/type_info_item_iv"
             android:layout_gravity="center_vertical"
             android:src="@mipmap/main_service_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="@dimen/goods_img_size"
+            android:layout_height="@dimen/goods_img_size"/>
         <LinearLayout
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -25,12 +30,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/type_info_item_name"
                     android:textColor="@color/col_333"
                     android:textSize="@dimen/ac_text_size_14"
                     android:text="新鲜上市的菠菜"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:id="@+id/type_info_select_mode"
+                    android:padding="5dp"
                     android:textColor="@color/qblue"
                     android:textSize="@dimen/ac_text_size_12"
                     android:text="选规格"
@@ -78,6 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <ImageView
+                    android:id="@+id/type_info_add"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/add_img"
@@ -133,8 +142,10 @@
 
             </LinearLayout>
             <CheckBox
+                android:id="@+id/type_info_check1"
+                android:background="@drawable/check_box_type_info"
                 android:layout_alignParentRight="true"
-                android:button="@drawable/check_box_type_info"
+                android:button="@null"
                 android:checked="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -176,9 +187,11 @@
 
             </LinearLayout>
             <CheckBox
+                android:id="@+id/type_info_check2"
+                android:background="@drawable/check_box_type_info"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:button="@drawable/check_box_type_info"
+                android:button="@null"
                 android:checked="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -188,5 +201,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
+    </LinearLayout>
     </LinearLayout>
 </LinearLayout>
