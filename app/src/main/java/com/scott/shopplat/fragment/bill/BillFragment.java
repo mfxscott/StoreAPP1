@@ -2,6 +2,7 @@ package com.scott.shopplat.fragment.bill;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,9 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.SearchActivity;
 import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.utils.Logs;
@@ -81,6 +84,14 @@ public class BillFragment extends Fragment {
         return typeList;
     }
     private void init(){
+        LinearLayout searchlin = (LinearLayout) view.findViewById(R.id.bill_search_liny);
+        searchlin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         recyclerView = (RecyclerView) view.findViewById(R.id.main_bill_gridv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));

@@ -66,8 +66,8 @@ public class MainFragmentActivity extends AppCompatActivity {
 //        isShow = false;
 //        //透明状态栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        SXUtils.getInstance().setSysStatusBar(this);
-        //透明导航栏
+//        SXUtils.getInstance(this).setSysStatusBar(this);
+//        透明导航栏
 //        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         init();
 //        compat(this);

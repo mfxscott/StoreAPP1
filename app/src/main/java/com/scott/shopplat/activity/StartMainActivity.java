@@ -89,6 +89,17 @@ public class StartMainActivity extends Activity {
             window.setStatusBarColor(Color.TRANSPARENT);
             window.setNavigationBarColor(Color.TRANSPARENT);
         }
+        else {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//
+//            }
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            //全屏
+//        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+//                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        }
+
         setContentView(R.layout.activity_main);
         activity = this;
         mPermissionsChecker = new PermissionsChecker(this);

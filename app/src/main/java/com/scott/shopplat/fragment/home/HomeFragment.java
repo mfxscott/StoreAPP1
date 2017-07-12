@@ -222,8 +222,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
     }
     private void initView(View view) {
-        setBanner();
-        setChannel();
+
         initViewPager();
         gridView = (MyGridView) view.findViewById(R.id.main_gridv);
         gridView.setAdapter(new HomeGridViewAdapter(activity,getGrideData()));
@@ -272,6 +271,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 return true;
             }
         });
+        setBanner();
+        setChannel();
     }
 
 

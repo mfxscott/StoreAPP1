@@ -94,6 +94,10 @@
         <activity
             android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.yhj.YHJActivity">
+    </activity>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".activity.SearchActivity">
         </activity>
     </application>
 
