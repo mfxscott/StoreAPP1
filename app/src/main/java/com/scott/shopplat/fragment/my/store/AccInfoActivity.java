@@ -22,10 +22,10 @@ public class AccInfoActivity extends BaseActivity {
     private void initView(){
         registerBack();
         setTitle("账户信息");
+
         ImageView headimg = (ImageView) findViewById(R.id.acc_info_headimg);
         Glide.with(activity).load(AppClient.headImg).placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
-
     }
 
 }
