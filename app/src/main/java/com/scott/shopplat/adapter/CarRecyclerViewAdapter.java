@@ -33,11 +33,12 @@ public  class CarRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<GoodsInfoEntity> mValues;
-    //false 为默认隐藏编辑选择按钮
+    public List<GoodsInfoEntity> mValues;
     public boolean showCheckb = false;
     private Context context;
     private Map<String,Boolean>  map = new HashMap<String ,Boolean>();
+    public int total=0;//统计选择总条数
+    private TextView numTv;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,11 +59,12 @@ public  class CarRecyclerViewAdapter
             return super.toString() + " '" + nameTv.getText();
         }
     }
-    public CarRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
+    public CarRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items, TextView numTv) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
         this.context = context;
+        this.numTv = numTv;
     }
 
     @Override
@@ -90,11 +92,7 @@ public  class CarRecyclerViewAdapter
 ////                removeData(position);
 //            }
 //        });
-        if(showCheckb){
-            holder.checkbox.setVisibility(View.VISIBLE);
-        }else{
-            holder.checkbox.setVisibility(View.GONE);
-        }
+        holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(map.get(position+""));
         getKeyValue();
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -104,17 +102,20 @@ public  class CarRecyclerViewAdapter
 //                if(map.containsKey(""+position)){
 //                    map.remove(""+position);
 //                }else{
+                SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter(position+"=="+mValues.get(position).getGoodsname());
                 map.put(position+"",isChecked);
 //                }
 
-//                if(isChecked){
-//                    SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter("true==="+position);
-//
-//
-//
-//                }else{
-//                    SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter("false==="+position);
-//                }
+                if(isChecked){
+                    if(mValues.size() != total){
+                        total++;
+                    }
+                }else{
+                    if(total != 0){
+                        total--;
+                    }
+                }
+                numTv.setText("已选"+total+"项");
             }
         });
         Glide.with(holder.mImageView.getContext())
@@ -141,38 +142,49 @@ public  class CarRecyclerViewAdapter
         while(iter.hasNext()){
             String key=iter.next();
             Boolean value = map.get(key);
-            Logs.i(key+"========================"+value);
+//            Logs.i(key+"========================"+value);
         }
     }
     //  删除数据
-    public void removeData(int position) {
+    public void removeData() {
+        int i=0;
         Iterator<String> iter = map.keySet().iterator();
         while(iter.hasNext()){
             String key=iter.next();
             Boolean value = map.get(key);
+            i++;
             if(value){
+
+
                 int postions = Integer.parseInt(key);
-                mValues.remove(postions);
-                notifyItemRemoved(postions);
+                Logs.i(mValues.size()+"删除的key是多少====","==="+postions+"====="+i++);
+//                if(i!=0)
+//                    postions= postions-1;
+
+                map.remove(postions);
+                mValues.remove(mValues.size() == i ?i -1:i);
+//                notifyItemRemoved(postions);
+//                notifyItemRangeChanged(postions, mValues.size());
             }
             System.out.println(key+" "+value);
         }
+        map.clear();
+        initDate();
         notifyDataSetChanged();
 
+    }
+    //  删除数据
+    public void removeAllData() {
 
+        for(int i=0;i<mValues.size();i++){
+            map.remove(i);
+            mValues.remove(i);
+            notifyItemRemoved(i);
+        }
+        map.clear();
+        initDate();
+        notifyDataSetChanged();
 
-
-//
-//        Iterator keys = map.keySet().iterator();
-//        while(keys.hasNext()){
-//            String key = (String)keys.next();
-//            int postions = Integer.parseInt(key);
-//            mValues.remove(postions);
-//            notifyItemRemoved(postions);
-//        }
-////      mValues.remove(position);
-//        notifyDataSetChanged();
-//        map.clear();
     }
 
     /**
@@ -183,6 +195,8 @@ public  class CarRecyclerViewAdapter
 //            if(!map.containsKey(""+i))
             map.put(""+i,true);
         }
+        total =mValues.size();
+        numTv.setText("已选"+total+"项");
         notifyDataSetChanged();
     }
     /**
@@ -192,6 +206,10 @@ public  class CarRecyclerViewAdapter
         for (int i = 0; i < mValues.size(); i++) {
             map.put(""+i,false);
         }
+        total = 0;
+        numTv.setText("已选"+total+"项");
+        Logs.i("size大小============"+mValues.size());
         notifyDataSetChanged();
+
     }
 }

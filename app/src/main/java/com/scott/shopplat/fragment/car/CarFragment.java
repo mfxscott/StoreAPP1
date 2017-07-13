@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scott.shopplat.R;
@@ -46,8 +47,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private CarRecyclerViewAdapter simpAdapter;
     private TextView payDelBtn;//购买删除按钮
     private LinearLayout delNumLin;
-    private TextView   delNumTv;
+    public TextView   delNumTv;//显示选择条目
     private CheckBox allCheckBox;
+    private RelativeLayout  allYhRel;//购物车优惠显示布局
+    private  List<GoodsInfoEntity> carlist;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,7 +68,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
      */
     private List<GoodsInfoEntity> getTypeInfoData()
     {
-        List<GoodsInfoEntity> typeList=new ArrayList<>();
+        carlist=new ArrayList<>();
         for(int i=0;i<10;i++){
             GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
@@ -84,12 +87,14 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 
             }
             type.setGoodsname("我是商品标题"+i);
-            typeList.add(type);
+            carlist.add(type);
 
         }
-        return typeList;
+        return carlist;
     }
     private void init(){
+        allYhRel = (RelativeLayout) view.findViewById(R.id.car_all_yh_rel);
+
         editDelTv = (TextView) view.findViewById(R.id.car_edit_del);
         editDelTv.setOnClickListener(this);
 
@@ -114,7 +119,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         recyclerView = (RecyclerView) view.findViewById(R.id.main_car_recyclerv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        simpAdapter = new CarRecyclerViewAdapter(getActivity(),getTypeInfoData());
+        simpAdapter = new CarRecyclerViewAdapter(getActivity(),getTypeInfoData(),delNumTv);
         simpAdapter.initDate();
         recyclerView.setAdapter(simpAdapter);
 
@@ -144,12 +149,14 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.car_edit_del:
                 if(simpAdapter.showCheckb){
+                    allYhRel.setVisibility(View.VISIBLE);
                     delNumLin.setVisibility(View.GONE);
                     payDelBtn.setText("结算");
                     editDelTv.setText("编辑");
                     simpAdapter.showCheckb = false;
                     simpAdapter.notifyDataSetChanged();
                 }else{
+                    allYhRel.setVisibility(View.GONE);
                     delNumLin.setVisibility(View.VISIBLE);
                     editDelTv.setText("完成");
                     payDelBtn.setText("删除");
@@ -158,7 +165,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.car_pay_del_btn:
-                simpAdapter.removeData(0);
+                simpAdapter.removeAllData();
                 break;
         }
 
