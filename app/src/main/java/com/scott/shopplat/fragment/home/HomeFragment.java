@@ -3,6 +3,7 @@ package com.scott.shopplat.fragment.home;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.androidkun.xtablayout.XTabLayout;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.member.StoreMapActivity;
 import com.scott.shopplat.adapter.HomeGridViewAdapter;
 import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
@@ -230,6 +232,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 SXUtils.getInstance(activity).ToastCenter("=="+position);
+                Intent inte = new Intent(activity, StoreMapActivity.class);
+                startActivity(inte);
             }
         });
 

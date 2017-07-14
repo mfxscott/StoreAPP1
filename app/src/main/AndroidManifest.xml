@@ -12,10 +12,19 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <!-- 高德地图权限 -->
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
      
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <!-- 要求设备有摄像头 -->
     <!-- <uses-permission android:name="android.permission.CAMERA"/> -->
@@ -31,11 +40,10 @@
         android:supportsRtl="true"
         android:theme="@style/Splash_Theme"
         tools:replace="android:icon, android:theme,android:label">
-
-        <!-- 高德地图key -->
         <meta-data
-            android:name="com.scott.shopplat"
-            android:value="79da2bfea04745404bb35c171de99291"/>
+            android:name="com.amap.api.v2.apikey"
+            android:value="3c411d4c119dbbac86b528317ea3d3fe" />
+        <!-- 高德地图key -->
         <!-- <service android:name="com.amap.api.location.APSService"></service> -->
 
         <activity android:name=".activity.StartMainActivity">

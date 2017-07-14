@@ -104,6 +104,7 @@ public class StartMainActivity extends Activity {
         activity = this;
         mPermissionsChecker = new PermissionsChecker(this);
         activity =this;
+        //启动页面倒计时
         mc = new MyCountDownTimer(3000, 1000);
         mc.start();
 //        // 缺少权限时, 进入权限配置页面
@@ -192,6 +193,7 @@ public class StartMainActivity extends Activity {
                         public void onClick(View v) {
                             guideLinlay.setVisibility(View.GONE);
                             addLoglLin.setVisibility(View.VISIBLE);
+                            //广告显示倒计时
                             mc = new MyCountDownTimer(2000, 1000);
                             mc.start();
 //                            Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);

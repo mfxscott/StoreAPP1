@@ -154,8 +154,6 @@ public  class CarRecyclerViewAdapter
             Boolean value = map.get(key);
             i++;
             if(value){
-
-
                 int postions = Integer.parseInt(key);
                 Logs.i(mValues.size()+"删除的key是多少====","==="+postions+"====="+i++);
 //                if(i!=0)
@@ -171,11 +169,9 @@ public  class CarRecyclerViewAdapter
         map.clear();
         initDate();
         notifyDataSetChanged();
-
     }
     //  删除数据
     public void removeAllData() {
-
         for(int i=0;i<mValues.size();i++){
             map.remove(i);
             mValues.remove(i);
