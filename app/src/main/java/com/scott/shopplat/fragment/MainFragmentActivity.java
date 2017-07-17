@@ -58,6 +58,7 @@ public class MainFragmentActivity extends AppCompatActivity {
     //    public  static boolean isShow=true;//判断是否主页打开过
     private String gesturePhone;//获取用户登录手机号用于判断是否使用手势密码登录
     public static BadgeView badge1;
+    public static int totalCarNum=0;//所有购物车数量
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,19 +153,26 @@ public class MainFragmentActivity extends AppCompatActivity {
      * @param strcount  增加条数
      */
     public void setBadge(boolean issub,int strcount){
-        String nowsize = badge1.getText().toString();
+//        String nowsize = badge1.getText().toString();
+
             if(issub){
-             int num= Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)+strcount;
-                if(num >= 100){
+//             int num= Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)+strcount;
+                totalCarNum = totalCarNum+strcount;
+                if(totalCarNum >= 100){
                     badge1.setText("99+");
                 }else{
-                    badge1.setText(num+"");
+                    badge1.setText(totalCarNum+"");
                 }
                 badge1.setVisibility(View.VISIBLE);
             }else{
-                int num =  Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)-strcount;
-                if(num > 0){
-                    badge1.setText(num+"");
+//                int num =  Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)-strcount;
+                totalCarNum = totalCarNum-strcount;
+                if(totalCarNum > 0){
+                    if(totalCarNum <= 99){
+                        badge1.setText(totalCarNum+"");
+                    }else{
+                        badge1.setText(99+"+");
+                    }
                 }else{
                     badge1.setText("0");
                     badge1.setVisibility(View.GONE);

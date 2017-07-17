@@ -1,6 +1,7 @@
 package com.scott.shopplat.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.entity.GoodsInfoEntity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 
@@ -39,6 +41,8 @@ public  class CarRecyclerViewAdapter
     private Map<String,Boolean>  map = new HashMap<String ,Boolean>();
     public int total=0;//统计选择总条数
     private TextView numTv;
+    private int carTotalNum=0;//点击
+
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,6 +50,9 @@ public  class CarRecyclerViewAdapter
         public final ImageView mImageView;
         public final TextView nameTv;
         public final CheckBox  checkbox;
+        public final TextView  sub;
+        public final TextView  number;
+        public final TextView  add;
 
         public ViewHolder(View view) {
             super(view);
@@ -53,6 +60,9 @@ public  class CarRecyclerViewAdapter
             mImageView = (ImageView) view.findViewById(R.id.car_item_iv);
             nameTv = (TextView) view.findViewById(R.id.car_item_name);
             checkbox = (CheckBox) view.findViewById(R.id.car_item_checkbox);
+            sub = (TextView) view.findViewById(R.id.car_item_sub_tv);
+            number = (TextView) view.findViewById(R.id.car_item_num_edt);
+            add = (TextView) view.findViewById(R.id.car_item_add_tv);
         }
         @Override
         public String toString() {
@@ -92,6 +102,8 @@ public  class CarRecyclerViewAdapter
 ////                removeData(position);
 //            }
 //        });
+
+
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(map.get(position+""));
         getKeyValue();
@@ -118,10 +130,57 @@ public  class CarRecyclerViewAdapter
                 numTv.setText("已选"+total+"项");
             }
         });
+        holder.sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carNum(false,1,holder.number);
+
+            }
+        });
+        holder.add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                carNum(true,1,holder.number);
+
+            }
+        });
         Glide.with(holder.mImageView.getContext())
                 .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
                 .fitCenter()
                 .into(holder.mImageView);
+    }
+    /**
+     * 判断是否是减，还是加入购物车
+     * @param issub  true 增加
+     * @param strcount  增加条数
+     */
+    public void carNum(boolean issub,int strcount,TextView textView){
+        String nowsize = textView.getText().toString();
+        int carTotalNum = Integer.parseInt(nowsize);
+        if(issub){
+            carTotalNum = carTotalNum+1;
+            if(carTotalNum >= 100){
+                textView.setText("99+");
+            }else{
+                textView.setText(carTotalNum+"");
+            }
+            textView.setTextColor(Color.BLACK);
+            MainFragmentActivity.getInstance().setBadge(true,1);
+        }else{
+            carTotalNum = carTotalNum-1;
+            if(carTotalNum > 0){
+                if(carTotalNum <= 99){
+                    textView.setText(carTotalNum+"");
+                }else{
+                    textView.setText("99+");
+                }
+            }else{
+                textView.setText("0");
+                textView.setTextColor(Color.TRANSPARENT);
+            }
+            if(carTotalNum >= 0)
+            MainFragmentActivity.getInstance().setBadge(false,1);
+        }
     }
     @Override
     public int getItemCount() {

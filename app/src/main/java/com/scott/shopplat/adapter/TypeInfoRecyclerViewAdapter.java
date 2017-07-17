@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +36,7 @@ public  class TypeInfoRecyclerViewAdapter
         public final ImageView mImageView;
         public final TextView modeTView;
         public final TextView mTextView;
+        public  final LinearLayout  selectLin;
 
         public ViewHolder(View view) {
             super(view);
@@ -42,6 +44,7 @@ public  class TypeInfoRecyclerViewAdapter
             mImageView = (ImageView) view.findViewById(R.id.type_info_item_iv);
             mTextView = (TextView) view.findViewById(R.id.type_info_item_name);
             modeTView = (TextView) view.findViewById(R.id.type_info_select_mode);
+            selectLin = (LinearLayout) view.findViewById(R.id.type_goods_item_gg_liny);
         }
         @Override
         public String toString() {
@@ -76,6 +79,11 @@ public  class TypeInfoRecyclerViewAdapter
         holder.modeTView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(holder.selectLin.isShown()){
+                    holder.selectLin.setVisibility(View.VISIBLE);
+                }else{
+                    holder.selectLin.setVisibility(View.GONE);
+                }
 //                removeData(position);
             }
         });

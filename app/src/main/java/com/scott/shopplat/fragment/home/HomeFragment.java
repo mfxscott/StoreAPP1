@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //                Intent intent = new Intent(activity, LoginNameActivity.class);
 //                activity.startActivity(intent);
 //                //购物车远点加减
-////                MainFragmentActivity.getInstance().setBadge(true,1);
+//                MainFragmentActivity.getInstance().setBadge(true,1);
 //                break;
 //            case R.id.home_scan_btn:
 //
