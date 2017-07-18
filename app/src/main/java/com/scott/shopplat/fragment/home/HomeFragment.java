@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +25,8 @@ import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.member.StoreMapActivity;
 import com.scott.shopplat.adapter.HomeGridViewAdapter;
+import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
+import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
@@ -66,6 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private Banner channelBanner ,banner;
     private RelativeLayout searchRel,searchRels;
     private MyGridView gridView;
+    private RecyclerView homebillRv;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -199,12 +205,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private void initViewPager() {
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
 //        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("未使用"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 5"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 6"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 7"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 8"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 9"));
+        tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
+        tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
+        tabLayout.addTab(tabLayout.newTab().setText("米面粮油"));
+        tabLayout.addTab(tabLayout.newTab().setText("水产冻货"));
+        tabLayout.addTab(tabLayout.newTab().setText("休闲酒饮"));
+        tabLayout.addTab(tabLayout.newTab().setText("面食面粉"));
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
@@ -223,7 +229,47 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         });
 
     }
+    /**
+     * 首页常用清单
+     * @return
+     */
+    private List<GoodsInfoEntity> getTypeInfoData()
+    {
+        List<GoodsInfoEntity> typeList=new ArrayList<>();
+        for(int i=0;i<10;i++){
+            GoodsInfoEntity type = new GoodsInfoEntity();
+            switch (i){
+                case 0:
+                    type.setGoodsname("dsfdf");
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                default:
+
+            }
+            type.setGoodsname("我是商品标题"+i);
+            typeList.add(type);
+
+        }
+        return typeList;
+    }
     private void initView(View view) {
+
+        homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
+
+        homebillRv.setLayoutManager(new LinearLayoutManager(homebillRv.getContext()));
+        homebillRv.setItemAnimator(new DefaultItemAnimator());
+        final SimpleStringRecyclerViewAdapter simpAdapter = new SimpleStringRecyclerViewAdapter(getActivity(),getTypeInfoData());
+        homebillRv.setAdapter(simpAdapter);
+
+
+
 
         initViewPager();
         gridView = (MyGridView) view.findViewById(R.id.main_gridv);
@@ -283,10 +329,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
     private void setBanner(){
         banner = (Banner) view.findViewById(R.id.banner);
-        List<String> images = new ArrayList<String>();
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
-        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
-        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
+//        List<String> images = new ArrayList<String>();
+//        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
+//        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
+//        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
+
+        List<Integer> images = new ArrayList<Integer>();
+        images.add(R.mipmap.banner11);
+        images.add(R.mipmap.banner33);
+        images.add(R.mipmap.banner44);
+        images.add(R.mipmap.banner55);
+        images.add(R.mipmap.banner66);
         List<String> titlestr = new ArrayList<String>();
         titlestr.add("我是第一个图片");
         titlestr.add("我是第2个图片");
@@ -314,10 +367,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 SXUtils.getInstance(activity).ToastCenter("=="+position);
             }
         });
-        List<String> images = new ArrayList<String>();
-        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
-        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
-        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
+        List<Integer> images = new ArrayList<Integer>();
+        images.add(R.mipmap.banner22);
+//        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
+//        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
+//        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
         //设置图片加载器
         channelBanner.setImageLoader(new GlideImageLoader());
         channelBanner.setBannerStyle(BannerConfig.NOT_INDICATOR);
@@ -389,20 +443,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                                 int oldx, int oldy) {
         // Log.i("TAG", "y--->" + y + "    height-->" + height);
         if (y <= 0) {
-//            textView.setBackgroundColor(Color.argb((int) 0, 227, 29, 26));//AGB由相关工具获得，或者美工提供
+//            searchRel.setBackgroundColor(Color.argb((int) y, y, y, y));//AGB由相关工具获得，或者美工提供
             searchRel.setVisibility(View.VISIBLE);
             searchRels.setVisibility(View.GONE);
         } else if (y > 0 && y <= bannerLin.getHeight()) {
             float scale = (float) y / bannerLin.getHeight();
             float alpha = (255 * scale);
             // 只是layout背景透明(仿知乎滑动效果)
-//            textView.setBackgroundColor(Color.argb((int) alpha, 227, 29, 26));
+//            searchRels.setBackgroundColor(Color.argb((int) alpha, 227, 29, 26));
             searchRel.setVisibility(View.VISIBLE);
             searchRels.setVisibility(View.GONE);
         } else {
             searchRels.setVisibility(View.VISIBLE);
             searchRel.setVisibility(View.GONE);
-//            textView.setBackroundColor(Color.argb((int) 255, 227, 29, 26));
+//            searchRels.setBackgroundColor(Color.argb((int) 255, 227, 29, 26));
         }
         Log.i("====","==========="+y);
     }
@@ -419,7 +473,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
              */
 
             //Glide 加载图片简单用法
-            Glide.with(context).load(path).placeholder(R.mipmap.ic_launcher).error(R.mipmap.default_head).into(imageView);
+            Glide.with(context).load(path).error(R.mipmap.default_head).into(imageView);
 
             //Picasso 加载图片简单用法
 //            Picasso.with(context).load(path).into(imageView);

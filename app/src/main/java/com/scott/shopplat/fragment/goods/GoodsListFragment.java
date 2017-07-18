@@ -89,17 +89,22 @@ public class GoodsListFragment extends Fragment {
             GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
                 case 0:
-                    type.setGoodsname("dsfdf");
+                    type.setGoodsname("鸡肉");
                     break;
                 case 1:
+                    type.setGoodsname("鲜蔬菜");
                     break;
                 case 2:
+                    type.setGoodsname("豆芽");
                     break;
                 case 3:
+                    type.setGoodsname("牛肉");
                     break;
                 case 4:
+                    type.setGoodsname("鸭肉");
                     break;
                 default:
+                    type.setGoodsname("西瓜");
 
             }
             typeList.add(type);
@@ -118,6 +123,7 @@ public class GoodsListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
                 typeAdapter.changeSelected(position);//刷新
+
             }
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.main_goods_info_gridv);

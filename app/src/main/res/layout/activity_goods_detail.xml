@@ -6,155 +6,29 @@
     android:orientation="vertical"
     android:background="@color/app_bg"
     >
-    <RelativeLayout
-        android:id="@+id/goods_detail_title_rel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/transparent"
-        >
-        <LinearLayout
-            android:id="@+id/all_title_goback_linlay"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_margin="10dp"
-                android:id="@+id/all_title_back_tv"
-                android:gravity="center_vertical"
-                android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:background="@mipmap/back_arrow" />
-        </LinearLayout>
-
-        <TextView
-            android:background="@mipmap/goods_detail_edit"
-            android:padding="5dp"
-            android:layout_marginRight="10dip"
-            android:layout_centerVertical="true"
-            android:id="@+id/all_title_right"
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/qblue"
-            android:textSize="16sp"
-            />
-    </RelativeLayout>
     <com.scott.shopplat.utils.ObservableScrollView
-        android:id="@+id/main_scroll_view"
+        android:id="@+id/goods_detail_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fadingEdge="none"
-        android:scrollbars="none" >
+        android:scrollbars="none"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <RelativeLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <LinearLayout
-                        android:id="@+id/goods_detail_goback_linlay"
-                        android:layout_centerVertical="true"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_margin="10dp"
-                            android:gravity="center_vertical"
-                            android:layout_alignParentLeft="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/back_arrow" />
-                    </LinearLayout>
-                </RelativeLayout>
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_marginLeft="40dp"
-                        android:layout_marginRight="40dp"
-                        android:layout_centerHorizontal="true"
-                        android:gravity="center_horizontal"
-                        android:paddingLeft="40dip"
-                        android:paddingRight="40dip"
-                        android:singleLine="true"
-                        android:ellipsize="end"
-                        android:paddingTop="10dip"
-                        android:paddingBottom="10dip"
-                        android:id="@+id/all_title_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="sdf"
-                        android:textColor="@color/title_black"
-                        android:textSize="18sp" />
-                    <LinearLayout
-                        android:background="@color/app_bg"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
 
-
-                        <LinearLayout
-                            android:padding="15dp"
-                            android:gravity="center_horizontal"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:textSize="@dimen/ac_text_size_14"
-                                android:textColor="@color/col_999"
-                                android:text="规则参数"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <View
-                                android:visibility="visible"
-                                android:layout_width="60dp"
-                                android:layout_height="1dp"
-                                android:background="@color/transparent" />
-                        </LinearLayout>
-                        <LinearLayout
-                            android:gravity="center_horizontal"
-                            android:padding="15dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <TextView
-                                android:textSize="@dimen/ac_text_size_14"
-                                android:textColor="@color/orange"
-                                android:text="规则参数"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-                            <View
-                                android:visibility="visible"
-                                android:layout_width="60dp"
-                                android:layout_height="1dp"
-                                android:background="@color/orange" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
 
             <RelativeLayout
+                android:background="@color/white"
                 android:id="@+id/goods_detail_banner_lin"
                 android:visibility="visible"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
                 <com.youth.banner.Banner
-                    android:id="@+id/banner"
-                    android:layout_width="match_parent"
+                    android:id="@+id/goods_detail_banner"
+                    android:layout_width="wrap_content"
                     android:layout_height="190dp"
                     app:delay_time="3000"
                     app:indicator_margin="5dp"
@@ -165,6 +39,12 @@
                     >
                 </com.youth.banner.Banner>
             </RelativeLayout>
+            <!-- =================商品参数=============-->
+            <LinearLayout
+                android:id="@+id/goods_detail_xxxx_lin"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <TextView
                 android:background="@color/white"
                 android:padding="10dp"
@@ -216,13 +96,13 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-               <TextView
-                   android:layout_marginLeft="5dp"
-                   android:padding="5dp"
-                   android:textColor="@color/qblue"
-                   android:text="选择规格"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"/>
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:padding="5dp"
+                    android:textColor="@color/qblue"
+                    android:text="选择规格"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
                 <LinearLayout
                     android:id="@+id/type_goods_item_gg_liny"
                     android:orientation="vertical"
@@ -367,10 +247,11 @@
 
                 <!-- 以下为商品信息布局 -->
                 <LinearLayout
+                    android:orientation="vertical"
                     android:background="@color/white"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="100dp">
                     <TextView
                         android:padding="10dp"
                         android:textSize="@dimen/ac_text_size_14"
@@ -378,16 +259,149 @@
                         android:text="商品信息"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
+                    <ImageView
+                        android:id="@+id/goods_detail_img1"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                    <ImageView
+                        android:id="@+id/goods_detail_img2"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                    <ImageView
+                        android:id="@+id/goods_detail_img3"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
+                    <ImageView
+                        android:id="@+id/goods_detail_img4"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"/>
 
                 </LinearLayout>
-
-<!-- 以下是规格参数 -->
+            </LinearLayout>
+                <!-- 以下是规格参数 -->
                 <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <TextView
+                        android:padding="10dp"
+                        android:textSize="@dimen/ac_text_size_14"
+                        android:textColor="@color/col_333"
+                        android:text="规格参数"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                    <View
+                        android:visibility="visible"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/line_bg" />
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="规格"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_888"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/col_333"
+                            android:layout_width="1dp"
+                            android:layout_height="10dp"/>
+                        <TextView
+                            android:text="袋（20斤）"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="规格"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_888"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/col_333"
+                            android:layout_width="1dp"
+                            android:layout_height="10dp"/>
+                        <TextView
+                            android:text="袋（20斤）"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <View
+                        android:visibility="visible"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/line_bg" />
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="包装"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_888"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/col_333"
+                            android:layout_width="1dp"
+                            android:layout_height="10dp"/>
+                        <TextView
+                            android:text="袋"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:padding="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="产地"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_888"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/col_333"
+                            android:layout_width="1dp"
+                            android:layout_height="10dp"/>
+                        <TextView
+                            android:text="中国"
+                            android:textSize="@dimen/ac_text_size_14"
+                            android:textColor="@color/col_333"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
 
-
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -420,10 +434,156 @@
 
 
 
+    <RelativeLayout
+        android:id="@+id/goods_detail_dis_title_rel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        >
+        <LinearLayout
+            android:id="@+id/all_title_goback_linlay"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_margin="10dp"
+                android:id="@+id/all_title_back_tv"
+                android:gravity="center_vertical"
+                android:layout_alignParentLeft="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@mipmap/back_arrow" />
+        </LinearLayout>
+
+        <TextView
+            android:background="@mipmap/goods_detail_edit"
+            android:padding="5dp"
+            android:layout_marginRight="10dip"
+            android:layout_centerVertical="true"
+            android:id="@+id/all_title_right"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/qblue"
+            android:textSize="16sp"
+            />
+    </RelativeLayout>
+
 
 
 
     <RelativeLayout
+        android:background="@color/white"
+        android:id="@+id/goods_detial_title_rel"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:id="@+id/goods_detail_goback_linlay"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="10dp"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentLeft="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@mipmap/back_arrow" />
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:paddingLeft="40dip"
+                android:paddingRight="40dip"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:paddingTop="10dip"
+                android:paddingBottom="10dip"
+                android:id="@+id/all_title_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="sdf"
+                android:textColor="@color/title_black"
+                android:textSize="18sp" />
+            <LinearLayout
+                android:background="@color/app_bg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/goods_detail_tab_xxxx_lin"
+                    android:padding="15dp"
+                    android:gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/goods_detail_tab_xxxx_tv"
+                        android:textSize="@dimen/ac_text_size_14"
+                        android:textColor="@color/orange"
+                        android:text="详细信息"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <View
+                        android:id="@+id/goods_detail_tab_xxxx_line_v"
+                        android:visibility="visible"
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:background="@color/orange" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/goods_detail_tab_ggcs_lin"
+                    android:gravity="center_horizontal"
+                    android:padding="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/goods_detail_tab_ggcs_tv"
+                        android:textSize="@dimen/ac_text_size_14"
+                        android:textColor="@color/col_999"
+                        android:text="规则参数"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <View
+                        android:id="@+id/goods_detail_tab_ggcs_line"
+                        android:visibility="visible"
+                        android:layout_width="60dp"
+                        android:layout_height="1dp"
+                        android:background="@color/transparent" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/goods_detail_bottom_rel"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:layout_width="match_parent"

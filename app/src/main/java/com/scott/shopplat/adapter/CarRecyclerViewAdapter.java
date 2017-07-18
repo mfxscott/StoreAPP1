@@ -144,10 +144,19 @@ public  class CarRecyclerViewAdapter
 
             }
         });
-        Glide.with(holder.mImageView.getContext())
-                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
-                .fitCenter()
-                .into(holder.mImageView);
+
+        if(position%2 ==0){
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_dg).into(holder.mImageView);
+        }else{
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
+
+        }
+
+
+//        Glide.with(holder.mImageView.getContext())
+//                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
+//                .fitCenter()
+//                .into(holder.mImageView);
     }
     /**
      * 判断是否是减，还是加入购物车

@@ -106,7 +106,9 @@
             android:name=".activity.SearchActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
-        <activity android:name=".activity.GoodsDetailActivity">
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".activity.GoodsDetailActivity">
         </activity>
     </application>
 

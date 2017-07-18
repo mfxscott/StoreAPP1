@@ -1,6 +1,7 @@
 package com.scott.shopplat.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.GoodsDetailActivity;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.utils.SXUtils;
 
@@ -87,11 +89,24 @@ public  class TypeInfoRecyclerViewAdapter
 //                removeData(position);
             }
         });
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+                holder.mView.getContext().startActivity(intent);
+            }
+        });
 
-        Glide.with(holder.mImageView.getContext())
-                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
-                .fitCenter()
-                .into(holder.mImageView);
+        if(position%2 ==0){
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
+        }else{
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
+        }
+
+//        Glide.with(holder.mImageView.getContext())
+//                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
+//                .fitCenter()
+//                .into(holder.mImageView);
     }
     @Override
     public int getItemCount() {

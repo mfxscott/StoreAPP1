@@ -126,10 +126,10 @@ public class BillFragment extends Fragment {
 //        tabLayout.setupWithViewPager(viewPager);
         tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
         tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 6"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 7"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 8"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 9"));
+        tabLayout.addTab(tabLayout.newTab().setText("米面粮油"));
+        tabLayout.addTab(tabLayout.newTab().setText("水产冻货"));
+        tabLayout.addTab(tabLayout.newTab().setText("休闲酒饮"));
+        tabLayout.addTab(tabLayout.newTab().setText("面食面粉"));
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {

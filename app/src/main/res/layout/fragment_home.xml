@@ -114,25 +114,27 @@
                     app:xTabIndicatorWidth="60dp"
                     app:xTabSelectedTextColor="@color/qblue"
                     app:xTabTextColor="@color/col_888"
-                    app:xTabTextSize="16sp"
-                    app:xTabSelectedTextSize="16sp"
+                    app:xTabTextSize="14sp"
+                    app:xTabSelectedTextSize="14sp"
                     app:xTabDisplayNum="5"
                     />
                 <LinearLayout
+                    android:layout_marginTop="5dp"
                     android:orientation="vertical"
                     android:background="@color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <com.scott.shopplat.utils.view.MyGridView
+                    android:layout_height="match_parent">
+                    <android.support.v7.widget.RecyclerView
+                        android:scrollbars="none"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
-                        android:id="@+id/main_bill_gridv"
-                        android:listSelector="@null"
-                        android:numColumns="4"
+                        android:id="@+id/home_list_recyclerv"
+                        android:numColumns="1"
                         android:stretchMode="columnWidth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:divider="#00000000"
+                        android:divider="@color/line_bg"
+                        android:dividerHeight="1dp"
                         />
                 </LinearLayout>
             </LinearLayout>
