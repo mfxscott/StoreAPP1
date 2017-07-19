@@ -24,21 +24,30 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:padding="15dp"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"
                 android:text="收货人"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <TextView
+            <EditText
+                android:id="@+id/edit_address_name_edt"
+                android:hint="请输入收货人"
+                android:textColorHint="@color/col_hint"
+                android:maxLength="10"
+                android:padding="5dp"
+                android:layout_marginLeft="70dp"
+                android:gravity="right"
+                android:background="@color/transparent"
                 android:layout_alignParentRight="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="okkk"
-                android:layout_width="wrap_content"
+                android:text=""
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
         <View
@@ -47,21 +56,30 @@
             android:layout_height="1dp"
             android:background="@color/line_bg" />
         <RelativeLayout
-            android:padding="15dp"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"
                 android:text="联系电话"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <TextView
+            <EditText
+                android:id="@+id/edit_address_phone_edt"
+                android:hint="请输入联系电话"
+                android:textColorHint="@color/col_hint"
+                android:maxLength="11"
+                android:padding="5dp"
+                android:layout_marginLeft="70dp"
+                android:gravity="right"
+                android:background="@color/transparent"
                 android:layout_alignParentRight="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="18682136973"
-                android:layout_width="wrap_content"
+                android:text=""
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
         <View
@@ -74,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"
                 android:text="所在区域"
@@ -109,6 +128,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"
                 android:text="街道"
@@ -140,26 +160,35 @@
             android:layout_height="1dp"
             android:background="@color/line_bg" />
         <RelativeLayout
-            android:padding="15dp"
+            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:layout_centerVertical="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"
                 android:text="详细地址"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <TextView
+            <EditText
+                android:id="@+id/edit_address_info_edt"
+                android:textColorHint="@color/col_hint"
+                android:hint="请输入详细地址"
+                android:maxLength="11"
+                android:padding="5dp"
+                android:layout_marginLeft="70dp"
+                android:gravity="right"
+                android:background="@color/transparent"
                 android:layout_alignParentRight="true"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="60栋123"
-                android:layout_width="wrap_content"
+                android:text=""
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
     </LinearLayout>
     <Button
-        android:enabled="false"
+        android:id="@+id/edit_address_save_btn"
         android:textSize="@dimen/ac_text_size_18"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"

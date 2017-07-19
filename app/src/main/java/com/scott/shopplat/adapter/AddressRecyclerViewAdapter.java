@@ -1,6 +1,8 @@
 package com.scott.shopplat.adapter;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -12,7 +14,9 @@ import android.widget.TextView;
 
 import com.scott.shopplat.R;
 import com.scott.shopplat.entity.AddressInfoEntity;
+import com.scott.shopplat.fragment.car.EditAddAddressActivity;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -26,6 +30,7 @@ public  class AddressRecyclerViewAdapter
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private List<AddressInfoEntity> mValues;
+    private Activity activity;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,6 +38,8 @@ public  class AddressRecyclerViewAdapter
         public final TextView namePhone;
         public final TextView cityStreet;
         public final CheckBox  isDefaultCb;
+        public final  TextView editTv;
+        public final  TextView  delTv;
 
         public ViewHolder(View view) {
             super(view);
@@ -40,6 +47,8 @@ public  class AddressRecyclerViewAdapter
             namePhone = (TextView) view.findViewById(R.id.address_item_name);
             cityStreet = (TextView) view.findViewById(R.id.address_item_city_street);
             isDefaultCb = (CheckBox) view.findViewById(R.id.address_item_cb);
+            editTv = (TextView) view.findViewById(R.id.address_item_edit);
+            delTv = (TextView) view.findViewById(R.id.address_item_del);
 
         }
         @Override
@@ -47,10 +56,11 @@ public  class AddressRecyclerViewAdapter
             return super.toString();
         }
     }
-    public AddressRecyclerViewAdapter(Context context, List<AddressInfoEntity> items) {
+    public AddressRecyclerViewAdapter(Activity context, List<AddressInfoEntity> items) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
+        this.activity = context;
     }
 
     @Override
@@ -62,15 +72,39 @@ public  class AddressRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        AddressInfoEntity  addrss = mValues.get(position);
-        holder.namePhone.setText(addrss.getName()+"&#160;&#160;&#160;&#160;"+addrss.getPhone());
-        holder.namePhone.setText(addrss.getCity()+addrss.getStreet());
+        final AddressInfoEntity  addrss = mValues.get(position);
+        holder.namePhone.setText(addrss.getName()+"    "+addrss.getPhone());
+        holder.cityStreet.setText(addrss.getCity()+addrss.getStreet());
         if(addrss.getIsDefault().equals("0")){
-            holder.isDefaultCb.setVisibility(View.VISIBLE);
-        }else{
-            holder.isDefaultCb.setVisibility(View.GONE);
-        }
 
+            holder.isDefaultCb.setChecked(true);
+        }else{
+            holder.isDefaultCb.setChecked(false);
+
+        }
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+        holder.delTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeData(position);
+            }
+        });
+        holder.editTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(holder.mView.getContext(), EditAddAddressActivity.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("tag","1");
+                mBundle.putSerializable("address", (Serializable) mValues.get(position));
+                intent.putExtras(mBundle);
+                holder.mView.getContext().startActivity(intent);
+            }
+        });
     }
     @Override
     public int getItemCount() {

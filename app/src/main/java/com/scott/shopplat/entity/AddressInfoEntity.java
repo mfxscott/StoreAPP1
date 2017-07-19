@@ -1,10 +1,12 @@
 package com.scott.shopplat.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by mfx-t224 on 2017/7/19.
  */
 
-public class AddressInfoEntity {
+public class AddressInfoEntity implements Serializable {
     private String  name;
     private String  id;
     private String  phone;

@@ -42,7 +42,7 @@
         <RadioButton
             android:id="@+id/main_tab_car_rb"
             style="@style/sl_main_frag"
-            android:drawableTop="@drawable/main_tab_my_selector"
+            android:drawableTop="@drawable/main_tab_car_selector"
             android:paddingTop="3dip"
             android:text="购物车"
             android:visibility="visible" />
