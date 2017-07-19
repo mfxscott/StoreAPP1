@@ -3,7 +3,6 @@ package com.scott.shopplat.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,7 +26,7 @@ import java.util.List;
  * @author mfx
  * @time  2017/7/17 15:53
  */
-public class GoodsDetailActivity extends AppCompatActivity implements ObservableScrollView.ScrollViewListener,View.OnClickListener{
+public class GoodsDetailActivity extends BaseActivity implements ObservableScrollView.ScrollViewListener,View.OnClickListener{
     private  Banner banner;
     private RelativeLayout titleRelay,disTitleRel;
     private Activity activity;
@@ -48,13 +47,19 @@ public class GoodsDetailActivity extends AppCompatActivity implements Observable
         tabXXXXLin.setOnClickListener(this);
         LinearLayout    tabGGCSLin = (LinearLayout) findViewById(R.id.goods_detail_tab_ggcs_lin);
         tabGGCSLin.setOnClickListener(this);
+        LinearLayout  backlin = (LinearLayout) findViewById(R.id.goods_detail_goback_linlay);
+        LinearLayout  disBackLin = (LinearLayout) findViewById(R.id.goods_detail_dis_goback_linlay);
+        backlin.setOnClickListener(this);
+        disBackLin.setOnClickListener(this);
+
+
         xxTv = (TextView) findViewById(R.id.goods_detail_tab_xxxx_tv);
         ggTv = (TextView) findViewById(R.id.goods_detail_tab_ggcs_tv);
         xxLine = findViewById(R.id.goods_detail_tab_xxxx_line_v);
         ggLine = findViewById(R.id.goods_detail_tab_ggcs_line);
 
 
-          scro = (ObservableScrollView) findViewById(R.id.goods_detail_scroll_view);
+        scro = (ObservableScrollView) findViewById(R.id.goods_detail_scroll_view);
         scro.setScrollViewListener(this);
         titleRelay = (RelativeLayout) findViewById(R.id.goods_detial_title_rel);
         disTitleRel = (RelativeLayout) findViewById(R.id.goods_detail_dis_title_rel);
@@ -113,7 +118,7 @@ public class GoodsDetailActivity extends AppCompatActivity implements Observable
             disTitleRel.setVisibility(View.GONE);
         }
         Logs.i(y+"============"+(xxxxlin.getHeight()+"==="+banner.getHeight()));
-        if(y >= xxxxlin.getHeight()){
+        if(y >= xxxxlin.getHeight()/2){
             xxTv.setTextColor(getResources().getColor(R.color.col_999));
             xxLine.setBackgroundResource(R.color.transparent);
             ggLine.setBackgroundResource(R.color.orange);
@@ -142,8 +147,11 @@ public class GoodsDetailActivity extends AppCompatActivity implements Observable
                 xxLine.setBackgroundResource(R.color.transparent);
                 ggLine.setBackgroundResource(R.color.orange);
                 ggTv.setTextColor(getResources().getColor(R.color.orange));
-                scro.scrollTo(0, xxxxlin.getHeight()+banner.getHeight());
+                scro.scrollTo(0, xxxxlin.getHeight());
                 Logs.i(xxxxlin.getHeight()+banner.getHeight()+"=======");
+                break;
+            case  R.id.goods_detail_goback_linlay: case  R.id.goods_detail_dis_goback_linlay:
+                finish();
                 break;
         }
     }

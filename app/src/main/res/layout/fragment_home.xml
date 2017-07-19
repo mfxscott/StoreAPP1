@@ -158,6 +158,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"/>
             <LinearLayout
+                android:id="@+id/home_search_gone_lin"
                 android:padding="5dp"
                 android:layout_centerVertical="true"
                 android:gravity="center_horizontal"
@@ -204,6 +205,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"/>
             <LinearLayout
+                android:id="@+id/home_search_lin"
                 android:padding="5dp"
                 android:layout_centerVertical="true"
                 android:gravity="center_horizontal"

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical"
+    tools:context="com.scott.shopplat.fragment.my.store.yhj.YHJActivity">
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <include layout="@layout/all_title_layout"
+            />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:scrollbars="none"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:id="@+id/address_list_recyclerv"
+                android:numColumns="1"
+                android:stretchMode="columnWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:divider="@color/line_bg"
+                android:dividerHeight="1dp"
+                />
+            <Button
+                android:enabled="false"
+                android:id="@+id/login_acc_next"
+                android:textSize="@dimen/ac_text_size_18"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="30dp"
+                android:padding="10dp"
+                android:textColor="@color/white"
+                android:text="新增"
+                android:background="@drawable/login_button_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

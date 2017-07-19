@@ -2,6 +2,7 @@ package com.scott.shopplat.fragment.car;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -165,7 +166,13 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 }
                 break;
             case R.id.car_pay_del_btn:
-                simpAdapter.removeAllData();
+                if(simpAdapter.showCheckb) {
+                    simpAdapter.removeAllData();
+
+                }else{
+                    Intent pay = new Intent(activity,GoPayActivity.class);
+                    startActivity(pay);
+                }
                 break;
         }
 

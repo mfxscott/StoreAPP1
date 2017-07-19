@@ -10,6 +10,9 @@ import com.scott.shopplat.activity.BaseActivity;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.view.GlideRoundTransform;
 
+/**
+ * 账号新鲜
+ */
 public class AccInfoActivity extends BaseActivity {
       private Activity activity;
     @Override

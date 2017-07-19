@@ -81,9 +81,11 @@ public  class TypeInfoRecyclerViewAdapter
         holder.modeTView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(holder.selectLin.isShown()){
+                if(!holder.selectLin.isShown()){
+                    holder.modeTView.setText("收起");
                     holder.selectLin.setVisibility(View.VISIBLE);
                 }else{
+                    holder.modeTView.setText("选规格");
                     holder.selectLin.setVisibility(View.GONE);
                 }
 //                removeData(position);

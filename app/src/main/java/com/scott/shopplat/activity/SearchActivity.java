@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,14 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        LinearLayout backLin = (LinearLayout) findViewById(R.id.search_goback_linlay);
+        backLin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 //        gridView = (GridView) findViewById(R.id.search_hot_mygridv);
 //        searchHotAdapter= new SearchHotAdapter(activity,getTypeInfoData());
 //        gridView.setAdapter(searchHotAdapter);

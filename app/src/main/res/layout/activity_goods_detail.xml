@@ -7,6 +7,7 @@
     android:background="@color/app_bg"
     >
     <com.scott.shopplat.utils.ObservableScrollView
+        android:layout_above="@+id/goods_detail_bottom_rel"
         android:id="@+id/goods_detail_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -251,7 +252,7 @@
                     android:background="@color/white"
                     android:layout_marginTop="10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="100dp">
+                    android:layout_height="wrap_content">
                     <TextView
                         android:padding="10dp"
                         android:textSize="@dimen/ac_text_size_14"
@@ -399,7 +400,7 @@
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="200dp">
+                        android:layout_height="20dp">
 
                     </LinearLayout>
                 </LinearLayout>
@@ -441,7 +442,7 @@
         android:background="@color/transparent"
         >
         <LinearLayout
-            android:id="@+id/all_title_goback_linlay"
+            android:id="@+id/goods_detail_dis_goback_linlay"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
@@ -520,7 +521,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="sdf"
+                android:text="新鲜蔬菜"
                 android:textColor="@color/title_black"
                 android:textSize="18sp" />
             <LinearLayout

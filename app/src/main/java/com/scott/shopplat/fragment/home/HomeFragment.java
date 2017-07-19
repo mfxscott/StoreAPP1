@@ -17,12 +17,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.SearchActivity;
 import com.scott.shopplat.activity.member.StoreMapActivity;
 import com.scott.shopplat.adapter.HomeGridViewAdapter;
 import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
@@ -177,7 +179,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     }
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
+        switch (v.getId()) {
+            case R.id.home_search_lin:case R.id.home_search_gone_lin:
+                Intent intent = new Intent(activity, SearchActivity.class);
+                startActivity(intent);
+                break;
 //            case R.id.home_goweb_btn:
 //                MainFragmentActivity.getInstance().setBadge(false,1);
 //                Intent aa = new Intent(activity, StoreMapActivity.class);
@@ -200,7 +206,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 ////                Intent intent = new Intent(activity, Regis1Activity.class);
 ////                activity.startActivity(intent);
 //                break;
-//        }
+        }
     }
     private void initViewPager() {
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
@@ -260,6 +266,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         return typeList;
     }
     private void initView(View view) {
+        LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.home_search_lin);
+        searchLin.setOnClickListener(this);
+        LinearLayout searchGoneLin = (LinearLayout) view.findViewById(R.id.home_search_gone_lin);
+        searchGoneLin.setOnClickListener(this);
+
+
 
         homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
 

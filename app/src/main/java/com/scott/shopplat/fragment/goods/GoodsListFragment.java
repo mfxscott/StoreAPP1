@@ -2,6 +2,7 @@ package com.scott.shopplat.fragment.goods;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.SearchActivity;
 import com.scott.shopplat.adapter.MainGoodsTypeAdapter;
 import com.scott.shopplat.adapter.TypeInfoRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
@@ -66,7 +69,19 @@ public class GoodsListFragment extends Fragment {
                     type.setTypeName("萝卜");
                     break;
                 case 4:
-                    type.setTypeName("菌类");
+                    type.setTypeName("豆类");
+                    break;
+                case 5:
+                    type.setTypeName("特菜");
+                    break;
+                case 6:
+                    type.setTypeName("肉类");
+                    break;
+                case 7:
+                    type.setTypeName("鱼类");
+                    break;
+                case 8:
+                    type.setTypeName("油点类");
                     break;
                 default:
                     type.setTypeName("其他");
@@ -113,6 +128,15 @@ public class GoodsListFragment extends Fragment {
         return typeList;
     }
     private void initView(){
+        LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.all_goods_search_lin);
+        searchLin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+
         initViewPager();
 
         typeGridView = (GridView) view.findViewById(R.id.main_goods_type_gridv);

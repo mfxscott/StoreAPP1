@@ -102,6 +102,7 @@
         android:layout_height="1dp"
         android:background="@color/line_bg" />
     <LinearLayout
+        android:visibility="gone"
         android:id="@+id/type_goods_item_gg_liny"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -142,14 +143,16 @@
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
-            <CheckBox
+
+
+            <ImageView
                 android:id="@+id/type_info_check1"
-                android:background="@drawable/check_box_type_info"
                 android:layout_alignParentRight="true"
-                android:button="@null"
-                android:checked="false"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/add_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
         </RelativeLayout>
         <RelativeLayout
             android:padding="10dp"
@@ -187,13 +190,11 @@
                     android:layout_height="wrap_content"/>
 
             </LinearLayout>
-            <CheckBox
+            <ImageView
                 android:id="@+id/type_info_check2"
-                android:background="@drawable/check_box_type_info"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:button="@null"
-                android:checked="false"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/add_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
