@@ -245,9 +245,7 @@ public class MainFragmentActivity extends AppCompatActivity {
         }
         return true;
     }
-
     public long firstTime = 0;
-
     public void exitSystem(Activity context) {
         long secondTime = System.currentTimeMillis();
         if (secondTime - firstTime > 800) {//如果两次按键时间间隔大于800毫秒，则不退出

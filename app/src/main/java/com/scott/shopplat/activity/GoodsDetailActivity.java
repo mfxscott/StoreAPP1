@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
-import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
+import com.scott.shopplat.utils.httpClient.AppClient;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -164,7 +164,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 startActivity(intent);
                 break;
             case R.id.goods_detail_gocar_btn:
-                MainFragmentActivity.carRb.setChecked(true);
+                AppClient.TAG4 = true;
+//                MainFragmentActivity.carRb.setChecked(true);
                 finish();
                 break;
         }
