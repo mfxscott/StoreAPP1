@@ -72,6 +72,7 @@
                 </com.youth.banner.Banner>
             </LinearLayout>
             <RelativeLayout
+                android:id="@+id/home_go_bill_rel"
                 android:padding="5dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/white_round_shap"

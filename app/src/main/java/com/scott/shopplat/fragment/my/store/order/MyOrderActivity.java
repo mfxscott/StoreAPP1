@@ -1,4 +1,4 @@
-package com.scott.shopplat.fragment.my.store.yhj;
+package com.scott.shopplat.fragment.my.store.order;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,78 +12,23 @@ import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.scott.shopplat.R;
-import com.scott.shopplat.entity.YHJEneity;
 import com.scott.shopplat.utils.Logs;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 优惠券
- * @author mfx
- * @time  2017/7/7 14:32
- */
-public class YHJActivity extends AppCompatActivity {
-    ViewPager viewPager;
-    private String yhjTag;
+
+public class MyOrderActivity extends AppCompatActivity {
+        private ViewPager viewPager;
+    private String orderTag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_yhj);
-        yhjTag = this.getIntent().getStringExtra("yhjTag");
+        setContentView(R.layout.activity_my_order);
+        orderTag = this.getIntent().getStringExtra("orderTag");
         initViewPager();
     }
-    /**
-     * 已使用数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getYSYBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
 
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("已使用");
-            map.setState("1");
-            map.setTime("201708-201708");
-            list.add(map);
-        }
-        return list;
-    }
-    /**
-     * 未使用数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("未使用");
-            map.setState("2");
-            map.setTime("201708-201708");
-            list.add(map);
-        }
-        return list;
-    }
-    /**
-     * 封装模拟银行卡数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getYGQBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("我是过期的");
-            map.setState("3");
-            map.setTime("201702-201706");
-            list.add(map);
-        }
-        return list;
-    }
     private void initViewPager() {
         LinearLayout allTitleGobackLinlay = (LinearLayout) findViewById(R.id.all_title_goback_linlay);
         allTitleGobackLinlay.setOnClickListener(new View.OnClickListener() {
@@ -93,31 +38,34 @@ public class YHJActivity extends AppCompatActivity {
             }
         });
         TextView allTitleName = (TextView) findViewById(R.id.all_title_name);
-        allTitleName.setText("优惠券");
+        allTitleName.setText("我的订单");
 
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
-        titles.add("未使用");
-        titles.add("已使用");
-        titles.add("已过期");
-        fragments.add(new NoUseFragment().newInstance(getBankData()));
-        fragments.add(new NoUseFragment().newInstance(getYSYBankData()));
-        fragments.add(new NoUseFragment().newInstance(getYGQBankData()));
+        titles.add("待支付");
+        titles.add("待发货");
+        titles.add("待收货");
+        titles.add("已完成");
+        fragments.add(new WaitPayFragment());
+        fragments.add(new WaitSendFragment());
+        fragments.add(new WaitTakeFragment());
+        fragments.add(new WaitDoneFragment());
         FragmentAdapter adatper = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
-         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.order_viewPager);
         viewPager.setAdapter(adatper);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(1);//预加载界面
         //将TabLayout和ViewPager关联起来。
-        XTabLayout tabLayout = (XTabLayout) findViewById(R.id.xTablayout);
+        XTabLayout tabLayout = (XTabLayout) findViewById(R.id.order_xtablayout);
         tabLayout.setupWithViewPager(viewPager);
-        if(Integer.parseInt(yhjTag) ==1){
+        if(Integer.parseInt(orderTag) ==1){
             viewPager.setCurrentItem(0);
-        }else if(Integer.parseInt(yhjTag) ==2){
+        }else if(Integer.parseInt(orderTag) ==2){
             viewPager.setCurrentItem(1);
-        }else if(Integer.parseInt(yhjTag) ==3){
+        }
+        else if(Integer.parseInt(orderTag) ==3){
             viewPager.setCurrentItem(2);
         }
-
+//        viewPager.setCurrentItem(1);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -125,7 +73,6 @@ public class YHJActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 Logs.i("========="+position);
-                new NoUseFragment().newInstance(getBankData());
             }
             @Override
             public void onPageScrollStateChanged(int state) {

@@ -24,12 +24,13 @@ import android.widget.Toast;
 import com.androidkun.xtablayout.XTabLayout;
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.GoodsDetailActivity;
 import com.scott.shopplat.activity.SearchActivity;
-import com.scott.shopplat.activity.member.StoreMapActivity;
 import com.scott.shopplat.adapter.HomeGridViewAdapter;
 import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.fragment.MainFragmentActivity;
+import com.scott.shopplat.fragment.my.store.order.MyOrderActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
 import com.scott.shopplat.utils.SXUtils;
@@ -97,24 +98,24 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
         for(int i=0;i<4;i++){
             Map<String,String>  map = new HashMap<>();
-              switch (i){
-                  case 0:
-                      map.put("name","开始购买");
-                      map.put("imageUrl","http://pic.qiantucdn.com/58pic/11/72/82/37I58PICgk5.jpg");
-                      break;
-                  case 1:
-                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                      map.put("name","常购清单");
-                      break;
-                  case 2:
-                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                      map.put("name","我的红包");
-                      break;
-                  case 3:
-                      map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                      map.put("name","我的订单");
-                      break;
-              }
+            switch (i){
+                case 0:
+                    map.put("name","开始购买");
+                    map.put("imageUrl","http://pic.qiantucdn.com/58pic/11/72/82/37I58PICgk5.jpg");
+                    break;
+                case 1:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","常购清单");
+                    break;
+                case 2:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","我的红包");
+                    break;
+                case 3:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","我的订单");
+                    break;
+            }
             map.put("state",""+i);
             list.add(map);
         }
@@ -183,6 +184,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             case R.id.home_search_lin:case R.id.home_search_gone_lin:
                 Intent intent = new Intent(activity, SearchActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.home_go_bill_rel:
+                MainFragmentActivity.billRb.setChecked(true);
                 break;
 //            case R.id.home_goweb_btn:
 //                MainFragmentActivity.getInstance().setBadge(false,1);
@@ -271,7 +275,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         LinearLayout searchGoneLin = (LinearLayout) view.findViewById(R.id.home_search_gone_lin);
         searchGoneLin.setOnClickListener(this);
 
-
+        RelativeLayout goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
+        goBillRel.setOnClickListener(this);
 
         homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
 
@@ -289,9 +294,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SXUtils.getInstance(activity).ToastCenter("=="+position);
-                Intent inte = new Intent(activity, StoreMapActivity.class);
-                startActivity(inte);
+                switch (position){
+                    case 0:
+                        MainFragmentActivity.goodsRb.setChecked(true);
+                        break;
+                    case 1:
+                        MainFragmentActivity.billRb.setChecked(true);
+                        break;
+                    case 2:
+                        MainFragmentActivity.myRb.setChecked(true);
+                        break;
+                    case 3:
+                        Intent order = new Intent(activity,MyOrderActivity.class);
+                        order.putExtra("orderTag","1");
+                        startActivity(order);
+                        break;
+                }
             }
         });
 
@@ -345,7 +363,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
 //        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
 //        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
-
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                startActivity(intent);
+            }
+        });
         List<Integer> images = new ArrayList<Integer>();
         images.add(R.mipmap.banner11);
         images.add(R.mipmap.banner33);
@@ -376,7 +400,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         channelBanner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-                SXUtils.getInstance(activity).ToastCenter("=="+position);
+                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                startActivity(intent);
             }
         });
         List<Integer> images = new ArrayList<Integer>();

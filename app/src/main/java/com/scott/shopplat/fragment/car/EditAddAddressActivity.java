@@ -26,7 +26,7 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
     }
     private  void initView(){
         registerBack();
-        setTitle("编辑地址");
+
         button = (Button) findViewById(R.id.edit_address_save_btn);
         button.setOnClickListener(this);
         nameEdt = (EditText) findViewById(R.id.edit_address_name_edt);
@@ -36,9 +36,11 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
             nameEdt.setText(addressInfo.getName());
             phoneEdt.setText(addressInfo.getPhone());
             infoEdt.setText(addressInfo.getStreet());
+            setTitle("编辑地址");
+        }else{
+            setTitle("新增地址");
         }
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){

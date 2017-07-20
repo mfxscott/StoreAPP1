@@ -13,26 +13,46 @@
             />
     </LinearLayout>
     <RelativeLayout
+        android:id="@+id/message_order_note_rel"
         android:layout_marginTop="10dp"
-        android:padding="15dp"
+        android:padding="10dp"
         android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:src="@mipmap/my_store_bill"
-            android:id="@+id/msg_list_order_iv"
+        <FrameLayout
+            android:id="@+id/msg_list_order_fram"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:padding="5dp"
+                android:src="@mipmap/msg_order"
+                android:id="@+id/msg_list_order_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:background="@drawable/my_msg_shap"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="2dp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/ac_text_size_12"
+                android:textStyle="bold"/>
+        </FrameLayout>
         <TextView
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/msg_list_order_iv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/msg_list_order_fram"
             android:textSize="@dimen/ac_text_size_14"
             android:textColor="@color/col_333"
             android:text="订单通知"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <LinearLayout
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -55,25 +75,45 @@
         android:layout_height="1dp"
         android:background="@color/line_bg" />
     <RelativeLayout
-        android:padding="15dp"
+        android:id="@+id/message_my_money_rel"
+        android:padding="10dp"
         android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:src="@mipmap/my_store_bill"
-            android:id="@+id/msg_list_zc_iv"
+        <FrameLayout
+            android:id="@+id/msg_list_order_zc_fram"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:padding="5dp"
+                android:src="@mipmap/msg_zc"
+                android:id="@+id/msg_list_zc_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:background="@drawable/my_msg_shap"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="2dp"
+                android:text="3"
+                android:textColor="@color/white"
+                android:textSize="@dimen/ac_text_size_12"
+                android:textStyle="bold"/>
+        </FrameLayout>
         <TextView
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/msg_list_zc_iv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/msg_list_order_zc_fram"
             android:textSize="@dimen/ac_text_size_14"
             android:textColor="@color/col_333"
             android:text="我的资产"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <LinearLayout
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -91,25 +131,44 @@
         </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
-        android:padding="15dp"
+        android:id="@+id/message_yh_ac_rel"
+        android:padding="10dp"
         android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:src="@mipmap/my_store_bill"
-            android:id="@+id/msg_list_yhcx_iv"
+        <FrameLayout
+            android:id="@+id/msg_list_order_cxhd_fram"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:padding="5dp"
+                android:src="@mipmap/msg_uhcx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="right"
+                android:background="@drawable/my_msg_shap"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="2dp"
+                android:text="12"
+                android:textColor="@color/white"
+                android:textSize="@dimen/ac_text_size_12"
+                android:textStyle="bold"/>
+        </FrameLayout>
         <TextView
             android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/msg_list_yhcx_iv"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/msg_list_order_cxhd_fram"
             android:textSize="@dimen/ac_text_size_14"
             android:textColor="@color/col_333"
             android:text="优惠促销"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <LinearLayout
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">

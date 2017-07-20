@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.GoodsDetailActivity;
 import com.scott.shopplat.entity.GoodsInfoEntity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public  class SimpleStringRecyclerViewAdapter
         public final ImageView mImageView;
         public final ImageView delImageView;
         public final TextView mTextView;
+        public final TextView addcar1,addcar2;
 
         public ViewHolder(View view) {
             super(view);
@@ -44,6 +46,8 @@ public  class SimpleStringRecyclerViewAdapter
             mImageView = (ImageView) view.findViewById(R.id.main_bill_item_iv);
             mTextView = (TextView) view.findViewById(R.id.main_bill_item_name);
             delImageView = (ImageView) view.findViewById(R.id.main_bill_item_del_iv);
+            addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
+            addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
         }
         @Override
         public String toString() {
@@ -86,7 +90,18 @@ public  class SimpleStringRecyclerViewAdapter
                     Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_whr).into(holder.mImageView);
 
                 }
-
+        holder.addcar1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
+        holder.addcar2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
 //        Glide.with(holder.mImageView.getContext())
 //                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
 //                .fitCenter()

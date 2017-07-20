@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.GoodsDetailActivity;
 import com.scott.shopplat.entity.GoodsInfoEntity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.SXUtils;
 
 import java.util.List;
@@ -39,6 +40,8 @@ public  class TypeInfoRecyclerViewAdapter
         public final TextView modeTView;
         public final TextView mTextView;
         public  final LinearLayout  selectLin;
+        public final ImageView typeadd1;
+        public final ImageView addImage,addImage2;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,6 +50,9 @@ public  class TypeInfoRecyclerViewAdapter
             mTextView = (TextView) view.findViewById(R.id.type_info_item_name);
             modeTView = (TextView) view.findViewById(R.id.type_info_select_mode);
             selectLin = (LinearLayout) view.findViewById(R.id.type_goods_item_gg_liny);
+            typeadd1 = (ImageView) view.findViewById(R.id.type_info_add);
+            addImage = (ImageView) view.findViewById(R.id.type_info_check1);
+            addImage2 = (ImageView) view.findViewById(R.id.type_info_check2);
         }
         @Override
         public String toString() {
@@ -98,7 +104,24 @@ public  class TypeInfoRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-
+        holder.typeadd1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
+        holder.addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
+        holder.addImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
         if(position%2 ==0){
             Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
         }else{

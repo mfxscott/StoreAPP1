@@ -57,11 +57,11 @@ public class MainGoodsTypeAdapter extends BaseAdapter {
             vh = (LifeViewHolder) convertView.getTag();
         }
         vh.TypeName.setText(info.getTypeName()+"");
-        if(position == 0){
-            vh.linV.setVisibility(View.VISIBLE);
-        }else{
-            vh.linV.setVisibility(View.GONE);
-        }
+//        if(position == 0){
+//            vh.linV.setVisibility(View.VISIBLE);
+//        }else{
+//            vh.linV.setVisibility(View.GONE);
+//        }
         if(mSelect==position){
             vh.rel.setBackgroundResource(R.color.app_bg);  //选中项背景
             vh.RlinV.setVisibility(View.GONE);

@@ -113,12 +113,20 @@
         <activity android:name=".fragment.car.GoPayActivity">
         </activity>
         <activity
-            android:theme="@style/Theme.DesignDemo"
-            android:name=".fragment.car.AddressListActivity">
+            android:name=".fragment.car.AddressListActivity"
+            android:theme="@style/Theme.DesignDemo">
         </activity>
         <activity
-            android:theme="@style/Theme.DesignDemo"
-            android:name=".fragment.car.EditAddAddressActivity">
+            android:name=".fragment.car.EditAddAddressActivity"
+            android:theme="@style/Theme.DesignDemo">
+        </activity>
+        <activity android:name=".activity.GoodsFeedbackActivity">
+        </activity>
+        <activity
+            android:name=".fragment.my.store.order.MyOrderActivity"
+            android:theme="@style/Theme.DesignDemo">
+        </activity>
+        <activity android:name=".fragment.my.store.order.OrderDetailActivity">
         </activity>
     </application>
 

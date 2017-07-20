@@ -2,6 +2,7 @@ package com.scott.shopplat.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.ObservableScrollView;
 import com.youth.banner.Banner;
@@ -51,6 +53,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         LinearLayout  disBackLin = (LinearLayout) findViewById(R.id.goods_detail_dis_goback_linlay);
         backlin.setOnClickListener(this);
         disBackLin.setOnClickListener(this);
+        TextView  feedback = (TextView) findViewById(R.id.goods_detail_feedback_tv);
+        feedback.setOnClickListener(this);
+        TextView  gocar = (TextView) findViewById(R.id.goods_detail_gocar_btn);
+        gocar.setOnClickListener(this);
 
 
         xxTv = (TextView) findViewById(R.id.goods_detail_tab_xxxx_tv);
@@ -153,6 +159,14 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             case  R.id.goods_detail_goback_linlay: case  R.id.goods_detail_dis_goback_linlay:
                 finish();
                 break;
+            case R.id.goods_detail_feedback_tv:
+                Intent intent = new Intent(activity,GoodsFeedbackActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.goods_detail_gocar_btn:
+                MainFragmentActivity.carRb.setChecked(true);
+                finish();
+                break;
         }
     }
 
@@ -167,7 +181,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
              切记不要胡乱强转！
              */
             //Glide 加载图片简单用法
-            Glide.with(context).load(path).placeholder(R.mipmap.ic_launcher).error(R.mipmap.default_head).into(imageView);
+            Glide.with(context).load(path).error(R.mipmap.default_head).into(imageView);
 
             //Picasso 加载图片简单用法
 //            Picasso.with(context).load(path).into(imageView);

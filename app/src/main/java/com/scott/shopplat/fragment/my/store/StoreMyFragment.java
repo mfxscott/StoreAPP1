@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.fragment.my.store.order.MyOrderActivity;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.view.GlideRoundTransform;
 
@@ -137,6 +138,26 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             case R.id.per_my_message_iv:
                 Intent msg = new Intent(activity,MessageActivity.class);
                 startActivity(msg);
+                break;
+            case R.id.my_store_myorder_rel:
+                Intent order = new Intent(activity,MyOrderActivity.class);
+                order.putExtra("orderTag","1");
+                startActivity(order);
+                break;
+            case R.id.my_store_waitpay_lin:
+                Intent payorder = new Intent(activity,MyOrderActivity.class);
+                payorder.putExtra("orderTag","1");
+                startActivity(payorder);
+                break;
+            case R.id.my_store_waitsend_lin:
+                Intent sendorder = new Intent(activity,MyOrderActivity.class);
+                sendorder.putExtra("orderTag","2");
+                startActivity(sendorder);
+                break;
+            case R.id.my_store_waitget_lin:
+                Intent getorder = new Intent(activity,MyOrderActivity.class);
+                getorder.putExtra("orderTag","3");
+                startActivity(getorder);
                 break;
         }
     }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.scott.shopplat.R;
@@ -31,6 +32,8 @@ public  class AddressRecyclerViewAdapter
     private int mBackground;
     private List<AddressInfoEntity> mValues;
     private Activity activity;
+    private int dfposiont=-1;
+    private boolean isOnclick=false;//判断只要点击过设置默认地址就不已默认字段标示为判断
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -75,13 +78,36 @@ public  class AddressRecyclerViewAdapter
         final AddressInfoEntity  addrss = mValues.get(position);
         holder.namePhone.setText(addrss.getName()+"    "+addrss.getPhone());
         holder.cityStreet.setText(addrss.getCity()+addrss.getStreet());
-        if(addrss.getIsDefault().equals("0")){
 
-            holder.isDefaultCb.setChecked(true);
-        }else{
-            holder.isDefaultCb.setChecked(false);
 
+        holder.isDefaultCb.setOnCheckedChangeListener(null);
+        if(isOnclick){
+            if (dfposiont == position) {
+                holder.isDefaultCb.setChecked(true);
+            } else {
+                holder.isDefaultCb.setChecked(false);
+            }
+        }else {
+            if (addrss.getIsDefault().equals("0")) {
+                holder.isDefaultCb.setChecked(true);
+            } else {
+                holder.isDefaultCb.setChecked(false);
+
+            }
         }
+        holder.isDefaultCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    dfposiont = position;
+                }else{
+                    dfposiont = -1;
+                }
+                isOnclick = true;
+                notifyDataSetChanged();
+            }
+        });
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

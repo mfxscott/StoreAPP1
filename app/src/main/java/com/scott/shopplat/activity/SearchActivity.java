@@ -46,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        searchHot();
 //        gridView = (GridView) findViewById(R.id.search_hot_mygridv);
 //        searchHotAdapter= new SearchHotAdapter(activity,getTypeInfoData());
 //        gridView.setAdapter(searchHotAdapter);
@@ -59,6 +59,11 @@ public class SearchActivity extends AppCompatActivity {
 //        });
 
 
+
+
+
+    }
+    private void searchHot() {
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
 
         Random random = new Random();
@@ -105,6 +110,5 @@ public class SearchActivity extends AppCompatActivity {
 
             flowLayout.addView(view);
         }
-
     }
 }

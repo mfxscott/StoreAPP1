@@ -463,7 +463,7 @@
             android:padding="5dp"
             android:layout_marginRight="10dip"
             android:layout_centerVertical="true"
-            android:id="@+id/all_title_right"
+            android:id="@+id/goods_detail_feedback_tv"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -637,7 +637,7 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/car_pay_del_btn"
+            android:id="@+id/goods_detail_gocar_btn"
             android:paddingRight="40dp"
             android:paddingLeft="40dp"
             android:paddingBottom="15dp"

@@ -31,6 +31,10 @@ public class AddressListActivity extends BaseActivity {
 
     }
     private void initView(){
+        registerBack();
+        setTitle("收货信息");
+
+
         addressRecy = (RecyclerView) findViewById(R.id.address_list_recyclerv);
 
         addressRecy.setLayoutManager(new LinearLayoutManager(addressRecy.getContext()));
@@ -53,35 +57,34 @@ public class AddressListActivity extends BaseActivity {
     }
     private List<AddressInfoEntity> getAddress(){
         List<AddressInfoEntity>  addressList = new ArrayList<>();
-        AddressInfoEntity  address;
-        for(int i =0;i<3;i++){
-            address = new AddressInfoEntity();
-            if(i ==0) {
-                address.setId("0");
-                address.setCity("广东省深圳市福田区");
-                address.setStreet("冰河大道2014");
-                address.setName("鲜好");
-                address.setPhone("123456789");
-                addressList.add(address);
-                address.setIsDefault("1");
-            }else if(i == 1) {
-                address.setId("1");
-                address.setCity("广东省深圳市罗湖区");
-                address.setStreet("冰河大道");
-                address.setName("刘");
-                address.setPhone("123456789");
-                addressList.add(address);
-                address.setIsDefault("1");
-            }else if(i==2){
-                address.setId("2");
-                address.setCity("广东省深圳市福田区");
-                address.setStreet("西乡2014");
-                address.setName("马");
-                address.setPhone("18682136973");
-                address.setIsDefault("0");
-            }
-            addressList.add(address);
-        }
+
+//        AddressInfoEntity   address = new AddressInfoEntity();
+//        address.setId("0");
+//        address.setCity("广东省深圳市福田区");
+//        address.setStreet("冰河大道2014");
+//        address.setName("鲜好");
+//        address.setPhone("123456789");
+//        addressList.add(address);
+//        address.setIsDefault("1");
+
+        AddressInfoEntity   addresss = new AddressInfoEntity();
+        addresss.setId("1");
+        addresss.setCity("广东省深圳市罗湖区");
+        addresss.setStreet("冰河大道");
+        addresss.setName("刘");
+        addresss.setPhone("123456789");
+        addresss.setIsDefault("1");
+
+        AddressInfoEntity   addressss = new AddressInfoEntity();
+        addressss.setId("2");
+        addressss.setCity("广东省深圳市福田区");
+        addressss.setStreet("西乡2014");
+        addressss.setName("马");
+        addressss.setPhone("18682136973");
+        addressss.setIsDefault("0");
+//        addressList.add(address);
+        addressList.add(addresss);
+        addressList.add(addressss);
         return addressList;
     }
 }

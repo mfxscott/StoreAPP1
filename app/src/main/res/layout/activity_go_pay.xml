@@ -62,7 +62,7 @@
     </RelativeLayout>
 
     <ScrollView
-        android:layout_above="@+id/gopay_btn"
+        android:layout_above="@+id/gopay_btn_rel"
         android:layout_below="@+id/gopay_title_lin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -470,7 +470,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/gopay_btn"
+        android:id="@+id/gopay_btn_rel"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -519,7 +519,7 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <TextView
-            android:id="@+id/car_pay_del_btn"
+            android:id="@+id/gopay_btn"
             android:paddingRight="40dp"
             android:paddingLeft="40dp"
             android:paddingBottom="15dp"

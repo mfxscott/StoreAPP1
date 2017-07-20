@@ -122,7 +122,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     private List<Map<String,String>> getBankData(){
         List<Map<String,String>> list = new ArrayList<>();
 
-        for(int i=0;i<10;i++){
+        for(int i=0;i<1;i++){
             Map<String,String>  map = new HashMap<>();
             map.put("cardNum","62262654256"+i);
             map.put("cardName","招商银行"+i);
@@ -154,11 +154,23 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         switch(v.getId()){
             case R.id.wallet_topup_btn:
                 Intent intent = new Intent(activity,TopUpActivity.class);
+                intent.putExtra("payTag","0");
+                intent.putExtra("paySum","0");
                 startActivity(intent);
                 break;
-            case R.id.wallet_yhj_rel:
+            case R.id.wallet_yhj_rel:case R.id.wallet_no_use_lin:
                 Intent yhj = new Intent(activity,YHJActivity.class);
+                yhj.putExtra("yhjTag","1");
                 startActivity(yhj);
+            case R.id.wallet_use_lin:
+                Intent yhj2 = new Intent(activity,YHJActivity.class);
+                yhj2.putExtra("yhjTag","2");
+                startActivity(yhj2);
+                break;
+            case R.id.wallet_used_lin:
+                Intent yhj3 = new Intent(activity,YHJActivity.class);
+                yhj3.putExtra("yhjTag","3");
+                startActivity(yhj3);
                 break;
             case R.id.wallet_my_bank_rel:
                 if(bankListLay.getVisibility() == View.VISIBLE){

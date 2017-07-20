@@ -13,6 +13,7 @@
 
 
     <dimen name="goods_img_size">90dp</dimen>
+    <dimen name="goods_img_info_size">70dp</dimen>
 
     <dimen name="bannel_img_h">120dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
