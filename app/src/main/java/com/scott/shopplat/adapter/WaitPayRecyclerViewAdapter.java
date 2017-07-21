@@ -89,6 +89,8 @@ public  class WaitPayRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
+                intent.putExtra("orderTag",tag+"");
+                intent.putExtra("orderId","123456");
                 holder.mView.getContext().startActivity(intent);
             }
         });
@@ -140,12 +142,12 @@ public  class WaitPayRecyclerViewAdapter
 
             }
         });
-//        holder.cancelOrder.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                SXUtils.getInstance(context).ToastCenter("取消订单");
-//            }
-//        });
+        holder.cancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SXUtils.getInstance(context).ToastCenter("取消订单");
+            }
+        });
 //        holder.rel1.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

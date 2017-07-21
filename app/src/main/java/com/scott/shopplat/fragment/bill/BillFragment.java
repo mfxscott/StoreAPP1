@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import com.androidkun.xtablayout.XTabLayout;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.SearchActivity;
-import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
+import com.scott.shopplat.adapter.HomeBillRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.httpClient.OKManager;
@@ -41,7 +41,7 @@ public class BillFragment extends Fragment {
     private Handler hand;
     private int indexPage= 1;
     private RecyclerView recyclerView;
-    private SimpleStringRecyclerViewAdapter billInfoAdapter;
+    private HomeBillRecyclerViewAdapter billInfoAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,11 +96,11 @@ public class BillFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.main_bill_gridv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final SimpleStringRecyclerViewAdapter simpAdapter = new SimpleStringRecyclerViewAdapter(getActivity(),getTypeInfoData());
+        final HomeBillRecyclerViewAdapter simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),getTypeInfoData());
         recyclerView.setAdapter(simpAdapter);
 
 //
-//        billInfoAdapter= new SimpleStringRecyclerViewAdapter(activity,getTypeInfoData());
+//        billInfoAdapter= new HomeBillRecyclerViewAdapter(activity,getTypeInfoData());
 //        gridView.setAdapter(billInfoAdapter);
 //        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

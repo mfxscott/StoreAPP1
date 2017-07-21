@@ -1,13 +1,16 @@
 package com.scott.shopplat.activity.member;
 
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -16,9 +19,11 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.BaseActivity;
+import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 
-public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationChangeListener,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener {
+public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationChangeListener,AMap.OnMapClickListener
+        ,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener {
     private MapView mapView;
     private AMap aMap;
     private TextView mLocationErrText;
@@ -33,13 +38,43 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         setContentView(R.layout.activity_store_map);
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
+
         activity = this;
+
+//        //这里以ACCESS_COARSE_LOCATION为例
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            //申请WRITE_EXTERNAL_STORAGE权限
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+//                    1000);//自定义的code
+//        }
+
         init();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(activity, "111", Toast.LENGTH_SHORT).show();
+            } else
+            {
+                // Permission Denied
+                Toast.makeText(activity, "被拒绝", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //可在此继续其他操作。
     }
     /**
      * 初始化
      */
     private void init() {
+        registerBack();
+        setTitle("选择门店");
+
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
@@ -69,6 +104,24 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         setupLocationStyle();
+
+//        mapView.setOnMapStatusChangeListener(new OnMapStatusChangeListener() {
+//
+//            @Override
+//            public void onMapStatusChangeStart(MapStatus mapStatus) {
+//
+//            }
+//
+//            @Override
+//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+//
+//            }
+//
+//            @Override
+//            public void onMapStatusChange(MapStatus mapStatus) {
+//                mMarker.setPosition(mapStatus.target);
+//            }
+//        });
     }
 
     /**
@@ -106,16 +159,16 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //                .zIndex(1.f).typeface(Typeface.DEFAULT_BOLD);
 //        aMap.addText(textOptions);
 
-
-        Marker marker = aMap.addMarker(new MarkerOptions()
-                .position(locationNow)
-                .title("当前位置")
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(R.mipmap.add_img))
-                .draggable(true));
-        marker.setRotateAngle(90);// 设置marker旋转90度
-        marker.setPositionByPixels(100, 100);
-        marker.showInfoWindow();// 设置默认显示一个infowinfow
+//
+//        Marker marker = aMap.addMarker(new MarkerOptions()
+//                .position(locationNow)
+//                .title("当前位置")
+//                .icon(BitmapDescriptorFactory
+//                        .defaultMarker(R.mipmap.add_img))
+//                .draggable(true));
+//        marker.setRotateAngle(90);// 设置marker旋转90度
+//        marker.setPositionByPixels(100, 100);
+//        marker.showInfoWindow();// 设置默认显示一个infowinfow
     }
     /**
      * 方法必须重写
@@ -180,7 +233,21 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
             Log.e("amap", "定位失败");
         }
     }
+    @Override
+    public void onMapClick(LatLng latLng) {
+//点击地图后清理图层插上图标，在将其移动到中心位置
+        aMap.clear();
+//        latitude = latLng.latitude;
+//        longitude = latLng.longitude;
+        Logs.i(latLng.latitude+"===="+latLng.longitude);
+        MarkerOptions otMarkerOptions = new MarkerOptions();
+        otMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.close));
+        otMarkerOptions.position(latLng);
+        aMap.addMarker(otMarkerOptions);
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
 
+
+    }
     @Override
     public void onMapLoaded() {
 

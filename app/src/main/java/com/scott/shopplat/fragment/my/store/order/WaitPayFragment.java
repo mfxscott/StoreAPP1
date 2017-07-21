@@ -41,7 +41,7 @@ public class WaitPayFragment extends Fragment {
     private ArrayList<GoodsInfoEntity> getBankData(){
         ArrayList<GoodsInfoEntity> list = new ArrayList<>();
 
-        for(int i=0;i<1;i++){
+        for(int i=0;i<2;i++){
             GoodsInfoEntity  info = new GoodsInfoEntity();
             info.setGoodsname("新鲜上市的西红柿");
             info.setGoodsPrice("￥10.00");

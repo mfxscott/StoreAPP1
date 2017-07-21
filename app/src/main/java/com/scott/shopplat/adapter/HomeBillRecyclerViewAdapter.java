@@ -25,8 +25,8 @@ import java.util.List;
  * @author mfx
  * @time  2017/7/11 12:24
  */
-public  class SimpleStringRecyclerViewAdapter
-        extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+public  class HomeBillRecyclerViewAdapter
+        extends RecyclerView.Adapter<HomeBillRecyclerViewAdapter.ViewHolder> {
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
@@ -54,7 +54,7 @@ public  class SimpleStringRecyclerViewAdapter
             return super.toString() + " '" + mTextView.getText();
         }
     }
-    public SimpleStringRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
+    public HomeBillRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;

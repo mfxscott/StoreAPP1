@@ -112,6 +112,7 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
         });
         registBtn = (Button) findViewById(R.id.regist_next);
         registBtn.setOnClickListener(this);
+        registBtn.setEnabled(true);//测试时放开按钮
         registSeeTv = (CheckBox) findViewById(R.id.regist_see_tv);
         registSeeTv.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -125,7 +126,6 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -174,10 +174,18 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.regist_next:
-                String codemsg = registCodeEdt.getText().toString();
-                String psdstr = registInputPsdEdt.getText().toString();
-                SXUtils.showMyProgressDialog(activity,true);
-                RegistHttp(mobilestr,psdstr,codemsg);
+                if(Tag.equals("64")){
+                    Intent intent = new Intent(activity,LoginNameActivity.class);
+                    startActivity(intent);
+                }else {
+                    Intent aa = new Intent(activity, StoreMapActivity.class);
+                    activity.startActivity(aa);
+                }
+//                String codemsg = registCodeEdt.getText().toString();
+//                String psdstr = registInputPsdEdt.getText().toString();
+//                SXUtils.showMyProgressDialog(activity,true);
+//                RegistHttp(mobilestr,psdstr,codemsg);
+
                 break;
             case R.id.regist_getcode_tv:
                 mobilestr = registInputPhoneEdt.getText().toString();
@@ -232,7 +240,6 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
         }
     }
     public void RegistHttp(String mobile,String psdStr,String codeStr){
-
         RequestBody requestBody = new FormBody.Builder()
                 .add("mobile", mobile)
                 .add("vcode", codeStr)

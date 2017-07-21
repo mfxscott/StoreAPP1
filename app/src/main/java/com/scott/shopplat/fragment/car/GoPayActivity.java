@@ -47,6 +47,7 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
                 break;
             case R.id.gopay_use_yhj_rel:
                 Intent intent = new Intent(activity, YHJActivity.class);
+                intent.putExtra("yhjTag","1");
                 startActivity(intent);
                 break;
             case R.id.gopay_btn:

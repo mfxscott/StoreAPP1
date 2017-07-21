@@ -33,7 +33,6 @@
             android:background="@color/line_bg" />
         <RelativeLayout
             android:id="@+id/order_wait_pay_rel1"
-            android:background="@drawable/white_gray_selector"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -118,7 +117,6 @@
             android:background="@color/line_bg" />
         <RelativeLayout
             android:id="@+id/order_wait_pay_rel2"
-            android:background="@drawable/white_gray_selector"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

@@ -41,9 +41,9 @@ public class WaitDoneFragment extends Fragment {
     private ArrayList<GoodsInfoEntity> getBankData(){
         ArrayList<GoodsInfoEntity> list = new ArrayList<>();
 
-        for(int i=0;i<1;i++){
+        for(int i=0;i<5;i++){
             GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsname("新鲜上市的西红柿");
+            info.setGoodsname("新鲜上市的西红柿"+i);
             info.setGoodsPrice("￥10.00");
             list.add(info);
         }

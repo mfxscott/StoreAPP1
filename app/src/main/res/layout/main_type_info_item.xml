@@ -102,7 +102,7 @@
         android:layout_height="1dp"
         android:background="@color/line_bg" />
     <LinearLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/type_goods_item_gg_liny"
         android:orientation="vertical"
         android:layout_width="match_parent"

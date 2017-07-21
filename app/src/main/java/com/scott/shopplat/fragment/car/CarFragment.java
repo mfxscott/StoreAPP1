@@ -19,8 +19,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scott.shopplat.R;
+import com.scott.shopplat.activity.member.Regis1Activity;
 import com.scott.shopplat.adapter.CarRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
+import com.scott.shopplat.fragment.CommonWebViewMainActivity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.httpClient.OKManager;
@@ -94,6 +97,9 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         return carlist;
     }
     private void init(){
+        LinearLayout lin = (LinearLayout) view.findViewById(R.id.car_go_shop_lin);
+        lin.setOnClickListener(this);
+
         allYhRel = (RelativeLayout) view.findViewById(R.id.car_all_yh_rel);
 
         editDelTv = (TextView) view.findViewById(R.id.car_edit_del);
@@ -174,6 +180,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     startActivity(pay);
                 }
                 break;
+            case R.id.car_go_shop_lin:
+                MainFragmentActivity.goodsRb.setChecked(true);
+                break;
+
         }
 
     }

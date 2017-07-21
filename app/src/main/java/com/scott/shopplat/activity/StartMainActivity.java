@@ -24,7 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scott.shopplat.R;
-import com.scott.shopplat.fragment.MainFragmentActivity;
+import com.scott.shopplat.activity.member.LoginNameActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.checkPermission.PermissionsActivity;
@@ -123,7 +123,6 @@ public class StartMainActivity extends Activity {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-
                         break;
                     case AppClient.UPDATEVER:
                         Map<String,String> map = (Map<String, String>) msg.obj;
@@ -149,8 +148,11 @@ public class StartMainActivity extends Activity {
         countTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
+//                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
+//                startActivity(intent);
+                Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
                 startActivity(intent);
+
                 mc.cancel();
                 finish();
             }
@@ -256,7 +258,9 @@ public class StartMainActivity extends Activity {
                     mc.start();
                 }
             }else{
-                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
+//                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
+//                startActivity(intent);
+                Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
+import com.scott.shopplat.fragment.CommonWebViewMainActivity;
 import com.scott.shopplat.fragment.my.store.order.MyOrderActivity;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.view.GlideRoundTransform;
@@ -158,6 +159,21 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 Intent getorder = new Intent(activity,MyOrderActivity.class);
                 getorder.putExtra("orderTag","3");
                 startActivity(getorder);
+                break;
+            case R.id.my_store_mykey_lin:
+            case R.id.my_store_cybill_lin:
+            case R.id.my_store_return_lin:
+            case R.id.my_store_new_lin:
+            case R.id.my_store_myfp_lin:
+            case R.id.my_store_help_center_rel:
+            case R.id.my_store_quesion_lin:
+            case R.id.my_store_fwcenter_lin:
+            case R.id.my_store_zxservice_lin:
+            case R.id.my_store_kffw_lin:
+                Intent mykey = new Intent(activity, CommonWebViewMainActivity.class);
+                mykey.putExtra("tag","2");
+                mykey.putExtra("postUrl","http:www.baidu.com");
+                startActivity(mykey);
                 break;
         }
     }

@@ -79,6 +79,7 @@
                     android:layout_height="wrap_content"/>
 
                 <LinearLayout
+                    android:id="@+id/car_go_shop_lin"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"

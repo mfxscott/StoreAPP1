@@ -67,7 +67,7 @@
         </RelativeLayout>
     </RelativeLayout>
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:orientation="vertical"
         android:background="@color/app_bg"
         android:layout_weight="1"

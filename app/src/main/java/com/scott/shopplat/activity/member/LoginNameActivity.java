@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.BaseActivity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.httpClient.AppClient;
@@ -48,9 +49,9 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView(){
-        registerBack();
         setTitle(getString(R.string.login_str));
         TextView backTv = (TextView) findViewById(R.id.all_title_back_tv);
+        backTv.setOnClickListener(this);
         backTv.setBackgroundResource(R.mipmap.close);
         TextView  titleRight = (TextView) findViewById(R.id.all_title_right);
         titleRight.setText(getString(R.string.regist_str));
@@ -101,6 +102,8 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                     //登录成功
                     case 1000:
                         SXUtils.getInstance(activity).ToastCenter("登录成功");
+                        Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                        startActivity(mainintent);
                         finish();
                         break;
                     case AppClient.ERRORCODE:
@@ -134,6 +137,11 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
             case R.id.all_title_right:
                 Intent regist = new Intent(LoginNameActivity.this, RegistCheckActivity.class);
                 startActivity(regist);
+                break;
+            case R.id.all_title_back_tv:
+                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                startActivity(mainintent);
+                finish();
                 break;
         }
 

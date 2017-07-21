@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.BaseActivity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.httpClient.AppClient;
@@ -57,14 +58,14 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView(){
-        registerBack();
         setTitle(getString(R.string.login_str));
         TextView backTv = (TextView) findViewById(R.id.all_title_back_tv);
+        backTv.setOnClickListener(this);
         backTv.setBackgroundResource(R.mipmap.close);
         TextView  titleRight = (TextView) findViewById(R.id.all_title_right);
         titleRight.setText(getString(R.string.regist_str));
         titleRight.setVisibility(View.VISIBLE);
-        titleRight.setTextColor(getColor(R.color.qblue));
+        titleRight.setTextColor(this.getResources().getColor(R.color.qblue));
         titleRight.setOnClickListener(this);
 
         loginInputPhoneEdt = (EditText) findViewById(R.id.login_input_phone_edt);
@@ -110,6 +111,8 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                 switch (msg.what) {
                     case 1000:
                         SXUtils.getInstance(activity).ToastCenter("登录成功");
+                        Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                        startActivity(mainintent);
                         finish();
                         break;
                     //验证码发送成功
@@ -155,6 +158,10 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
             case R.id.all_title_right:
                 Intent regist = new Intent(LoginCodeActivity.this, RegistCheckActivity.class);
                 startActivity(regist);
+                break;
+            case R.id.all_title_back_tv:
+                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                startActivity(mainintent);
                 break;
         }
 

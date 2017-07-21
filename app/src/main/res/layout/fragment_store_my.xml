@@ -413,7 +413,6 @@
 
                     <LinearLayout
                         android:background="@drawable/white_gray_selector"
-
                         android:id="@+id/my_store_mykey_lin"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

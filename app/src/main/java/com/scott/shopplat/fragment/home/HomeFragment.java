@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,8 +23,8 @@ import com.bumptech.glide.Glide;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.GoodsDetailActivity;
 import com.scott.shopplat.activity.SearchActivity;
+import com.scott.shopplat.adapter.HomeBillGridViewAdapter;
 import com.scott.shopplat.adapter.HomeGridViewAdapter;
-import com.scott.shopplat.adapter.SimpleStringRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.fragment.my.store.order.MyOrderActivity;
@@ -74,7 +71,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private Banner channelBanner ,banner;
     private RelativeLayout searchRel,searchRels;
     private MyGridView gridView;
-    private RecyclerView homebillRv;
+    private MyGridView homebillRv;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -144,7 +141,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
-                hand.sendMessage(msg);
+                if(hand != null)
+                    hand.sendMessage(msg);
                 Logs.i("服务器连接异常", "========" + strError.toString());
             }
         });
@@ -278,13 +276,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         RelativeLayout goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
         goBillRel.setOnClickListener(this);
 
-        homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
+//        homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
+//        homebillRv.setLayoutManager(new LinearLayoutManager(homebillRv.getContext()));
+//        homebillRv.setItemAnimator(new DefaultItemAnimator());
+//        final HomeBillRecyclerViewAdapter simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),getTypeInfoData());
+//        homebillRv.setAdapter(simpAdapter);
 
-        homebillRv.setLayoutManager(new LinearLayoutManager(homebillRv.getContext()));
-        homebillRv.setItemAnimator(new DefaultItemAnimator());
-        final SimpleStringRecyclerViewAdapter simpAdapter = new SimpleStringRecyclerViewAdapter(getActivity(),getTypeInfoData());
+
+        homebillRv = (MyGridView) view.findViewById(R.id.home_list_recyclerv);
+        HomeBillGridViewAdapter simpAdapter = new HomeBillGridViewAdapter(getActivity(),getTypeInfoData());
         homebillRv.setAdapter(simpAdapter);
-
+        homebillRv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
 

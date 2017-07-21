@@ -36,7 +36,6 @@ public class OKManager {
     public Activity activity;
     private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/api.do";
     //    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/rest/mobile/13800138000/type/1";
-//    private String  HttpUrl= "http://www.hunanyoufu.com/sysdweb/ESB/UXUNDBF/UXUNJFYFRONT/";
     //    private Handler handler;
     //提交json数据
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
