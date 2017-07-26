@@ -2,11 +2,9 @@ package com.scott.shopplat.activity.member;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -39,7 +37,6 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
     public static Activity activity;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +44,6 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
         activity = this;
         initView();
     }
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView(){
         setTitle(getString(R.string.login_str));
         TextView backTv = (TextView) findViewById(R.id.all_title_back_tv);

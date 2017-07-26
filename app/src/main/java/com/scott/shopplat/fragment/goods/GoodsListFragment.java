@@ -165,7 +165,6 @@ public class GoodsListFragment extends Fragment {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
 //            }
 //        });
-
     }
     private void initViewPager() {
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.goods_xTablayout);

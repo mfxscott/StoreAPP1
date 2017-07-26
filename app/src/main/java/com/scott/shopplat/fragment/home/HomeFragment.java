@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -69,9 +70,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private Button mainGowebBtn;
     private Button mainGopayBtn;
     private Banner channelBanner ,banner;
-    private RelativeLayout searchRel,searchRels;
+    private RelativeLayout searchRel;
+    private LinearLayout searchRels;
     private MyGridView gridView;
     private MyGridView homebillRv;
+    private XTabLayout scrollXtablayout;
+    private RelativeLayout goBillRel;
+    private LinearLayout channelLin,homeGridLin;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -184,6 +190,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 startActivity(intent);
                 break;
             case R.id.home_go_bill_rel:
+                //滚动到指定位置
+//                scro.scrollTo(0, bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+41);
                 MainFragmentActivity.billRb.setChecked(true);
                 break;
 //            case R.id.home_goweb_btn:
@@ -210,8 +218,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //                break;
         }
     }
-    private void initViewPager() {
-        XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
+
+    private void initViewPager( XTabLayout tabLayout) {
 //        tabLayout.setupWithViewPager(viewPager);
         tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
         tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
@@ -268,13 +276,20 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         return typeList;
     }
     private void initView(View view) {
+        scrollXtablayout = (XTabLayout) view.findViewById(R.id.main_scroll_Tablayout);
+        XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
+        initViewPager(scrollXtablayout);
+        initViewPager(tabLayout);
+
         LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.home_search_lin);
         searchLin.setOnClickListener(this);
         LinearLayout searchGoneLin = (LinearLayout) view.findViewById(R.id.home_search_gone_lin);
         searchGoneLin.setOnClickListener(this);
 
-        RelativeLayout goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
+         goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
         goBillRel.setOnClickListener(this);
+        channelLin = (LinearLayout) view.findViewById(R.id.main_channel_lin);
+        homeGridLin = (LinearLayout) view.findViewById(R.id.home_grid_lin);
 
 //        homebillRv = (RecyclerView) view.findViewById(R.id.home_list_recyclerv);
 //        homebillRv.setLayoutManager(new LinearLayoutManager(homebillRv.getContext()));
@@ -296,7 +311,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
 
 
-        initViewPager();
+
         gridView = (MyGridView) view.findViewById(R.id.main_gridv);
         gridView.setAdapter(new HomeGridViewAdapter(activity,getGrideData()));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -322,7 +337,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         });
 
         searchRel = (RelativeLayout) view.findViewById(R.id.main_search_rel);
-        searchRels = (RelativeLayout) view.findViewById(R.id.main_search_rels);
+        searchRels = (LinearLayout) view.findViewById(R.id.main_search_rels);
 
 
 
@@ -362,9 +377,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         setBanner();
         setChannel();
     }
-
-
-
     private void setBanner(){
         banner = (Banner) view.findViewById(R.id.banner);
 //        List<String> images = new ArrayList<String>();
@@ -491,14 +503,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //            searchRel.setBackgroundColor(Color.argb((int) y, y, y, y));//AGB由相关工具获得，或者美工提供
             searchRel.setVisibility(View.VISIBLE);
             searchRels.setVisibility(View.GONE);
-        } else if (y > 0 && y <= bannerLin.getHeight()) {
-            float scale = (float) y / bannerLin.getHeight();
+//            scrollXtablayout.setVisibility(View.GONE);
+            searchRel.setBackgroundColor(Color.argb((int) 0, (int) 0, (int) 0, (int) 0));
+        } else if (y > 0 && y <= bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+40) {
+            float scale = (float) y / (bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+40);
             float alpha = (255 * scale);
             // 只是layout背景透明(仿知乎滑动效果)
-//            searchRels.setBackgroundColor(Color.argb((int) alpha, 227, 29, 26));
+            searchRel.setBackgroundColor(Color.argb((int) alpha, (int) alpha, (int) alpha, (int) alpha));
             searchRel.setVisibility(View.VISIBLE);
             searchRels.setVisibility(View.GONE);
         } else {
+//            scrollXtablayout.setVisibility(View.VISIBLE);
             searchRels.setVisibility(View.VISIBLE);
             searchRel.setVisibility(View.GONE);
 //            searchRels.setBackgroundColor(Color.argb((int) 255, 227, 29, 26));

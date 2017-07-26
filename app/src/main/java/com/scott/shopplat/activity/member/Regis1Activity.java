@@ -2,12 +2,10 @@ package com.scott.shopplat.activity.member;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -169,7 +167,6 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
         });
     }
     String mobilestr;
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View v) {
         switch (v.getId()){

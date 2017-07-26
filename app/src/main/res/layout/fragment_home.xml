@@ -12,7 +12,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fadingEdge="none"
-        android:scrollbars="none" >
+        android:scrollbars="none"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
@@ -36,6 +38,7 @@
                 </com.youth.banner.Banner>
             </RelativeLayout>
             <LinearLayout
+                android:id="@+id/home_grid_lin"
                 android:orientation="vertical"
                 android:background="@color/white"
                 android:layout_width="match_parent"
@@ -145,10 +148,15 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <RelativeLayout
+        <LinearLayout
             android:visibility="gone"
-            android:background="@color/white"
+            android:orientation="vertical"
             android:id="@+id/main_search_rels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:background="@color/white"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -193,6 +201,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
+        <RelativeLayout
+            android:background="@color/white"
+            android:layout_below="@+id/main_search_rels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.androidkun.xtablayout.XTabLayout
+                android:id="@+id/main_scroll_Tablayout"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="start"
+                app:xTabMode="scrollable"
+                app:xTabIndicatorColor="@color/qblue"
+                app:xTabIndicatorHeight="2dp"
+                app:xTabIndicatorWidth="60dp"
+                app:xTabSelectedTextColor="@color/qblue"
+                app:xTabTextColor="@color/col_888"
+                app:xTabTextSize="14sp"
+                app:xTabSelectedTextSize="14sp"
+                app:xTabDisplayNum="5"
+                />
+        </RelativeLayout>
+
+        </LinearLayout>
+
         <RelativeLayout
             android:visibility="visible"
             android:id="@+id/main_search_rel"

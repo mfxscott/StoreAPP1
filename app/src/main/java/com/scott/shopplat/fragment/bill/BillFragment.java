@@ -20,7 +20,10 @@ import com.scott.shopplat.activity.SearchActivity;
 import com.scott.shopplat.adapter.HomeBillRecyclerViewAdapter;
 import com.scott.shopplat.entity.GoodsInfoEntity;
 import com.scott.shopplat.utils.Logs;
+import com.scott.shopplat.utils.SXUtils;
 import com.scott.shopplat.utils.httpClient.OKManager;
+import com.scott.shopplat.utils.view.SwipyRefreshLayout;
+import com.scott.shopplat.utils.view.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ public class BillFragment extends Fragment {
     private int indexPage= 1;
     private RecyclerView recyclerView;
     private HomeBillRecyclerViewAdapter billInfoAdapter;
+    private SwipyRefreshLayout   mSwipyRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,6 +88,26 @@ public class BillFragment extends Fragment {
         return typeList;
     }
     private void init(){
+        mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.bill_swipyrefreshlayout);
+        SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
+        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if(direction == SwipyRefreshLayoutDirection.TOP){
+//                httpChanner();
+                    indexPage = 1;
+                    hand.sendEmptyMessage(1);
+//                    HttpLiveSp(indexPage);
+                }else{
+                    hand.sendEmptyMessage(1);
+                    indexPage ++;
+//                    HttpLiveSp(indexPage);
+                }
+            }
+        });
+
+
         LinearLayout searchlin = (LinearLayout) view.findViewById(R.id.bill_search_liny);
         searchlin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +139,9 @@ public class BillFragment extends Fragment {
                 switch (msg.what) {
                     case 1:
 
+                }
+                if(mSwipyRefreshLayout != null){
+                    mSwipyRefreshLayout.setRefreshing(false);
                 }
                 return true;
             }

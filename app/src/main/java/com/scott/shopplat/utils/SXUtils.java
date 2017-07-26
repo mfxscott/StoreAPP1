@@ -30,6 +30,7 @@ import com.scott.shopplat.activity.MyApplication;
 import com.scott.shopplat.utils.dncry.wsc.AESEDncryption;
 import com.scott.shopplat.utils.httpClient.AppClient;
 import com.scott.shopplat.utils.httpClient.OKManager;
+import com.scott.shopplat.utils.view.SwipyRefreshLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -461,5 +462,10 @@ public class SXUtils {
     private  SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public  String GetNowDateTime() {
         return sdf.format(new Date());
+    }
+
+
+    public  void setColorSchemeResources(SwipyRefreshLayout mSwipyRefreshLayout) {
+        mSwipyRefreshLayout.setColorSchemeResources(R.color.qblue, R.color.btn_gray,R.color.red);
     }
 }

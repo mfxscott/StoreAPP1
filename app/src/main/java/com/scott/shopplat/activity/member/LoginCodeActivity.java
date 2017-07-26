@@ -2,12 +2,10 @@ package com.scott.shopplat.activity.member;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -48,7 +46,6 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
     public static Activity activity;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +53,6 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
         activity = this;
           initView();
     }
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void initView(){
         setTitle(getString(R.string.login_str));
         TextView backTv = (TextView) findViewById(R.id.all_title_back_tv);

@@ -1,11 +1,18 @@
 package com.scott.shopplat.activity.member;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,17 +20,24 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 import com.scott.shopplat.R;
 import com.scott.shopplat.activity.BaseActivity;
+import com.scott.shopplat.fragment.MainFragmentActivity;
 import com.scott.shopplat.utils.Logs;
 import com.scott.shopplat.utils.SXUtils;
 
 public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationChangeListener,AMap.OnMapClickListener
-        ,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener {
+        ,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener , AMap.OnCameraChangeListener,View.OnClickListener{
     private MapView mapView;
     private AMap aMap;
     private TextView mLocationErrText;
@@ -31,24 +45,25 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
     private MyLocationStyle myLocationStyle;
-    public   LatLng locationNow;// 北京市经纬度
+    public LatLng locationNow;// 北京市经纬度
+    private Bundle  savedInstanceState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_map);
         mapView = (MapView) findViewById(R.id.map);
-        mapView.onCreate(savedInstanceState);// 此方法必须重写
-
+        this.savedInstanceState = savedInstanceState;
+        //必须要写
+        mapView.onCreate(savedInstanceState);
         activity = this;
 
-//        //这里以ACCESS_COARSE_LOCATION为例
-//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            //申请WRITE_EXTERNAL_STORAGE权限
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-//                    1000);//自定义的code
-//        }
-
+        //这里以ACCESS_COARSE_LOCATION为例
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1000);//自定义的code
+        }
         init();
     }
     @Override
@@ -57,11 +72,14 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
-                Toast.makeText(activity, "111", Toast.LENGTH_SHORT).show();
+//                mapView.onResume();
+//                init();
+                Toast.makeText(activity, "同意授权权限", Toast.LENGTH_SHORT).show();
+                aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW));
             } else
             {
                 // Permission Denied
-                Toast.makeText(activity, "被拒绝", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "权限被拒绝,将无法定位当前店铺.", Toast.LENGTH_SHORT).show();
             }
             return;
         }
@@ -74,7 +92,8 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     private void init() {
         registerBack();
         setTitle("选择门店");
-
+        Button btn = (Button) findViewById(R.id.map_store_comfirm_btn);
+        btn.setOnClickListener(this);
         if (aMap == null) {
             aMap = mapView.getMap();
             setUpMap();
@@ -83,11 +102,18 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //        mGPSModeGroup.setVisibility(View.GONE);
 //        mLocationErrText = (TextView)findViewById(R.id.location_errInfo_text);
 //        mLocationErrText.setVisibility(View.GONE);
-
         //设置SDK 自带定位消息监听
         aMap.setOnMyLocationChangeListener(this);
+        aMap.setOnCameraChangeListener(this);
+        mapView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Logs.i("===="+event.getAction());
+                return false;
+            }
+        });
+//        startLocationValue();
     }
-
     /**
      * 设置一些amap的属性
      */
@@ -95,33 +121,12 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         // 如果要设置定位的默认状态，可以在此处进行设置
         myLocationStyle = new MyLocationStyle();
         aMap.setMyLocationStyle(myLocationStyle);
-
-//        aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
-//        aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-
-
         aMap.setOnMarkerDragListener(this);
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
         setupLocationStyle();
+//        startLocation();
 
-//        mapView.setOnMapStatusChangeListener(new OnMapStatusChangeListener() {
-//
-//            @Override
-//            public void onMapStatusChangeStart(MapStatus mapStatus) {
-//
-//            }
-//
-//            @Override
-//            public void onMapStatusChangeFinish(MapStatus mapStatus) {
-//
-//            }
-//
-//            @Override
-//            public void onMapStatusChange(MapStatus mapStatus) {
-//                mMarker.setPosition(mapStatus.target);
-//            }
-//        });
     }
 
     /**
@@ -132,7 +137,7 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         // 自定义定位蓝点图标
         myLocationStyle.myLocationIcon(BitmapDescriptorFactory.
-                fromResource(R.mipmap.add_img));
+                fromResource(R.mipmap.gps_point));
         // 自定义精度范围的圆形边框颜色
         myLocationStyle.strokeColor(STROKE_COLOR);
         //自定义精度范围的圆形边框宽度
@@ -143,9 +148,23 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         aMap.setMyLocationStyle(myLocationStyle);
         aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATE));
 //        aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW));
+
+        //根据经纬度转为地理位置
+         geocoderSearch = new GeocodeSearch(this);
+         geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener(){
+
+            @Override
+            public void onGeocodeSearched(GeocodeResult result, int rCode) {
+            }
+            @Override
+            public void onRegeocodeSearched(RegeocodeResult result, int rCode) {
+                String formatAddress = result.getRegeocodeAddress().getFormatAddress();
+                Logs.i("formatAddress=======", "formatAddress:"+formatAddress);
+                Log.e("formatAddress====", "rCode:"+rCode);
+
+            }});
     }
-
-
+    GeocodeSearch geocoderSearch;
     private void addMarkersToMap() {
         // 文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度
 //        TextOptions textOptions = new TextOptions()
@@ -236,7 +255,7 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     @Override
     public void onMapClick(LatLng latLng) {
 //点击地图后清理图层插上图标，在将其移动到中心位置
-        aMap.clear();
+//        aMap.clear();
 //        latitude = latLng.latitude;
 //        longitude = latLng.longitude;
         Logs.i(latLng.latitude+"===="+latLng.longitude);
@@ -245,14 +264,10 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         otMarkerOptions.position(latLng);
         aMap.addMarker(otMarkerOptions);
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-
-
     }
     @Override
     public void onMapLoaded() {
-
     }
-
     /**
      * 监听拖动marker时事件回调
      */
@@ -282,7 +297,30 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.map_store_comfirm_btn:
+                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                startActivity(mainintent);
+                finish();
+                break;
+        }
+    }
+    @Override
+    public void onCameraChange(CameraPosition cameraPosition) {
+//        aMap.clear();
+    }
+   //移动地图中心地理位置，显示当前移动地址
+    @Override
+    public void onCameraChangeFinish(CameraPosition cameraPosition) {
+        LatLng target = cameraPosition.target;
 
 
+//        Logs.i(target.latitude + "经纬度纬度------" + target.longitude);
+        LatLonPoint lp = new LatLonPoint(target.latitude,target.longitude);
+        RegeocodeQuery query = new RegeocodeQuery(lp, 200,GeocodeSearch.AMAP);
+        geocoderSearch.getFromLocationAsyn(query);
+    }
 
 }

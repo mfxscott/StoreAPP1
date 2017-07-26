@@ -12,7 +12,7 @@
             />
     </LinearLayout>
     <RelativeLayout
-        android:layout_weight="1.5"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -24,6 +24,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
+        <ImageView
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/location_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
         <RelativeLayout
             android:visibility="visible"
             android:background="#60000000"
@@ -66,6 +72,9 @@
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
     </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:visibility="visible"
         android:orientation="vertical"
@@ -111,13 +120,12 @@
                 android:textColorHint="@color/col_hint"
                 android:textSize="@dimen/ac_text_size_14"
                 android:hint="如您没有找到相关门店信息，请在此输入您的门店信息"
-                android:padding="5dp"
+                android:padding="10dp"
                 android:background="@drawable/white_round_shap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
             <Button
-                android:enabled="false"
-                android:id="@+id/check_store_btn"
+                android:id="@+id/map_store_comfirm_btn"
                 android:textSize="@dimen/ac_text_size_18"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
@@ -131,4 +139,5 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </LinearLayout>

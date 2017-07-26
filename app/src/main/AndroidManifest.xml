@@ -22,7 +22,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-     
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <!-- 要求设备有摄像头 -->
@@ -43,7 +42,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="3c411d4c119dbbac86b528317ea3d3fe"/>
         <!-- 高德地图key -->
-        <!-- <service android:name="com.amap.api.location.APSService"></service> -->
+        <service android:name="com.amap.api.location.APSService"/>
 
         <activity android:name=".activity.StartMainActivity">
             <intent-filter>
@@ -104,7 +103,8 @@
         </activity>
         <activity
             android:name=".activity.SearchActivity"
-            android:theme="@style/Theme.DesignDemo">
+            android:theme="@style/Theme.DesignDemo"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
         </activity>
         <activity
             android:name=".activity.GoodsDetailActivity"
@@ -127,6 +127,10 @@
             android:theme="@style/Theme.DesignDemo">
         </activity>
         <activity android:name=".fragment.my.store.order.OrderDetailActivity">
+        </activity>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".activity.SearchDetailActivity">
         </activity>
     </application>
 
