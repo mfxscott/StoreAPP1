@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/app_bg"
     >
-    <com.scott.shopplat.utils.ObservableScrollView
+    <com.xianhao365.o2o.utils.ObservableScrollView
         android:layout_above="@+id/goods_detail_bottom_rel"
         android:id="@+id/goods_detail_scroll_view"
         android:layout_width="fill_parent"
@@ -406,7 +406,7 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </com.scott.shopplat.utils.ObservableScrollView>
+    </com.xianhao365.o2o.utils.ObservableScrollView>
 
 
 

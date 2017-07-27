@@ -4,7 +4,7 @@
                 android:layout_height="match_parent"
                 android:background="@color/app_bg"
                 android:orientation="vertical"
-                tools:context="com.scott.shopplat.fragment.my.store.AccManageActivity">
+                tools:context="com.xianhao365.o2o.fragment.my.store.AccManageActivity">
 
     <RelativeLayout
         android:background="@color/white"

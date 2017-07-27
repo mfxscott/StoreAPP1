@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="com.scott.shopplat">
+          package="com.xianhao365.o2o">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
@@ -62,23 +62,30 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".utils.checkPermission.PermissionsActivity">
         </activity>
-        <activity android:name=".activity.member.Regis1Activity">
+        <activity
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
+            android:name=".activity.member.Regis1Activity">
         </activity>
         <activity
             android:name=".activity.member.LoginCodeActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:label="@string/title_activity_login">
         </activity>
         <activity
             android:name=".activity.member.LoginNameActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:label="@string/title_activity_login_name">
         </activity>
         <activity
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
             android:name=".activity.member.ForGetPsdActivity"
             android:label="@string/title_activity_for_get_psd">
         </activity>
         <activity android:name=".activity.member.StoreMapActivity">
         </activity>
-        <activity android:name=".activity.member.RegistCheckActivity">
+        <activity
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
+            android:name=".activity.member.RegistCheckActivity">
         </activity>
         <activity android:name=".fragment.my.store.AccManageActivity"/>
         <activity
@@ -120,7 +127,9 @@
             android:name=".fragment.car.EditAddAddressActivity"
             android:theme="@style/Theme.DesignDemo">
         </activity>
-        <activity android:name=".activity.GoodsFeedbackActivity">
+        <activity
+            android:name=".activity.GoodsFeedbackActivity"
+            android:windowSoftInputMode="stateHidden|stateUnchanged">
         </activity>
         <activity
             android:name=".fragment.my.store.order.MyOrderActivity"
@@ -129,8 +138,12 @@
         <activity android:name=".fragment.my.store.order.OrderDetailActivity">
         </activity>
         <activity
-            android:theme="@style/Theme.DesignDemo"
-            android:name=".activity.SearchDetailActivity">
+            android:name=".activity.SearchDetailActivity"
+            android:theme="@style/Theme.DesignDemo">
+        </activity>
+        <activity android:name=".fragment.my.buyer.ExtractDetailActivity">
+        </activity>
+        <activity android:name=".fragment.my.buyer.ExtractAddBankCardActivity">
         </activity>
     </application>
 

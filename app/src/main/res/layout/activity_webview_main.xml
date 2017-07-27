@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
-            <com.scott.shopplat.utils.view.WebViewSwipeRefreshLayout
+            <com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout
                 android:id="@+id/common_swipe_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" >
@@ -27,7 +27,7 @@
                     android:id="@+id/common_webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
-            </com.scott.shopplat.utils.view.WebViewSwipeRefreshLayout>
+            </com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout>
         </FrameLayout>
         <LinearLayout
             android:visibility="gone"

@@ -7,7 +7,7 @@
     android:background="@color/app_bg"
     >
 
-    <com.scott.shopplat.utils.ObservableScrollView
+    <com.xianhao365.o2o.utils.ObservableScrollView
         android:id="@+id/main_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -43,7 +43,7 @@
                 android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.scott.shopplat.utils.view.MyGridView
+                <com.xianhao365.o2o.utils.view.MyGridView
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
                     android:id="@+id/main_gridv"
@@ -128,7 +128,7 @@
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-                    <com.scott.shopplat.utils.view.MyGridView
+                    <com.xianhao365.o2o.utils.view.MyGridView
                         android:scrollbars="none"
                         android:layout_gravity="center_horizontal"
                         android:gravity="center_horizontal"
@@ -144,7 +144,7 @@
             </LinearLayout>
         </LinearLayout>
 
-    </com.scott.shopplat.utils.ObservableScrollView>
+    </com.xianhao365.o2o.utils.ObservableScrollView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -168,7 +168,7 @@
                 android:layout_height="35dp"/>
             <LinearLayout
                 android:id="@+id/home_search_gone_lin"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:layout_centerVertical="true"
                 android:gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
@@ -206,7 +206,6 @@
             android:layout_below="@+id/main_search_rels"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <com.androidkun.xtablayout.XTabLayout
                 android:id="@+id/main_scroll_Tablayout"
                 android:layout_width="match_parent"
@@ -240,7 +239,7 @@
                 android:layout_height="35dp"/>
             <LinearLayout
                 android:id="@+id/home_search_lin"
-                android:padding="5dp"
+                android:padding="8dp"
                 android:layout_centerVertical="true"
                 android:gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
@@ -252,11 +251,11 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_gravity="center_vertical"
-                    android:src="@mipmap/icon_main_search"
+                    android:src="@mipmap/search_white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:textSize="@dimen/ac_text_size_16"
+                    android:textSize="@dimen/ac_text_size_14"
                     android:layout_marginLeft="5dp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/white"

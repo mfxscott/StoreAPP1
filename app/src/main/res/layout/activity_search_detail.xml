@@ -80,7 +80,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.scott.shopplat.utils.view.SwipyRefreshLayout
+        <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
             android:id="@+id/search_detail_swipyrefreshlayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -97,6 +97,6 @@
             android:layout_height="wrap_content"
             android:divider="#00000000"
             />
-        </com.scott.shopplat.utils.view.SwipyRefreshLayout>
+        </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
     </LinearLayout>
 </LinearLayout>

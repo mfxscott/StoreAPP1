@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:background="@color/app_bg"
               android:orientation="vertical"
-              tools:context="com.scott.shopplat.fragment.my.store.AccManageActivity">
+              tools:context="com.xianhao365.o2o.fragment.my.store.AccManageActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,18 +70,18 @@
                             android:textColor="@color/col_333"
                             android:textSize="@dimen/ac_text_size_16"/>
 
-                        <Button
-                            android:paddingTop="10dp"
-                            android:paddingBottom="10dp"
+                        <TextView
+                            android:paddingTop="5dp"
+                            android:paddingBottom="5dp"
                             android:id="@+id/wallet_topup_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:background="@drawable/topup_button_selector"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
-                            android:text="充    值"
+                            android:paddingLeft="25dp"
+                            android:paddingRight="25dp"
+                            android:text="提现"
                             android:textColor="@color/white"
                             android:textSize="16sp"/>
                     </RelativeLayout>
@@ -308,7 +308,7 @@
                     android:background="@color/white"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                    <com.scott.shopplat.utils.view.MyGridView
+                    <com.xianhao365.o2o.utils.view.MyGridView
                         android:id="@+id/wallet_bank_gridv"
                         android:listSelector="@null"
                         android:numColumns="1"
@@ -406,7 +406,7 @@
                  android:background="@color/white"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content">
-                 <com.scott.shopplat.utils.view.MyGridView
+                 <com.xianhao365.o2o.utils.view.MyGridView
                      android:id="@+id/wallet_srdetail_gridv"
                      android:listSelector="@null"
                      android:numColumns="1"

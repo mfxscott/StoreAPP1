@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              tools:context="com.scott.shopplat.activity.StartMainActivity">
+              tools:context="com.xianhao365.o2o.activity.StartMainActivity">
 
   <ImageView
       android:id="@+id/start_logo_iv"
