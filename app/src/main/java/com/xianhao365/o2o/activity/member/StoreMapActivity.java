@@ -4,55 +4,74 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.LatLngBounds;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.services.core.AMapException;
 import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.core.PoiItem;
+import com.amap.api.services.core.SuggestionCity;
 import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.amap.api.services.poisearch.PoiResult;
+import com.amap.api.services.poisearch.PoiSearch;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
+import com.xianhao365.o2o.adapter.StoreMapListAdapter;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.xianhao365.o2o.R.id.map;
 
 public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationChangeListener,AMap.OnMapClickListener
-        ,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener , AMap.OnCameraChangeListener,View.OnClickListener{
+        ,AMap.OnMarkerDragListener, AMap.OnMapLoadedListener , AMap.OnCameraChangeListener,View.OnClickListener,PoiSearch.OnPoiSearchListener{
     private MapView mapView;
     private AMap aMap;
-    private TextView mLocationErrText;
     private Activity activity;
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
     private MyLocationStyle myLocationStyle;
     public LatLng locationNow;// 北京市经纬度
-    private Bundle  savedInstanceState;
+    private StoreMapListAdapter storeMapListAdapter;
+    private Handler hand;
+    private ListView maplist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_store_map);
-        mapView = (MapView) findViewById(R.id.map);
-        this.savedInstanceState = savedInstanceState;
+        mapView = (MapView) findViewById(map);
         //必须要写
         mapView.onCreate(savedInstanceState);
         activity = this;
@@ -90,8 +109,10 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
      * 初始化
      */
     private void init() {
+
         registerBack();
         setTitle("选择门店");
+        maplist = (ListView) findViewById(R.id.store_map_listv);
         Button btn = (Button) findViewById(R.id.map_store_comfirm_btn);
         btn.setOnClickListener(this);
         if (aMap == null) {
@@ -113,6 +134,26 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
             }
         });
 //        startLocationValue();
+
+
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 0:
+                        List<Map<String ,String >> poItem = (List<Map<String ,String >>) msg.obj;
+                        Logs.i("======="+msg.obj);
+                        storeMapListAdapter = new StoreMapListAdapter(activity,poItem);
+                        maplist.setAdapter(storeMapListAdapter);
+                        break;
+                    case AppClient.ERRORCODE:
+                        String errormsg = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+                        break;
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
     }
     /**
      * 设置一些amap的属性
@@ -150,8 +191,8 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //        aMap.setMyLocationStyle(myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_SHOW));
 
         //根据经纬度转为地理位置
-         geocoderSearch = new GeocodeSearch(this);
-         geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener(){
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(new GeocodeSearch.OnGeocodeSearchListener(){
 
             @Override
             public void onGeocodeSearched(GeocodeResult result, int rCode) {
@@ -188,6 +229,31 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //        marker.setRotateAngle(90);// 设置marker旋转90度
 //        marker.setPositionByPixels(100, 100);
 //        marker.showInfoWindow();// 设置默认显示一个infowinfow
+    }
+    /**
+     * 开始进行poi搜索
+     */
+    /**
+     * 开始进行poi搜索
+     */
+    private LatLonPoint lp;
+    private PoiSearch.Query query;// Poi查询条件类
+    private PoiSearch poiSearch;
+    protected void doSearchQuery() {
+//        keyWord = mSearchText.getText().toString().trim();
+
+//        currentPage = 0;
+        query = new PoiSearch.Query("餐馆", "", "");// 第一个参数表示搜索字符串，第二个参数表示poi搜索类型，第三个参数表示poi搜索区域（空字符串代表全国）
+        query.setPageSize(20);// 设置每页最多返回多少条poiitem
+        query.setPageNum(1);// 设置查第一页
+
+        if (lp != null) {
+            poiSearch = new PoiSearch(this, query);
+            poiSearch.setOnPoiSearchListener(this);
+            poiSearch.setBound(new PoiSearch.SearchBound(lp, 500, true));//
+            // 设置搜索区域为以lp点为圆心，其周围5000米范围
+            poiSearch.searchPOIAsyn();// 异步搜索
+        }
     }
     /**
      * 方法必须重写
@@ -236,6 +302,7 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
                 // 定位类型，可能为GPS WIFI等，具体可以参考官网的定位SDK介绍
                 int locationType = bundle.getInt(MyLocationStyle.LOCATION_TYPE);
                 locationNow= new LatLng(location.getLatitude(), location.getLongitude());
+                lp = new LatLonPoint(location.getLatitude(), location.getLongitude());
                 addMarkersToMap();
                 /*
                 errorCode
@@ -311,16 +378,238 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     public void onCameraChange(CameraPosition cameraPosition) {
 //        aMap.clear();
     }
-   //移动地图中心地理位置，显示当前移动地址
+    //移动地图中心地理位置，显示当前移动地址
     @Override
     public void onCameraChangeFinish(CameraPosition cameraPosition) {
         LatLng target = cameraPosition.target;
-
-
 //        Logs.i(target.latitude + "经纬度纬度------" + target.longitude);
-        LatLonPoint lp = new LatLonPoint(target.latitude,target.longitude);
-        RegeocodeQuery query = new RegeocodeQuery(lp, 200,GeocodeSearch.AMAP);
+        LatLonPoint latlp = new LatLonPoint(target.latitude,target.longitude);
+        RegeocodeQuery query = new RegeocodeQuery(latlp, 200,GeocodeSearch.AMAP);
         geocoderSearch.getFromLocationAsyn(query);
+        lp = new LatLonPoint(target.latitude,target.longitude);
+        doSearchQuery();
     }
 
+    // 将之前被点击的marker置为原来的状态
+    private void resetlastmarker() {
+        int index = poiOverlay.getPoiIndex(mlastMarker);
+        if (index < 10) {
+            mlastMarker.setIcon(BitmapDescriptorFactory
+                    .fromBitmap(BitmapFactory.decodeResource(
+                            getResources(),
+                            markers[index])));
+        }else {
+            mlastMarker.setIcon(BitmapDescriptorFactory.fromBitmap(
+                    BitmapFactory.decodeResource(getResources(), R.mipmap.location_mark)));
+        }
+        mlastMarker = null;
+
+    }
+    private myPoiOverlay poiOverlay;// poi图层
+    private PoiResult poiResult; // poi返回的结果
+    private List<PoiItem> poiItems;// poi数
+    private Marker mlastMarker;
+    private int[] markers = {R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+            ,R.mipmap.location_mark
+    };
+    /**
+     * 自定义PoiOverlay
+     *
+     */
+
+    private class myPoiOverlay {
+        private AMap mamap;
+        private List<PoiItem> mPois;
+        private ArrayList<Marker> mPoiMarks = new ArrayList<Marker>();
+
+        public myPoiOverlay(AMap amap, List<PoiItem> pois) {
+            mamap = amap;
+            mPois = pois;
+        }
+        /**
+         * 添加Marker到地图中。
+         * @since V2.1.0
+         */
+        public void addToMap() {
+            for (int i = 0; i < mPois.size(); i++) {
+                Marker marker = mamap.addMarker(getMarkerOptions(i));
+                PoiItem item = mPois.get(i);
+                marker.setObject(item);
+                mPoiMarks.add(marker);
+            }
+        }
+        /**
+         * 去掉PoiOverlay上所有的Marker。
+         *
+         * @since V2.1.0
+         */
+        public void removeFromMap() {
+            for (Marker mark : mPoiMarks) {
+                mark.remove();
+            }
+        }
+        /**
+         * 移动镜头到当前的视角。
+         * @since V2.1.0
+         */
+        public void zoomToSpan() {
+            if (mPois != null && mPois.size() > 0) {
+                if (mamap == null)
+                    return;
+                LatLngBounds bounds = getLatLngBounds();
+                mamap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+            }
+        }
+        private LatLngBounds getLatLngBounds() {
+            LatLngBounds.Builder b = LatLngBounds.builder();
+            for (int i = 0; i < mPois.size(); i++) {
+                b.include(new LatLng(mPois.get(i).getLatLonPoint().getLatitude(),
+                        mPois.get(i).getLatLonPoint().getLongitude()));
+            }
+            return b.build();
+        }
+        private MarkerOptions getMarkerOptions(int index) {
+            return new MarkerOptions()
+                    .position(
+                            new LatLng(mPois.get(index).getLatLonPoint()
+                                    .getLatitude(), mPois.get(index)
+                                    .getLatLonPoint().getLongitude()))
+                    .title(getTitle(index)).snippet(getSnippet(index))
+                    .icon(getBitmapDescriptor(index));
+        }
+        protected String getTitle(int index) {
+            return mPois.get(index).getTitle();
+        }
+
+        protected String getSnippet(int index) {
+            return mPois.get(index).getSnippet();
+        }
+
+        /**
+         * 从marker中得到poi在list的位置。
+         *
+         * @param marker 一个标记的对象。
+         * @return 返回该marker对应的poi在list的位置。
+         * @since V2.1.0
+         */
+        public int getPoiIndex(Marker marker) {
+            for (int i = 0; i < mPoiMarks.size(); i++) {
+                if (mPoiMarks.get(i).equals(marker)) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        protected BitmapDescriptor getBitmapDescriptor(int arg0) {
+            if (arg0 < 10) {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(getResources(), markers[arg0]));
+                return icon;
+            }else {
+                BitmapDescriptor icon = BitmapDescriptorFactory.fromBitmap(
+                        BitmapFactory.decodeResource(getResources(), R.mipmap.location_mark));
+                return icon;
+            }
+        }
+    }
+
+    @Override
+    public void onPoiSearched(PoiResult result, int rcode) {
+        if (rcode == AMapException.CODE_AMAP_SUCCESS) {
+            if (result != null && result.getQuery() != null) {// 搜索poi的结果
+                if (result.getQuery().equals(query)) {// 是否是同一条
+                    poiResult = result;
+                    poiItems = poiResult.getPois();// 取得第一页的poiitem数据，页数从数字0开始
+                    List<SuggestionCity> suggestionCities = poiResult
+                            .getSearchSuggestionCitys();// 当搜索不到poiitem数据时，会返回含有搜索关键字的城市信息
+                    if (poiItems != null && poiItems.size() > 0) {
+                        //清除POI信息显示
+//                        whetherToShowDetailInfo(false);
+//                        //并还原点击marker样式
+//                        if (mlastMarker != null) {
+//                            resetlastmarker();
+//                        }
+//                        //清理之前搜索结果的marker
+//                        if (poiOverlay !=null) {
+//                            poiOverlay.removeFromMap();
+//                        }
+                        List<Map<String ,String >>  mapList=null;
+                        for(int i=0;i<poiItems.size();i++){
+                            mapList = new ArrayList<>();
+                            Map<String ,String > map =new  HashMap<String,String>();
+                            map.put("title",poiItems.get(i).getTitle()+"");
+                            map.put("address",poiItems.get(i).getProvinceName()+poiItems.get(i).getCityName()+poiItems.get(i).getAdName()+poiItems.get(i).getSnippet());
+//                            Logs.i("==========="+poiItems.get(i).getTitle()+"标题和地址"+poiItems.get(i).getDirection());
+//                            Logs.i("==========="+poiItems.get(i).getCityName());
+//                            Logs.i("==========="+poiItems.get(i).getAdName());
+//                            Logs.i("==========="+poiItems.get(i).getProvinceName());
+//                            Logs.i("==========="+poiItems.get(i).getSnippet());
+
+//                            Logs.i("==========="+poiItems.get(i).getTypeDes());
+//                            Logs.i("==========="+poiItems.get(i).getTel());
+//                            Logs.i("==========="+poiItems.get(i).getProvinceCode());
+                            mapList.add(map);
+                        }
+//                        aMap.clear();
+//                        poiOverlay = new myPoiOverlay(aMap, poiItems);
+//                        poiOverlay.addToMap();
+//                        poiOverlay.zoomToSpan();
+
+                        aMap.addMarker(new MarkerOptions()
+                                .anchor(0.5f, 0.5f)
+                                .icon(BitmapDescriptorFactory
+                                        .fromBitmap(BitmapFactory.decodeResource(
+                                                getResources(), R.mipmap.map_point)))
+                                .position(new LatLng(lp.getLatitude(), lp.getLongitude())));
+
+//                        aMap.addCircle(new CircleOptions()
+//                                .center(new LatLng(lp.getLatitude(),
+//                                        lp.getLongitude())).radius(5000)
+//                                .strokeColor(Color.BLUE)
+//                                .fillColor(Color.argb(50, 1, 1, 1))
+//                                .strokeWidth(2));
+                        Message msg = new Message();
+                        msg.what = 0;
+                        msg.obj = mapList;
+                        hand.sendMessage(msg);
+                        return;
+                    } else if (suggestionCities != null
+                            && suggestionCities.size() > 0) {
+                        showSuggestCity(suggestionCities);
+                    } else {
+                        Toast.makeText(activity,"没有数据",Toast.LENGTH_LONG).show();
+                    }
+                }
+            } else {
+                Toast.makeText(activity,"没有数据",Toast.LENGTH_LONG).show();
+            }
+        } else  {
+            Toast.makeText(activity,rcode+"",Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onPoiItemSearched(PoiItem poiItem, int i) {
+
+    }
+    /**
+     * poi没有搜索到数据，返回一些推荐城市的信息
+     */
+    private void showSuggestCity(List<SuggestionCity> cities) {
+        String infomation = "推荐城市\n";
+        for (int i = 0; i < cities.size(); i++) {
+            infomation += "城市名称:" + cities.get(i).getCityName() + "城市区号:"
+                    + cities.get(i).getCityCode() + "城市编码:"
+                    + cities.get(i).getAdCode() + "\n";
+        }
+        Toast.makeText(activity,infomation+"",Toast.LENGTH_LONG).show();
+
+    }
 }

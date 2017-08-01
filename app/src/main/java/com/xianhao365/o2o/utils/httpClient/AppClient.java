@@ -17,7 +17,6 @@ public class AppClient{
 //    public static String HTTPIP = "http://118.178.248.237:9080/";//2公司云服务
 //    public static String HTTPIP="http://10.64.2.88:9080/";//开发测试
 
-
     public static final  int GETCODEMSG = 1001;//获取短信验证码成功
     public static final  int ERRORCODE = 4040;//非正常数据返回码
     public static final  int UPDATEVER = 1002;//版本升级返回码

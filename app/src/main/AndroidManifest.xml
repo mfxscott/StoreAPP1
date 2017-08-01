@@ -81,7 +81,9 @@
             android:name=".activity.member.ForGetPsdActivity"
             android:label="@string/title_activity_for_get_psd">
         </activity>
-        <activity android:name=".activity.member.StoreMapActivity">
+        <activity
+            android:windowSoftInputMode="stateHidden|stateUnchanged"
+            android:name=".activity.member.StoreMapActivity">
         </activity>
         <activity
             android:windowSoftInputMode="stateHidden|stateUnchanged"
