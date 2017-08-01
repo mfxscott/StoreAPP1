@@ -88,7 +88,7 @@
                 </RelativeLayout>
             </LinearLayout>
             <Button
-                android:enabled="false"
+                android:enabled="true"
                 android:id="@+id/login_acc_next"
                 android:textSize="@dimen/ac_text_size_18"
                 android:layout_marginLeft="15dp"

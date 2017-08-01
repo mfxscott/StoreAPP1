@@ -123,9 +123,9 @@ public  class TypeInfoRecyclerViewAdapter
             }
         });
         if(position%2 ==0){
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
         }else{
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
         }
 
 //        Glide.with(holder.mImageView.getContext())

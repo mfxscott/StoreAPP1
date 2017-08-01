@@ -127,7 +127,7 @@ public class MainFragmentActivity extends AppCompatActivity {
 //        badge1.setHeight(30);
 //        badge1.setWidth(30);
         badge1.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
-        badge1.setBadgeBackgroundColor(Color.RED); // 提醒信息的背景颜色，自己设置
+        badge1.setBadgeBackgroundColor(getResources().getColor(R.color.orange)); // 提醒信息的背景颜色，自己设置
 //        badge1.setBackgroundResource(R.drawable.round_red_bg_shap); //设置背景图片
         badge1.setTextSize(12); // 文本大小
 //        badge1.setBadgeMargin(3, 3); // 水平和竖直方向的间距
@@ -214,35 +214,20 @@ public class MainFragmentActivity extends AppCompatActivity {
                 addFragmentToStack(goodsFrag);
             } else if (myRb.getId() == checkedId) {
                 //根据登陆后获取的用户表示来判断我的界面显示对应布局
-//                if(AppClient.TAG.equals("32")){
-
-
-
+                if(AppClient.USERROLETAG.equals("32")){
                     if (myFrag == null) {
                         myFrag = new BuyerFragment();
                         transaction.add(R.id.content, myFrag);
                     }
                     addFragmentToStack(myFrag);
 
-
-
-
-
-//                }else
-//                    if(AppClient.TAG.equals("64")){
-
-
-
-//                    if (storeFrag == null) {
-//                        storeFrag = new StoreMyFragment();
-//                        transaction.add(R.id.content, storeFrag);
-//                    }
-//                    addFragmentToStack(storeFrag);
-
-
-
-
-//                }
+                }else if(AppClient.USERROLETAG.equals("64")){
+                    if (storeFrag == null) {
+                        storeFrag = new StoreMyFragment();
+                        transaction.add(R.id.content, storeFrag);
+                    }
+                    addFragmentToStack(storeFrag);
+                }
 
             }else if(carRb.getId() == checkedId){
                 if (carFrag == null) {

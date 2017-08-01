@@ -94,8 +94,8 @@ public  class WaitPayRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-        Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
-        Glide.with(holder.mImageView1.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView1);
+        Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
+        Glide.with(holder.mImageView1.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView1);
             switch (tag){
                 case 1:
                     holder.btnLin.setVisibility(View.VISIBLE);

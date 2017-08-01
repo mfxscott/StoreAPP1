@@ -169,32 +169,25 @@ public class SXUtils {
     }
     /**
      * 弹出提示 确定
-     * @param activity
      * @param title
      * @param contentStr
      */
     public  void ToastshowDialogView(Activity activity,String title,String contentStr){
-//        if(tipDialog ==null) {
         final Dialog tipDialog = new AlertDialog.Builder(activity).create();
-//        }
+        tipDialog.show();
         tipDialog.setCancelable(true);
         tipDialog.setCanceledOnTouchOutside(false);
-        if ( tipDialog.isShowing()) {
-//                Msgialogg.show();
-        }else{
-            if(tipDialog != null)
-                tipDialog.show();
-        }
         Window window = tipDialog.getWindow();
         window.setContentView(R.layout.common_dialog);
-        LinearLayout cancel = (LinearLayout) window.findViewById(R.id.addbankcard_dialog_cancel);
-        TextView content = (TextView) window.findViewById(R.id.addbankcard_dialog_content);
+        LinearLayout cancel = (LinearLayout) window.findViewById(R.id.dialog_liny);
+        TextView content = (TextView) window.findViewById(R.id.dialog_message_tv);
         TextView  titletv = (TextView) window.findViewById(R.id.dialog_title_tv);
-        TextView  oktv = (TextView) window.findViewById(R.id.pay_dialog_error_btn);
+        TextView  rightBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
+        TextView  leftBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
         View vi = window.findViewById(R.id.add_bank_dialog_view);
         vi.setVisibility(View.GONE);
         vi.setPadding(0,2,0,2);
-        oktv.setText("确定");
+        leftBtn.setText("确定");
         titletv.setText(title);
         ImageView iv = (ImageView) window.findViewById(R.id.dialog_close_iv);
         iv.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +204,7 @@ public class SXUtils {
             }
         });
     }
+
 //    public void  setSysStatusBar(Activity activity,int color){
 ////        setTranslucentStatus(activity);
 //

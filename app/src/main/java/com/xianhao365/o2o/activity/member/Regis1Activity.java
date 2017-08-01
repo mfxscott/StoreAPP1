@@ -148,7 +148,7 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                         String msgstr = (String) msg.obj;
                         try {
                             JSONObject jsonObject = new JSONObject(msgstr.toString());
-                            AppClient.TAG   = jsonObject.getString("secs");
+                            AppClient.USERROLETAG   = jsonObject.getString("secs");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

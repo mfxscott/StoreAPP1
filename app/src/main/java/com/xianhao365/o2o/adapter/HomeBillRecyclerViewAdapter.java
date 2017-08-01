@@ -84,12 +84,11 @@ public  class HomeBillRecyclerViewAdapter
                 removeData(position);
             }
         });
-                if(position%2 ==0){
-                    Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_dy).into(holder.mImageView);
-                }else{
-                    Glide.with(holder.mImageView.getContext()).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_whr).into(holder.mImageView);
-
-                }
+        if(position%2 ==0){
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(holder.mImageView);
+        }else{
+            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(holder.mImageView);
+        }
         holder.addcar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

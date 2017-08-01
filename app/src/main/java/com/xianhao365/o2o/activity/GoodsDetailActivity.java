@@ -75,10 +75,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         ImageView img2 = (ImageView) findViewById(R.id.goods_detail_img2);
         ImageView img3 = (ImageView) findViewById(R.id.goods_detail_img3);
         ImageView img4 = (ImageView) findViewById(R.id.goods_detail_img4);
-        Glide.with(activity).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_dy).into(img1);
-        Glide.with(activity).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_hlg).into(img2);
-        Glide.with(activity).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_dg).into(img3);
-        Glide.with(activity).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_jd).into(img4);
+        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(img1);
+        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(img2);
+        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(img3);
+        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(img4);
 
     }
     private void setBanner(){

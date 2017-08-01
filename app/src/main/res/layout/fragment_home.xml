@@ -6,109 +6,212 @@
     android:orientation="vertical"
     android:background="@color/app_bg"
     >
-
-    <com.xianhao365.o2o.utils.ObservableScrollView
-        android:id="@+id/main_scroll_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:fadingEdge="none"
-        android:scrollbars="none"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <RelativeLayout
-                android:id="@+id/main_banner_lin"
-                android:visibility="visible"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-                <com.youth.banner.Banner
-                    android:id="@+id/banner"
-                    android:layout_width="match_parent"
-                    android:layout_height="190dp"
-                    app:delay_time="3000"
-                    app:indicator_margin="5dp"
-                    app:indicator_height="8dp"
-                    app:indicator_width="8dp"
-                    app:title_background="#a0000000"
-                    app:title_height="40dp"
-                    >
-                </com.youth.banner.Banner>
-            </RelativeLayout>
+    <com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout
+        android:id="@+id/home_swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <com.xianhao365.o2o.utils.ObservableScrollView
+            android:id="@+id/main_scroll_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:fadingEdge="none"
+            android:scrollbars="none"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true">
             <LinearLayout
-                android:id="@+id/home_grid_lin"
                 android:orientation="vertical"
-                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <com.xianhao365.o2o.utils.view.MyGridView
-                    android:layout_gravity="center_horizontal"
-                    android:gravity="center_horizontal"
-                    android:id="@+id/main_gridv"
-                    android:listSelector="@null"
-                    android:numColumns="4"
-                    android:stretchMode="columnWidth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:divider="#00000000"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:background="@color/white"
-                android:id="@+id/main_channel_lin"
-                android:visibility="visible"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-                <com.youth.banner.Banner
-                    android:id="@+id/channel"
+                <RelativeLayout
+                    android:id="@+id/main_banner_lin"
+                    android:visibility="visible"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+                    <com.youth.banner.Banner
+                        android:id="@+id/banner"
+                        android:layout_width="match_parent"
+                        android:layout_height="190dp"
+                        app:delay_time="3000"
+                        app:indicator_margin="5dp"
+                        app:indicator_height="8dp"
+                        app:indicator_width="8dp"
+                        app:title_background="#a0000000"
+                        app:title_height="40dp"
+                        >
+                    </com.youth.banner.Banner>
+                </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/home_grid_lin"
+                    android:orientation="vertical"
+                    android:background="@color/white"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    app:delay_time="2000"
-                    app:indicator_margin="5dp"
-                    app:indicator_height="8dp"
-                    app:indicator_width="8dp"
-                    app:title_background="#a0000000"
-                    app:title_height="40dp"
-                    >
-                </com.youth.banner.Banner>
+                    android:layout_height="wrap_content">
+                    <com.xianhao365.o2o.utils.view.MyGridView
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:id="@+id/main_gridv"
+                        android:listSelector="@null"
+                        android:numColumns="4"
+                        android:stretchMode="columnWidth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:divider="#00000000"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:background="@color/white"
+                    android:id="@+id/main_channel_lin"
+                    android:visibility="visible"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content" >
+                    <com.youth.banner.Banner
+                        android:id="@+id/channel"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        app:delay_time="2000"
+                        app:indicator_margin="5dp"
+                        app:indicator_height="8dp"
+                        app:indicator_width="8dp"
+                        app:title_background="#a0000000"
+                        app:title_height="40dp"
+                        >
+                    </com.youth.banner.Banner>
+                </LinearLayout>
+                <RelativeLayout
+                    android:id="@+id/home_go_bill_rel"
+                    android:padding="5dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/white_round_shap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/main_bill_img"
+                        android:src="@mipmap/main_bill_banner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/main_bill_img"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/col_hint"
+                        android:textSize="@dimen/ac_text_size_14"
+                        android:text="我的专属订货单"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@mipmap/arrow_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.androidkun.xtablayout.XTabLayout
+                        android:id="@+id/main_xTablayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_gravity="start"
+                        app:xTabMode="scrollable"
+                        app:xTabIndicatorColor="@color/qblue"
+                        app:xTabIndicatorHeight="2dp"
+                        app:xTabIndicatorWidth="60dp"
+                        app:xTabSelectedTextColor="@color/qblue"
+                        app:xTabTextColor="@color/col_888"
+                        app:xTabTextSize="14sp"
+                        app:xTabSelectedTextSize="14sp"
+                        app:xTabDisplayNum="5"
+                        />
+                    <LinearLayout
+                        android:layout_marginTop="5dp"
+                        android:orientation="vertical"
+                        android:background="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <com.xianhao365.o2o.utils.view.MyGridView
+                            android:scrollbars="none"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/home_list_recyclerv"
+                            android:numColumns="1"
+                            android:stretchMode="columnWidth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:divider="@color/line_bg"
+                            android:dividerHeight="1dp"
+                            />
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
+
+        </com.xianhao365.o2o.utils.ObservableScrollView>
+    </com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:id="@+id/main_search_rels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
             <RelativeLayout
-                android:id="@+id/home_go_bill_rel"
-                android:padding="5dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/white_round_shap"
+                android:background="@color/white"
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <ImageView
                     android:layout_centerVertical="true"
-                    android:id="@+id/main_bill_img"
-                    android:src="@mipmap/main_bill_banner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
+                    android:id="@+id/main_custom_service_ivs"
+                    android:src="@mipmap/icon_main_customer_service"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"/>
+                <LinearLayout
+                    android:id="@+id/home_search_gone_lin"
+                    android:padding="8dp"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/main_bill_img"
+                    android:gravity="center_horizontal"
                     android:layout_marginLeft="10dp"
-                    android:textColor="@color/col_hint"
-                    android:textSize="@dimen/ac_text_size_14"
-                    android:text="我的专属订货单"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@+id/main_custom_service_ivs"
+                    android:layout_toLeftOf="@+id/main_message_ivs"
+                    android:background="@drawable/search_bg_gray_shap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_search"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:textSize="@dimen/ac_text_size_14"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:textColor="#888888"
+                        android:text="搜索"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </LinearLayout>
+                <ImageView
+                    android:visibility="gone"
                     android:layout_centerVertical="true"
+                    android:id="@+id/main_message_ivs"
                     android:layout_alignParentRight="true"
-                    android:background="@mipmap/arrow_right"
+                    android:src="@mipmap/icon_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
-            <LinearLayout
-                android:orientation="vertical"
+            <RelativeLayout
+                android:background="@color/white"
+                android:layout_below="@+id/main_search_rels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <com.androidkun.xtablayout.XTabLayout
-                    android:id="@+id/main_xTablayout"
+                    android:id="@+id/main_scroll_Tablayout"
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_gravity="start"
@@ -122,106 +225,7 @@
                     app:xTabSelectedTextSize="14sp"
                     app:xTabDisplayNum="5"
                     />
-                <LinearLayout
-                    android:layout_marginTop="5dp"
-                    android:orientation="vertical"
-                    android:background="@color/white"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-                    <com.xianhao365.o2o.utils.view.MyGridView
-                        android:scrollbars="none"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
-                        android:id="@+id/home_list_recyclerv"
-                        android:numColumns="1"
-                        android:stretchMode="columnWidth"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:divider="@color/line_bg"
-                        android:dividerHeight="1dp"
-                        />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-    </com.xianhao365.o2o.utils.ObservableScrollView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <LinearLayout
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:id="@+id/main_search_rels"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <RelativeLayout
-            android:background="@color/white"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_centerVertical="true"
-                android:id="@+id/main_custom_service_ivs"
-                android:src="@mipmap/icon_main_customer_service"
-                android:layout_width="35dp"
-                android:layout_height="35dp"/>
-            <LinearLayout
-                android:id="@+id/home_search_gone_lin"
-                android:padding="8dp"
-                android:layout_centerVertical="true"
-                android:gravity="center_horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toRightOf="@+id/main_custom_service_ivs"
-                android:layout_toLeftOf="@+id/main_message_ivs"
-                android:background="@drawable/search_bg_gray_shap"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_gravity="center_vertical"
-                    android:src="@mipmap/icon_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-                <TextView
-                    android:textSize="@dimen/ac_text_size_14"
-                    android:layout_marginLeft="5dp"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="#888888"
-                    android:text="搜索"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
-            <ImageView
-                android:visibility="gone"
-                android:layout_centerVertical="true"
-                android:id="@+id/main_message_ivs"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/icon_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:background="@color/white"
-            android:layout_below="@+id/main_search_rels"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <com.androidkun.xtablayout.XTabLayout
-                android:id="@+id/main_scroll_Tablayout"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_gravity="start"
-                app:xTabMode="scrollable"
-                app:xTabIndicatorColor="@color/qblue"
-                app:xTabIndicatorHeight="2dp"
-                app:xTabIndicatorWidth="60dp"
-                app:xTabSelectedTextColor="@color/qblue"
-                app:xTabTextColor="@color/col_888"
-                app:xTabTextSize="14sp"
-                app:xTabSelectedTextSize="14sp"
-                app:xTabDisplayNum="5"
-                />
-        </RelativeLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 

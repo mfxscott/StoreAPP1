@@ -43,8 +43,9 @@ public class AppClient{
      *  用户登录不同角色区分
      *  32 商户摊主
      *  64 个人用户
+     *  用户标签，1:后台用户,2:城市采购中心,4:供应商,8:联创中心,16:合伙人,32:摊主店铺,64:消费者,128:供应商司机,256:采购中心司机
      */
-    public static String TAG = "32";//tag 用户类型
+    public static String USERROLETAG = "32";//tag 用户类型
     public static String USER_LOGIN =  "svc.sign.in";//		用户登录
     public static String USER_LOGINOUAt = "svc.sign.out";//		用户登出
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌

@@ -210,7 +210,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                     JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
                     AppClient.USER_ID = jsonObject1.getString("uid");
                     AppClient.USER_SESSION = jsonObject1.getString("sid");
-                    AppClient.TAG = jsonObject1.getString("tag");
+                    AppClient.USERROLETAG = jsonObject1.getString("tag");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

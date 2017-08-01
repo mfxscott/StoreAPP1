@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +24,9 @@ import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.MainGoodsTypeEntity;
 import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
+import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +46,9 @@ public class GoodsListFragment extends Fragment {
     private GridView typeGridView;
     private RecyclerView recyclerView;
     private  MainGoodsTypeAdapter  typeAdapter;
-
+    private int indexPage= 1;
+    private SwipyRefreshLayout mSwipyRefreshLayout;
+    private Handler hand;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -128,6 +135,27 @@ public class GoodsListFragment extends Fragment {
         return typeList;
     }
     private void initView(){
+
+        mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.goods_type_swipyrefreshlayout);
+        SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
+        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if(direction == SwipyRefreshLayoutDirection.TOP){
+//                httpChanner();
+                    indexPage = 1;
+                    hand.sendEmptyMessage(1);
+//                    HttpLiveSp(indexPage);
+                }else{
+                    hand.sendEmptyMessage(1);
+                    indexPage ++;
+//                    HttpLiveSp(indexPage);
+                }
+            }
+        });
+
+
         LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.all_goods_search_lin);
         searchLin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +193,19 @@ public class GoodsListFragment extends Fragment {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
 //            }
 //        });
+
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1:
+
+                }
+                if(mSwipyRefreshLayout != null){
+                    mSwipyRefreshLayout.setRefreshing(false);
+                }
+                return true;
+            }
+        });
     }
     private void initViewPager() {
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.goods_xTablayout);

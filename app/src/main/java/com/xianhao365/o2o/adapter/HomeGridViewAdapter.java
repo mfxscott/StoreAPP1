@@ -51,19 +51,19 @@ public class HomeGridViewAdapter extends BaseAdapter {
         switch(position){
             case 0:
                 vh.imgv.setImageResource(R.mipmap.start__pay);
-//                Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.start__pay).into(vh.imgv);
+//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.start__pay).into(vh.imgv);
                 break;
             case 1:
                 vh.imgv.setImageResource(R.mipmap.use_bill);
-//                Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.use_bill).into(vh.imgv);
+//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.use_bill).into(vh.imgv);
                 break;
             case 2:
                 vh.imgv.setImageResource(R.mipmap.my_hb);
-//                Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.my_hb).into(vh.imgv);
+//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_hb).into(vh.imgv);
                 break;
             case 3:
                 vh.imgv.setImageResource(R.mipmap.my_order);
-//                Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.my_order).into(vh.imgv);
+//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_order).into(vh.imgv);
                 break;
         }
 //        Glide.with(context).load(gridvlist.get("imageUrl")).centerCrop().into(vh.imgv);

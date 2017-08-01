@@ -84,7 +84,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 
         storeLin = (LinearLayout) view.findViewById(R.id.my_store_dis_lin);
         perLin = (LinearLayout) view.findViewById(R.id.my_per_dis_lin);
-        if(AppClient.TAG .equals("64")){
+        if(AppClient.USERROLETAG .equals("64")){
             perLin.setVisibility(View.VISIBLE);
             storeLin.setVisibility(View.GONE);
         }else{
@@ -130,6 +130,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.my_per_wallet:
                 Intent wall = new Intent(activity,MyWalletActivity.class);
+
                 startActivity(wall);
                 break;
             case R.id.my_acc_mamage_tv:

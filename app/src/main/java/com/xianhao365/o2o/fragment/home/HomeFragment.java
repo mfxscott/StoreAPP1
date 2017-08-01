@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private XTabLayout scrollXtablayout;
     private RelativeLayout goBillRel;
     private LinearLayout channelLin,homeGridLin;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -220,6 +222,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     }
 
     private void initViewPager( XTabLayout tabLayout) {
+
 //        tabLayout.setupWithViewPager(viewPager);
         tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
         tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
@@ -276,6 +279,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         return typeList;
     }
     private void initView(View view) {
+
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_container);
+//        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //重新刷新页面
+//                myWebView.reload();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
+
         scrollXtablayout = (XTabLayout) view.findViewById(R.id.main_scroll_Tablayout);
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
         initViewPager(scrollXtablayout);

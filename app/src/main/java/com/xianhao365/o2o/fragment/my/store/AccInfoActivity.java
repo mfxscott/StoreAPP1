@@ -11,7 +11,7 @@ import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
 
 /**
- * 账号新鲜
+ * 账号信息
  */
 public class AccInfoActivity extends BaseActivity {
       private Activity activity;

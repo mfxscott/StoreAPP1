@@ -39,5 +39,4 @@ public class WebViewSwipeRefreshLayout extends SwipeRefreshLayout {
     }
     return super.onTouchEvent(arg0);
   }
-  
 }

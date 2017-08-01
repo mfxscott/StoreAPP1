@@ -12,11 +12,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
@@ -47,11 +51,10 @@ import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.view.ListViewForScrollView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.xianhao365.o2o.R.id.map;
 
@@ -63,10 +66,16 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     private static final int STROKE_COLOR = Color.argb(180, 3, 145, 255);
     private static final int FILL_COLOR = Color.argb(10, 0, 0, 180);
     private MyLocationStyle myLocationStyle;
-    public LatLng locationNow;// 北京市经纬度
+    public LatLng locationNow;//第一次定位得到的经纬度
+    private LatLonPoint lp;  //移动后的中心点经纬度
+    private PoiSearch.Query query;// Poi查询条件类
+    private PoiSearch poiSearch;
     private StoreMapListAdapter storeMapListAdapter;
     private Handler hand;
-    private ListView maplist;
+    private ListViewForScrollView maplist;
+    private ProgressBar proBar;
+    private List<PoiItem> poItem;//每次移动地图，获取中心点周边店铺信息
+    private EditText inputInfo;//输入门店信息
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +121,20 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 
         registerBack();
         setTitle("选择门店");
-        maplist = (ListView) findViewById(R.id.store_map_listv);
+
+        inputInfo = (EditText) findViewById(R.id.store_map_input_info_edt);
+        proBar = (ProgressBar) findViewById(R.id.store_map_probar);
+        ScrollView scrollv = (ScrollView) findViewById(R.id.store_map_scrollv);
+        scrollv.scrollTo(0,0);
+        maplist = (ListViewForScrollView) findViewById(R.id.store_map_listv);
+        maplist.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                storeMapListAdapter.changeSelected(position);
+            }
+        });
         Button btn = (Button) findViewById(R.id.map_store_comfirm_btn);
+
         btn.setOnClickListener(this);
         if (aMap == null) {
             aMap = mapView.getMap();
@@ -140,17 +161,23 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 0:
-                        List<Map<String ,String >> poItem = (List<Map<String ,String >>) msg.obj;
-                        Logs.i("======="+msg.obj);
+                        if(poItem != null && poItem.size()>0)
+                            poItem.clear();
+                        poItem = (List<PoiItem>) msg.obj;
+                        Logs.i(poItem.size()+"======="+poItem);
                         storeMapListAdapter = new StoreMapListAdapter(activity,poItem);
                         maplist.setAdapter(storeMapListAdapter);
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+                        if(poItem != null) {
+                            poItem.clear();
+                            storeMapListAdapter.notifyDataSetChanged();
+                        }
                         break;
                 }
-                SXUtils.DialogDismiss();
+                proBar.setVisibility(View.GONE);
                 return true;
             }
         });
@@ -169,7 +196,6 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //        startLocation();
 
     }
-
     /**
      * 设置自定义定位蓝点
      */
@@ -207,6 +233,13 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     }
     GeocodeSearch geocoderSearch;
     private void addMarkersToMap() {
+        aMap.addMarker(new MarkerOptions()
+                .anchor(0.5f, 0.5f)
+                .icon(BitmapDescriptorFactory
+                        .fromBitmap(BitmapFactory.decodeResource(
+                                getResources(), R.mipmap.map_point)))
+                .position(locationNow));
+
         // 文字显示标注，可以设置显示内容，位置，字体大小颜色，背景色旋转角度
 //        TextOptions textOptions = new TextOptions()
 //                .position(locationNow)
@@ -233,12 +266,6 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     /**
      * 开始进行poi搜索
      */
-    /**
-     * 开始进行poi搜索
-     */
-    private LatLonPoint lp;
-    private PoiSearch.Query query;// Poi查询条件类
-    private PoiSearch poiSearch;
     protected void doSearchQuery() {
 //        keyWord = mSearchText.getText().toString().trim();
 
@@ -368,6 +395,24 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.map_store_comfirm_btn:
+
+                String  InfoStr = inputInfo.getText().toString().trim();
+                String checkInfo="";//最终选中的店铺地址
+                if(storeMapListAdapter != null && storeMapListAdapter.mSelect != -1 && !TextUtils.isEmpty(InfoStr)){
+                    //选择店铺和输入同时输入了详细信息
+                    PoiItem    map = poItem.get(storeMapListAdapter.mSelect);
+                    String storeName = map.getTitle();
+                    String addressStr =map.getProvinceName().toString().trim()+map.getCityName().toString().trim()+map.getAdName().toString().trim()+map.getSnippet().toString().trim()+"";
+                    checkInfo = addressStr;
+                }else if(TextUtils.isEmpty(InfoStr) &&  poItem == null ){
+                    SXUtils.getInstance(activity).ToastshowDialogView(activity,"温馨提示","请选择或者输入店铺信息");
+                    return;
+                }else if(!TextUtils.isEmpty(InfoStr)){
+                    checkInfo = InfoStr;
+                }else if(storeMapListAdapter != null && storeMapListAdapter.mSelect != -1){
+                    PoiItem    map = poItem.get(storeMapListAdapter.mSelect);
+                    checkInfo =map.getProvinceName().toString().trim()+map.getCityName().toString().trim()+map.getAdName().toString().trim()+map.getSnippet().toString().trim()+"";
+                }
                 Intent mainintent = new Intent(activity, MainFragmentActivity.class);
                 startActivity(mainintent);
                 finish();
@@ -387,22 +432,29 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         RegeocodeQuery query = new RegeocodeQuery(latlp, 200,GeocodeSearch.AMAP);
         geocoderSearch.getFromLocationAsyn(query);
         lp = new LatLonPoint(target.latitude,target.longitude);
+        proBar.setVisibility(View.VISIBLE);
         doSearchQuery();
     }
 
     // 将之前被点击的marker置为原来的状态
-    private void resetlastmarker() {
-        int index = poiOverlay.getPoiIndex(mlastMarker);
-        if (index < 10) {
-            mlastMarker.setIcon(BitmapDescriptorFactory
-                    .fromBitmap(BitmapFactory.decodeResource(
-                            getResources(),
-                            markers[index])));
-        }else {
-            mlastMarker.setIcon(BitmapDescriptorFactory.fromBitmap(
-                    BitmapFactory.decodeResource(getResources(), R.mipmap.location_mark)));
-        }
-        mlastMarker = null;
+    private void resetlastmarker(List<PoiItem> mapList) {
+        Message msg = new Message();
+        msg.what = 0;
+        msg.obj = mapList;
+        hand.sendMessage(msg);
+
+
+//        int index = poiOverlay.getPoiIndex(mlastMarker);
+//        if (index < 10) {
+//            mlastMarker.setIcon(BitmapDescriptorFactory
+//                    .fromBitmap(BitmapFactory.decodeResource(
+//                            getResources(),
+//                            markers[index])));
+//        }else {
+//            mlastMarker.setIcon(BitmapDescriptorFactory.fromBitmap(
+//                    BitmapFactory.decodeResource(getResources(), R.mipmap.location_mark)));
+//        }
+//        mlastMarker = null;
 
     }
     private myPoiOverlay poiOverlay;// poi图层
@@ -534,40 +586,43 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //                        whetherToShowDetailInfo(false);
 //                        //并还原点击marker样式
 //                        if (mlastMarker != null) {
-//                            resetlastmarker();
+                        resetlastmarker(poiItems);
 //                        }
 //                        //清理之前搜索结果的marker
 //                        if (poiOverlay !=null) {
 //                            poiOverlay.removeFromMap();
 //                        }
-                        List<Map<String ,String >>  mapList=null;
-                        for(int i=0;i<poiItems.size();i++){
-                            mapList = new ArrayList<>();
-                            Map<String ,String > map =new  HashMap<String,String>();
-                            map.put("title",poiItems.get(i).getTitle()+"");
-                            map.put("address",poiItems.get(i).getProvinceName()+poiItems.get(i).getCityName()+poiItems.get(i).getAdName()+poiItems.get(i).getSnippet());
-//                            Logs.i("==========="+poiItems.get(i).getTitle()+"标题和地址"+poiItems.get(i).getDirection());
-//                            Logs.i("==========="+poiItems.get(i).getCityName());
-//                            Logs.i("==========="+poiItems.get(i).getAdName());
-//                            Logs.i("==========="+poiItems.get(i).getProvinceName());
-//                            Logs.i("==========="+poiItems.get(i).getSnippet());
+//                        List<Map<String ,String >>  mapList=null;
+//                        for(int i=0;i<poiItems.size();i++){
+//                            mapList = new ArrayList<>();
+//                            Map<String ,String > map =new  HashMap<String,String>();
+//                            map.put("title",poiItems.get(i).getTitle()+"");
+//                            map.put("address",poiItems.get(i).getProvinceName()+poiItems.get(i).getCityName()+poiItems.get(i).getAdName()+poiItems.get(i).getSnippet());
+////                            Logs.i("==========="+poiItems.get(i).getTitle()+"标题和地址"+poiItems.get(i).getDirection());
+////                            Logs.i("==========="+poiItems.get(i).getCityName());
+////                            Logs.i("==========="+poiItems.get(i).getAdName());
+////                            Logs.i("==========="+poiItems.get(i).getProvinceName());
+////                            Logs.i("==========="+poiItems.get(i).getSnippet());
+//
+////                            Logs.i("==========="+poiItems.get(i).getTypeDes());
+////                            Logs.i("==========="+poiItems.get(i).getTel());
+////                            Logs.i("==========="+poiItems.get(i).getProvinceCode());
+//                            mapList.add(map);
+//                            Logs.i("================================"+i);
+//                        }
+//                        Logs.i("===========执行完成=====================");
 
-//                            Logs.i("==========="+poiItems.get(i).getTypeDes());
-//                            Logs.i("==========="+poiItems.get(i).getTel());
-//                            Logs.i("==========="+poiItems.get(i).getProvinceCode());
-                            mapList.add(map);
-                        }
 //                        aMap.clear();
 //                        poiOverlay = new myPoiOverlay(aMap, poiItems);
 //                        poiOverlay.addToMap();
 //                        poiOverlay.zoomToSpan();
 
-                        aMap.addMarker(new MarkerOptions()
-                                .anchor(0.5f, 0.5f)
-                                .icon(BitmapDescriptorFactory
-                                        .fromBitmap(BitmapFactory.decodeResource(
-                                                getResources(), R.mipmap.map_point)))
-                                .position(new LatLng(lp.getLatitude(), lp.getLongitude())));
+//                        aMap.addMarker(new MarkerOptions()
+//                                .anchor(0.5f, 0.5f)
+//                                .icon(BitmapDescriptorFactory
+//                                        .fromBitmap(BitmapFactory.decodeResource(
+//                                                getResources(), R.mipmap.map_point)))
+//                                .position(new LatLng(lp.getLatitude(), lp.getLongitude())));
 
 //                        aMap.addCircle(new CircleOptions()
 //                                .center(new LatLng(lp.getLatitude(),
@@ -575,26 +630,31 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
 //                                .strokeColor(Color.BLUE)
 //                                .fillColor(Color.argb(50, 1, 1, 1))
 //                                .strokeWidth(2));
-                        Message msg = new Message();
-                        msg.what = 0;
-                        msg.obj = mapList;
-                        hand.sendMessage(msg);
-                        return;
                     } else if (suggestionCities != null
                             && suggestionCities.size() > 0) {
                         showSuggestCity(suggestionCities);
                     } else {
-                        Toast.makeText(activity,"没有数据",Toast.LENGTH_LONG).show();
+                        Message msg = new Message();
+                        msg.what = AppClient.ERRORCODE;
+                        msg.obj = "没有查询到相关数据";
+                        hand.sendMessage(msg);
                     }
                 }
             } else {
-                Toast.makeText(activity,"没有数据",Toast.LENGTH_LONG).show();
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = "没有查询到相关数据";
+                hand.sendMessage(msg);
+
             }
         } else  {
-            Toast.makeText(activity,rcode+"",Toast.LENGTH_LONG).show();
+//            Toast.makeText(activity,rcode+"",Toast.LENGTH_LONG).show();
+//            Message msg = new Message();
+//            msg.what = AppClient.ERRORCODE;
+//            msg.obj = rcode+"";
+//            hand.sendMessage(msg);
         }
     }
-
     @Override
     public void onPoiItemSearched(PoiItem poiItem, int i) {
 

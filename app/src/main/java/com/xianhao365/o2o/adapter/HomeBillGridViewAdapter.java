@@ -73,9 +73,9 @@ public class HomeBillGridViewAdapter extends BaseAdapter {
             }
         });
         if(position%2 ==0){
-            Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_dy).into(vh.mImageView);
+            Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(vh.mImageView);
         }else{
-            Glide.with(context).load("android.resource://com.scott.shopplat/mipmap/"+R.mipmap.img_whr).into(vh.mImageView);
+            Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(vh.mImageView);
 
         }
         vh.addcar1.setOnClickListener(new View.OnClickListener() {

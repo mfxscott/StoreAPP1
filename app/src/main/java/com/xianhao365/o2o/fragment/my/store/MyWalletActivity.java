@@ -51,9 +51,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         setContentView(R.layout.activity_my_wallet);
         walletTag = this.getIntent().getStringExtra("walletTag");
         activity = this;
-
         initView();
-
     }
     private void initView(){
         bankListLay = (LinearLayout) findViewById(R.id.wallet_banklist_lin);
@@ -92,6 +90,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         });
 
         walletTopupBtn = (TextView) findViewById(R.id.wallet_topup_btn);
+//        if(walletTag== null)
+//        {
+//            walletTopupBtn.setText("充值");
+//        }else
         if(walletTag.equals("1")){
             walletTopupBtn.setText("提现");
         }
@@ -99,9 +101,9 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         walletTopupBtn.setOnClickListener(this);
         walletYhjRel.setOnClickListener(this);
         LinearLayout banklay = (LinearLayout) findViewById(R.id.wallet_bank_card_lin);
-        if(AppClient.TAG.equals("64")){
+        if(AppClient.USERROLETAG.equals("64")){
             banklay.setVisibility(View.GONE);
-        }else if(AppClient.TAG.equals("32")){
+        }else if(AppClient.USERROLETAG.equals("32")){
             banklay.setVisibility(View.VISIBLE);
         }
         hand = new Handler(new Handler.Callback() {
@@ -160,13 +162,14 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.wallet_topup_btn:
-                if(walletTag.equals("1")){
-                    Intent intent = new Intent(activity,ExtractDetailActivity.class);
-                    startActivity(intent);
-                }else{
+                if(walletTag == null){
                     Intent intent = new Intent(activity,TopUpActivity.class);
                     intent.putExtra("payTag","0");
                     intent.putExtra("paySum","0");
+                    startActivity(intent);
+                }else
+                if(walletTag.equals("1")){
+                    Intent intent = new Intent(activity,ExtractDetailActivity.class);
                     startActivity(intent);
                 }
 
@@ -175,6 +178,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 Intent yhj = new Intent(activity,YHJActivity.class);
                 yhj.putExtra("yhjTag","1");
                 startActivity(yhj);
+                break;
             case R.id.wallet_use_lin:
                 Intent yhj2 = new Intent(activity,YHJActivity.class);
                 yhj2.putExtra("yhjTag","2");

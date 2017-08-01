@@ -64,7 +64,8 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nameStr = s.toString();
-                inputEditListener();
+                //生产环境需要放开 用于检验输入框参数是否合法
+//                inputEditListener();
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -118,8 +119,13 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
             case R.id.login_acc_next:
                 String phone = loginAccPhoneEdt.getText().toString();
                 String psd = loginAccPsdEdt.getText().toString();
-                SXUtils.showMyProgressDialog(this,false);
-                psdLoginHttp(phone,psd);
+                AppClient.USERROLETAG = phone;
+
+                Intent gomain = new Intent(activity, MainFragmentActivity.class);
+                startActivity(gomain);
+                finish();
+//                SXUtils.showMyProgressDialog(this,false);
+//                psdLoginHttp(phone,psd);
                 break;
             case R.id.login_acc_usecode_tv:
                 Intent intent = new Intent(LoginNameActivity.this, LoginCodeActivity.class);
@@ -140,7 +146,6 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                 finish();
                 break;
         }
-
     }
     /**
      * 判断三个参数是否满足条件才显示注册按钮
@@ -168,7 +173,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                     JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
                     AppClient.USER_ID = jsonObject1.getString("uid");
                     AppClient.USER_SESSION = jsonObject1.getString("sid");
-                    AppClient.TAG = jsonObject1.getString("tag");
+                    AppClient.USERROLETAG = jsonObject1.getString("tag");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
