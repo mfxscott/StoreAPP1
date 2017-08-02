@@ -279,6 +279,7 @@ public class StartMainActivity extends Activity {
         }
         return true;
     }
+    //页面启动
     public void LauncherHttp(){
         RequestBody requestBody = new FormBody.Builder()
 //                .add("mobile", mobile)

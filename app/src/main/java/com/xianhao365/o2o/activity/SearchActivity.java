@@ -3,6 +3,8 @@ package com.xianhao365.o2o.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -19,9 +21,17 @@ import android.widget.Toast;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.view.FlowLayout;
 import com.xianhao365.o2o.utils.view.MyGridView;
 import com.xianhao365.o2o.utils.view.MyViewGroup;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 public class SearchActivity extends AppCompatActivity {
     //    private GridView gridView;
@@ -30,6 +40,7 @@ public class SearchActivity extends AppCompatActivity {
     private EditText  searchEdt;
     private MyGridView search_gridv;
     private MyViewGroup search_hist_lin;
+    private Handler hand;
 
     /**
      * 显示的文字
@@ -105,6 +116,25 @@ public class SearchActivity extends AppCompatActivity {
 ////                searchHotAdapter.changeSelected(position);//刷新
 //            }
 //        });
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    //热词搜索成功
+                    case 1000:
+                        SXUtils.getInstance(activity).ToastCenter("登录成功");
+//                        Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+//                        startActivity(mainintent);
+                        finish();
+                        break;
+                    case AppClient.ERRORCODE:
+                        String errormsg = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+                        break;
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
     }
     /**
      * 热门搜索词 按钮样式
@@ -229,5 +259,40 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         return searchlist;
+    }
+    public void psdLoginHttp(String mobile,String psdStr){
+        RequestBody requestBody = new FormBody.Builder()
+//                .add("mobile", mobile)
+//                .add("password",psdStr)
+//                .add("loginType","1")//0=验证码登录,1=密码登录
+                .build();
+        new OKManager(this).sendStringByPostMethod(requestBody, AppClient.HOTSEARCH, new OKManager.Func4() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("热门搜索词汇发送成功返回参数=======",jsonObject.toString());
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+
+//                    "responseData":{"searchWordNo",123456,"searchWord":"周周周"}
+
+                    AppClient.USER_ID = jsonObject1.getString("searchWordNo");
+                    AppClient.USER_SESSION = jsonObject1.getString("searchWord");
+                    AppClient.USERROLETAG = jsonObject1.getString("tag");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = "";
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
     }
 }

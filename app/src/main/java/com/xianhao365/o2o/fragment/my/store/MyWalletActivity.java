@@ -90,10 +90,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         });
 
         walletTopupBtn = (TextView) findViewById(R.id.wallet_topup_btn);
-//        if(walletTag== null)
-//        {
-//            walletTopupBtn.setText("充值");
-//        }else
+        if(walletTag== null)
+        {
+            walletTopupBtn.setText("充值");
+        }else
         if(walletTag.equals("1")){
             walletTopupBtn.setText("提现");
         }
