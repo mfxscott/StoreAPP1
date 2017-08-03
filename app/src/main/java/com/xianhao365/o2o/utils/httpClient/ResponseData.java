@@ -3,6 +3,8 @@ package com.xianhao365.o2o.utils.httpClient;
 
 import android.content.Context;
 
+import com.xianhao365.o2o.entity.GoodsTypeEntity;
+import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 
 import org.json.JSONArray;
@@ -62,7 +64,7 @@ public class ResponseData {
                 }
             } else {
                 JSONObject objdetail = (JSONObject) isobj;
-               hotSearch = new HashMap<>();
+                hotSearch = new HashMap<>();
 //                spinfo.setShopName(objdetail.getString("shopname"));
 //                spinfo.setGoodsImg(objdetail.getString("goodsimage"));
 //                spinfo.setMarketPrice(objdetail.getString("marketprice"));
@@ -77,5 +79,72 @@ public class ResponseData {
             e.printStackTrace();
         }
         return spList;
+    }
+    /**
+     * 首页商品一，而级分类
+     * @param jsonobj  返回数据
+     * @return
+     */
+    public static List<GoodsTypeEntity> getGoodsTypeData(Object jsonobj) throws JSONException {
+        List<GoodsTypeEntity> goodsTypeList = new ArrayList<GoodsTypeEntity>();
+        List<GoodsTypeEntity> childrengoodsTypeList= null;
+        GoodsTypeEntity goodsType;
+        Logs.i("解析返回json====="+jsonobj);
+        JSONObject aaa = (JSONObject) jsonobj;
+
+
+//            Object isobj = msgRspJson.get("localSearchGoods");
+        if (jsonobj instanceof JSONArray) {
+                JSONArray arr = (JSONArray) jsonobj;
+                for (int i = 0; i < arr.length(); i++) {
+                    goodsType = new GoodsTypeEntity();
+                    JSONObject objdetail = arr.getJSONObject(i);
+                    goodsType.setCatNo(objdetail.getString("catNo"));
+                    goodsType.setName(objdetail.getString("name"));
+                    goodsType.setParentId(objdetail.getString("parentId"));
+                    goodsType.setId(objdetail.getString("id"));
+                       if(objdetail.get("children") != null){
+                           childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
+                           GoodsTypeEntity CgoodsType;
+                           JSONArray childrenarr = objdetail.getJSONArray("children");
+                           for (int c = 0; c < childrenarr.length(); c++) {
+                               CgoodsType = new GoodsTypeEntity();
+                               JSONObject Cobjdetail = childrenarr.getJSONObject(c);
+                               CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
+                               CgoodsType.setName(Cobjdetail.getString("name"));
+                               CgoodsType.setParentId(Cobjdetail.getString("parentId"));
+                               CgoodsType.setId(Cobjdetail.getString("id"));
+                               childrengoodsTypeList.add(CgoodsType);
+                           }
+                       }
+                    goodsType.setGoodsTypeList(childrengoodsTypeList);
+                    goodsTypeList.add(goodsType);
+                }
+            } else if(jsonobj instanceof JSONObject){
+                JSONObject objdetail = (JSONObject) jsonobj;
+                goodsType = new GoodsTypeEntity();
+                goodsType.setCatNo(objdetail.getString("catNo"));
+                goodsType.setName(objdetail.getString("name"));
+                goodsType.setParentId(objdetail.getString("parentId"));
+                goodsType.setId(objdetail.getString("id"));
+
+                if(objdetail.get("children") != null){
+                    childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
+                    GoodsTypeEntity CgoodsType;
+                    JSONArray childrenarr = objdetail.getJSONArray("children");
+                    for (int c = 0; c < childrenarr.length(); c++) {
+                        CgoodsType = new GoodsTypeEntity();
+                        JSONObject Cobjdetail = childrenarr.getJSONObject(c);
+                        CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
+                        CgoodsType.setName(Cobjdetail.getString("name"));
+                        CgoodsType.setParentId(Cobjdetail.getString("parentId"));
+                        CgoodsType.setId(Cobjdetail.getString("id"));
+                        childrengoodsTypeList.add(CgoodsType);
+                    }
+                }
+                goodsType.setGoodsTypeList(childrengoodsTypeList);
+                goodsTypeList.add(goodsType);
+            }
+            return goodsTypeList;
     }
 }

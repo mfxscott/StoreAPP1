@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.utils.Logs;
@@ -31,6 +33,9 @@ import com.xianhao365.o2o.utils.checkPermission.PermissionsActivity;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsChecker;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +72,8 @@ public class StartMainActivity extends Activity {
     private RelativeLayout addLoglLin;
     private Activity activity;
     private Handler hand;
+    private int seconds;//广告图片显示时间
+    private String imgUrl;//广告图片
     /**
      * 图片资源id
      */
@@ -123,6 +130,10 @@ public class StartMainActivity extends Activity {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+                        Glide.with(activity)
+                                .load("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501757540559&di=e90bccf64389faec7963e21e102c4367&imgtype=0&src=http%3A%2F%2Fwww.1tong.com%2Fuploads%2Fallimg%2F121024%2F1-1210241T0360-L.jpg")
+                                .fitCenter()
+                                .into(addLogoIv);
                         break;
                     case AppClient.UPDATEVER:
                         Map<String,String> map = (Map<String, String>) msg.obj;
@@ -144,6 +155,7 @@ public class StartMainActivity extends Activity {
 
         countTv = (TextView) findViewById(R.id.start_addlogo_time_tv);
         addLogoIv = (ImageView) findViewById(R.id.start_addlogo_iv);
+
         addLoglLin = (RelativeLayout) findViewById(R.id.start_addlogo_linlay);
         countTv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,7 +208,7 @@ public class StartMainActivity extends Activity {
                             guideLinlay.setVisibility(View.GONE);
                             addLoglLin.setVisibility(View.VISIBLE);
                             //广告显示倒计时
-                            mc = new MyCountDownTimer(2000, 1000);
+                            mc = new MyCountDownTimer(seconds, 1000);
                             mc.start();
 //                            Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
 //                            startActivity(intent);
@@ -254,7 +266,7 @@ public class StartMainActivity extends Activity {
                 else{
                     guideLinlay.setVisibility(View.GONE);
                     addLoglLin.setVisibility(View.VISIBLE);
-                    mc = new MyCountDownTimer(3000, 1000);
+                    mc = new MyCountDownTimer(2000, 1000);
                     mc.start();
                 }
             }else{
@@ -292,6 +304,20 @@ public class StartMainActivity extends Activity {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("启动图发送成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+                try {
+                    jsonObject1 = new JSONObject(jsonObject.toString());
+
+                    String secondsStr = jsonObject1.getString("seconds");
+                    if(!TextUtils.isEmpty(secondsStr)){
+                        seconds = Integer.parseInt(secondsStr);
+                    }else{
+                        seconds = 2;
+                    }
+                    imgUrl = jsonObject1.getString("imgUrl");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Message msg = new Message();
                 msg.what = 1000;
                 msg.obj = "";

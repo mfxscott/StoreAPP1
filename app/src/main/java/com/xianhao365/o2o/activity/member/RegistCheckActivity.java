@@ -26,6 +26,7 @@ public class RegistCheckActivity extends Activity {
                 Intent sellregist = new Intent(RegistCheckActivity.this, Regis1Activity.class);
                 sellregist.putExtra("registRole","32");
                 startActivity(sellregist);
+                finish();
             }
         });
         pay.setOnClickListener(new View.OnClickListener() {
@@ -34,6 +35,7 @@ public class RegistCheckActivity extends Activity {
                 Intent regist = new Intent(RegistCheckActivity.this, Regis1Activity.class);
                 regist.putExtra("registRole","64");
                 startActivity(regist);
+                finish();
             }
         });
     }

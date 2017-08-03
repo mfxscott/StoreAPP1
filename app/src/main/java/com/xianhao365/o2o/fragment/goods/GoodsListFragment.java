@@ -22,14 +22,24 @@ import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.MainGoodsTypeAdapter;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.GoodsTypeEntity;
 import com.xianhao365.o2o.entity.MainGoodsTypeEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 
 /**
@@ -49,14 +59,21 @@ public class GoodsListFragment extends Fragment {
     private int indexPage= 1;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private Handler hand;
+    private XTabLayout tabLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_goods, null);
         activity = getActivity();
         initView();
+        GetGoodsType();
         return view;
     }
+
+    /**
+     * 二级分类
+     * @return
+     */
     private List<MainGoodsTypeEntity> getTypeData()
     {
         List<MainGoodsTypeEntity> typeList=new ArrayList<>();
@@ -101,7 +118,7 @@ public class GoodsListFragment extends Fragment {
     }
 
     /**
-     * 商品分类详情商品
+     * 商品分类详情商品 一级分类
      * @return
      */
     private List<GoodsInfoEntity> getTypeInfoData()
@@ -165,11 +182,10 @@ public class GoodsListFragment extends Fragment {
             }
         });
 
-        initViewPager();
-
+         tabLayout = (XTabLayout) view.findViewById(R.id.goods_xTablayout);
         typeGridView = (GridView) view.findViewById(R.id.main_goods_type_gridv);
-        typeAdapter= new MainGoodsTypeAdapter(activity,getTypeData());
-        typeGridView.setAdapter(typeAdapter);
+//        typeAdapter= new MainGoodsTypeAdapter(activity,getTypeData());
+//        typeGridView.setAdapter(typeAdapter);
         typeGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -197,8 +213,15 @@ public class GoodsListFragment extends Fragment {
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 1:
-
+                    case 1000:
+                        List<GoodsTypeEntity> TypeList= (List<GoodsTypeEntity>) msg.obj;
+                        Logs.i("分类size======================"+TypeList.size());
+                        initViewPager(TypeList);
+                        break;
+                    case AppClient.ERRORCODE:
+                        String msgs = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(msgs);
+                        break;
                 }
                 if(mSwipyRefreshLayout != null){
                     mSwipyRefreshLayout.setRefreshing(false);
@@ -207,19 +230,21 @@ public class GoodsListFragment extends Fragment {
             }
         });
     }
-    private void initViewPager() {
-        XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.goods_xTablayout);
-//        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("全部菜品"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 5"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 6"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 7"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 8"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 9"));
+    private void initViewPager(final List<GoodsTypeEntity> typeList) {
+        if (typeList != null) {
+            for (int i = 0; i < typeList.size(); i++) {
+                tabLayout.addTab(tabLayout.newTab().setText(typeList.get(i).getName() + ""));
+            }
+        }else{
+            tabLayout.addTab(tabLayout.newTab().setText("肉类"));
+            tabLayout.addTab(tabLayout.newTab().setText("鲜蔬菜"));
+        }
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
                 Logs.i("tab===============111111="+ tab.getPosition());
+                typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getGoodsTypeList());
+                typeGridView.setAdapter(typeAdapter);
             }
 
             @Override
@@ -233,5 +258,45 @@ public class GoodsListFragment extends Fragment {
             }
         });
 
+    }
+
+    /**
+     * 获取商品分类
+     */
+    public void GetGoodsType(){
+        RequestBody requestBody = new FormBody.Builder()
+//                .add("catNo", "00002-00001")//二级分类查询00002
+//                .add("vcode", codeStr)
+//                .add("registerType", "0")//0=手机,1=微信,2=QQ
+//                .add("password", psdStr)
+//                .add("tag","64")
+                .build();
+        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_TYPE, new OKManager.Func4() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("商品分类发送成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+                try {
+                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getGoodsTypeData(jsonObject);
+                    Message msg = new Message();
+                    msg.what = 1000;
+                    msg.obj = goodsTypeList;
+                    hand.sendMessage(msg);
+                } catch (JSONException e) {
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = e.toString();
+                    hand.sendMessage(msg);
+                }
+
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
     }
 }

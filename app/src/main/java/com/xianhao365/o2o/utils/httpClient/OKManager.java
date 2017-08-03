@@ -34,7 +34,8 @@ public class OKManager {
     private volatile  OKManager manager;
     private final String TAG = OKManager.class.getSimpleName();//获得类名
     public Activity activity;
-    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/api.do";
+    private String  HttpUrl= "http://120.27.223.246:8080/xianhao365/api.do";
+//    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/api.do";
     //    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/rest/mobile/13800138000/type/1";
     //    private Handler handler;
     //提交json数据
@@ -182,7 +183,7 @@ public class OKManager {
                 return;
             }
             if("10000".equals(jsonObject.getString("responseCode"))){
-                callBack.onResponse(jsonObject.getString("responseData"));
+                callBack.onResponse(jsonObject.get("responseData"));
             }
             else{
                 callBack.onResponseError(jsonObject.getString("responseText"));

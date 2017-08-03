@@ -1,11 +1,15 @@
 package com.xianhao365.o2o.activity.member;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -16,6 +20,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
@@ -45,12 +50,12 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     private TextView registRuleTv;//注册条款
     private Activity activity;
     private Handler   hand;
-    private String Tag; //64 个人 32 商户判断用户商户还是个人注册
+    private String userTag; //64 个人 32 商户判断用户商户还是个人注册
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regis1);
-        Tag = this.getIntent().getStringExtra("registRole");
+        userTag = this.getIntent().getStringExtra("registRole");
         activity = this;
         initView();
 
@@ -134,12 +139,18 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                             LoginCodeActivity.activity.finish();
                         SXUtils.getInstance(activity).ToastCenter("注册成功"+"");
 
-                        if(Tag.equals("64")){
+                        if(userTag.equals("64")){
                             Intent intent = new Intent(activity,LoginNameActivity.class);
                             startActivity(intent);
                         }else {
-                            Intent aa = new Intent(activity, StoreMapActivity.class);
-                            activity.startActivity(aa);
+                            //这里以ACCESS_COARSE_LOCATION为例
+                            if (ContextCompat.checkSelfPermission(Regis1Activity.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                //申请WRITE_EXTERNAL_STORAGE权限
+                                ActivityCompat.requestPermissions(Regis1Activity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                        1000);//自定义的code
+                            }
+
                         }
                         finish();
                         break;
@@ -166,22 +177,41 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
             }
         });
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Intent aa = new Intent(activity, StoreMapActivity.class);
+                activity.startActivity(aa);
+            } else
+            {
+                Toast.makeText(activity, "定位权限被拒绝,将无法定位当前周边店铺.", Toast.LENGTH_SHORT).show();
+                Intent aa = new Intent(activity, StoreMapActivity.class);
+                activity.startActivity(aa);
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //可在此继续其他操作。
+    }
     String mobilestr;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.regist_next:
-                if(Tag.equals("64")){
-                    Intent intent = new Intent(activity,LoginNameActivity.class);
-                    startActivity(intent);
-                }else {
-                    Intent aa = new Intent(activity, StoreMapActivity.class);
-                    activity.startActivity(aa);
-                }
-//                String codemsg = registCodeEdt.getText().toString();
-//                String psdstr = registInputPsdEdt.getText().toString();
-//                SXUtils.showMyProgressDialog(activity,true);
-//                RegistHttp(mobilestr,psdstr,codemsg);
+//                if(Tag.equals("64")){
+//                    Intent intent = new Intent(activity,LoginNameActivity.class);
+//                    startActivity(intent);
+//                }else {
+//                    Intent aa = new Intent(activity, StoreMapActivity.class);
+//                    activity.startActivity(aa);
+//                }
+                String codemsg = registCodeEdt.getText().toString();
+                String psdstr = registInputPsdEdt.getText().toString();
+                SXUtils.showMyProgressDialog(activity,true);
+                RegistHttp(mobilestr,psdstr,codemsg);
 
                 break;
             case R.id.regist_getcode_tv:
@@ -242,9 +272,9 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                 .add("vcode", codeStr)
                 .add("registerType", "0")//0=手机,1=微信,2=QQ
                 .add("password", psdStr)
-                .add("tag",Tag)
+                .add("tag",userTag)
                 .build();
-        Logs.i("注册请求字段===","=="+mobile+"=="+codeStr+"==="+psdStr+"===="+Tag);
+        Logs.i("注册请求字段===","=="+mobile+"=="+codeStr+"==="+psdStr+"===="+userTag);
         new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_REGIST, new OKManager.Func4() {
             @Override
             public void onResponse(Object jsonObject) {

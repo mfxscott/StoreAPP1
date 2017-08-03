@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.MainGoodsTypeEntity;
+import com.xianhao365.o2o.entity.GoodsTypeEntity;
 
 import java.util.List;
 /**
@@ -18,11 +18,11 @@ import java.util.List;
  * @time  2017/7/10 17:58
  */
 public class MainGoodsTypeAdapter extends BaseAdapter {
-    private List<MainGoodsTypeEntity> result;
+    private List<GoodsTypeEntity> result;
     private final LayoutInflater mLayoutInflater;
     private Activity context;
     int mSelect = 0;   //选中项
-    public MainGoodsTypeAdapter(Activity context, List<MainGoodsTypeEntity> result) {
+    public MainGoodsTypeAdapter(Activity context, List<GoodsTypeEntity> result) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
@@ -43,7 +43,7 @@ public class MainGoodsTypeAdapter extends BaseAdapter {
         return position;
     }
     public View getView(int position, View convertView, ViewGroup parent) {
-        MainGoodsTypeEntity info = result.get(position);
+        GoodsTypeEntity info = result.get(position);
         LifeViewHolder vh;
         if (convertView == null) {
             vh = new LifeViewHolder();
@@ -56,7 +56,7 @@ public class MainGoodsTypeAdapter extends BaseAdapter {
         } else {
             vh = (LifeViewHolder) convertView.getTag();
         }
-        vh.TypeName.setText(info.getTypeName()+"");
+        vh.TypeName.setText(info.getName()+"");
 //        if(position == 0){
 //            vh.linV.setVisibility(View.VISIBLE);
 //        }else{
