@@ -3,7 +3,9 @@ package com.xianhao365.o2o.utils.httpClient;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
+import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 
@@ -85,49 +87,29 @@ public class ResponseData {
      * @param jsonobj  返回数据
      * @return
      */
-    public static List<GoodsTypeEntity> getGoodsTypeData(Object jsonobj) throws JSONException {
+    public  List<GoodsTypeEntity> getGoodsTypeData(Object jsonobj) throws JSONException {
         List<GoodsTypeEntity> goodsTypeList = new ArrayList<GoodsTypeEntity>();
         List<GoodsTypeEntity> childrengoodsTypeList= null;
         GoodsTypeEntity goodsType;
         Logs.i("解析返回json====="+jsonobj);
-        JSONObject aaa = (JSONObject) jsonobj;
+        Object obj;
+        try {
+            obj =  (JSONObject) jsonobj;
+        }catch (ClassCastException e){
+            obj =  (JSONArray) jsonobj;
+        }
 
-
+//        JSONObject aaa = (JSONObject) jsonobj;
 //            Object isobj = msgRspJson.get("localSearchGoods");
-        if (jsonobj instanceof JSONArray) {
-                JSONArray arr = (JSONArray) jsonobj;
-                for (int i = 0; i < arr.length(); i++) {
-                    goodsType = new GoodsTypeEntity();
-                    JSONObject objdetail = arr.getJSONObject(i);
-                    goodsType.setCatNo(objdetail.getString("catNo"));
-                    goodsType.setName(objdetail.getString("name"));
-                    goodsType.setParentId(objdetail.getString("parentId"));
-                    goodsType.setId(objdetail.getString("id"));
-                       if(objdetail.get("children") != null){
-                           childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
-                           GoodsTypeEntity CgoodsType;
-                           JSONArray childrenarr = objdetail.getJSONArray("children");
-                           for (int c = 0; c < childrenarr.length(); c++) {
-                               CgoodsType = new GoodsTypeEntity();
-                               JSONObject Cobjdetail = childrenarr.getJSONObject(c);
-                               CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
-                               CgoodsType.setName(Cobjdetail.getString("name"));
-                               CgoodsType.setParentId(Cobjdetail.getString("parentId"));
-                               CgoodsType.setId(Cobjdetail.getString("id"));
-                               childrengoodsTypeList.add(CgoodsType);
-                           }
-                       }
-                    goodsType.setGoodsTypeList(childrengoodsTypeList);
-                    goodsTypeList.add(goodsType);
-                }
-            } else if(jsonobj instanceof JSONObject){
-                JSONObject objdetail = (JSONObject) jsonobj;
+        if (obj instanceof JSONArray) {
+            JSONArray arr = (JSONArray) obj;
+            for (int i = 0; i < arr.length(); i++) {
                 goodsType = new GoodsTypeEntity();
+                JSONObject objdetail = arr.getJSONObject(i);
                 goodsType.setCatNo(objdetail.getString("catNo"));
                 goodsType.setName(objdetail.getString("name"));
                 goodsType.setParentId(objdetail.getString("parentId"));
                 goodsType.setId(objdetail.getString("id"));
-
                 if(objdetail.get("children") != null){
                     childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
                     GoodsTypeEntity CgoodsType;
@@ -145,6 +127,45 @@ public class ResponseData {
                 goodsType.setGoodsTypeList(childrengoodsTypeList);
                 goodsTypeList.add(goodsType);
             }
-            return goodsTypeList;
+        } else if(obj instanceof JSONObject){
+            JSONObject objdetail = (JSONObject) obj;
+            goodsType = new GoodsTypeEntity();
+            goodsType.setCatNo(objdetail.getString("catNo"));
+            goodsType.setName(objdetail.getString("name"));
+            goodsType.setParentId(objdetail.getString("parentId"));
+            goodsType.setId(objdetail.getString("id"));
+
+            if(objdetail.get("children") != null){
+                childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
+                GoodsTypeEntity CgoodsType;
+                JSONArray childrenarr = objdetail.getJSONArray("children");
+                for (int c = 0; c < childrenarr.length(); c++) {
+                    CgoodsType = new GoodsTypeEntity();
+                    JSONObject Cobjdetail = childrenarr.getJSONObject(c);
+                    CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
+                    CgoodsType.setName(Cobjdetail.getString("name"));
+                    CgoodsType.setParentId(Cobjdetail.getString("parentId"));
+                    CgoodsType.setId(Cobjdetail.getString("id"));
+                    childrengoodsTypeList.add(CgoodsType);
+                }
+            }
+            goodsType.setGoodsTypeList(childrengoodsTypeList);
+            goodsTypeList.add(goodsType);
+        }
+        return goodsTypeList;
     }
+
+    /**
+     * 解析用户个人信息
+     * @param jsonObj
+     * @return
+     * @throws JSONException
+     */
+    public UserInfoEntity  getUserInfo(Object jsonObj) throws JSONException {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonObj.toString(),UserInfoEntity.class);
+
+
+    }
+
 }

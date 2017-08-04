@@ -3,12 +3,15 @@ package com.xianhao365.o2o.activity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
@@ -33,6 +37,7 @@ import com.xianhao365.o2o.utils.checkPermission.PermissionsActivity;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsChecker;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.RequestReqMsgData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -114,6 +119,17 @@ public class StartMainActivity extends Activity {
         //启动页面倒计时
         mc = new MyCountDownTimer(3000, 1000);
         mc.start();
+
+        //这里以ACCESS_COARSE_LOCATION为例
+        if (ContextCompat.checkSelfPermission(StartMainActivity.this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(StartMainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE},
+                    1000);//自定义的code
+        }
+
+
+
 //        // 缺少权限时, 进入权限配置页面
 //        if (mPermissionsChecker.lacksPermissions(PERMISSIONS)) {
 //            startPermissionsActivity();
@@ -124,6 +140,25 @@ public class StartMainActivity extends Activity {
 //        Log.i("手机唯一标示IMEI====",imei+"");
 //        GetuserList();
         initView();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 1000)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+//                Intent aa = new Intent(activity, StoreMapActivity.class);
+//                activity.startActivity(aa);
+            } else
+            {
+                Toast.makeText(activity, "手机权限被拒绝,将无法定位当前周边店铺.", Toast.LENGTH_SHORT).show();
+//                Intent aa = new Intent(activity, StoreMapActivity.class);
+//                activity.startActivity(aa);
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //可在此继续其他操作。
     }
     private void initView(){
         hand = new Handler(new Handler.Callback() {
@@ -149,7 +184,7 @@ public class StartMainActivity extends Activity {
             }
         });
         LauncherHttp();
-//        RequestReqMsgData.UpdateVersion(activity,hand);
+        RequestReqMsgData.UpdateVersion(activity,hand);
         logoIv = (ImageView) findViewById(R.id.start_logo_iv);
         guideLinlay = (LinearLayout) findViewById(R.id.start_guide_linlay);
 
@@ -233,9 +268,6 @@ public class StartMainActivity extends Activity {
                 return null;
             }
         });
-    }
-    private void startPermissionsActivity() {
-        PermissionsActivity.startActivityForResult(this, REQUEST_CODE, PERMISSIONS);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

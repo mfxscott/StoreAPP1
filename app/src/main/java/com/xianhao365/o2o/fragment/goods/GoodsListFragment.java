@@ -265,7 +265,7 @@ public class GoodsListFragment extends Fragment {
      */
     public void GetGoodsType(){
         RequestBody requestBody = new FormBody.Builder()
-//                .add("catNo", "00002-00001")//二级分类查询00002
+                .add("catNo", "00002-00001")//二级分类查询00002
 //                .add("vcode", codeStr)
 //                .add("registerType", "0")//0=手机,1=微信,2=QQ
 //                .add("password", psdStr)
@@ -277,7 +277,59 @@ public class GoodsListFragment extends Fragment {
                 Logs.i("商品分类发送成功返回参数=======",jsonObject.toString());
                 JSONObject jsonObject1 = null;
                 try {
-                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getGoodsTypeData(jsonObject);
+                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getInstance(activity).getGoodsTypeData(jsonObject);
+                    Message msg = new Message();
+                    msg.what = 1000;
+                    msg.obj = goodsTypeList;
+                    hand.sendMessage(msg);
+                } catch (JSONException e) {
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = e.toString();
+                    hand.sendMessage(msg);
+                }
+
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+    }
+
+    /**
+     * 根据商品分类查询商品数据
+     * cid    分类ID
+     cno 分类编码(支持模糊查询)
+     bid          品牌ID
+     goodsName   商品名称
+     goodsPlace  产地
+     foodGrade   等级
+     goodsType   类型（ 1:热销 2:新品）
+     supplyName  供应商名称
+     bPrice  本店售价开始（查询本店售价区间）
+     ePrice  本店售价结束（查询本店售价区间）
+     bWholesalePrice  批发售价开始（查询本店售价区间）
+     eWholesalePrice   批发售价结束（查询本店售价区间）
+     */
+    public void GetGoodsTypeInfoHttp(String goodsCId){
+        RequestBody requestBody = new FormBody.Builder()
+                .add("cid", "00002-00001")//二级分类查询00002
+//                .add("vcode", codeStr)
+//                .add("registerType", "0")//0=手机,1=微信,2=QQ
+//                .add("password", psdStr)
+//                .add("tag","64")
+                .build();
+        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_TYPE, new OKManager.Func4() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("商品分类发送成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+                try {
+                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getInstance(activity).getGoodsTypeData(jsonObject);
                     Message msg = new Message();
                     msg.what = 1000;
                     msg.obj = goodsTypeList;

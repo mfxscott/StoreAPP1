@@ -71,7 +71,8 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.login_out_btn:
-                SXUtils.getInstance(activity).ToastCenter("sdf");
+                SXUtils.showMyProgressDialog(activity,false);
+                getLoginOutHttp();
                 break;
             case R.id.acc_manage_info_lin:
                 Intent intent = new Intent(activity,AccInfoActivity.class);
@@ -83,7 +84,7 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 break;
         }
     }
-    public void RegistHttp(){
+    public void getLoginOutHttp(){
         RequestBody requestBody = new FormBody.Builder()
 //                .add("mobile", mobile)
 //                .add("vcode", codeStr)

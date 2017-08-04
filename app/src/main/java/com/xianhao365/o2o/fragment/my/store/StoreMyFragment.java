@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +17,20 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
+import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
+
+import org.json.JSONException;
+
+import okhttp3.FormBody;
+import okhttp3.RequestBody;
 
 /**
  * 摊主或者个人登录进入我的界面
@@ -44,6 +57,9 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private Activity activity;
     private LinearLayout storeLin; //店铺账号类型显示
     private LinearLayout perLin; //个人账号类型显示
+    private Handler hand;
+    private UserInfoEntity userinfo;//个人所有用户信息
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,12 +77,22 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 //        }
         view = inflater.inflate(R.layout.fragment_store_my, null);
         initView();
+        SXUtils.showMyProgressDialog(activity,false);
+        getUserInfoHttp();
         return view;
     }
     private void initView(){
-        ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
-        Glide.with(activity).load(AppClient.headImg).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.user_center_swipe_container);
+//        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //重新刷新页面
+//                myWebView.reload();
+                getUserInfoHttp();
+
+            }
+        });
 //        Glide.with(activity).load("https://www.baidu.com/img/bdlogo.png").transform(new GlideRoundTransform(activity, 10)).into(headimg);
 
 //        Glide.with(activity)
@@ -124,6 +150,32 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         myStoreFwcenterLin.setOnClickListener(this);
         myStoreZxserviceLin.setOnClickListener(this);
         myStoreKffwLin.setOnClickListener(this);
+
+
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1000:
+                        userinfo = (UserInfoEntity) msg.obj;
+                        TextView  name = (TextView) view.findViewById(R.id.user_info_name_tv);
+                        name.setText(userinfo.getNickname()+"");
+                        ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
+                        Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.default_head)
+                                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+                        Logs.i("用户信息size======================"+msg.obj);
+                        break;
+                    case AppClient.ERRORCODE:
+                        String msgs = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(msgs);
+                        break;
+                }
+                if(swipeRefreshLayout != null){
+                swipeRefreshLayout.setRefreshing(false);
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
     }
     @Override
     public void onClick(View v) {
@@ -177,5 +229,39 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 startActivity(mykey);
                 break;
         }
+    }
+    public void getUserInfoHttp(){
+        RequestBody requestBody = new FormBody.Builder()
+//                .add("vcode", codeStr)
+//                .add("registerType", "0")//0=手机,1=微信,2=QQ
+//                .add("password", psdStr)
+//                .add("tag","64")
+                .build();
+        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_INFO, new OKManager.Func4() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("用户信息发送成功返回参数=======",jsonObject.toString());
+                try {
+                    UserInfoEntity userinfo =  ResponseData.getInstance(activity).getUserInfo(jsonObject);
+                    Message msg = new Message();
+                    msg.what = 1000;
+                    msg.obj = userinfo;
+                    hand.sendMessage(msg);
+                } catch (JSONException e) {
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = e.toString();
+                    hand.sendMessage(msg);
+                }
+
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
     }
 }

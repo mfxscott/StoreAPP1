@@ -510,7 +510,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         banner.stopAutoPlay();
         EventBus.getDefault().unregister(this);
     }
-
+    //scrollview 滑动事件
     @Override
     public void onScrollChanged(ObservableScrollView scrollView, int x, int y,
                                 int oldx, int oldy) {

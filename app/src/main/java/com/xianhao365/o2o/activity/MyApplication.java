@@ -6,6 +6,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 
+import com.xianhao365.o2o.utils.CrashHandler;
 import com.xianhao365.o2o.utils.NetworkConnectChangedReceiver;
 
 import java.util.ArrayList;
@@ -71,8 +72,8 @@ public class MyApplication extends Application{
 //        LeakCanary.install(this);
         // Normal app init code...
         //设置该CrashHandler为程序的默认处理器
-//        CrashHandler catchExcep = new CrashHandler(this);
-//        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+        CrashHandler catchExcep = new CrashHandler(this);
+        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
 
 
         IntentFilter filter = new IntentFilter();

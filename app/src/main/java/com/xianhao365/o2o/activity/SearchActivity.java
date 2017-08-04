@@ -61,6 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         activity = this;
         initView();
         searchHistHot(getSearchValue());
+        getHotSearchHttp();
     }
     private void initView() {
 //        search_gridv = (MyGridView) findViewById(R.id.search_hist_gridv);
@@ -260,7 +261,7 @@ public class SearchActivity extends AppCompatActivity {
 
         return searchlist;
     }
-    public void psdLoginHttp(String mobile,String psdStr){
+    public void getHotSearchHttp(){
         RequestBody requestBody = new FormBody.Builder()
 //                .add("mobile", mobile)
 //                .add("password",psdStr)
@@ -275,9 +276,9 @@ public class SearchActivity extends AppCompatActivity {
 
 //                    "responseData":{"searchWordNo",123456,"searchWord":"周周周"}
 
-                    AppClient.USER_ID = jsonObject1.getString("searchWordNo");
-                    AppClient.USER_SESSION = jsonObject1.getString("searchWord");
-                    AppClient.USERROLETAG = jsonObject1.getString("tag");
+//                    AppClient.USER_ID = jsonObject1.getString("searchWordNo");
+//                    AppClient.USER_SESSION = jsonObject1.getString("searchWord");
+//                    AppClient.USERROLETAG = jsonObject1.getString("tag");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

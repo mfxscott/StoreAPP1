@@ -44,6 +44,9 @@ public class AppClient{
     public static String USER_ORDERS="svc.get.user.order.info";//获取用户订单信息
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
 
+
+
+
     public static String GET_CODEMSG = "svc.pull.sms";//拉取短信
     public static String APP_UPDATE="svc.check.update";//app版本更新
     public static String APP_LAUNCH="svc.launch.image";//启动广告图
@@ -53,6 +56,7 @@ public class AppClient{
     public static String GOODS_DETAIL="svc.goods.ById";//商品详情
     public static String GOODS_TYPE="svc.cat.list";//商品分类
     public static String GOODS_LIST="svc.goods.list";//商品列表 根据参数进行分类查询
+
 
    public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";
 

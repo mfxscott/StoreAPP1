@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
@@ -52,8 +53,11 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         walletTag = this.getIntent().getStringExtra("walletTag");
         activity = this;
         initView();
+
     }
     private void initView(){
+
+
         bankListLay = (LinearLayout) findViewById(R.id.wallet_banklist_lin);
         myBankArrow = (ImageView) findViewById(R.id.wallet_mybank_arrow_iv);
 
@@ -90,11 +94,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         });
 
         walletTopupBtn = (TextView) findViewById(R.id.wallet_topup_btn);
-        if(walletTag== null)
-        {
+
+        if(AppClient.USERROLETAG.equals("64")){
             walletTopupBtn.setText("充值");
-        }else
-        if(walletTag.equals("1")){
+        }else{
             walletTopupBtn.setText("提现");
         }
         walletYhjRel = (RelativeLayout) findViewById(R.id.wallet_yhj_rel);
@@ -122,6 +125,8 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 return true;
             }
         });
+        ScrollView scrollView = (ScrollView) findViewById(R.id.wallet_scrollv);
+        scrollView.scrollTo(0,0);
     }
 
     /**
@@ -162,13 +167,12 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.wallet_topup_btn:
-                if(walletTag == null){
+                if(AppClient.USERROLETAG.equals("64")){
                     Intent intent = new Intent(activity,TopUpActivity.class);
                     intent.putExtra("payTag","0");
                     intent.putExtra("paySum","0");
                     startActivity(intent);
-                }else
-                if(walletTag.equals("1")){
+                }else{
                     Intent intent = new Intent(activity,ExtractDetailActivity.class);
                     startActivity(intent);
                 }

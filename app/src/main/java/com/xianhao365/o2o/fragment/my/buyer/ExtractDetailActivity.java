@@ -11,7 +11,11 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
-
+/**
+ * 商户，店主提现
+ * @author mfx
+ * @time  2017/8/4 11:09
+ */
 public class ExtractDetailActivity extends BaseActivity implements View.OnClickListener {
     private Activity activity;
     private TextView extractMoneyCardTv;
