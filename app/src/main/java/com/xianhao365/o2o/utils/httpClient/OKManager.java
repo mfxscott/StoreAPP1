@@ -78,6 +78,7 @@ public class OKManager {
     public void sendStringByPostMethod(RequestBody requestBody, final String rspMsgName , final Func4 callBack) {
         Logs.i("请求地址参数======",requestBody.contentType()+"=");
 
+
         Request request = new Request.Builder().url(HttpUrl)
 //        headMsgJson.put("X-App-Key","xianhao365");
 //        //随机数

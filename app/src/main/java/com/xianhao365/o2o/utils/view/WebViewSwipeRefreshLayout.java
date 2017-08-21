@@ -48,7 +48,6 @@ public class WebViewSwipeRefreshLayout extends SwipeRefreshLayout {
   }
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
-
     switch (event.getAction()) {
       case MotionEvent.ACTION_DOWN:
         mPrevX = event.getX();

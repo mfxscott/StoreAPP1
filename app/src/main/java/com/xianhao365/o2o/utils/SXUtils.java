@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lzy.okhttputils.model.HttpHeaders;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
@@ -40,6 +41,8 @@ import java.util.Date;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
+
+import static com.xianhao365.o2o.utils.httpClient.RequestReqMsgData.getReqsn;
 
 /**
  * des
@@ -468,5 +471,26 @@ public class SXUtils {
 
     public  void setColorSchemeResources(SwipyRefreshLayout mSwipyRefreshLayout) {
         mSwipyRefreshLayout.setColorSchemeResources(R.color.qblue, R.color.btn_gray,R.color.red);
+    }
+
+    /**
+     * 获取header请求参数
+     * @param rspMsgName 方法名
+     * @return
+     */
+    public HttpHeaders GetheadData(String rspMsgName){
+        HttpHeaders headers = new HttpHeaders();
+        headers.put("X-App-Key","xianhao365");
+        headers.put("X-Method",rspMsgName);
+        headers.put("X-Timestamp", SXUtils.getInstance(mContext).GetNowDateTime());
+        headers.put("X-Version","1.0");
+        headers.put("X-User-ID", TextUtils.isEmpty(AppClient.USER_ID) ? "" : AppClient.USER_ID);
+        headers.put("X-User-Session",TextUtils.isEmpty(AppClient.USER_SESSION) ? "" : AppClient.USER_SESSION);
+        headers.put("X-OS","Android");
+        headers.put("X-OS-Version", SXUtils.getInstance(mContext).getClientDeviceInfo());
+        headers.put("X-App-Version",SXUtils.getInstance(mContext).getVersionName());
+        headers.put("X-UDID", SXUtils.getInstance(mContext).getDeviceId());
+        headers.put("X-Nonce",getReqsn());
+        return headers;
     }
 }

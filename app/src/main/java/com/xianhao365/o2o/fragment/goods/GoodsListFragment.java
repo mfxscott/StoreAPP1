@@ -17,6 +17,10 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
+import com.lzy.okhttputils.OkHttpUtils;
+import com.lzy.okhttputils.callback.StringCallback;
+import com.lzy.okhttputils.model.HttpHeaders;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.MainGoodsTypeAdapter;
@@ -35,11 +39,14 @@ import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 
 /**
@@ -66,10 +73,11 @@ public class GoodsListFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_goods, null);
         activity = getActivity();
         initView();
-        GetGoodsType();
+//        GetGoodsType();
+//        GetGoodsTypeInfoHttp();
+        HttpUtil();
         return view;
     }
-
     /**
      * 二级分类
      * @return
@@ -315,15 +323,15 @@ public class GoodsListFragment extends Fragment {
      bWholesalePrice  批发售价开始（查询本店售价区间）
      eWholesalePrice   批发售价结束（查询本店售价区间）
      */
-    public void GetGoodsTypeInfoHttp(String goodsCId){
+    public void GetGoodsTypeInfoHttp(){
         RequestBody requestBody = new FormBody.Builder()
-                .add("cid", "00002-00001")//二级分类查询00002
+                .add("cno","00003")
 //                .add("vcode", codeStr)
 //                .add("registerType", "0")//0=手机,1=微信,2=QQ
 //                .add("password", psdStr)
 //                .add("tag","64")
                 .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_TYPE, new OKManager.Func4() {
+        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_LIST, new OKManager.Func4() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("商品分类发送成功返回参数=======",jsonObject.toString());
@@ -350,5 +358,36 @@ public class GoodsListFragment extends Fragment {
                 hand.sendMessage(msg);
             }
         });
+    }
+    public void HttpUtil(){
+      HttpHeaders httpHeaders =  SXUtils.getInstance(activity).GetheadData(AppClient.GOODS_LIST);
+        OkHttpUtils.getInstance().addCommonHeaders(httpHeaders);
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("cno","0003");
+        OkHttpUtils.post("http://120.27.223.246:8080/xianhao365/api.do")
+                .tag(this)
+                .params(httpParams)
+//                .postJson("")
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        try {
+                            Logs.i("==onSuccess=="+(String)response.body().string());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        Logs.i("==onError=="+e.toString());
+                    }
+
+                    @Override
+                    public void upProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+                        Logs.i(progress+"====");
+                        super.upProgress(currentSize, totalSize, progress, networkSpeed);
+                    }
+                });
     }
 }
