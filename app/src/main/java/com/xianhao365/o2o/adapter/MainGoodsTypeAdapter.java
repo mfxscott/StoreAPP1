@@ -13,7 +13,7 @@ import com.xianhao365.o2o.entity.GoodsTypeEntity;
 
 import java.util.List;
 /**
- * 全部商品 分类展示
+ * 全部商品 左侧二级分类展示
  * @author mfx
  * @time  2017/7/10 17:58
  */

@@ -146,7 +146,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
      * 判断三个参数是否满足条件才显示注册按钮
      */
     private void inputEditListener(){
-        if(nameStr.equals("") || nameStr.length() <11 || psdStr.equals("") ||psdStr.length()<6){
+        if(nameStr.equals("") || nameStr.length() <11 || psdStr.equals("")){//变态的测试环境密码是一去掉小于6位验证   || psdStr.length()<6
             loginAccNext.setEnabled(false);
             loginAccNext.setBackgroundResource(R.drawable.gray_round_shap);
         }else{

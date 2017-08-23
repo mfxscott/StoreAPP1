@@ -15,9 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
-import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public  class TypeInfoRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<GoodsInfoEntity> mValues;
+    private List<GoodsDetailEntity> mValues;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -59,7 +58,7 @@ public  class TypeInfoRecyclerViewAdapter
             return super.toString() + " '" + mTextView.getText();
         }
     }
-    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
+    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsDetailEntity> items) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -74,15 +73,7 @@ public  class TypeInfoRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTextView.setText(mValues.get(position).getGoodsname());
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                SXUtils.getInstance(context).ToastCenter("===="+position);
-            }
-        });
+        holder.mTextView.setText(mValues.get(position).getGoodsName());
 
         holder.modeTView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +92,7 @@ public  class TypeInfoRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+                intent.putExtra("cno",mValues.get(position).getCno());
                 holder.mView.getContext().startActivity(intent);
             }
         });

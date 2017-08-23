@@ -53,9 +53,11 @@ public class AppClient{
     public static String APP_SWIPER="svc.swiper";//轮播广告图
     public static String STORE_LOCATION="svc.shop.location";//查询门店地理位置
     public static String HOTSEARCH = "svc.search.word";//热门搜索词汇 svc.search.word --svc.search.keyword
+    //商品信息相关接口
     public static String GOODS_DETAIL="svc.goods.ById";//商品详情
     public static String GOODS_TYPE="svc.cat.list";//商品分类
     public static String GOODS_LIST="svc.goods.list";//商品列表 根据参数进行分类查询
+
 
 
    public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";

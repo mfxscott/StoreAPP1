@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 
 import com.lzy.okhttputils.OkHttpUtils;
-import com.xianhao365.o2o.utils.CrashHandler;
 import com.xianhao365.o2o.utils.NetworkConnectChangedReceiver;
 
 import java.util.ArrayList;
@@ -21,51 +20,18 @@ import java.util.ArrayList;
 
 public class MyApplication extends Application{
     ArrayList<Activity> list = new ArrayList<Activity>();
-
+    private String  HttpUrl= "http://120.27.223.246:8080/xianhao365/api.do";
     private  String httpId = "https://www.sanxiapay.com/";
-    /**
-     * 接口请求
-     */
-    private  String HTTPURL =httpId+"wscommon/ESB/UXUNDBF/UXUNCOMMONFRONT/common";
     /**
      * 中转地址
      */
     private  String INTENTURL=httpId+"emallapp/ccqtgb/ccqtgbUrl.do";
-    /**
-     * 测试web跳转链接
-     */
-    private  String webUrlTest = "emallapp/pages/finanz/finance.jsp";
-
-    public String getHttpId() {
-        return httpId;
-    }
-
-    public void setHttpId(String httpId) {
-        this.httpId = httpId;
-    }
-
-    public String getHTTPURL() {
-        return HTTPURL;
-    }
-
-    public void setHTTPURL(String HTTPURL) {
-        this.HTTPURL = HTTPURL;
-    }
-
-    public String getWebUrlTest() {
-        return webUrlTest;
-    }
-
-    public void setWebUrlTest(String webUrlTest) {
-        this.webUrlTest = webUrlTest;
-    }
 
     public String getINTENTURL() {
         return INTENTURL;
     }
-
-    public void setINTENTURL(String INTENTURL) {
-        this.INTENTURL = INTENTURL;
+    public String getHttpUrl() {
+        return HttpUrl;
     }
     @Override
     public void onCreate() {
@@ -82,8 +48,8 @@ public class MyApplication extends Application{
 //        LeakCanary.install(this);
         // Normal app init code...
         //设置该CrashHandler为程序的默认处理器
-        CrashHandler catchExcep = new CrashHandler(this);
-        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
+//        CrashHandler catchExcep = new CrashHandler(this);
+//        Thread.setDefaultUncaughtExceptionHandler(catchExcep);
 
 
         IntentFilter filter = new IntentFilter();

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
+import com.xianhao365.o2o.entity.GsonResponseDataEntity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -113,15 +114,29 @@ public class ResponseData {
                 if(objdetail.get("children") != null){
                     childrengoodsTypeList = new ArrayList<GoodsTypeEntity>();
                     GoodsTypeEntity CgoodsType;
-                    JSONArray childrenarr = objdetail.getJSONArray("children");
-                    for (int c = 0; c < childrenarr.length(); c++) {
+
+                    Object cobj = objdetail.get("children");
+                    if(cobj instanceof String){
+                        //空字符串什么都不做
+                    }else if(cobj instanceof JSONObject){
                         CgoodsType = new GoodsTypeEntity();
-                        JSONObject Cobjdetail = childrenarr.getJSONObject(c);
+                        JSONObject Cobjdetail = (JSONObject) cobj;
                         CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
                         CgoodsType.setName(Cobjdetail.getString("name"));
                         CgoodsType.setParentId(Cobjdetail.getString("parentId"));
                         CgoodsType.setId(Cobjdetail.getString("id"));
                         childrengoodsTypeList.add(CgoodsType);
+                    }else if(cobj instanceof JSONArray){
+                        JSONArray childrenarr = objdetail.getJSONArray("children");
+                        for (int c = 0; c < childrenarr.length(); c++) {
+                            CgoodsType = new GoodsTypeEntity();
+                            JSONObject Cobjdetail = childrenarr.getJSONObject(c);
+                            CgoodsType.setCatNo(Cobjdetail.getString("catNo"));
+                            CgoodsType.setName(Cobjdetail.getString("name"));
+                            CgoodsType.setParentId(Cobjdetail.getString("parentId"));
+                            CgoodsType.setId(Cobjdetail.getString("id"));
+                            childrengoodsTypeList.add(CgoodsType);
+                        }
                     }
                 }
                 goodsType.setGoodsTypeList(childrengoodsTypeList);
@@ -165,7 +180,10 @@ public class ResponseData {
         Gson gson = new Gson();
         return gson.fromJson(jsonObj.toString(),UserInfoEntity.class);
 
+    }
+    public GsonResponseDataEntity getDataGson(Object jsonObj) throws JSONException {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonObj.toString(),GsonResponseDataEntity.class);
 
     }
-
 }

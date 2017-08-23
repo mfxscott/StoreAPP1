@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
@@ -88,29 +88,29 @@ private Activity activity;
      * 商品分类详情商品
      * @return
      */
-    private List<GoodsInfoEntity> getTypeInfoData()
+    private List<GoodsDetailEntity> getTypeInfoData()
     {
-        List<GoodsInfoEntity> typeList=new ArrayList<>();
+        List<GoodsDetailEntity> typeList=new ArrayList<>();
         for(int i=0;i<10;i++){
-            GoodsInfoEntity type = new GoodsInfoEntity();
+            GoodsDetailEntity type = new GoodsDetailEntity();
             switch (i){
                 case 0:
-                    type.setGoodsname("鸡肉");
+                    type.setGoodsName("鸡肉");
                     break;
                 case 1:
-                    type.setGoodsname("鲜蔬菜");
+                    type.setGoodsName("鲜蔬菜");
                     break;
                 case 2:
-                    type.setGoodsname("豆芽");
+                    type.setGoodsName("豆芽");
                     break;
                 case 3:
-                    type.setGoodsname("牛肉");
+                    type.setGoodsName("牛肉");
                     break;
                 case 4:
-                    type.setGoodsname("鸭肉");
+                    type.setGoodsName("鸭肉");
                     break;
                 default:
-                    type.setGoodsname("西瓜");
+                    type.setGoodsName("西瓜");
 
             }
             typeList.add(type);
