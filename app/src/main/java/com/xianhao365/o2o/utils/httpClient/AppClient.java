@@ -43,7 +43,7 @@ public class AppClient{
     public static String  UPDATE_PASSWORD="";//修改用户密码信息
     public static String USER_ORDERS="svc.get.user.order.info";//获取用户订单信息
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
-
+    public static String  GYS_BILLLIST ="svc.purchase.mypurchaselist";//供应商的采购单列表
 
 
 

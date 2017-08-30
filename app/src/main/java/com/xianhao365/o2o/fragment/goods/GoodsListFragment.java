@@ -3,6 +3,7 @@ package com.xianhao365.o2o.fragment.goods;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,23 +19,24 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
-import com.lzy.okhttputils.OkHttpUtils;
-import com.lzy.okhttputils.callback.StringCallback;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.MainGoodsTypeAdapter;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
 import com.xianhao365.o2o.entity.GsonResponseDataEntity;
 import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
+import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
+import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
@@ -44,10 +46,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
-import okhttp3.Response;
+
+import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
 
 /**
@@ -188,7 +190,23 @@ public class GoodsListFragment extends Fragment {
                         break;
                     case 1001:
                         List<GoodsDetailEntity> goodsDetaiLIst = (List<GoodsDetailEntity>) msg.obj;
-                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst);
+                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst,new FoodActionCallback(){
+
+                            @Override
+                            public void addAction(View view) {
+                                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                                int position[] = new int[2];
+                                view.getLocationInWindow(position);
+                                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                                rootView.addView(nxHooldeView);
+                                int endPosition[] = new int[2];
+                                badge1.getLocationInWindow(endPosition);
+                                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                                nxHooldeView.startBeizerAnimation();
+                                MainFragmentActivity.getInstance().setBadge(true,1);
+                            }
+                        });
                         recyclerView.setAdapter(simpAdapter);
 //                typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getGoodsTypeList());
 //                typeGridView.setAdapter(typeAdapter);
@@ -312,53 +330,27 @@ public class GoodsListFragment extends Fragment {
         if(TextUtils.isEmpty(cno)){
             return;
         }
-        HttpUtils.getInstance(activity).addHttpHeadData(AppClient.GOODS_LIST);
-        JSONObject obj = new JSONObject();
-        Logs.i("===请求参数==="+cno+"==="+cid);
-        try {
-            obj.put("cno",cno);
-            obj.put("cid",cid);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         HttpParams httpParams = new HttpParams();
         httpParams.put("cno",cno);
         httpParams.put("cid",cid);
-        OkHttpUtils.post(SXUtils.getInstance(activity).getApp().getHttpUrl())
-                .tag(this)
-//                .upString(httpParams)
-                .upJson(obj.toString())
-//                .params(httpParams)
-                .execute(new StringCallback() {
-                    @Override
-                    public void onSuccess(String s, Call call, Response response) {
-                        GsonResponseDataEntity gde = null;
-                        try {
-                            gde = ResponseData.getInstance(activity).getDataGson(s);
-                            Message msg = new Message();
-                            msg.what = 1001;
-                            msg.obj = gde.getResponseData();
-                            hand.sendMessage(msg);
-                        } catch (JSONException e) {
-                            Message msg = new Message();
-                            msg.what = AppClient.ERRORCODE;
-                            msg.obj = "解析出现异常";
-                            hand.sendMessage(msg);
-                            e.printStackTrace();
-                        }
-                        Logs.i(gde.getResponseData().size()+"=========onSuccess==",s);
-                    }
-                    @Override
-                    public void onError(Call call, Response response, Exception e) {
-                        super.onError(call, response, e);
-                        Logs.i("=======onError=="+e.toString());
-                    }
+        HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                GsonResponseDataEntity gde = (GsonResponseDataEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),GsonResponseDataEntity.class);
+                Message msg = new Message();
+                msg.what = 1001;
+                msg.obj = gde.getResponseData();
+                hand.sendMessage(msg);
+            }
 
-                    @Override
-                    public void upProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
-                        Logs.i(progress+"=====upProgress===");
-                        super.upProgress(currentSize, totalSize, progress, networkSpeed);
-                    }
-                });
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+
     }
 }

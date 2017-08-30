@@ -1,17 +1,14 @@
 package com.xianhao365.o2o.entity;
 
-import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
-
-import java.util.List;
-
 /**
  * Created by mfx-t224 on 2017/8/23.
  */
-public class GsonResponseDataEntity {
+public class ResponseDataUserInfoEntity {
     private String responseCode;
     private String businessCode;
     private String responseText;
-    private List<GoodsDetailEntity> responseData; //商品列表
+    private UserInfoEntity responseData; //供应商用户信息
+//    private List<UserInfoEntity>
 
     public String getResponseCode() {
         return responseCode;
@@ -37,20 +34,11 @@ public class GsonResponseDataEntity {
         this.responseText = responseText;
     }
 
-    public List<GoodsDetailEntity> getResponseData() {
+    public UserInfoEntity getResponseData() {
         return responseData;
     }
 
-    public void setResponseData(List<GoodsDetailEntity> responseData) {
+    public void setResponseData(UserInfoEntity responseData) {
         this.responseData = responseData;
-    }
-    @Override
-    public String toString() {
-        return "GsonResponseDataEntity{" +
-                "responseCode='" + responseCode + '\'' +
-                ", businessCode='" + businessCode + '\'' +
-                ", responseText='" + responseText + '\'' +
-                ", responseData=" + responseData +
-                '}';
     }
 }

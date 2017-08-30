@@ -10,16 +10,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.BuyerBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.BuyerQHGridViewAdapter;
+import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 
 import java.util.ArrayList;
@@ -43,6 +48,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     private Handler hand;
     private MyGridView gridView;
     private MyGridView qsgridView;
+    private RelativeLayout cgOrderListLin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +58,10 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         manager = new OKManager(activity);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
+//        GetUserInfoHttp();
+//        GetGYSBillListHttp();
+        GetOrderListHttp();
+        GetUserWalletHttp();
         return view;
     }
     //初始化
@@ -61,8 +71,10 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         RelativeLayout wallet = (RelativeLayout) view.findViewById(R.id.buyer_per_wallet);
         wallet.setOnClickListener(this);
 
+        cgOrderListLin = (RelativeLayout) view.findViewById(R.id.my_cg_store_myorder_rel);
+        cgOrderListLin.setOnClickListener(this);
         gridView = (MyGridView) view.findViewById(R.id.buyer_bille_gridv);
-        gridView.setAdapter(new BuyerBillGridViewAdapter(activity,getGrideData()));
+        gridView.setAdapter(new BuyerBillGridViewAdapter(activity,getGYSBillData()));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -84,7 +96,6 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                 }
             }
         });
-
         qsgridView = (MyGridView) view.findViewById(R.id.buyer_qh_gridv);
         qsgridView.setAdapter(new BuyerQHGridViewAdapter(activity,getGrideData()));
         qsgridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,10 +108,25 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
+                    case 1000:
+                        UserInfoEntity userinfo = (UserInfoEntity) msg.obj;
+                        initUserInfo(userinfo);
+                        break;
                 }
                 return true;
             }
         });
+    }
+    //获取到用户信息，更新相关UI
+    private void initUserInfo(UserInfoEntity userInfo){
+        TextView name = (TextView) view.findViewById(R.id.buyer_name_tv);
+        ImageView headImg = (ImageView) view.findViewById(R.id.my_head_img);
+
+
+//        Glide.with(activity).load((String)userInfo.getIcon()).placeholder(R.mipmap.default_head)
+//                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headImg);
+        name.setText(userInfo.getUsername());
+
     }
     @Override
     public void onClick(View view) {
@@ -114,9 +140,44 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                 wall.putExtra("walletTag","1");
                 startActivity(wall);
                 break;
+            //采购清单列表
+            case R.id.my_cg_store_myorder_rel:
+                Intent cgbill = new Intent(activity,CGBillListActivity.class);
+                startActivity(cgbill);
+                break;
         }
     }
-
+    /**
+     * 供应商采购清单店铺
+     * @return
+     */
+    private List<Map<String,String>> getGYSBillData(){
+        List<Map<String,String>> list = new ArrayList<>();
+        for(int i=0;i<4;i++){
+            Map<String,String>  map = new HashMap<>();
+            switch (i){
+                case 0:
+                    map.put("name","待接单");
+                    map.put("imageUrl","http://pic.qiantucdn.com/58pic/11/72/82/37I58PICgk5.jpg");
+                    break;
+                case 1:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","待收货");
+                    break;
+                case 2:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","待发货");
+                    break;
+                case 3:
+                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
+                    map.put("name","已完成");
+                    break;
+            }
+            map.put("state",""+i);
+            list.add(map);
+        }
+        return list;
+    }
     /**
      * 首页九宫格
      * @return
@@ -156,4 +217,107 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         }
         return list;
     }
+
+
+    /**
+     * 获取供应商信息
+     */
+    public void GetUserInfoHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
+
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+
+    /**
+     * 获取供应商信息
+     */
+    public void GetGYSBillListHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, null, new HttpUtils.requestCallBack() {
+
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+    /**
+     * 获取订单信息
+     */
+    public void GetOrderListHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ORDERS, null, new HttpUtils.requestCallBack() {
+
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+    /**
+     * 获取用户余额
+     */
+    public void GetUserWalletHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+
 }

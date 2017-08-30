@@ -3,6 +3,7 @@ package com.xianhao365.o2o.fragment.bill;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,15 +19,20 @@ import com.androidkun.xtablayout.XTabLayout;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillRecyclerViewAdapter;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
 
 /**
@@ -120,7 +126,23 @@ public class BillFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.main_bill_gridv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final HomeBillRecyclerViewAdapter simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),getTypeInfoData());
+        final HomeBillRecyclerViewAdapter simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),getTypeInfoData(),new FoodActionCallback(){
+
+            @Override
+            public void addAction(View view) {
+                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                int position[] = new int[2];
+                view.getLocationInWindow(position);
+                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                rootView.addView(nxHooldeView);
+                int endPosition[] = new int[2];
+                badge1.getLocationInWindow(endPosition);
+                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                nxHooldeView.startBeizerAnimation();
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
         recyclerView.setAdapter(simpAdapter);
 
 //

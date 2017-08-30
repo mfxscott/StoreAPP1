@@ -15,8 +15,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 
 import java.util.List;
 
@@ -26,11 +26,18 @@ import java.util.List;
  * @time  2017/7/10 20:47
  */
 public  class TypeInfoRecyclerViewAdapter
-        extends RecyclerView.Adapter<TypeInfoRecyclerViewAdapter.ViewHolder> {
+        extends RecyclerView.Adapter<TypeInfoRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private List<GoodsDetailEntity> mValues;
+    private FoodActionCallback callback;
+
+    @Override
+    public void onClick(View v) {
+        if(callback==null) return;
+        callback.addAction(v);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -58,10 +65,11 @@ public  class TypeInfoRecyclerViewAdapter
             return super.toString() + " '" + mTextView.getText();
         }
     }
-    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsDetailEntity> items) {
+    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsDetailEntity> items,FoodActionCallback callback) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
+        this.callback = callback;
     }
 
     @Override
@@ -73,7 +81,8 @@ public  class TypeInfoRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTextView.setText(mValues.get(position).getGoodsName());
+        GoodsDetailEntity goodsdetail = mValues.get(position);
+        holder.mTextView.setText(goodsdetail.getGoodsName()+"");
 
         holder.modeTView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,24 +105,27 @@ public  class TypeInfoRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-        holder.typeadd1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
-        holder.addImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
-        holder.addImage2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
+        holder.typeadd1.setOnClickListener(this);
+        holder.addImage.setOnClickListener(this);
+        holder.addImage2.setOnClickListener(this);
+//        holder.typeadd1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
+//        holder.addImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
+//        holder.addImage2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
         if(position%2 ==0){
             Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
         }else{
@@ -144,4 +156,5 @@ public  class TypeInfoRecyclerViewAdapter
         mValues.remove(position);
         notifyItemRemoved(position);
     }
+
 }

@@ -36,6 +36,7 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+
         //必须调用初始化
         OkHttpUtils.init(this);
 

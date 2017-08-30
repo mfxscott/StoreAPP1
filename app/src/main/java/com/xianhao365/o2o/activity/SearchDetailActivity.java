@@ -1,6 +1,7 @@
 package com.xianhao365.o2o.activity;
 
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,13 +18,18 @@ import android.widget.Toast;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
+import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
 public class SearchDetailActivity extends AppCompatActivity {
 private Activity activity;
@@ -80,7 +87,23 @@ private Activity activity;
         recyclerView = (RecyclerView) findViewById(R.id.search_detail_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final TypeInfoRecyclerViewAdapter simpAdapter = new TypeInfoRecyclerViewAdapter(activity,getTypeInfoData());
+        final TypeInfoRecyclerViewAdapter simpAdapter = new TypeInfoRecyclerViewAdapter(activity,getTypeInfoData(),new FoodActionCallback(){
+
+            @Override
+            public void addAction(View view) {
+                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                int position[] = new int[2];
+                view.getLocationInWindow(position);
+                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                rootView.addView(nxHooldeView);
+                int endPosition[] = new int[2];
+                badge1.getLocationInWindow(endPosition);
+                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                nxHooldeView.startBeizerAnimation();
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
         recyclerView.setAdapter(simpAdapter);
     }
 

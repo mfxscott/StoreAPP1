@@ -7,13 +7,12 @@
     android:background="@color/app_bg"
     >
     <com.xianhao365.o2o.utils.ObservableScrollView
-        android:layout_above="@+id/goods_detail_bottom_rel"
         android:id="@+id/goods_detail_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fadingEdge="none"
         android:scrollbars="none"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/goods_detial_title_rel"
         android:layout_alignParentStart="true">
         <LinearLayout
             android:orientation="vertical"
@@ -240,6 +239,7 @@
 
                     </LinearLayout>
                     <TextView
+                        android:id="@+id/goods_detail_add_tv"
                         android:background="@mipmap/add_img"
                         android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
@@ -601,6 +601,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"/>
             <TextView
+                android:id="@+id/goods_detail_car_num_tv"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_gravity="right"
                 android:background="@drawable/my_msg_shap"

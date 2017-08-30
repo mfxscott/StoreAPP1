@@ -4,8 +4,10 @@ package com.xianhao365.o2o.utils.httpClient;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
 import com.xianhao365.o2o.entity.GsonResponseDataEntity;
+import com.xianhao365.o2o.entity.ResponseDataUserInfoEntity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -181,9 +183,29 @@ public class ResponseData {
         return gson.fromJson(jsonObj.toString(),UserInfoEntity.class);
 
     }
+    public ResponseDataUserInfoEntity getGYSUserInfo(Object jsonObj) throws JSONException {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonObj.toString(),ResponseDataUserInfoEntity.class);
+
+    }
     public GsonResponseDataEntity getDataGson(Object jsonObj) throws JSONException {
         Gson gson = new Gson();
         return gson.fromJson(jsonObj.toString(),GsonResponseDataEntity.class);
 
+    }
+    // 将Json数据解析成相应的映射对象
+    public  <T> T parseJsonWithGson(String jsonData, Class<T> type) {
+        Logs.i("输出GSON数据=====",jsonData);
+        Gson gson = new Gson();
+        T result = gson.fromJson(jsonData, type);
+        return result;
+    }
+    // 将Json数组解析成相应的映射对象列表
+    public  <T> List<T> parseJsonArrayWithGson(String jsonData,Class<T> type) {
+        Logs.i("输出GSON数据=======",jsonData);
+        Gson gson = new Gson();
+        List<T> result = gson.fromJson(jsonData, new TypeToken<List<T>>() {
+        }.getType());
+        return result;
     }
 }

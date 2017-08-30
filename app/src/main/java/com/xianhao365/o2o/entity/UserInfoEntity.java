@@ -14,7 +14,16 @@ public class UserInfoEntity {
     private  String nickname;
     private  String email;
     private  String tag;
+    private String grade;
     private  String mobile;
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
 
     public String getBirthday() {
         return birthday;

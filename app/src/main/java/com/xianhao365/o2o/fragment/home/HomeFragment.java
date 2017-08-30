@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,6 +28,7 @@ import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.HomeGridViewAdapter;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
@@ -36,6 +38,7 @@ import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.view.MyGridView;
+import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -53,6 +56,8 @@ import java.util.Map;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
+
+import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
 /**
  * ***************************
@@ -315,7 +320,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
 
         homebillRv = (MyGridView) view.findViewById(R.id.home_list_recyclerv);
-        HomeBillGridViewAdapter simpAdapter = new HomeBillGridViewAdapter(getActivity(),getTypeInfoData());
+        HomeBillGridViewAdapter simpAdapter = new HomeBillGridViewAdapter(getActivity(),getTypeInfoData(),new FoodActionCallback(){
+
+            @Override
+            public void addAction(View view) {
+                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                int position[] = new int[2];
+                view.getLocationInWindow(position);
+                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                rootView.addView(nxHooldeView);
+                int endPosition[] = new int[2];
+                badge1.getLocationInWindow(endPosition);
+                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                nxHooldeView.startBeizerAnimation();
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
         homebillRv.setAdapter(simpAdapter);
         homebillRv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

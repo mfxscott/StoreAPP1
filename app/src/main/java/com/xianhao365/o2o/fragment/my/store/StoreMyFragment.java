@@ -20,17 +20,11 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
-import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
-
-import org.json.JSONException;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 /**
  * 摊主或者个人登录进入我的界面
@@ -158,11 +152,10 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                     case 1000:
                         userinfo = (UserInfoEntity) msg.obj;
                         TextView  name = (TextView) view.findViewById(R.id.user_info_name_tv);
-                        name.setText(userinfo.getNickname()+"");
+                        name.setText(userinfo.getUsername()+"");
                         ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
                         Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.default_head)
                                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
-                        Logs.i("用户信息size======================"+msg.obj);
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
@@ -230,30 +223,21 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 break;
         }
     }
-    public void getUserInfoHttp(){
-        RequestBody requestBody = new FormBody.Builder()
-//                .add("vcode", codeStr)
-//                .add("registerType", "0")//0=手机,1=微信,2=QQ
-//                .add("password", psdStr)
-//                .add("tag","64")
-                .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_INFO, new OKManager.Func4() {
+
+    /**
+     * 获取供应商信息
+     */
+    public void getUserInfoHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
+
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("用户信息发送成功返回参数=======",jsonObject.toString());
-                try {
-                    UserInfoEntity userinfo =  ResponseData.getInstance(activity).getUserInfo(jsonObject);
-                    Message msg = new Message();
-                    msg.what = 1000;
-                    msg.obj = userinfo;
-                    hand.sendMessage(msg);
-                } catch (JSONException e) {
-                    Message msg = new Message();
-                    msg.what = AppClient.ERRORCODE;
-                    msg.obj = e.toString();
-                    hand.sendMessage(msg);
-                }
-
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
             }
             @Override
             public void onResponseError(String strError) {
@@ -261,6 +245,87 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 hand.sendMessage(msg);
+
+            }
+        });
+    }
+
+
+//    public void getUserInfoHttp(){
+//        RequestBody requestBody = new FormBody.Builder()
+//                .build();
+//        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_INFO, new OKManager.Func4() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+//                try {
+//                    UserInfoEntity userinfo =  ResponseData.getInstance(activity).getUserInfo(jsonObject);
+//                    Message msg = new Message();
+//                    msg.what = 1000;
+//                    msg.obj = userinfo;
+//                    hand.sendMessage(msg);
+//                } catch (JSONException e) {
+//                    Message msg = new Message();
+//                    msg.what = AppClient.ERRORCODE;
+//                    msg.obj = e.toString();
+//                    hand.sendMessage(msg);
+//                }
+//
+//            }
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+//            }
+//        });
+//    }
+    /**
+     * 获取订单信息
+     */
+    public void GetOrderListHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ORDERS, null, new HttpUtils.requestCallBack() {
+
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+    /**
+     * 获取用户余额
+     */
+    public void GetUserWalletHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
             }
         });
     }

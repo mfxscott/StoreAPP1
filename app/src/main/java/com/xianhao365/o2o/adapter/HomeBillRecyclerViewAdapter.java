@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 
 import java.util.List;
@@ -26,12 +26,12 @@ import java.util.List;
  * @time  2017/7/11 12:24
  */
 public  class HomeBillRecyclerViewAdapter
-        extends RecyclerView.Adapter<HomeBillRecyclerViewAdapter.ViewHolder> {
+        extends RecyclerView.Adapter<HomeBillRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private List<GoodsInfoEntity> mValues;
-
+    private FoodActionCallback callback;
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
@@ -54,10 +54,16 @@ public  class HomeBillRecyclerViewAdapter
             return super.toString() + " '" + mTextView.getText();
         }
     }
-    public HomeBillRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
+    @Override
+    public void onClick(View v) {
+        if(callback==null) return;
+        callback.addAction(v);
+    }
+    public HomeBillRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items,FoodActionCallback callback) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
+        this.callback = callback;
     }
 
     @Override
@@ -89,18 +95,20 @@ public  class HomeBillRecyclerViewAdapter
         }else{
             Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(holder.mImageView);
         }
-        holder.addcar1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
-        holder.addcar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
+        holder.addcar1.setOnClickListener(this);
+        holder.addcar2.setOnClickListener(this);
+//        holder.addcar1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
+//        holder.addcar2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
 //        Glide.with(holder.mImageView.getContext())
 //                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
 //                .fitCenter()

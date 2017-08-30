@@ -88,6 +88,8 @@ public class CommonWebViewMainActivity extends BaseActivity {
         myWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
         //触摸焦点起作用
         myWebView.requestFocus();
+        //提供暴露接口给js调用
+        myWebView.addJavascriptInterface(new WebViewJavaScriptInterface(myWebView,activity), "androidInterface");
         myWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {

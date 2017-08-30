@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 
 import java.util.List;
 
@@ -20,14 +20,21 @@ import java.util.List;
  * @author mfx
  * @time  2017/7/10 10:13
  */
-public class HomeBillGridViewAdapter extends BaseAdapter {
+public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClickListener{
     private  List<GoodsInfoEntity> result;
     private final LayoutInflater mLayoutInflater;
     private Activity context;
-    public HomeBillGridViewAdapter(Activity context,  List<GoodsInfoEntity> result) {
+    private FoodActionCallback callback;
+    public HomeBillGridViewAdapter(Activity context,  List<GoodsInfoEntity> result,FoodActionCallback callback) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
+        this.callback = callback;
+    }
+    @Override
+    public void onClick(View v) {
+        if(callback==null) return;
+        callback.addAction(v);
     }
     public int getCount() {
         return result.size();
@@ -78,18 +85,20 @@ public class HomeBillGridViewAdapter extends BaseAdapter {
             Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(vh.mImageView);
 
         }
-        vh.addcar1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
-        vh.addcar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
+        vh.addcar1.setOnClickListener(this);
+        vh.addcar2.setOnClickListener(this);
+//        vh.addcar1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
+//        vh.addcar2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                MainFragmentActivity.getInstance().setBadge(true,1);
+//            }
+//        });
 //        goodsinfo
         return view;
     }

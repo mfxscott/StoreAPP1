@@ -23,7 +23,6 @@ public class GoodsFeedbackActivity extends BaseActivity implements View.OnClickL
         Button  btn = (Button) findViewById(R.id.feedback_submit_btn);
         btn.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -32,6 +31,5 @@ public class GoodsFeedbackActivity extends BaseActivity implements View.OnClickL
                 finish();
                 break;
         }
-
     }
 }

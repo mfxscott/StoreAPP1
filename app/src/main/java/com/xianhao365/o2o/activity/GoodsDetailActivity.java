@@ -3,41 +3,45 @@ package com.xianhao365.o2o.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 商品详情
  * @author mfx
  * @time  2017/7/17 15:53
  */
-public class GoodsDetailActivity extends BaseActivity implements ObservableScrollView.ScrollViewListener,View.OnClickListener{
+public class GoodsDetailActivity extends BaseActivity implements ObservableScrollView.ScrollViewListener,View.OnClickListener,FoodActionCallback {
     private  Banner banner;
     private RelativeLayout titleRelay,disTitleRel;
     private Activity activity;
@@ -47,10 +51,15 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     private ObservableScrollView  scro;
     private Handler hand;
     private String cno;//商品id
+    @BindView(R.id.goods_detail_add_tv)
+    TextView addcar;
+    @BindView(R.id.goods_detail_car_num_tv)
+    TextView carNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_detail);
+        ButterKnife.bind(this);
         cno = this.getIntent().getStringExtra("cno");
         activity = this;
         setBanner();
@@ -70,7 +79,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         feedback.setOnClickListener(this);
         TextView  gocar = (TextView) findViewById(R.id.goods_detail_gocar_btn);
         gocar.setOnClickListener(this);
-
+        addcar.setOnClickListener(this);
 
         xxTv = (TextView) findViewById(R.id.goods_detail_tab_xxxx_tv);
         ggTv = (TextView) findViewById(R.id.goods_detail_tab_ggcs_tv);
@@ -93,15 +102,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(img3);
         Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(img4);
 
-
-
-
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
@@ -199,7 +203,32 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 AppClient.TAG4 = true;
 //                MainFragmentActivity.carRb.setChecked(true);
                 finish();
+                return;
+            case R.id.goods_detail_add_tv:
+                this.addAction(v);
                 break;
+        }
+    }
+
+    @Override
+    public void addAction(View view) {
+        NXHooldeView nxHooldeView = new NXHooldeView(activity);
+        int position[] = new int[2];
+        view.getLocationInWindow(position);
+        nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+        ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+        rootView.addView(nxHooldeView);
+        int endPosition[] = new int[2];
+        carNum.getLocationInWindow(endPosition);
+        nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+        nxHooldeView.startBeizerAnimation();
+        String carStr = carNum.getText().toString().trim();
+        if(TextUtils.isEmpty(carStr)){
+            carNum.setText("1");
+        }else{
+            int carn = Integer.parseInt(carStr);
+            carn ++;
+            carNum.setText(carn+"");
         }
     }
 
@@ -228,39 +257,71 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     /**
      * 获取商品详情
      */
-    public void getHttpGoodsDetail(){
-        RequestBody requestBody = new FormBody.Builder()
-                .add("catNo", cno)//二级分类查询00002
-//                .add("vcode", codeStr)
-//                .add("registerType", "0")//0=手机,1=微信,2=QQ
-//                .add("password", psdStr)
-//                .add("tag","64")
-                .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_DETAIL, new OKManager.Func4() {
+//    public void getHttpGoodsDetail(){
+//        if(TextUtils.isEmpty(cno)) {
+//            SXUtils.getInstance(activity).ToastCenter("商品id为空");
+//            return;
+//        }
+//        RequestBody requestBody = new FormBody.Builder()
+//
+//                .add("catNo", cno)//二级分类查询00002
+////                .add("vcode", codeStr)
+////                .add("registerType", "0")//0=手机,1=微信,2=QQ
+////                .add("password", psdStr)
+////                .add("tag","64")
+//                .build();
+//        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_DETAIL, new OKManager.Func4() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+//                Logs.i("商品详情发送成功返回参数=======",jsonObject.toString());
+//                JSONObject jsonObject1 = null;
+////                try {
+////                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getInstance(activity).getGoodsTypeData(jsonObject);
+////                    Message msg = new Message();
+////                    msg.what = 1000;
+////                    msg.obj = goodsTypeList;
+////                    hand.sendMessage(msg);
+////                } catch (JSONException e) {
+////                    Message msg = new Message();
+////                    msg.what = AppClient.ERRORCODE;
+////                    msg.obj = e.toString();
+////                    hand.sendMessage(msg);
+////                }
+//
+//            }
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+//            }
+//        });
+//    }
+    /**
+     * 获取商品详情
+     */
+    public void getHttpGoodsDetail() {
+        HttpParams params = new HttpParams();
+        params.put("catNo", cno);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("商品详情发送成功返回参数=======",jsonObject.toString());
-                JSONObject jsonObject1 = null;
-//                try {
-//                    List<GoodsTypeEntity> goodsTypeList =  ResponseData.getInstance(activity).getGoodsTypeData(jsonObject);
-//                    Message msg = new Message();
-//                    msg.what = 1000;
-//                    msg.obj = goodsTypeList;
-//                    hand.sendMessage(msg);
-//                } catch (JSONException e) {
-//                    Message msg = new Message();
-//                    msg.what = AppClient.ERRORCODE;
-//                    msg.obj = e.toString();
-//                    hand.sendMessage(msg);
-//                }
-
+//                UserInfoEntity gde = null;
+//                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(), UserInfoEntity.class);
+//                Message msg = new Message();
+//                msg.what = 1000;
+//                msg.obj = gde;
+//                hand.sendMessage(msg);
             }
+
             @Override
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 hand.sendMessage(msg);
+
             }
         });
     }

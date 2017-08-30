@@ -43,6 +43,7 @@
                         android:layout_height="wrap_content"
                         >
                         <TextView
+                            android:id="@+id/buyer_name_tv"
                             android:textSize="@dimen/ac_text_size_16"
                             android:textColor="@color/white"
                             android:text="鲜好摊主店铺"
@@ -54,6 +55,7 @@
                             android:layout_height="wrap_content"
                             >
                             <TextView
+                                android:id="@+id/buyer_user_level_tv"
                                 android:layout_centerVertical="true"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/ac_text_size_12"
@@ -144,6 +146,7 @@
                                 android:textSize="@dimen/ac_text_size_12"/>
 
                             <TextView
+                                android:id="@+id/buyer_balance_tv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/wallet_name_tv"
@@ -189,7 +192,7 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/my_store_myorder_rel"
+                android:id="@+id/my_cg_store_myorder_rel"
                 android:layout_marginTop="10dp"
                 android:padding="15dp"
                 android:background="@drawable/white_gray_selector"

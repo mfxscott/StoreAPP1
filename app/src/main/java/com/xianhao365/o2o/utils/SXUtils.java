@@ -141,7 +141,7 @@ public class SXUtils {
     /**
      * @param isBack  true可按返回取消
      */
-    public static void showMyProgressDialog(Activity activity,boolean isBack) {
+    public static void showMyProgressDialog(Context activity,boolean isBack) {
         params = new LinearLayout.LayoutParams( LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         inflater = LayoutInflater.from(activity);
         View v = inflater.inflate(R.layout.common_loading, null);// 得到加载view
@@ -175,7 +175,7 @@ public class SXUtils {
      * @param title
      * @param contentStr
      */
-    public  void ToastshowDialogView(Activity activity,String title,String contentStr){
+    public  void ToastshowDialogView(Context activity,String title,String contentStr){
         final Dialog tipDialog = new AlertDialog.Builder(activity).create();
         tipDialog.show();
         tipDialog.setCancelable(true);
