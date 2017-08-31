@@ -21,6 +21,7 @@ import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
+import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
@@ -58,10 +59,10 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         manager = new OKManager(activity);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
-//        GetUserInfoHttp();
-//        GetGYSBillListHttp();
-        GetOrderListHttp();
-        GetUserWalletHttp();
+        GetUserInfoHttp();
+        GetGYSBillListHttp();
+//        GetOrderListHttp();
+//        GetUserWalletHttp();
         return view;
     }
     //初始化
@@ -104,7 +105,6 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
 
             }
         });
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -112,6 +112,9 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                         UserInfoEntity userinfo = (UserInfoEntity) msg.obj;
                         initUserInfo(userinfo);
                         break;
+                    case AppClient.ERRORCODE:
+                        String str = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(str+"");
                 }
                 return true;
             }
@@ -223,8 +226,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
      * 获取供应商信息
      */
     public void GetUserInfoHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
-
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ISPPLY_NFO, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 UserInfoEntity gde = null;
@@ -244,13 +246,11 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-
     /**
-     * 获取供应商信息
+     * 获取供应商采购列表
      */
     public void GetGYSBillListHttp() {
         HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, null, new HttpUtils.requestCallBack() {
-
             @Override
             public void onResponse(Object jsonObject) {
                 UserInfoEntity gde = null;

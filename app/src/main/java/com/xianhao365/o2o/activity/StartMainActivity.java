@@ -37,7 +37,6 @@ import com.xianhao365.o2o.utils.checkPermission.PermissionsActivity;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsChecker;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
-import com.xianhao365.o2o.utils.httpClient.RequestReqMsgData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -182,7 +181,7 @@ public class StartMainActivity extends Activity {
             }
         });
         LauncherHttp();
-        RequestReqMsgData.UpdateVersion(activity,hand);
+//        RequestReqMsgData.UpdateVersion(activity,hand);
         logoIv = (ImageView) findViewById(R.id.start_logo_iv);
         guideLinlay = (LinearLayout) findViewById(R.id.start_guide_linlay);
 

@@ -448,7 +448,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         //设置banner动画效果
         //DepthPag折叠
         banner.setBannerAnimation(Transformer.Default);
-
         //banner设置方法全部调用完毕时最后调用
         banner.start();
     }
@@ -542,8 +541,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             searchRels.setVisibility(View.GONE);
 //            scrollXtablayout.setVisibility(View.GONE);
             searchRel.setBackgroundColor(Color.argb((int) 0, (int) 0, (int) 0, (int) 0));
-        } else if (y > 0 && y <= bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+40) {
-            float scale = (float) y / (bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+40);
+        } else if (y > 0 && y <= bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+80) {
+            float scale = (float) y / (bannerLin.getHeight()+goBillRel.getHeight()+channelLin.getHeight()+homeGridLin.getHeight()-searchRel.getHeight()+80);
             float alpha = (255 * scale);
             // 只是layout背景透明(仿知乎滑动效果)
             searchRel.setBackgroundColor(Color.argb((int) alpha, (int) alpha, (int) alpha, (int) alpha));

@@ -233,7 +233,6 @@ public class GoodsListFragment extends Fragment {
             GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
 //            GetGoodsTypeInfoHttp(typeList.get(0).getGoodsTypeList().get(0).getCatNo(),typeList.get(0).getGoodsTypeList().get(0).getId());
         }
-
         if (typeList != null) {
             for (int i = 0; i < typeList.size(); i++) {
                 tabLayout.addTab(tabLayout.newTab().setText(typeList.get(i).getName() + ""));
@@ -245,14 +244,14 @@ public class GoodsListFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
-                Logs.i("tab===============111111="+ tab.getPosition());
-                int positoin = tab.getPosition();
-
                 typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getGoodsTypeList());
                 typeGridView.setAdapter(typeAdapter);
                 if(typeList.get(tab.getPosition()).getGoodsTypeList() != null && typeList.get(tab.getPosition()).getGoodsTypeList().size()>0){
                     typeTwoList = typeList.get(tab.getPosition()).getGoodsTypeList();
                     GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
+                    Logs.i("商品ID============="+ typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
+                }else{
+                    recyclerView.setAdapter(simpAdapter);
                 }
 //                List<GoodsTypeEntity> typeGoods= typeList.get(positoin).getGoodsTypeList();
 //                typeTwoList = (List<GoodsTypeEntity>) typeGoods != null || typeGoods.size()>0? (List<GoodsTypeEntity>) typeGoods.get(0) :null;
@@ -262,15 +261,12 @@ public class GoodsListFragment extends Fragment {
             public void onTabUnselected(XTabLayout.Tab tab) {
                 Logs.i("tab===============222222222="+ tab.getPosition());
             }
-
             @Override
             public void onTabReselected(XTabLayout.Tab tab) {
                 Logs.i("tab===============3333333333="+ tab.getPosition());
             }
         });
-
     }
-
     /**
      * 获取商品分类
      */

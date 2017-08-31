@@ -7,8 +7,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     <ImageView
+        android:padding="1dp"
+        android:background="@color/col_999"
         android:id="@+id/item_img"
-        android:src="@mipmap/app_logo"
+        android:src="@mipmap/loading_img"
         android:layout_width="60dp"
         android:layout_height="60dp"/>
     </LinearLayout>

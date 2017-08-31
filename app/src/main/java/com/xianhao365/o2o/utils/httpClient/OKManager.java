@@ -2,7 +2,6 @@ package com.xianhao365.o2o.utils.httpClient;
 
 import android.app.Activity;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -118,12 +117,12 @@ public class OKManager {
                 .post(requestBody).build();
         Logs.i("请求数据==================start=============================");
         Headers headers = request.headers();
-        Logs.i("==", "method : " + request.method());
-        Logs.i("==", "url : " + HttpUrl);
-        if (headers != null && headers.size() > 0) {
-            Log.e("==", "headers : \n");
-            Log.e("===", headers.toString());
-        }
+//        Logs.i("==", "method : " + request.method());
+//        Logs.i("==", "url : " + HttpUrl);
+//        if (headers != null && headers.size() > 0) {
+//            Log.e("==", "headers : \n");
+//            Log.e("===", headers.toString());
+//        }
         Logs.i("请求数据==================end=============================");
         client.newCall(request).enqueue(new Callback() {
             @Override

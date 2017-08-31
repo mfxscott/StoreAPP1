@@ -30,6 +30,8 @@ public class CGBillListActivity extends BaseActivity {
     }
 
     private void initView(){
+        registerBack();
+        setTitle("采购清单列表");
         recyclerView = (RecyclerView) findViewById(R.id.cg_order_list_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

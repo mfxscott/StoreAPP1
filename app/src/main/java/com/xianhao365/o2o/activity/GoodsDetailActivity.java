@@ -152,6 +152,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         if (y <= 0) {
             disTitleRel.setVisibility(View.VISIBLE);
             titleRelay.setVisibility(View.GONE);
+            //40 为清单两段间距距离
         } else if (y > 0 && y <= banner.getHeight()-disTitleRel.getHeight()) {
             titleRelay.setVisibility(View.GONE);
             disTitleRel.setVisibility(View.VISIBLE);

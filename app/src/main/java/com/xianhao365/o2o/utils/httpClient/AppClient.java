@@ -39,6 +39,8 @@ public class AppClient{
     public static String USER_LOGINOUAt = "svc.sign.out";//		用户登出
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
+    public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
+
     public static String  UPDATE_USER_INFO = "svc.update.user.base.info";//修改用户基本信息
     public static String  UPDATE_PASSWORD="";//修改用户密码信息
     public static String USER_ORDERS="svc.get.user.order.info";//获取用户订单信息

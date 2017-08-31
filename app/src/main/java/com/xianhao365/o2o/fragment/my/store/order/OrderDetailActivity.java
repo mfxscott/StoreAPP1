@@ -41,7 +41,6 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         RelativeLayout rel2 = (RelativeLayout) findViewById(R.id.order_detail_wait_pay_rel2);
         rel1.setOnClickListener(this);
         rel2.setOnClickListener(this);
-
         registerBack();
         setTitle("订单详情");
         switch (Integer.parseInt(orderTag)){

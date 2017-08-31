@@ -1,6 +1,7 @@
 package com.xianhao365.o2o.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
-import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,9 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SXUtils.getInstance(context).ToastCenter(position+"");
+                Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
+                intent.putExtra("orderTag",tag+"");
+                intent.putExtra("orderId","123456");
             }
         });
     }
