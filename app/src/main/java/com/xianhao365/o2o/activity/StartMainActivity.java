@@ -75,7 +75,7 @@ public class StartMainActivity extends Activity {
     private RelativeLayout addLoglLin;
     private Activity activity;
     private Handler hand;
-    private int seconds;//广告图片显示时间
+    private int seconds=3000;//广告图片显示时间
     private String imgUrl;//广告图片
     /**
      * 图片资源id
@@ -203,18 +203,18 @@ public class StartMainActivity extends Activity {
             }
         });
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        imgIdArray = new int[]{R.mipmap.guide_1, R.mipmap.guide_2,R.mipmap.guide_3,R.mipmap.guide_4};
+        imgIdArray = new int[]{R.mipmap.guide_1, R.mipmap.guide_2};
         //设置Adapter
 //        viewPager.setCurrentItem((mImageViews.length) * 100);
         View view1 = LayoutInflater.from(this).inflate(R.layout.guide, null);
         View view2 = LayoutInflater.from(this).inflate(R.layout.guide2, null);
-        View view3 = LayoutInflater.from(this).inflate(R.layout.guide3, null);
-        View view4 = LayoutInflater.from(this).inflate(R.layout.guide4, null);
+//        View view3 = LayoutInflater.from(this).inflate(R.layout.guide3, null);
+//        View view4 = LayoutInflater.from(this).inflate(R.layout.guide4, null);
 
         viewContainter.add(view1);
         viewContainter.add(view2);
-        viewContainter.add(view3);
-        viewContainter.add(view4);
+//        viewContainter.add(view3);
+//        viewContainter.add(view4);
 
         viewPager.setAdapter(new PagerAdapter() {
 
@@ -233,7 +233,7 @@ public class StartMainActivity extends Activity {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 ((ViewPager) container).addView(viewContainter.get(position));
-                if(position == 3){
+                if(position == 1){
                     TextView tv = (TextView) viewContainter.get(position).findViewById(R.id.guide_close_tv);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -342,7 +342,7 @@ public class StartMainActivity extends Activity {
                     if(!TextUtils.isEmpty(secondsStr)){
                         seconds = Integer.parseInt(secondsStr);
                     }else{
-                        seconds = 2;
+                        seconds = 3;
                     }
                     imgUrl = jsonObject1.getString("imgUrl");
                 } catch (JSONException e) {
