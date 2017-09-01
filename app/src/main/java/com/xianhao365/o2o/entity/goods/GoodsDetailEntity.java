@@ -43,7 +43,6 @@ public class GoodsDetailEntity {
     private GoodsDetailCatEntity cat;
     private GoodsDetailBrandEntity brand;
     private List<GoodsDetailSkuListEntity> skuList;
-
     public static class GoodsDetailCatEntity{
         private String id;
         private String creator;

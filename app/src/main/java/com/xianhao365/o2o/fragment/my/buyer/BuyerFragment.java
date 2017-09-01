@@ -60,7 +60,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
         GetUserInfoHttp();
-        GetGYSBillListHttp();
+//        GetGYSBillListHttp();
 //        GetOrderListHttp();
 //        GetUserWalletHttp();
         return view;
@@ -246,30 +246,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-    /**
-     * 获取供应商采购列表
-     */
-    public void GetGYSBillListHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, null, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
 
-            }
-        });
-    }
     /**
      * 获取订单信息
      */

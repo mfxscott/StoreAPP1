@@ -3,6 +3,7 @@ package com.xianhao365.o2o.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,11 +20,13 @@ import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.FoodActionCallback;
+import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -55,6 +58,22 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     TextView addcar;
     @BindView(R.id.goods_detail_car_num_tv)
     TextView carNum;
+    @BindView(R.id.goods_detail_name_tv)
+    TextView goodsNameTv;//商品名称
+    @BindView(R.id.goods_detail_pf_price_tv)
+    TextView pfPriceTv;//商品批发价
+    @BindView(R.id.goods_detail_marke_price_tv)
+    TextView marketPriceTv;//商品市场价
+    @BindView(R.id.goods_detail_model_tv)
+    TextView goodsModelTv;//商品规格
+    @BindView(R.id.goods_detail_address_tv)
+    TextView goodsAddress;//商品产地
+    @BindView(R.id.goods_detail_level_tv)
+    TextView goodsLevel;//商品等级
+    @BindView(R.id.goods_detail_unit_tv)
+    TextView goodsUnit;//商品包装
+    @BindView(R.id.goods_detail_gg_model_tv)
+    TextView goodsggModel;//商品规格
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +83,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         activity = this;
         setBanner();
         initView();
+        SXUtils.showMyProgressDialog(activity,false);
         getHttpGoodsDetail();
     }
     private void initView(){
@@ -106,12 +126,27 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+                        GoodsDetailEntity goodsdetail = (GoodsDetailEntity) msg.obj;
+                        if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
+                            Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
+                            goodsModelTv.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
+                            marketPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getMarketPrice());
+                            pfPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getShopWholesalePrice());
+                            goodsggModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
+                            marketPriceTv.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
+                        }
+                        goodsNameTv.setText(goodsdetail.getGoodsName()+"");
+                        goodsAddress.setText(goodsdetail.getGoodsPlace());
+                        goodsUnit.setText(goodsdetail.getGoodsUnit());
+                        goodsLevel.setText(goodsdetail.getFoodGrade());
+
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(msgs);
                         break;
                 }
+                SXUtils.DialogDismiss();
                 return true;
             }
         });
@@ -302,18 +337,20 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     /**
      * 获取商品详情
      */
-    public void getHttpGoodsDetail() {
+    public void getHttpGoodsDetail(){
+        if(TextUtils.isEmpty(cno)){
+            return;
+        }
         HttpParams params = new HttpParams();
-        params.put("catNo", cno);
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
+        params.put("id", cno);
+        HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-//                UserInfoEntity gde = null;
-//                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(), UserInfoEntity.class);
-//                Message msg = new Message();
-//                msg.what = 1000;
-//                msg.obj = gde;
-//                hand.sendMessage(msg);
+                GoodsDetailEntity gde = (GoodsDetailEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),GoodsDetailEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
             }
 
             @Override
@@ -322,8 +359,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 hand.sendMessage(msg);
-
             }
         });
+
     }
 }

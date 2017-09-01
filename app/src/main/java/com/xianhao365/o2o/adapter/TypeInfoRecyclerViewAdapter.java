@@ -12,11 +12,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
+import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
 
@@ -48,6 +49,11 @@ public  class TypeInfoRecyclerViewAdapter
         public  final LinearLayout  selectLin;
         public final ImageView typeadd1;
         public final ImageView addImage,addImage2;
+        public final TextView  shopPrice;
+        public final TextView  goodsUnit;
+        public final TextView  goodsModel;
+        public final TextView  marketPrice;
+
 
         public ViewHolder(View view) {
             super(view);
@@ -59,6 +65,10 @@ public  class TypeInfoRecyclerViewAdapter
             typeadd1 = (ImageView) view.findViewById(R.id.type_info_add);
             addImage = (ImageView) view.findViewById(R.id.type_info_check1);
             addImage2 = (ImageView) view.findViewById(R.id.type_info_check2);
+            shopPrice = (TextView) view.findViewById(R.id.type_info_shop_price_tv);
+            goodsUnit = (TextView) view.findViewById(R.id.type_info_item_goodsUnit_tv);
+            goodsModel = (TextView) view.findViewById(R.id.type_info_item_goodsmodel_tv);
+            marketPrice = (TextView) view.findViewById(R.id.type_info_item_market_price_tv);
         }
         @Override
         public String toString() {
@@ -82,7 +92,18 @@ public  class TypeInfoRecyclerViewAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         GoodsDetailEntity goodsdetail = mValues.get(position);
+        holder.modeTView.setVisibility(View.GONE);
+        if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
+            Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
+            holder.goodsModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
+            holder.marketPrice.setText("¥"+goodsdetail.getSkuList().get(0).getMarketPrice());
+            holder.shopPrice.setText("¥"+goodsdetail.getSkuList().get(0).getShopWholesalePrice());
+        }
+        else if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>1){
+            holder.modeTView.setVisibility(View.VISIBLE);
+        }
         holder.mTextView.setText(goodsdetail.getGoodsName()+"");
+        holder.goodsUnit.setText("/"+goodsdetail.getGoodsUnit()+"");
 
         holder.modeTView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +122,7 @@ public  class TypeInfoRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
-                intent.putExtra("cno",mValues.get(position).getCno());
+                intent.putExtra("cno",mValues.get(position).getId());
                 holder.mView.getContext().startActivity(intent);
             }
         });
@@ -126,14 +147,14 @@ public  class TypeInfoRecyclerViewAdapter
 //                MainFragmentActivity.getInstance().setBadge(true,1);
 //            }
 //        });
-        if(position%2 ==0){
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
-        }else{
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
-        }
-
+//        if(position%2 ==0){
+//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
+//        }else{
+//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
+//        }
+        SXUtils.getInstance(holder.mImageView.getContext()).GlideSetImg(goodsdetail.getThumbImg(),holder.mImageView);
 //        Glide.with(holder.mImageView.getContext())
-//                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
+//                .load(goodsdetail.getThumbImg())
 //                .fitCenter()
 //                .into(holder.mImageView);
     }

@@ -77,7 +77,7 @@
             app:xTabSelectedTextColor="@color/qblue"
             app:xTabTextColor="@color/col_888"
             app:xTabTextSize="14sp"
-            app:xTabSelectedTextSize="16sp"
+            app:xTabSelectedTextSize="14sp"
             app:xTabDisplayNum="5"
             />
         <LinearLayout

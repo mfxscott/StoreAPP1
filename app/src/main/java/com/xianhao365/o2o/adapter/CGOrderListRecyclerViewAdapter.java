@@ -14,10 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
+import com.xianhao365.o2o.utils.SXUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<GoodsInfoEntity> mValues;
+    private List<CGListInfoEntity> mValues;
     private Context context;
     private int tag;//标示订单类型进入显示不同按钮
 
@@ -53,13 +53,20 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
             mView = view;
             cgOrderItemRecycler = (RecyclerView) view.findViewById(R.id.cg_order_item_recycler);
             cgOrderNumTv = (TextView) view.findViewById(R.id.cg_order_num_tv);
+            cgOrderTimeItemTv =  (TextView) view.findViewById(R.id.cg_order_time_item_tv);
+            cgOrderPriceItemTv      =  (TextView) view.findViewById(R.id.cg_order_price_item_tv);
+            cgOrderGetTimeItemTv  =  (TextView) view.findViewById(R.id.cg_order_get_time_item_tv);
+            cgOrderAddressItemTv  =  (TextView) view.findViewById(R.id.cg_order_address_item_tv);
+            cgOrderTakeItemTv =  (TextView) view.findViewById(R.id.cg_order_take_item_tv);
+            cgOrderFeedbackBtn =  (TextView) view.findViewById(R.id.cg_order_feedback_btn);
+
         }
         @Override
         public String toString() {
             return super.toString() + " '";
         }
     }
-    public CGOrderListRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items,int tag) {
+    public CGOrderListRecyclerViewAdapter(Context context, List<CGListInfoEntity> items, int tag) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -76,20 +83,55 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final CGListInfoEntity cgInfo = mValues.get(position);
+//        收货状态(10:新建 20:供应商确认30:已发货 40:完成)
+        final String receiveState = cgInfo.getReceiveState();
         holder.cgOrderItemRecycler.setLayoutManager(new LinearLayoutManager(holder.cgOrderItemRecycler.getContext()));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.cgOrderItemRecycler.setLayoutManager(linearLayoutManager);
         holder.cgOrderItemRecycler.setItemAnimator(new DefaultItemAnimator());
-        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,getBankData(),1);
+        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,cgInfo.getPurchaseLines(),1);
         holder.cgOrderItemRecycler.setAdapter(simpAdapter);
-        holder.cgOrderNumTv.setText("9876543210");
+
+        holder.cgOrderNumTv.setText(cgInfo.getPurchaseCode()+"");
+        holder.cgOrderTimeItemTv.setText(cgInfo.getCreated()+"");
+        holder.cgOrderPriceItemTv.setText(cgInfo.getPurchaseAmount()+"元");
+        holder.cgOrderGetTimeItemTv.setText(cgInfo.getReceiveTime());
+        holder.cgOrderAddressItemTv.setText(cgInfo.getReceiverAddr());
+        holder.cgOrderTakeItemTv.setText(cgInfo.getReceiver());
+        if (receiveState.equals("10")) {
+            holder.cgOrderFeedbackBtn.setText("确认");
+        }
+        if (receiveState.equals("20")) {
+            holder.cgOrderFeedbackBtn.setText("发货");
+        } else if (receiveState.equals("30")) {
+            holder.cgOrderFeedbackBtn.setText("已发货");
+            holder.cgOrderFeedbackBtn.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.cgOrderFeedbackBtn.setBackgroundResource(R.color.transparent);
+        } else if (receiveState.equals("40")) {
+            holder.cgOrderFeedbackBtn.setText("已完成");
+            holder.cgOrderFeedbackBtn.setTextColor(context.getResources().getColor(R.color.orange));
+            holder.cgOrderFeedbackBtn.setBackgroundResource(R.color.transparent);
+        }
+        holder.cgOrderFeedbackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (receiveState.equals("10")) {
+                    SXUtils.getInstance(context).ToastCenter("确认订单");
+                }
+                if (receiveState.equals("20")) {
+                    SXUtils.getInstance(context).ToastCenter("点击发货");
+                }
+            }
+        });
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
+                Intent intent = new Intent(context, OrderDetailActivity.class);
                 intent.putExtra("orderTag",tag+"");
-                intent.putExtra("orderId","123456");
+                intent.putExtra("orderId",cgInfo.getId());
+                context.startActivity(intent);
             }
         });
     }
@@ -101,18 +143,5 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
     public int getItemViewType(int position) {
         Log.i("========",position+"");
         return super.getItemViewType(position);
-    }
-    /**
-     * @return
-     */
-    private ArrayList<GoodsInfoEntity> getBankData(){
-        ArrayList<GoodsInfoEntity> list = new ArrayList<>();
-        for(int i=0;i<20;i++){
-            GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsname("新鲜上市的西红柿");
-            info.setGoodsPrice("￥10.00");
-            list.add(info);
-        }
-        return list;
     }
 }

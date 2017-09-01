@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpHeaders;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
@@ -343,7 +344,7 @@ public class SXUtils {
         try {
             // IMEI（imei）
             TelephonyManager tm = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-             imei = "imei"+tm.getDeviceId();
+            imei = "imei"+tm.getDeviceId();
             return ""+imei;
         } catch (Exception e) {
             e.printStackTrace();
@@ -470,7 +471,7 @@ public class SXUtils {
 
 
     public  void setColorSchemeResources(SwipyRefreshLayout mSwipyRefreshLayout) {
-        mSwipyRefreshLayout.setColorSchemeResources(R.color.qblue, R.color.btn_gray,R.color.red);
+        mSwipyRefreshLayout.setColorSchemeResources(R.color.qblue, R.color.blue,R.color.red);
     }
 
     /**
@@ -492,5 +493,19 @@ public class SXUtils {
         headers.put("X-UDID", SXUtils.getInstance(mContext).getDeviceId());
         headers.put("X-Nonce",getReqsn());
         return headers;
+    }
+
+    /**
+     * 公共调用图片装置
+     * @param imgUrl
+     * @param view
+     */
+    public void GlideSetImg(String imgUrl,ImageView view){
+        Glide.with(mContext)
+                .load(imgUrl)
+                .placeholder(R.mipmap.loading_img)
+                .error(R.mipmap.load_error)
+                .fitCenter()
+                .into(view);
     }
 }

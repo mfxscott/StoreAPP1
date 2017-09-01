@@ -251,7 +251,7 @@ public class GoodsListFragment extends Fragment {
                     GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
                     Logs.i("商品ID============="+ typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
                 }else{
-                    recyclerView.setAdapter(simpAdapter);
+                    recyclerView.setAdapter(null);
                 }
 //                List<GoodsTypeEntity> typeGoods= typeList.get(positoin).getGoodsTypeList();
 //                typeTwoList = (List<GoodsTypeEntity>) typeGoods != null || typeGoods.size()>0? (List<GoodsTypeEntity>) typeGoods.get(0) :null;
