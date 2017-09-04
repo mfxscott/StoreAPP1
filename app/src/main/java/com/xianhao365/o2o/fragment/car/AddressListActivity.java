@@ -33,8 +33,6 @@ public class AddressListActivity extends BaseActivity {
     private void initView(){
         registerBack();
         setTitle("收货信息");
-
-
         addressRecy = (RecyclerView) findViewById(R.id.address_list_recyclerv);
 
         addressRecy.setLayoutManager(new LinearLayoutManager(addressRecy.getContext()));

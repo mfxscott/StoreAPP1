@@ -1,11 +1,14 @@
 package com.xianhao365.o2o.entity.cgListInfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by mfx-t224 on 2017/9/1.
  * 采购列表中订单详细商品列表
  */
 
-public class CGPurchaseLinesEntity{
+public class CGPurchaseLinesEntity implements Parcelable {
     private String id;
     private String created;
     private String skuCode;//sku编码
@@ -14,6 +17,60 @@ public class CGPurchaseLinesEntity{
     private String goodsUnit;//商品重量/单位/
     private String goodsName;//商品名称
     private String goodsCode;//商品编码
+    private String totalAmount;//订单总价
+    private String goodsNumber;//商品价格
+
+    protected CGPurchaseLinesEntity(Parcel in) {
+        id = in.readString();
+        created = in.readString();
+        skuCode = in.readString();
+        thumbImg = in.readString();
+        goodsPrice = in.readString();
+        goodsUnit = in.readString();
+        goodsName = in.readString();
+        goodsCode = in.readString();
+        totalAmount = in.readString();
+        goodsNumber = in.readString();
+        actualNumber = in.readString();
+    }
+
+    public static final Creator<CGPurchaseLinesEntity> CREATOR = new Creator<CGPurchaseLinesEntity>() {
+        @Override
+        public CGPurchaseLinesEntity createFromParcel(Parcel in) {
+            return new CGPurchaseLinesEntity(in);
+        }
+
+        @Override
+        public CGPurchaseLinesEntity[] newArray(int size) {
+            return new CGPurchaseLinesEntity[size];
+        }
+    };
+
+    public String getGoodsNumber() {
+        return goodsNumber;
+    }
+
+    public void setGoodsNumber(String goodsNumber) {
+        this.goodsNumber = goodsNumber;
+    }
+
+    public String getActualNumber() {
+        return actualNumber;
+    }
+
+    public void setActualNumber(String actualNumber) {
+        this.actualNumber = actualNumber;
+    }
+
+    private String actualNumber;//实际商品价格
+
+    public String getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(String totalAmount) {
+        this.totalAmount = totalAmount;
+    }
 
     public String getId() {
         return id;
@@ -77,5 +134,25 @@ public class CGPurchaseLinesEntity{
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(created);
+        dest.writeString(skuCode);
+        dest.writeString(thumbImg);
+        dest.writeString(goodsPrice);
+        dest.writeString(goodsUnit);
+        dest.writeString(goodsName);
+        dest.writeString(goodsCode);
+        dest.writeString(totalAmount);
+        dest.writeString(goodsNumber);
+        dest.writeString(actualNumber);
     }
 }

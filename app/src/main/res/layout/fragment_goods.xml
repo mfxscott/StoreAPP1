@@ -103,13 +103,23 @@
                     android:divider="#00000000"
                     />
             </LinearLayout>
-            <LinearLayout
+            <RelativeLayout
                 android:background="@color/white"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/goods_type_pro"
+                    style="@style/Base.Widget.AppCompat.ProgressBar"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                 <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
                     android:id="@+id/goods_type_swipyrefreshlayout"
                     android:layout_width="fill_parent"
@@ -128,7 +138,9 @@
                     android:divider="#00000000"
                     />
                 </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
-            </LinearLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
         </LinearLayout>
 
     </LinearLayout>

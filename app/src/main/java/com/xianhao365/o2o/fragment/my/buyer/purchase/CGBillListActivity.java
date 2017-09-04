@@ -1,4 +1,4 @@
-package com.xianhao365.o2o.fragment.my.buyer;
+package com.xianhao365.o2o.fragment.my.buyer.purchase;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -103,31 +103,8 @@ public class CGBillListActivity extends BaseActivity {
                             simpAdapter = new CGOrderListRecyclerViewAdapter(activity,cgList,1);
                             recyclerView.setAdapter(simpAdapter);
                         }
-//                        List<GoodsTypeEntity> TypeList= (List<GoodsTypeEntity>) msg.obj;
-//                        initViewPager(TypeList);
                         break;
                     case 1001:
-//                        List<GoodsDetailEntity> goodsDetaiLIst = (List<GoodsDetailEntity>) msg.obj;
-//                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst,new FoodActionCallback(){
-//
-//                            @Override
-//                            public void addAction(View view) {
-//                                NXHooldeView nxHooldeView = new NXHooldeView(activity);
-//                                int position[] = new int[2];
-//                                view.getLocationInWindow(position);
-//                                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
-//                                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
-//                                rootView.addView(nxHooldeView);
-//                                int endPosition[] = new int[2];
-//                                badge1.getLocationInWindow(endPosition);
-//                                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
-//                                nxHooldeView.startBeizerAnimation();
-//                                MainFragmentActivity.getInstance().setBadge(true,1);
-//                            }
-//                        });
-//                        recyclerView.setAdapter(simpAdapter);
-//                typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getGoodsTypeList());
-//                typeGridView.setAdapter(typeAdapter);
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;

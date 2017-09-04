@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.lzy.okhttputils.model.HttpParams;
@@ -50,14 +51,10 @@ import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
-
-
 /**
  * ***************************
- * 主页金融
+ * 首页商品分类
  * @author mfx
- * 深圳市优讯信息技术有限公司
- * 16/10/30 上午11:30
  * ***************************
  */
 public class GoodsListFragment extends Fragment {
@@ -72,6 +69,9 @@ public class GoodsListFragment extends Fragment {
     private Handler hand;
     private XTabLayout tabLayout;
     private List<GoodsTypeEntity> typeTwoList ;
+    private ProgressBar progressBar;
+    private String cnoStr;// 分类编码(支持模糊查询)
+    private String bidStr;//品牌ID
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -115,12 +115,11 @@ public class GoodsListFragment extends Fragment {
 
             }
             typeList.add(type);
-
         }
         return typeList;
     }
     private void initView(){
-
+       progressBar = (ProgressBar)view.findViewById(R.id.goods_type_pro);
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.goods_type_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -128,19 +127,15 @@ public class GoodsListFragment extends Fragment {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-//                httpChanner();
                     indexPage = 1;
-                    hand.sendEmptyMessage(1);
-//                    HttpLiveSp(indexPage);
+                    GetGoodsTypeInfoHttp(cnoStr,bidStr);
                 }else{
-                    hand.sendEmptyMessage(1);
                     indexPage ++;
+                    GetGoodsTypeInfoHttp(cnoStr,bidStr);
 //                    HttpLiveSp(indexPage);
                 }
             }
         });
-
-
         LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.all_goods_search_lin);
         searchLin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +156,8 @@ public class GoodsListFragment extends Fragment {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
                 typeAdapter.changeSelected(position);//刷新
                 if(typeTwoList != null && typeTwoList.size()>0)
+                    cnoStr = typeTwoList.get(position).getCatNo();
+                bidStr = typeTwoList.get(position).getId();
                     GetGoodsTypeInfoHttp(typeTwoList.get(position).getCatNo(),typeTwoList.get(position).getId());
 
 
@@ -190,8 +187,13 @@ public class GoodsListFragment extends Fragment {
                         break;
                     case 1001:
                         List<GoodsDetailEntity> goodsDetaiLIst = (List<GoodsDetailEntity>) msg.obj;
-                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst,new FoodActionCallback(){
+                        if(goodsDetaiLIst.size() >9){
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                        }else{
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
 
+                        }
+                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst,new FoodActionCallback(){
                             @Override
                             public void addAction(View view) {
                                 NXHooldeView nxHooldeView = new NXHooldeView(activity);
@@ -214,11 +216,15 @@ public class GoodsListFragment extends Fragment {
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(msgs);
+
                         break;
                 }
                 if(mSwipyRefreshLayout != null){
                     mSwipyRefreshLayout.setRefreshing(false);
                 }
+                progressBar.setVisibility(View.GONE);
+                SXUtils.DialogDismiss();
+                SXUtils.DialogDismiss();
                 return true;
             }
         });
@@ -230,6 +236,8 @@ public class GoodsListFragment extends Fragment {
 //第一次加载默认第一项分类商品
         if(typeList.get(0).getGoodsTypeList() != null && typeList.get(0).getGoodsTypeList().size()>0){
             typeTwoList = typeList.get(0).getGoodsTypeList();
+            cnoStr = typeTwoList.get(0).getCatNo();
+                    bidStr = typeTwoList.get(0).getId();
             GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
 //            GetGoodsTypeInfoHttp(typeList.get(0).getGoodsTypeList().get(0).getCatNo(),typeList.get(0).getGoodsTypeList().get(0).getId());
         }
@@ -248,8 +256,9 @@ public class GoodsListFragment extends Fragment {
                 typeGridView.setAdapter(typeAdapter);
                 if(typeList.get(tab.getPosition()).getGoodsTypeList() != null && typeList.get(tab.getPosition()).getGoodsTypeList().size()>0){
                     typeTwoList = typeList.get(tab.getPosition()).getGoodsTypeList();
+                    cnoStr = typeTwoList.get(0).getCatNo();
+                    bidStr = typeTwoList.get(0).getId();
                     GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
-                    Logs.i("商品ID============="+ typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
                 }else{
                     recyclerView.setAdapter(null);
                 }
@@ -326,8 +335,9 @@ public class GoodsListFragment extends Fragment {
         if(TextUtils.isEmpty(cno)){
             return;
         }
+        progressBar.setVisibility(View.VISIBLE);
         HttpParams httpParams = new HttpParams();
-        httpParams.put("cno",cno);
+//        httpParams.put("cno",cno);
         httpParams.put("cid",cid);
         HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
             @Override
@@ -338,7 +348,6 @@ public class GoodsListFragment extends Fragment {
                 msg.obj = gde.getResponseData();
                 hand.sendMessage(msg);
             }
-
             @Override
             public void onResponseError(String strError) {
                 Message msg = new Message();

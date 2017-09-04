@@ -2,6 +2,7 @@ package com.xianhao365.o2o.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
+import com.xianhao365.o2o.fragment.my.buyer.purchase.CGOrderDetailActivity;
+import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,6 +87,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final CGListInfoEntity cgInfo = mValues.get(position);
+        Logs.i(cgInfo.getPurchaseLines().size()+"=============+++++++");
 //        收货状态(10:新建 20:供应商确认30:已发货 40:完成)
         final String receiveState = cgInfo.getReceiveState();
         holder.cgOrderItemRecycler.setLayoutManager(new LinearLayoutManager(holder.cgOrderItemRecycler.getContext()));
@@ -128,9 +132,13 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, OrderDetailActivity.class);
-                intent.putExtra("orderTag",tag+"");
-                intent.putExtra("orderId",cgInfo.getId());
+                Intent intent = new Intent(context, CGOrderDetailActivity.class);
+                Bundle bundle = new Bundle();
+                ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                list.add(cgInfo.getPurchaseLines());
+                bundle.putParcelableArrayList("PurchaseList",list);
+                bundle.putParcelable("orderList", cgInfo);
+                intent.putExtras(bundle);
                 context.startActivity(intent);
             }
         });

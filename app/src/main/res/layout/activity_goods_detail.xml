@@ -7,6 +7,7 @@
     android:background="@color/app_bg"
     >
     <com.xianhao365.o2o.utils.ObservableScrollView
+        android:layout_above="@+id/goods_detail_bottom_rel"
         android:id="@+id/goods_detail_scroll_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -262,7 +263,7 @@
 
                 <!-- 以下为商品信息布局 -->
                 <LinearLayout
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     android:background="@color/white"
                     android:layout_marginTop="10dp"
@@ -601,15 +602,9 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-
-
-
-
-
-
+<!-- 底部添加购物车列表-->
     <RelativeLayout
-        android:layout_above="@+id/goods_detail_scroll_view"
+
         android:id="@+id/goods_detail_bottom_rel"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
@@ -677,5 +672,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+
 
 </RelativeLayout>

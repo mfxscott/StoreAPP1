@@ -151,7 +151,6 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             }
         });
     }
-
     private void setBanner(){
         banner = (Banner) findViewById(R.id.goods_detail_banner);
 //        List<String> images = new ArrayList<String>();
@@ -343,14 +342,22 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         }
         HttpParams params = new HttpParams();
         params.put("id", cno);
-        HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 GoodsDetailEntity gde = (GoodsDetailEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),GoodsDetailEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
+                if(gde != null){
+                    Message msg = new Message();
+                    msg.what = 1000;
+                    msg.obj = gde;
+                    hand.sendMessage(msg);
+                }else{
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = "数据解析异常";
+                    hand.sendMessage(msg);
+                }
+
             }
 
             @Override

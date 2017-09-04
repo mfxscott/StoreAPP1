@@ -46,8 +46,9 @@ public class AppClient{
     public static String USER_ORDERS="svc.get.user.order.info";//获取用户订单信息
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
     public static String  GYS_BILLLIST ="svc.purchase.mypurchaselist";//供应商的采购单列表
+    public static String  GYS_CONFIRM_PURCHASE ="svc.purchase.confirmPurchase";//供应商确认采购订单
 
-
+    public static String  GYS_CPURCHASE_DELIVER ="svc.purchase.deliverGoods";//供应商采购单发货
 
     public static String GET_CODEMSG = "svc.pull.sms";//拉取短信
     public static String APP_UPDATE="svc.check.update";//app版本更新

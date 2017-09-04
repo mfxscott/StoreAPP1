@@ -33,14 +33,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
-
-
 /**
  * ***************************
- * 生活版块
+ * 首页采购清单
  * @author mfx
- * 深圳市优讯信息技术有限公司
- * 16/10/29 下午9:28
  * ***************************
  */
 public class BillFragment extends Fragment {

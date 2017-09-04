@@ -19,6 +19,7 @@ import com.xianhao365.o2o.adapter.BuyerBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.BuyerQHGridViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
+import com.xianhao365.o2o.fragment.my.buyer.purchase.CGBillListActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.SXUtils;

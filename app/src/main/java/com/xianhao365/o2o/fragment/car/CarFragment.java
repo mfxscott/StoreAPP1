@@ -32,10 +32,8 @@ import java.util.List;
 
 /**
  * ***************************
- * 生活版块
+ * 首页购物车
  * @author mfx
- * 深圳市优讯信息技术有限公司
- * 16/10/29 下午9:28
  * ***************************
  */
 public class CarFragment extends Fragment implements View.OnClickListener{
@@ -86,7 +84,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 case 4:
                     break;
                 default:
-
             }
             type.setGoodsname("我是商品标题"+i);
             carlist.add(type);
