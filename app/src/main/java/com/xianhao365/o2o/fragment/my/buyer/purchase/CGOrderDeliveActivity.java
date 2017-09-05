@@ -24,6 +24,7 @@ import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
@@ -67,8 +68,12 @@ public class CGOrderDeliveActivity extends BaseActivity {
         purchaseCode = this.getIntent().getStringExtra("code");
         numberStr = this.getIntent().getStringExtra("num");
         skucode = this.getIntent().getStringExtra("skucode");
+        initView();
     }
-
+    private void initView(){
+        registerBack();
+        setTitle("确认发货");
+    }
     View.OnClickListener ShareOnclick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -102,6 +107,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        SXUtils.getInstance(activity).deleteDir(GETPICPATH);
         switch (requestCode) {
             //相册
             case 100:
@@ -111,6 +117,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
 //                Bitmap bitmap12 = ImageUtils.setPic(Utils.getRealFilePath(activity,data.getData()));
 //                imgStr =   getImageString(uploadImg,getRealFilePath(this,data.getData()),2);
                 imgStr = getRealFilePath(this, data.getData());
+                Logs.i("相册=======图片路径"+imgStr);
                 if (TextUtils.isEmpty(imgStr)) {
                     return;
                 }
@@ -120,7 +127,8 @@ public class CGOrderDeliveActivity extends BaseActivity {
             //拍照
             case 101:
 //                Bitmap bitmap31 = ImageUtils.setPic(Utils.getInstance(activity).getPathTakePhoto());
-//                imgStr = getImageString(uploadImg, getPathTakePhoto(), 2);
+                imgStr = getPathTakePhoto();
+                Logs.i("拍照=======图片路径"+imgStr);
 //                if(bitmap31 == null){
 //                    return;
 //                }
@@ -241,7 +249,6 @@ public class CGOrderDeliveActivity extends BaseActivity {
         try {
             f.createNewFile();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return f;
@@ -351,15 +358,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        String [] strArray = new String [2];
-//        strArray[0] = skucode;
-//        strArray[1] = numberStr;
-//        String strs = strArray.toString();
-//        List<String> listsstr= new ArrayList<>();
-//        params.putUrlParams("purchaseLines","[{actualNumber:34;skuCode:145000021}]");
-//        params.put("purchaseLines", strArray.toString());
         params.put("linestr", jsonArray.toString());
-
         List<File> files = new ArrayList<>();
         File file = new File(imgStr);
         files.add(file);
@@ -368,7 +367,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
         HttpUtils.getInstance(activity).requestUploadImgPost(false, AppClient.GYS_CPURCHASE_DELIVER, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Log.i("111111=========", jsonObject.toString());
+                Log.i("上传成功=========", jsonObject.toString());
             }
 
             @Override

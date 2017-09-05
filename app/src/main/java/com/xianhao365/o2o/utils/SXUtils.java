@@ -37,6 +37,7 @@ import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -507,5 +508,22 @@ public class SXUtils {
                 .error(R.mipmap.load_error)
                 .fitCenter()
                 .into(view);
+    }
+    //删除文件夹和文件夹里面的文件
+    public  void deleteDir(final String pPath) {
+        File dir = new File(pPath);
+        deleteDirWihtFile(dir);
+    }
+
+    public  void deleteDirWihtFile(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory())
+            return;
+        for (File file : dir.listFiles()) {
+            if (file.isFile())
+                file.delete(); // 删除所有文件
+            else if (file.isDirectory())
+                deleteDirWihtFile(file); // 递规的方式删除文件夹
+        }
+        dir.delete();// 删除目录本身
     }
 }

@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-import com.xianhao365.o2o.fragment.my.buyer.purchase.CGOrderDetailActivity;
+import com.xianhao365.o2o.fragment.my.buyer.purchase.CGOrderDeliveActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 
@@ -123,7 +123,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
                     SXUtils.getInstance(context).ToastCenter("确认订单");
                 }
                 if (receiveState.equals("20")) {
-                    Intent intent = new Intent(context, CGOrderDetailActivity.class);
+                    Intent intent = new Intent(context, CGOrderDeliveActivity.class);
                     intent.putExtra("code",cgInfo.getPurchaseCode());
                     intent.putExtra("num",cgInfo.getPurchaseLineVos().get(0).getActualNumber());
                     intent.putExtra("skucode",cgInfo.getPurchaseLineVos().get(0).getSkuCode());

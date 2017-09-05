@@ -12,13 +12,14 @@
             />
     </LinearLayout>
     <com.xianhao365.o2o.utils.ObservableScrollView
-        android:id="@+id/cg_order_detail_observablescroll"
         android:layout_below="@+id/cg_order_delive_title_lin"
+        android:id="@+id/cg_order_detail_observablescroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fadingEdge="none"
         android:scrollbars="none"
-        >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:background="@color/white"
             android:orientation="vertical"
@@ -77,7 +78,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="司机："
+                    android:text="司机名称："
                     android:textColor="@color/col_999"
                     android:textSize="@dimen/ac_text_size_14" />
 
@@ -100,7 +101,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="实际电话："
+                    android:text="司机电话："
                     android:textColor="@color/col_999"
                     android:textSize="@dimen/ac_text_size_14" />
 
@@ -169,7 +170,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="发货人联系方式："
+                    android:text="发货人电话："
                     android:textColor="@color/col_999"
                     android:textSize="@dimen/ac_text_size_14" />
 
@@ -192,30 +193,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="司机和火车照片："
-                    android:textColor="@color/col_999"
-                    android:textSize="@dimen/ac_text_size_14" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text=""
-                    android:textColor="@color/col_333"
-                    android:textSize="@dimen/ac_text_size_14" />
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/line_bg" />
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="15dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="采购单闽西："
+                    android:text="发货数量："
                     android:textColor="@color/col_999"
                     android:textSize="@dimen/ac_text_size_14" />
 
@@ -240,7 +218,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="采购单闽西："
+                    android:text="司机和货车照片"
                     android:textColor="@color/col_999"
                     android:textSize="@dimen/ac_text_size_14" />
                 <ImageView

@@ -13,8 +13,8 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.CGOrderListRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.cgListInfo.CGBillListEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-import com.xianhao365.o2o.entity.cgListInfo.GCListEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -142,10 +142,10 @@ public class CGBillListActivity extends BaseActivity {
         HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                GCListEntity gde = (GCListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),GCListEntity.class);
+                CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;
-                msg.obj = gde.getRows();
+                msg.obj = gde.getDataset();
                 hand.sendMessage(msg);
             }
             @Override
