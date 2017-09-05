@@ -61,11 +61,8 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
         cgListInfo = bundle.getParcelable("orderList");
         purchaseList= (List<CGPurchaseLinesEntity>) list.get(0);//强转成你自己定义的list，这样list2就是你传过来的那个list了。
         initView();
-
     }
-
     private void initView(){
-
         totalTv.setText(cgListInfo.getPurchaseAmount()+"");
         getTimeTv.setText(cgListInfo.getReceiveTime()+"");
         sendAddrTv.setText(cgListInfo.getReceiverAddr()+"");

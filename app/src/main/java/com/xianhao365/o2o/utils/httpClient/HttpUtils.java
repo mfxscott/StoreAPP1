@@ -13,9 +13,6 @@ import com.xianhao365.o2o.utils.SXUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.util.List;
-
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -116,12 +113,12 @@ public class HttpUtils{
      * @param callBack  结果回调
      * @param  isAll   是否返回所有数据
      */
-    public void requestFilePost(final boolean isAll, final String method,String fileKey, HttpParams httpParams, List<File> files, final requestCallBack callBack){
+    public void requestUploadImgPost(final boolean isAll, final String method, HttpParams httpParams, final requestCallBack callBack){
         addHttpHeadData(method);
         OkHttpUtils.post(SXUtils.getInstance(mContext).getApp().getHttpUrl())
                 .tag(this)
                 .params(httpParams)
-                .addFileParams(fileKey,files)
+//                .addFileParams(fileKey,files)
                 .execute(new StringCallback() {
                     @Override
                     public void onSuccess(String s, Call call, Response response) {

@@ -1,57 +1,29 @@
 package com.xianhao365.o2o.entity.cgListInfo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by mfx-t224 on 2017/9/1.
  * 采购列表中订单详细商品列表
  */
 
-public class CGPurchaseLinesEntity implements Parcelable {
+public class CGPurchaseLinesEntity {
     private String id;
-    private String created;
+    private String actualNumber;
     private String skuCode;//sku编码
+    private String goodsNumber;//商品数量
+    private String purchaseCode;
+    private String totalAmount;//商品总价
     private String thumbImg;//商品图片
     private String goodsPrice;//商品采购价
     private String goodsUnit;//商品重量/单位/
     private String goodsName;//商品名称
     private String goodsCode;//商品编码
-    private String totalAmount;//订单总价
-    private String goodsNumber;//商品价格
 
-    protected CGPurchaseLinesEntity(Parcel in) {
-        id = in.readString();
-        created = in.readString();
-        skuCode = in.readString();
-        thumbImg = in.readString();
-        goodsPrice = in.readString();
-        goodsUnit = in.readString();
-        goodsName = in.readString();
-        goodsCode = in.readString();
-        totalAmount = in.readString();
-        goodsNumber = in.readString();
-        actualNumber = in.readString();
+    public String getId() {
+        return id;
     }
 
-    public static final Creator<CGPurchaseLinesEntity> CREATOR = new Creator<CGPurchaseLinesEntity>() {
-        @Override
-        public CGPurchaseLinesEntity createFromParcel(Parcel in) {
-            return new CGPurchaseLinesEntity(in);
-        }
-
-        @Override
-        public CGPurchaseLinesEntity[] newArray(int size) {
-            return new CGPurchaseLinesEntity[size];
-        }
-    };
-
-    public String getGoodsNumber() {
-        return goodsNumber;
-    }
-
-    public void setGoodsNumber(String goodsNumber) {
-        this.goodsNumber = goodsNumber;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getActualNumber() {
@@ -62,7 +34,21 @@ public class CGPurchaseLinesEntity implements Parcelable {
         this.actualNumber = actualNumber;
     }
 
-    private String actualNumber;//实际商品价格
+    public String getGoodsNumber() {
+        return goodsNumber;
+    }
+
+    public void setGoodsNumber(String goodsNumber) {
+        this.goodsNumber = goodsNumber;
+    }
+
+    public String getPurchaseCode() {
+        return purchaseCode;
+    }
+
+    public void setPurchaseCode(String purchaseCode) {
+        this.purchaseCode = purchaseCode;
+    }
 
     public String getTotalAmount() {
         return totalAmount;
@@ -70,22 +56,6 @@ public class CGPurchaseLinesEntity implements Parcelable {
 
     public void setTotalAmount(String totalAmount) {
         this.totalAmount = totalAmount;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCreated() {
-        return created;
-    }
-
-    public void setCreated(String created) {
-        this.created = created;
     }
 
     public String getSkuCode() {
@@ -134,25 +104,5 @@ public class CGPurchaseLinesEntity implements Parcelable {
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(created);
-        dest.writeString(skuCode);
-        dest.writeString(thumbImg);
-        dest.writeString(goodsPrice);
-        dest.writeString(goodsUnit);
-        dest.writeString(goodsName);
-        dest.writeString(goodsCode);
-        dest.writeString(totalAmount);
-        dest.writeString(goodsNumber);
-        dest.writeString(actualNumber);
     }
 }

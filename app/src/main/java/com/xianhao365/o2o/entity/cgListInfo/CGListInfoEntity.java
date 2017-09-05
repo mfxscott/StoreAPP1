@@ -1,8 +1,5 @@
 package com.xianhao365.o2o.entity.cgListInfo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.List;
 
 /**
@@ -10,17 +7,10 @@ import java.util.List;
  * 采购列表
  */
 
-public class CGListInfoEntity implements Parcelable{
-    private String id;
-    private String created;//创建时间
-    private String creator;//创建
-    private String modified;//修正时间
-    private String modifier;//修正人
-    private String suggestCode;//采购建议单号
-    private String vendorCode;//供应商编码
-    private String vendorName;//供应商名称
+public class CGListInfoEntity {
+    private String purchaseAmount;
+    private String completeTime;
     private String purchaseCode;//采购单号
-    private String purchaseAmount;//采购金额
     private String actualAmount;//实际支付金额
     private String payState;//付款状态，payed：已付款；not_pay：未付款；
     private String receiveState;//收货状态(10:新建 20:供应商确认30:已发货 40:完成)
@@ -38,114 +28,22 @@ public class CGListInfoEntity implements Parcelable{
     private String senderPhone;//发货人电话
     private String senderName;//发货人名称
     private String remark;//备注
-    private String images;//司机车辆拍照
-    private List<CGPurchaseLinesEntity> purchaseLines;
+    private List<CGPurchaseLinesEntity> purchaseLineVos;
 
-    protected CGListInfoEntity(Parcel in) {
-        id = in.readString();
-        created = in.readString();
-        creator = in.readString();
-        modified = in.readString();
-        modifier = in.readString();
-        suggestCode = in.readString();
-        vendorCode = in.readString();
-        vendorName = in.readString();
-        purchaseCode = in.readString();
-        purchaseAmount = in.readString();
-        actualAmount = in.readString();
-        payState = in.readString();
-        receiveState = in.readString();
-        receiveResult = in.readString();
-        receiveTime = in.readString();
-        requestTime = in.readString();
-        receiver = in.readString();
-        receiverPhone = in.readString();
-        receiverAddr = in.readString();
-        vehicleNo = in.readString();
-        driverName = in.readString();
-        driverPhone = in.readString();
-        sendTime = in.readString();
-        sendAddr = in.readString();
-        senderPhone = in.readString();
-        senderName = in.readString();
-        remark = in.readString();
-        images = in.readString();
+    public List<CGPurchaseLinesEntity> getPurchaseLineVos() {
+        return purchaseLineVos;
     }
 
-    public static final Creator<CGListInfoEntity> CREATOR = new Creator<CGListInfoEntity>() {
-        @Override
-        public CGListInfoEntity createFromParcel(Parcel in) {
-            return new CGListInfoEntity(in);
-        }
-
-        @Override
-        public CGListInfoEntity[] newArray(int size) {
-            return new CGListInfoEntity[size];
-        }
-    };
-
-    public String getCreated() {
-        return created;
+    public void setPurchaseLineVos(List<CGPurchaseLinesEntity> purchaseLineVos) {
+        this.purchaseLineVos = purchaseLineVos;
     }
 
-    public void setCreated(String created) {
-        this.created = created;
+    public String getCompleteTime() {
+        return completeTime;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public String getModified() {
-        return modified;
-    }
-
-    public void setModified(String modified) {
-        this.modified = modified;
-    }
-
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getSuggestCode() {
-        return suggestCode;
-    }
-
-    public void setSuggestCode(String suggestCode) {
-        this.suggestCode = suggestCode;
-    }
-
-    public String getVendorCode() {
-        return vendorCode;
-    }
-
-    public void setVendorCode(String vendorCode) {
-        this.vendorCode = vendorCode;
-    }
-
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
+    public void setCompleteTime(String completeTime) {
+        this.completeTime = completeTime;
     }
 
     public String getPurchaseCode() {
@@ -299,57 +197,79 @@ public class CGListInfoEntity implements Parcelable{
     public void setRemark(String remark) {
         this.remark = remark;
     }
-
-    public String getImages() {
-        return images;
     }
 
-    public void setImages(String images) {
-        this.images = images;
-    }
-
-    public List<CGPurchaseLinesEntity> getPurchaseLines() {
-        return purchaseLines;
-    }
-
-    public void setPurchaseLines(List<CGPurchaseLinesEntity> purchaseLines) {
-        this.purchaseLines = purchaseLines;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(created);
-        dest.writeString(creator);
-        dest.writeString(modified);
-        dest.writeString(modifier);
-        dest.writeString(suggestCode);
-        dest.writeString(vendorCode);
-        dest.writeString(vendorName);
-        dest.writeString(purchaseCode);
-        dest.writeString(purchaseAmount);
-        dest.writeString(actualAmount);
-        dest.writeString(payState);
-        dest.writeString(receiveState);
-        dest.writeString(receiveResult);
-        dest.writeString(receiveTime);
-        dest.writeString(requestTime);
-        dest.writeString(receiver);
-        dest.writeString(receiverPhone);
-        dest.writeString(receiverAddr);
-        dest.writeString(vehicleNo);
-        dest.writeString(driverName);
-        dest.writeString(driverPhone);
-        dest.writeString(sendTime);
-        dest.writeString(sendAddr);
-        dest.writeString(senderPhone);
-        dest.writeString(senderName);
-        dest.writeString(remark);
-        dest.writeString(images);
-    }
-}
+//public static class CGPurchaseLinesEntity{
+//    private String id;
+//    private String created;
+//    private String skuCode;//sku编码
+//    private String thumbImg;//商品图片
+//    private String goodsPrice;//商品采购价
+//    private String goodsUnit;//商品重量/单位/
+//    private String goodsName;//商品名称
+//    private String goodsCode;//商品编码
+//
+//    public String getId() {
+//        return id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
+//
+//    public String getCreated() {
+//        return created;
+//    }
+//
+//    public void setCreated(String created) {
+//        this.created = created;
+//    }
+//
+//    public String getSkuCode() {
+//        return skuCode;
+//    }
+//
+//    public void setSkuCode(String skuCode) {
+//        this.skuCode = skuCode;
+//    }
+//
+//    public String getThumbImg() {
+//        return thumbImg;
+//    }
+//
+//    public void setThumbImg(String thumbImg) {
+//        this.thumbImg = thumbImg;
+//    }
+//
+//    public String getGoodsPrice() {
+//        return goodsPrice;
+//    }
+//
+//    public void setGoodsPrice(String goodsPrice) {
+//        this.goodsPrice = goodsPrice;
+//    }
+//
+//    public String getGoodsUnit() {
+//        return goodsUnit;
+//    }
+//
+//    public void setGoodsUnit(String goodsUnit) {
+//        this.goodsUnit = goodsUnit;
+//    }
+//
+//    public String getGoodsName() {
+//        return goodsName;
+//    }
+//
+//    public void setGoodsName(String goodsName) {
+//        this.goodsName = goodsName;
+//    }
+//
+//    public String getGoodsCode() {
+//        return goodsCode;
+//    }
+//
+//    public void setGoodsCode(String goodsCode) {
+//        this.goodsCode = goodsCode;
+//    }
+//}

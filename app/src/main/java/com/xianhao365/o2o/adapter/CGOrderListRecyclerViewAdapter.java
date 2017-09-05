@@ -2,7 +2,6 @@ package com.xianhao365.o2o.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +19,6 @@ import com.xianhao365.o2o.fragment.my.buyer.purchase.CGOrderDetailActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -87,7 +85,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final CGListInfoEntity cgInfo = mValues.get(position);
-        Logs.i(cgInfo.getPurchaseLines().size()+"=============+++++++");
+        Logs.i(cgInfo.getPurchaseLineVos().size()+"=============+++++++");
 //        收货状态(10:新建 20:供应商确认30:已发货 40:完成)
         final String receiveState = cgInfo.getReceiveState();
         holder.cgOrderItemRecycler.setLayoutManager(new LinearLayoutManager(holder.cgOrderItemRecycler.getContext()));
@@ -95,11 +93,11 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.cgOrderItemRecycler.setLayoutManager(linearLayoutManager);
         holder.cgOrderItemRecycler.setItemAnimator(new DefaultItemAnimator());
-        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,cgInfo.getPurchaseLines(),1);
+        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,cgInfo.getPurchaseLineVos(),1);
         holder.cgOrderItemRecycler.setAdapter(simpAdapter);
 
         holder.cgOrderNumTv.setText(cgInfo.getPurchaseCode()+"");
-        holder.cgOrderTimeItemTv.setText(cgInfo.getCreated()+"");
+        holder.cgOrderTimeItemTv.setText(cgInfo.getCompleteTime()+"");
         holder.cgOrderPriceItemTv.setText(cgInfo.getPurchaseAmount()+"元");
         holder.cgOrderGetTimeItemTv.setText(cgInfo.getReceiveTime());
         holder.cgOrderAddressItemTv.setText(cgInfo.getReceiverAddr());
@@ -125,21 +123,25 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
                     SXUtils.getInstance(context).ToastCenter("确认订单");
                 }
                 if (receiveState.equals("20")) {
-                    SXUtils.getInstance(context).ToastCenter("点击发货");
+                    Intent intent = new Intent(context, CGOrderDetailActivity.class);
+                    intent.putExtra("code",cgInfo.getPurchaseCode());
+                    intent.putExtra("num",cgInfo.getPurchaseLineVos().get(0).getActualNumber());
+                    intent.putExtra("skucode",cgInfo.getPurchaseLineVos().get(0).getSkuCode());
+                    context.startActivity(intent);
                 }
             }
         });
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, CGOrderDetailActivity.class);
-                Bundle bundle = new Bundle();
-                ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
-                list.add(cgInfo.getPurchaseLines());
-                bundle.putParcelableArrayList("PurchaseList",list);
-                bundle.putParcelable("orderList", cgInfo);
-                intent.putExtras(bundle);
-                context.startActivity(intent);
+//                Intent intent = new Intent(context, CGOrderDetailActivity.class);
+//                Bundle bundle = new Bundle();
+//                ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+//                list.add(cgInfo.getPurchaseLineVos());
+//                bundle.putParcelableArrayList("PurchaseList",list);
+//                bundle.putParcelable("orderList", cgInfo);
+//                intent.putExtras(bundle);
+//                context.startActivity(intent);
             }
         });
     }
