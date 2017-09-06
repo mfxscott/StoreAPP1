@@ -393,7 +393,7 @@ public class SXUtils {
                 Logs.i("验证码发送成功返回参数=======",jsonObject.toString());
                 Message msg = new Message();
                 msg.what = AppClient.GETCODEMSG;
-                msg.obj = jsonObject;
+                msg.obj = jsonObject+"";
                 handler.sendMessage(msg);
             }
             @Override
@@ -407,7 +407,6 @@ public class SXUtils {
     }
     /**
      * 公共fragment 跳转
-     *
      * @param fm       FragmentManager
      * @param fragment 跳转fragment
      * @param tag      标签

@@ -83,8 +83,8 @@ public class CGOrderDetailRecyclerViewAdapter
         final CGPurchaseLinesEntity gcpurchase = mValues.get(position);
         holder.name.setText(gcpurchase.getGoodsName());
         holder.modelPrice.setText(gcpurchase.getTotalAmount());
-        holder.model.setText(gcpurchase.getGoodsUnit());
-        holder.num.setText(gcpurchase.getGoodsNumber());
+        holder.model.setText("/"+gcpurchase.getGoodsUnit());
+        holder.num.setText("x"+gcpurchase.getGoodsNumber());
         holder.tatol.setText(gcpurchase.getTotalAmount());
         holder.markPrice.setText(gcpurchase.getGoodsPrice());
         holder.shopPrice.setText(gcpurchase.getActualNumber());

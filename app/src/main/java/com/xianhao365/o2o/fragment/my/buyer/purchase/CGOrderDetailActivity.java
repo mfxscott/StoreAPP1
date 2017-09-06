@@ -1,6 +1,7 @@
 package com.xianhao365.o2o.fragment.my.buyer.purchase;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,6 +49,8 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
     TextView  getPresonTv;
     @BindView(R.id.cg_order_detail_recycler)
     RecyclerView recycler;
+    @BindView(R.id.cg_order_detail_no_tv)
+    TextView  purCodeTv;
     private Handler hand;
 
     @Override
@@ -67,14 +70,15 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
         getTimeTv.setText(cgListInfo.getReceiveTime()+"");
         sendAddrTv.setText(cgListInfo.getReceiverAddr()+"");
         getPresonTv.setText(cgListInfo.getReceiver()+"");
+        purCodeTv.setText("采购单号:"+cgListInfo.getPurchaseCode());
         takeOrder.setOnClickListener(this);
         registerBack();
         setTitle("采购订单详情");
 
         recycler.setLayoutManager(new LinearLayoutManager(this));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recycler.setLayoutManager(linearLayoutManager);
+//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        recycler.setLayoutManager(linearLayoutManager);
         recycler.setItemAnimator(new DefaultItemAnimator());
         CGOrderDetailRecyclerViewAdapter simpAdapter = new CGOrderDetailRecyclerViewAdapter(this,purchaseList);
         recycler.setAdapter(simpAdapter);
@@ -121,7 +125,11 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
                         getConfirmPurchaseHttp(cgListInfo.getPurchaseCode());
                         break;
                     case 20:
-                        SXUtils.getInstance(activity).ToastCenter("立即发货");
+                        Intent intent = new Intent(activity, CGOrderDeliveActivity.class);
+                        intent.putExtra("code",cgListInfo.getPurchaseCode());
+                        intent.putExtra("num",cgListInfo.getPurchaseLineVos().get(0).getActualNumber());
+                        intent.putExtra("skucode",cgListInfo.getPurchaseLineVos().get(0).getSkuCode());
+                        startActivity(intent);
                         break;
                 }
                 break;

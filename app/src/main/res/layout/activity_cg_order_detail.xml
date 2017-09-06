@@ -36,6 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/cg_order_detail_no_tv"
                     android:padding="15dp"
                     android:textSize="@dimen/ac_text_size_14"
                     android:textColor="@color/col_333"
@@ -43,6 +44,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView
+                    android:visibility="gone"
                     android:layout_alignParentRight="true"
                     android:padding="15dp"
                     android:textSize="@dimen/ac_text_size_14"
@@ -196,7 +198,7 @@
                 android:padding="10dp"
                 android:id="@+id/cg_order_detail_take_btn"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/comfirm_take_selector"
+                android:background="@drawable/login_button_selector"
                 android:textSize="@dimen/ac_text_size_18"
                 android:textColor="@color/white"
                 android:text="立刻付款"

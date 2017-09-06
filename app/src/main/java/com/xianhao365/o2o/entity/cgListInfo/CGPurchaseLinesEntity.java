@@ -1,11 +1,14 @@
 package com.xianhao365.o2o.entity.cgListInfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by mfx-t224 on 2017/9/1.
  * 采购列表中订单详细商品列表
  */
 
-public class CGPurchaseLinesEntity {
+public class CGPurchaseLinesEntity implements Parcelable{
     private String id;
     private String actualNumber;
     private String skuCode;//sku编码
@@ -17,6 +20,32 @@ public class CGPurchaseLinesEntity {
     private String goodsUnit;//商品重量/单位/
     private String goodsName;//商品名称
     private String goodsCode;//商品编码
+
+    protected CGPurchaseLinesEntity(Parcel in) {
+        id = in.readString();
+        actualNumber = in.readString();
+        skuCode = in.readString();
+        goodsNumber = in.readString();
+        purchaseCode = in.readString();
+        totalAmount = in.readString();
+        thumbImg = in.readString();
+        goodsPrice = in.readString();
+        goodsUnit = in.readString();
+        goodsName = in.readString();
+        goodsCode = in.readString();
+    }
+
+    public static final Creator<CGPurchaseLinesEntity> CREATOR = new Creator<CGPurchaseLinesEntity>() {
+        @Override
+        public CGPurchaseLinesEntity createFromParcel(Parcel in) {
+            return new CGPurchaseLinesEntity(in);
+        }
+
+        @Override
+        public CGPurchaseLinesEntity[] newArray(int size) {
+            return new CGPurchaseLinesEntity[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -104,5 +133,25 @@ public class CGPurchaseLinesEntity {
 
     public void setGoodsCode(String goodsCode) {
         this.goodsCode = goodsCode;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(actualNumber);
+        dest.writeString(skuCode);
+        dest.writeString(goodsNumber);
+        dest.writeString(purchaseCode);
+        dest.writeString(totalAmount);
+        dest.writeString(thumbImg);
+        dest.writeString(goodsPrice);
+        dest.writeString(goodsUnit);
+        dest.writeString(goodsName);
+        dest.writeString(goodsCode);
     }
 }

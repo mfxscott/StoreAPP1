@@ -1,5 +1,8 @@
 package com.xianhao365.o2o.entity.cgListInfo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -7,7 +10,7 @@ import java.util.List;
  * 采购列表
  */
 
-public class CGListInfoEntity {
+public class CGListInfoEntity implements Parcelable{
     private String purchaseAmount;
     private String completeTime;
     private String purchaseCode;//采购单号
@@ -28,6 +31,52 @@ public class CGListInfoEntity {
     private String senderPhone;//发货人电话
     private String senderName;//发货人名称
     private String remark;//备注
+    private String  created;//订单创建时间
+
+    protected CGListInfoEntity(Parcel in) {
+        purchaseAmount = in.readString();
+        completeTime = in.readString();
+        purchaseCode = in.readString();
+        actualAmount = in.readString();
+        payState = in.readString();
+        receiveState = in.readString();
+        receiveResult = in.readString();
+        receiveTime = in.readString();
+        requestTime = in.readString();
+        receiver = in.readString();
+        receiverPhone = in.readString();
+        receiverAddr = in.readString();
+        vehicleNo = in.readString();
+        driverName = in.readString();
+        driverPhone = in.readString();
+        sendTime = in.readString();
+        sendAddr = in.readString();
+        senderPhone = in.readString();
+        senderName = in.readString();
+        remark = in.readString();
+        created = in.readString();
+    }
+
+    public static final Creator<CGListInfoEntity> CREATOR = new Creator<CGListInfoEntity>() {
+        @Override
+        public CGListInfoEntity createFromParcel(Parcel in) {
+            return new CGListInfoEntity(in);
+        }
+
+        @Override
+        public CGListInfoEntity[] newArray(int size) {
+            return new CGListInfoEntity[size];
+        }
+    };
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     private List<CGPurchaseLinesEntity> purchaseLineVos;
 
     public List<CGPurchaseLinesEntity> getPurchaseLineVos() {
@@ -197,7 +246,37 @@ public class CGListInfoEntity {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(purchaseAmount);
+        dest.writeString(completeTime);
+        dest.writeString(purchaseCode);
+        dest.writeString(actualAmount);
+        dest.writeString(payState);
+        dest.writeString(receiveState);
+        dest.writeString(receiveResult);
+        dest.writeString(receiveTime);
+        dest.writeString(requestTime);
+        dest.writeString(receiver);
+        dest.writeString(receiverPhone);
+        dest.writeString(receiverAddr);
+        dest.writeString(vehicleNo);
+        dest.writeString(driverName);
+        dest.writeString(driverPhone);
+        dest.writeString(sendTime);
+        dest.writeString(sendAddr);
+        dest.writeString(senderPhone);
+        dest.writeString(senderName);
+        dest.writeString(remark);
+        dest.writeString(created);
+    }
+}
 
 //public static class CGPurchaseLinesEntity{
 //    private String id;

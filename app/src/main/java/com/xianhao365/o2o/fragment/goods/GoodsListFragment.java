@@ -230,6 +230,10 @@ public class GoodsListFragment extends Fragment {
         });
     }
     private void initViewPager(final List<GoodsTypeEntity> typeList) {
+        if(typeList == null ||typeList.size() <=0){
+            SXUtils.getInstance(activity).ToastCenter("未查询到相关数据");
+            return;
+        }
         //第一次都是显示默认第一个二级分类
         typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(0).getGoodsTypeList());
         typeGridView.setAdapter(typeAdapter);

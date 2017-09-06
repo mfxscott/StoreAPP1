@@ -76,6 +76,9 @@ public class StartMainActivity extends Activity {
     private Handler hand;
     private int seconds=3000;//广告图片显示时间
     private String imgUrl;//广告图片
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_PHONE_STATE};
     /**
      * 图片资源id
      */
@@ -121,7 +124,7 @@ public class StartMainActivity extends Activity {
         if (ContextCompat.checkSelfPermission(StartMainActivity.this, Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
             //申请WRITE_EXTERNAL_STORAGE权限
-            ActivityCompat.requestPermissions(StartMainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE},
+            ActivityCompat.requestPermissions(StartMainActivity.this, PERMISSIONS_STORAGE,
                     1000);//自定义的code
         }
 

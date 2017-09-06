@@ -11,15 +11,22 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
@@ -27,6 +34,7 @@ import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.view.MyGridView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,11 +62,18 @@ public class CGOrderDeliveActivity extends BaseActivity {
     TextView cgOrderDetailTakeBtn;
     @BindView(R.id.delive_upload_img)
     ImageView deliveUploadImg;
+    @BindView(R.id.cg_delive_gridv)
+    MyGridView imgGirdv;
+    @BindView(R.id.delive_pp_img_view)
+    ImageView  ppImgV;
+    @BindView(R.id.delive_pp_rely_view)
+    RelativeLayout ppRely;
     private Handler hand;
     private Activity activity;
     private String purchaseCode, numberStr, skucode;
     private GetPicPopupWindow getpicpop;
-
+    private List<File> imgList = new ArrayList<>();
+    private ImageGridViewAdapter  imgGridAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +88,52 @@ public class CGOrderDeliveActivity extends BaseActivity {
     private void initView(){
         registerBack();
         setTitle("确认发货");
+        //默认添加一个增加按钮图片
+        imgList.add(new File("123456"));
+        deliveUploadImg.setVisibility(View.GONE);
+        imgGridAdapter = new ImageGridViewAdapter(imgList);
+        imgGirdv.setAdapter(imgGridAdapter);
+        imgGirdv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(imgList.size()-1 == position){
+                    getpicpop = new GetPicPopupWindow(activity, ShareOnclick, false);
+                    //显示窗口
+                    getpicpop.showAtLocation(view, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+                }else {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inPreferredConfig = Bitmap.Config.ARGB_4444;
+                    Bitmap img = BitmapFactory.decodeFile(imgList.get(position).getPath(),options);
+                    ppRely.setVisibility(View.VISIBLE);
+                    ppImgV.setImageBitmap(img);
+//                    imgList.remove(position);
+//                    imgGridAdapter.notifyDataSetChanged();
+                }
+            }
+        });
+        ppImgV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ppRely.setVisibility(View.GONE);
+            }
+        });
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1000:
+                        Logs.i(imgList.size()+"");
+                        imgGridAdapter.notifyDataSetChanged();
+                        break;
+                    case 1001:
+                        break;
+                    case AppClient.ERRORCODE:
+                        String msgs = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(msgs);
+                        break;
+                }
+                return true;
+            }
+        });
     }
     View.OnClickListener ShareOnclick = new View.OnClickListener() {
         @Override
@@ -107,7 +168,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        SXUtils.getInstance(activity).deleteDir(GETPICPATH);
+//        SXUtils.getInstance(activity).deleteDir(GETPICPATH);
         switch (requestCode) {
             //相册
             case 100:
@@ -121,8 +182,9 @@ public class CGOrderDeliveActivity extends BaseActivity {
                 if (TextUtils.isEmpty(imgStr)) {
                     return;
                 }
-//
-
+                File file = new File( imgStr ) ;
+                imgList.add(0,file);
+                hand.sendEmptyMessage(1000);
                 break;
             //拍照
             case 101:
@@ -135,6 +197,9 @@ public class CGOrderDeliveActivity extends BaseActivity {
                 if (TextUtils.isEmpty(imgStr)) {
                     return;
                 }
+                File files = new File(imgStr) ;
+                imgList.add(0,files);
+                hand.sendEmptyMessage(1000);
 //                Bitmap bitmap3;
 //                if(bitmap31.getWidth() < 240){
 //                    bitmap3 =  ImageUtils.zoomImg(bitmap31,bitmap31.getWidth(),bitmap31.getHeight());
@@ -147,6 +212,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
 //                Utils.getInstance(activity).deleteFile(Utils.getInstance(activity).getPathTakePhoto());
                 break;
             case 102:
+
 //                ImgStr =   ImageUtils.bitmapToString(Utils.getPathTakePhoto());
 //                try {
 //                    bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(Utils.getUriTakePhoto()));
@@ -369,14 +435,13 @@ public class CGOrderDeliveActivity extends BaseActivity {
             public void onResponse(Object jsonObject) {
                 Log.i("上传成功=========", jsonObject.toString());
             }
-
             @Override
             public void onResponseError(String strError) {
                 Log.i("2222222=========", strError.toString());
             }
         });
     }
-    @OnClick({R.id.delive_upload_img, R.id.cg_order_detail_take_btn})
+    @OnClick({R.id.delive_upload_img, R.id.cg_order_detail_take_btn,R.id.delive_pp_rely_view})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.delive_upload_img:
@@ -387,6 +452,45 @@ public class CGOrderDeliveActivity extends BaseActivity {
             case R.id.cg_order_detail_take_btn:
                 GetGYSBillListHttp();
                 break;
+            case R.id.delive_pp_rely_view:
+                break;
+        }
+    }
+    class ImageGridViewAdapter extends BaseAdapter {
+        private final LayoutInflater mLayoutInflater;
+        public ImageGridViewAdapter( List<File> result) {
+            mLayoutInflater = LayoutInflater.from(activity);
+        }
+        public int getCount() {
+            return imgList.size();
+        }
+        public Object getItem(int position) {
+            return position;
+        }
+        public long getItemId(int position) {
+            return position;
+        }
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LifeViewHolder vh;
+            if (convertView == null) {
+                vh = new LifeViewHolder();
+                convertView = mLayoutInflater.inflate(R.layout.img_item_layout, null);
+                vh.imgv = (ImageView) convertView.findViewById(R.id.item_img);
+                convertView.setTag(vh);
+            } else {
+                vh = (LifeViewHolder) convertView.getTag();
+            }
+            vh.imgv.setBackgroundResource(R.color.transparent);
+            if(imgList.size()-1 == position){
+                Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.addphoto).into(vh.imgv);
+            }else{
+                Glide.with(activity).load(imgList.get(position)).asBitmap().into(vh.imgv);
+            }
+
+            return convertView;
+        }
+        class LifeViewHolder{
+            ImageView imgv;
         }
     }
 }
