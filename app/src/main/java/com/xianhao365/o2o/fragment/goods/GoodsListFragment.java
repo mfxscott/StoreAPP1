@@ -35,7 +35,6 @@ import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
@@ -46,9 +45,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 /**
@@ -119,7 +115,7 @@ public class GoodsListFragment extends Fragment {
         return typeList;
     }
     private void initView(){
-       progressBar = (ProgressBar)view.findViewById(R.id.goods_type_pro);
+        progressBar = (ProgressBar)view.findViewById(R.id.goods_type_pro);
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.goods_type_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -158,7 +154,7 @@ public class GoodsListFragment extends Fragment {
                 if(typeTwoList != null && typeTwoList.size()>0)
                     cnoStr = typeTwoList.get(position).getCatNo();
                 bidStr = typeTwoList.get(position).getId();
-                    GetGoodsTypeInfoHttp(typeTwoList.get(position).getCatNo(),typeTwoList.get(position).getId());
+                GetGoodsTypeInfoHttp(typeTwoList.get(position).getCatNo(),typeTwoList.get(position).getId());
 
 
             }
@@ -241,7 +237,7 @@ public class GoodsListFragment extends Fragment {
         if(typeList.get(0).getGoodsTypeList() != null && typeList.get(0).getGoodsTypeList().size()>0){
             typeTwoList = typeList.get(0).getGoodsTypeList();
             cnoStr = typeTwoList.get(0).getCatNo();
-                    bidStr = typeTwoList.get(0).getId();
+            bidStr = typeTwoList.get(0).getId();
             GetGoodsTypeInfoHttp(typeTwoList.get(0).getCatNo(),typeTwoList.get(0).getId());
 //            GetGoodsTypeInfoHttp(typeList.get(0).getGoodsTypeList().get(0).getCatNo(),typeList.get(0).getGoodsTypeList().get(0).getId());
         }
@@ -281,17 +277,10 @@ public class GoodsListFragment extends Fragment {
         });
     }
     /**
-     * 获取商品分类
+     * 获取供应商采购列表
      */
-    public void GetGoodsType(){
-        RequestBody requestBody = new FormBody.Builder()
-//                .add("catNo", "00002-00001")//二级分类查询00002
-//                .add("vcode", codeStr)
-//                .add("registerType", "0")//0=手机,1=微信,2=QQ
-//                .add("password", psdStr)
-//                .add("tag","64")
-                .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GOODS_TYPE, new OKManager.Func4() {
+    public void GetGoodsType() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.GOODS_TYPE, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("商品分类发送成功返回参数=======",jsonObject.toString());
@@ -308,7 +297,6 @@ public class GoodsListFragment extends Fragment {
                     msg.obj = e.toString();
                     hand.sendMessage(msg);
                 }
-
             }
             @Override
             public void onResponseError(String strError) {
@@ -316,10 +304,10 @@ public class GoodsListFragment extends Fragment {
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 hand.sendMessage(msg);
+
             }
         });
     }
-
     /**
      * 根据商品分类查询商品数据
      * cid    分类ID

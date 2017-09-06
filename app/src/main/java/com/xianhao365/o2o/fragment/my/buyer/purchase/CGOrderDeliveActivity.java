@@ -213,7 +213,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
                 break;
             case 102:
 
-//                ImgStr =   ImageUtils.bitmapToString(Utils.getPathTakePhoto());
+//                ImgStr =   ImageUtils.bitmapToString(Utils.getPathTakePhoto());550616817782
 //                try {
 //                    bitmap = BitmapFactory.decodeStream(activity.getContentResolver().openInputStream(Utils.getUriTakePhoto()));
 //                    imgStr =   Utils.bitmapToBase64(bitmap);

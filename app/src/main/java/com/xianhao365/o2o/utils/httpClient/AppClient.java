@@ -61,7 +61,8 @@ public class AppClient{
     public static String GOODS_TYPE="svc.cat.list";//商品分类
     public static String GOODS_LIST="svc.goods.list";//商品列表 根据参数进行分类查询
 
-
+//购物车
+    public static String CARLIST = "svc.shoppingcart.get";//查询购物车
 
    public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";
 

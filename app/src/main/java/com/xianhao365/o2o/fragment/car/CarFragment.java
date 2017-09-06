@@ -21,10 +21,15 @@ import android.widget.TextView;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.CarRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.car.CarList;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
+import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,6 @@ import java.util.List;
 public class CarFragment extends Fragment implements View.OnClickListener{
     private  View view;
     private Activity activity;
-    private OKManager manager;//工具类
     private Handler hand;
     private int indexPage= 1;
     private RecyclerView recyclerView;
@@ -56,9 +60,9 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_car, null);
         activity = getActivity();
-        manager = new OKManager(activity);
         init();
-        HttpLiveSp();
+        SXUtils.showMyProgressDialog(activity,false);
+        GetCarList();
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;
     }
@@ -139,11 +143,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
                         break;
                 }
+                SXUtils.DialogDismiss();
                 return true;
             }
         });
-    }
-    private void HttpLiveSp() {
     }
 
     @Override
@@ -178,9 +181,33 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             case R.id.car_go_shop_lin:
                 MainFragmentActivity.goodsRb.setChecked(true);
                 break;
-
         }
 
+    }
+    /**
+     * 获取购物车列表
+     */
+    public void GetCarList() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.CARLIST, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("购物车成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+           CarList car = (CarList) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CarList.class);
+                    Message msg = new Message();
+                    msg.what = 1000;
+                    msg.obj = car;
+                    hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
     }
 }
 
