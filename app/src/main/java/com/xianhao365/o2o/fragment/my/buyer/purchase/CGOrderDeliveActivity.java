@@ -410,7 +410,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
         params.put("driverName", "123qwe");
         params.put("driverPhone", "18682136973");
         params.put("sendTime", sDateSuffix);
-        params.put("sendAddr", "深圳市");
+        params.put("sendAddr", "深圳市");//商品
         params.put("senderPhone", "18682136973");
         params.put("senderName", "12qwe");
 
