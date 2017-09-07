@@ -81,7 +81,7 @@ public class CommonWebViewMainActivity extends BaseActivity {
         if(tag.equals("2")){
             myWebView.postUrl(postUrl,null);
         }else {
-            myWebView.postUrl(SXUtils.getInstance(activity).getApp().getINTENTURL(), SXUtils.getInstance(activity).WebViewPostJSONObject(activity,postUrl).getBytes());
+            myWebView.postUrl(SXUtils.getInstance(activity).getApp().getHttpUrl(), SXUtils.getInstance(activity).WebViewPostJSONObject(activity,postUrl).getBytes());
         }
 //        myWebView.addJavascriptInterface(new IntentWebJavaScriptInterface(),
 //                "intent");
@@ -204,7 +204,7 @@ public class CommonWebViewMainActivity extends BaseActivity {
                 if (tag.equals("2")) {
                     myWebView.postUrl(LoginUrl, null);
                 } else {
-                    myWebView.postUrl(SXUtils.getInstance(activity).getApp().getINTENTURL(), SXUtils.getInstance(activity).WebViewPostJSONObject(activity,LoginUrl).getBytes());
+                    myWebView.postUrl(SXUtils.getInstance(activity).getApp().getHttpUrl(), SXUtils.getInstance(activity).WebViewPostJSONObject(activity,LoginUrl).getBytes());
                 }
                 break;
             case 1001:

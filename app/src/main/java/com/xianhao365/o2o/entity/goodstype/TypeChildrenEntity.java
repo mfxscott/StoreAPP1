@@ -4,15 +4,24 @@ package com.xianhao365.o2o.entity.goodstype;
  * 商品二级分类
  */
 public class TypeChildrenEntity {
-    private String name;
+    private String categoryCode;
+    private String categoryName;
     private String id;
 
-    public String getName() {
-        return name;
+    public String getCategoryCode() {
+        return categoryCode;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getId() {

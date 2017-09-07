@@ -40,6 +40,7 @@ import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -64,7 +65,8 @@ public class GoodsListFragment extends Fragment {
     private XTabLayout tabLayout;
     private List<TypeChildrenEntity> typeTwoList ;
     private ProgressBar progressBar;
-    private String bidStr;//品牌ID
+    private String idStr;//品牌ID
+    private String cnoStr;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -89,10 +91,10 @@ public class GoodsListFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 1;
-                    GetGoodsTypeInfoHttp(bidStr);
+                    GetGoodsTypeInfoHttp(idStr,cnoStr);
                 }else{
                     indexPage ++;
-                    GetGoodsTypeInfoHttp(bidStr);
+                    GetGoodsTypeInfoHttp(idStr,cnoStr);
 //                    HttpLiveSp(indexPage);
                 }
             }
@@ -115,8 +117,9 @@ public class GoodsListFragment extends Fragment {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
                 typeAdapter.changeSelected(position);//刷新
                 if(typeTwoList != null && typeTwoList.size()>0)
-                    bidStr = typeTwoList.get(position).getId();
-                GetGoodsTypeInfoHttp(typeTwoList.get(position).getId());
+                    idStr = typeTwoList.get(0).getId();
+                cnoStr = typeTwoList.get(0).getCategoryCode();
+                GetGoodsTypeInfoHttp(typeTwoList.get(0).getId(),typeTwoList.get(position).getCategoryCode());
 
 
             }
@@ -201,8 +204,9 @@ public class GoodsListFragment extends Fragment {
 ////第一次加载默认第一项分类商品
 
 
-        bidStr = typeTwoList.get(0).getId();
-        GetGoodsTypeInfoHttp(typeTwoList.get(0).getId());
+        idStr = typeTwoList.get(0).getId();
+        cnoStr = typeTwoList.get(0).getCategoryCode();
+        GetGoodsTypeInfoHttp(typeTwoList.get(0).getId(),typeTwoList.get(0).getCategoryCode());
 //            GetGoodsTypeInfoHttp(typeList.get(0).getGoodsTypeList().get(0).getCatNo(),typeList.get(0).getGoodsTypeList().get(0).getId());
 
         if (typeList != null) {
@@ -220,8 +224,9 @@ public class GoodsListFragment extends Fragment {
                 typeGridView.setAdapter(typeAdapter);
                 if(typeList.get(tab.getPosition()).getChildren() != null && typeList.get(tab.getPosition()).getChildren().size()>0){
                     typeTwoList = typeList.get(tab.getPosition()).getChildren();
-                    bidStr = typeTwoList.get(0).getId();
-                    GetGoodsTypeInfoHttp(typeTwoList.get(0).getId());
+                    idStr = typeTwoList.get(0).getId();
+                    cnoStr = typeTwoList.get(0).getCategoryCode();
+                    GetGoodsTypeInfoHttp(typeTwoList.get(0).getId(),typeTwoList.get(0).getCategoryCode());
                 }else{
                     recyclerView.setAdapter(null);
                 }
@@ -285,14 +290,26 @@ public class GoodsListFragment extends Fragment {
      bWholesalePrice  批发售价开始（查询本店售价区间）
      eWholesalePrice   批发售价结束（查询本店售价区间）
      */
-    public void GetGoodsTypeInfoHttp(String cid){
+    public void GetGoodsTypeInfoHttp(String cid,String cno){
+        if(recyclerView != null)
+        recyclerView.setAdapter(null);
         progressBar.setVisibility(View.VISIBLE);
+
         HttpParams httpParams = new HttpParams();
         httpParams.put("cid",cid);
+        httpParams.put("cno",cno);
+        Logs.i("=+++======="+cid);
         HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                TypeInfoEntity gde = (TypeInfoEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),TypeInfoEntity.class);
+                String jsobj="";
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                     jsobj = jsonObject1.getString("responseData");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                TypeInfoEntity gde = (TypeInfoEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsobj,TypeInfoEntity.class);
                 Message msg = new Message();
                 msg.what = 1001;
                 msg.obj = gde.getRows();

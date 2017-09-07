@@ -9,7 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.GoodsTypeEntity;
 import com.xianhao365.o2o.entity.goodstype.TypeChildrenEntity;
 
 import java.util.List;
@@ -57,7 +56,7 @@ public class MainGoodsTypeAdapter extends BaseAdapter {
         } else {
             vh = (LifeViewHolder) convertView.getTag();
         }
-        vh.TypeName.setText(info.getName()+"");
+        vh.TypeName.setText(info.getCategoryName());
 //        if(position == 0){
 //            vh.linV.setVisibility(View.VISIBLE);
 //        }else{

@@ -128,10 +128,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         simpAdapter = new CarRecyclerViewAdapter(getActivity(),getTypeInfoData(),delNumTv);
         simpAdapter.initDate();
         recyclerView.setAdapter(simpAdapter);
-
-
-
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

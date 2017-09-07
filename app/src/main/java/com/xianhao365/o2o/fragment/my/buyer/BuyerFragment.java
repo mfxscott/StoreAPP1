@@ -61,7 +61,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         GetUserInfoHttp();
 //        GetGYSBillListHttp();
 //        GetOrderListHttp();
-//        GetUserWalletHttp();
+        GetUserWalletHttp();
         return view;
     }
     //初始化
@@ -247,7 +247,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
+                msg.obj = "供应商信息="+strError;
                 hand.sendMessage(msg);
 
             }
@@ -273,7 +273,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
+                msg.obj = "供应商钱包="+strError;
                 hand.sendMessage(msg);
 
             }

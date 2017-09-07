@@ -21,15 +21,8 @@ import java.util.ArrayList;
 public class MyApplication extends Application{
     ArrayList<Activity> list = new ArrayList<Activity>();
     private String  HttpUrl= "http://120.27.223.246:8080/xianhao365/api.do";
-    private  String httpId = "https://www.sanxiapay.com/";
-    /**
-     * 中转地址
-     */
-    private  String INTENTURL=httpId+"emallapp/ccqtgb/ccqtgbUrl.do";
+//    private String HttpUrl = "http://192.168.1.102:9080/api.do";
 
-    public String getINTENTURL() {
-        return INTENTURL;
-    }
     public String getHttpUrl() {
         return HttpUrl;
     }

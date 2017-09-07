@@ -5,7 +5,7 @@ package com.xianhao365.o2o.entity.goodsinfo;
  */
 
 public class GoodsInfoEntity {
-    private String GoodsCode;
+    private String goodsCode;
     private String goodsName;
     private String goodsNickname;
     private String goodsUnit;
@@ -30,11 +30,11 @@ public class GoodsInfoEntity {
     private String wholesalePrice;
 
     public String getGoodsCode() {
-        return GoodsCode;
+        return goodsCode;
     }
 
     public void setGoodsCode(String goodsCode) {
-        GoodsCode = goodsCode;
+        this.goodsCode = goodsCode;
     }
 
     public String getGoodsName() {

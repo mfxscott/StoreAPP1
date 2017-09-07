@@ -33,7 +33,7 @@ public class OKManager {
     private volatile  OKManager manager;
     private final String TAG = OKManager.class.getSimpleName();//获得类名
     public Activity activity;
-    private String  HttpUrl= "http://120.27.223.246:8080/xianhao365/api.do";
+//    private String  HttpUrl= "http://120.27.223.246:8080/xianhao365/api.do";
 //    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/api.do";
     //    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/rest/mobile/13800138000/type/1";
     //    private Handler handler;
@@ -76,7 +76,7 @@ public class OKManager {
      */
     public void sendStringByPostMethod(RequestBody requestBody, final String rspMsgName , final Func4 callBack) {
         Logs.i("请求地址参数======",requestBody.contentType()+"=");
-        Request request = new Request.Builder().url(HttpUrl)
+        Request request = new Request.Builder().url(SXUtils.getInstance(activity).getApp().getHttpUrl())
 //        headMsgJson.put("X-App-Key","xianhao365");
 //        //随机数
 //        headMsgJson.put("X-Method",serviceCodeEnum);// "98d8b2e92be8c8fe640ef291c4fa843e305358e4f0652955b4dd9a5b5bfddef1"

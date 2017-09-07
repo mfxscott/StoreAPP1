@@ -74,6 +74,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         SXUtils.showMyProgressDialog(activity,false);
         getUserInfoHttp();
         GetOrderListHttp();
+        GetUserWalletHttp();
         return view;
     }
     private void initView(){
@@ -225,7 +226,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * 获取供应商信息
+     * 获取不同用户信息
      */
     public void getUserInfoHttp() {
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
@@ -242,8 +243,8 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponseError(String strError) {
                 Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
+                msg.what =AppClient.ERRORCODE;
+                msg.obj = "获取用户信息"+strError;
                 hand.sendMessage(msg);
 
             }
@@ -299,7 +300,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
+                msg.obj = "获取用户订单信息="+strError;
                 hand.sendMessage(msg);
 
             }
@@ -323,7 +324,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
+                msg.obj = "获取钱包余额="+strError;
                 hand.sendMessage(msg);
 
             }
