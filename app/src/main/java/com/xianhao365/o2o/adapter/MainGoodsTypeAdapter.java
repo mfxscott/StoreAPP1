@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
+import com.xianhao365.o2o.entity.goodstype.TypeChildrenEntity;
 
 import java.util.List;
 /**
@@ -18,11 +19,11 @@ import java.util.List;
  * @time  2017/7/10 17:58
  */
 public class MainGoodsTypeAdapter extends BaseAdapter {
-    private List<GoodsTypeEntity> result;
+    private List<TypeChildrenEntity> result;
     private final LayoutInflater mLayoutInflater;
     private Activity context;
     int mSelect = 0;   //选中项
-    public MainGoodsTypeAdapter(Activity context, List<GoodsTypeEntity> result) {
+    public MainGoodsTypeAdapter(Activity context, List<TypeChildrenEntity> result) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
@@ -43,7 +44,7 @@ public class MainGoodsTypeAdapter extends BaseAdapter {
         return position;
     }
     public View getView(int position, View convertView, ViewGroup parent) {
-        GoodsTypeEntity info = result.get(position);
+        TypeChildrenEntity info = result.get(position);
         LifeViewHolder vh;
         if (convertView == null) {
             vh = new LifeViewHolder();

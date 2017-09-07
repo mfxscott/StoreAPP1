@@ -20,7 +20,7 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -70,7 +70,7 @@ public class BillFragment extends Fragment {
             GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
                 case 0:
-                    type.setGoodsname("dsfdf");
+                    type.setGoodsName("dsfdf");
                     break;
                 case 1:
                     break;
@@ -83,7 +83,7 @@ public class BillFragment extends Fragment {
                 default:
 
             }
-            type.setGoodsname("我是商品标题"+i);
+            type.setGoodsName("我是商品标题"+i);
             typeList.add(type);
 
         }

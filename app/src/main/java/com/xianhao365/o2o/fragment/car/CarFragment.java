@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.CarRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.car.CarList;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
@@ -77,7 +77,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
                 case 0:
-                    type.setGoodsname("dsfdf");
+                    type.setGoodsName("dsfdf");
                     break;
                 case 1:
                     break;
@@ -89,7 +89,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     break;
                 default:
             }
-            type.setGoodsname("我是商品标题"+i);
+            type.setGoodsName("我是商品标题"+i);
             carlist.add(type);
 
         }

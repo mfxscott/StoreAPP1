@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 import com.xianhao365.o2o.utils.SXUtils;

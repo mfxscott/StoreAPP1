@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
 
 import java.util.List;
@@ -75,7 +75,7 @@ public  class HomeBillRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTextView.setText(mValues.get(position).getGoodsname());
+        holder.mTextView.setText(mValues.get(position).getGoodsName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

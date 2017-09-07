@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 
 import java.util.List;
 
@@ -62,7 +62,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
         }
 
 
-        vh.mTextView.setText(goodsinfo.getGoodsname());
+        vh.mTextView.setText(goodsinfo.getGoodsName());
 //
 //        vh.mView.setOnClickListener(new View.OnClickListener() {
 //            @Override

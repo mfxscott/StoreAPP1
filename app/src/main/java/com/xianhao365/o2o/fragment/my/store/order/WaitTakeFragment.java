@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 
 import java.util.ArrayList;
 
@@ -47,8 +47,8 @@ public class WaitTakeFragment extends Fragment {
 
         for(int i=0;i<8;i++){
             GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsname("新鲜上市的西红柿");
-            info.setGoodsPrice("￥10.00");
+            info.setGoodsName("新鲜上市的西红柿");
+            info.setShopPrice("￥10.00");
             list.add(info);
         }
         return list;

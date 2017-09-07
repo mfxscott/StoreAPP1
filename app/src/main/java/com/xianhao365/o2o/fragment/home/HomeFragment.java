@@ -29,7 +29,7 @@ import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.HomeGridViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.Logs;
@@ -264,7 +264,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
                 case 0:
-                    type.setGoodsname("dsfdf");
+                    type.getGoodsName();
                     break;
                 case 1:
                     break;
@@ -277,7 +277,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 default:
 
             }
-            type.setGoodsname("我是商品标题"+i);
+            type.setGoodsName("我是商品标题"+i);
             typeList.add(type);
 
         }

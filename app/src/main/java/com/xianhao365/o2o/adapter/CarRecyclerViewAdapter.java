@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -86,7 +86,7 @@ public  class CarRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.nameTv.setText(mValues.get(position).getGoodsname());
+        holder.nameTv.setText(mValues.get(position).getGoodsName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +114,7 @@ public  class CarRecyclerViewAdapter
 //                if(map.containsKey(""+position)){
 //                    map.remove(""+position);
 //                }else{
-                SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter(position+"=="+mValues.get(position).getGoodsname());
+                SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter(position+"=="+mValues.get(position).getGoodsName());
                 map.put(position+"",isChecked);
 //                }
 

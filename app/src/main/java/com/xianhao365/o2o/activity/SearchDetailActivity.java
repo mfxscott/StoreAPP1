@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
@@ -111,11 +111,11 @@ private Activity activity;
      * 商品分类详情商品
      * @return
      */
-    private List<GoodsDetailEntity> getTypeInfoData()
+    private List<GoodsInfoEntity> getTypeInfoData()
     {
-        List<GoodsDetailEntity> typeList=new ArrayList<>();
+        List<GoodsInfoEntity> typeList=new ArrayList<>();
         for(int i=0;i<10;i++){
-            GoodsDetailEntity type = new GoodsDetailEntity();
+            GoodsInfoEntity type = new GoodsInfoEntity();
             switch (i){
                 case 0:
                     type.setGoodsName("鸡肉");

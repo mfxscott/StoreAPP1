@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
@@ -120,8 +120,8 @@ public class WaitPayFragment extends Fragment {
 
         for(int i=0;i<2;i++){
             GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsname("新鲜上市的西红柿");
-            info.setGoodsPrice("￥10.00");
+            info.setGoodsName("新鲜上市的西红柿");
+            info.setShopPrice("￥10.00");
             list.add(info);
         }
         return list;
