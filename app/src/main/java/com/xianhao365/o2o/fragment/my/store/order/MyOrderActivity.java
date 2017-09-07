@@ -1,6 +1,8 @@
 package com.xianhao365.o2o.fragment.my.store.order;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -19,16 +21,23 @@ import java.util.List;
 
 
 public class MyOrderActivity extends AppCompatActivity {
-        private ViewPager viewPager;
+    private ViewPager viewPager;
     private String orderTag;
+    private Activity activity;
+    private Handler hand;
+    private int indexPage=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_order);
+        activity = this;
         orderTag = this.getIntent().getStringExtra("orderTag");
+        initView();
         initViewPager();
     }
+    private void initView(){
 
+    }
     private void initViewPager() {
         LinearLayout allTitleGobackLinlay = (LinearLayout) findViewById(R.id.all_title_goback_linlay);
         allTitleGobackLinlay.setOnClickListener(new View.OnClickListener() {
@@ -105,4 +114,6 @@ public class MyOrderActivity extends AppCompatActivity {
 
         }
     }
+
+
 }

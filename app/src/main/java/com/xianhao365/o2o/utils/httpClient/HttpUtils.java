@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.lzy.okhttputils.OkHttpUtils;
 import com.lzy.okhttputils.callback.StringCallback;
+import com.lzy.okhttputils.interceptor.LoggerInterceptor;
 import com.lzy.okhttputils.model.HttpHeaders;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.utils.Logs;
@@ -115,9 +116,11 @@ public class HttpUtils{
      */
     public void requestUploadImgPost(final boolean isAll, final String method, HttpParams httpParams, final requestCallBack callBack){
         addHttpHeadData(method);
+        //http://blog.csdn.net/lixiang_y/article/details/70161197  双向认证
         OkHttpUtils.post(SXUtils.getInstance(mContext).getApp().getHttpUrl())
                 .tag(this)
                 .params(httpParams)
+                .addInterceptor(new LoggerInterceptor("TAG"))
 //                .addFileParams(fileKey,files)
                 .execute(new StringCallback() {
                     @Override

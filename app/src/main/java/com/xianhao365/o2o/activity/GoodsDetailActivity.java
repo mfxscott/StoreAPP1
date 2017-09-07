@@ -83,6 +83,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         activity = this;
         setBanner();
         initView();
+        if(TextUtils.isEmpty(cno)) {
+            SXUtils.getInstance(activity).ToastCenter("商品ID为空");
+            return;
+        }
         SXUtils.showMyProgressDialog(activity,false);
         getHttpGoodsDetail();
     }

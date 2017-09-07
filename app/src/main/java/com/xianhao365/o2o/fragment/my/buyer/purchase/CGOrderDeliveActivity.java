@@ -1,5 +1,6 @@
 package com.xianhao365.o2o.fragment.my.buyer.purchase;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -9,10 +10,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
@@ -74,6 +77,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
     private GetPicPopupWindow getpicpop;
     private List<File> imgList = new ArrayList<>();
     private ImageGridViewAdapter  imgGridAdapter;
+    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
         skucode = this.getIntent().getStringExtra("skucode");
         initView();
     }
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void initView(){
         registerBack();
         setTitle("确认发货");
@@ -117,6 +122,8 @@ public class CGOrderDeliveActivity extends BaseActivity {
                 ppRely.setVisibility(View.GONE);
             }
         });
+
+
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -134,6 +141,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
                 return true;
             }
         });
+
     }
     View.OnClickListener ShareOnclick = new View.OnClickListener() {
         @Override
@@ -326,6 +334,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
      * @param ishead      1 上传头像缩小尺寸
      * @return
      */
+    @RequiresApi(api = Build.VERSION_CODES.FROYO)
     public String getImageString(ImageView imgview, String imgFilePath, int ishead) {
         String imageString = null;
         Bitmap mBitmap = BitmapFactory.decodeFile(imgFilePath);
@@ -362,8 +371,10 @@ public class CGOrderDeliveActivity extends BaseActivity {
 //                e.printStackTrace();
 //            }
 //            imageString =  bytes.toString();
-            imageString = Base64.encodeToString(bytes, Base64.NO_WRAP);
+//            imageString = Base64.encodeToString(bytes, Base64.NO_WRAP);
+            Base64.encodeToString(bytes,Base64.NO_WRAP);
         }
+
         return imageString;
     }
 

@@ -52,6 +52,7 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
     @BindView(R.id.cg_order_detail_no_tv)
     TextView  purCodeTv;
     private Handler hand;
+    private String purchaseCodeStr,actualNumberStr,skuCodeStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +72,11 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
         sendAddrTv.setText(cgListInfo.getReceiverAddr()+"");
         getPresonTv.setText(cgListInfo.getReceiver()+"");
         purCodeTv.setText("采购单号:"+cgListInfo.getPurchaseCode());
+
+        purchaseCodeStr = cgListInfo.getPurchaseCode();
+        actualNumberStr= purchaseList.get(0).getActualNumber();
+        skuCodeStr = purchaseList.get(0).getSkuCode();
+
         takeOrder.setOnClickListener(this);
         registerBack();
         setTitle("采购订单详情");
@@ -127,8 +133,8 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
                     case 20:
                         Intent intent = new Intent(activity, CGOrderDeliveActivity.class);
                         intent.putExtra("code",cgListInfo.getPurchaseCode());
-                        intent.putExtra("num",cgListInfo.getPurchaseLineVos().get(0).getActualNumber());
-                        intent.putExtra("skucode",cgListInfo.getPurchaseLineVos().get(0).getSkuCode());
+                        intent.putExtra("num",purchaseList.get(0).getActualNumber());
+                        intent.putExtra("skucode",purchaseList.get(0).getSkuCode());
                         startActivity(intent);
                         break;
                 }

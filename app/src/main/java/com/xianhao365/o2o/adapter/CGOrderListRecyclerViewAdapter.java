@@ -111,7 +111,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         if (receiveState.equals("20")) {
             holder.cgOrderFeedbackBtn.setText("发货");
         } else if (receiveState.equals("30")) {
-            holder.cgOrderFeedbackBtn.setText("已发货");
+            holder.cgOrderFeedbackBtn.setText("待收货");
             holder.cgOrderFeedbackBtn.setTextColor(context.getResources().getColor(R.color.orange));
             holder.cgOrderFeedbackBtn.setBackgroundResource(R.color.transparent);
         } else if (receiveState.equals("40")) {

@@ -18,10 +18,8 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.BuyerBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.BuyerQHGridViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.buyer.purchase.CGBillListActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
-import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
@@ -82,18 +80,25 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        MainFragmentActivity.goodsRb.setChecked(true);
+                        Intent state1 = new Intent(activity,CGBillListActivity.class);
+                        state1.putExtra("state","10");
+                        startActivity(state1);
                         break;
                     case 1:
-                        MainFragmentActivity.billRb.setChecked(true);
+//                        MainFragmentActivity.billRb.setChecked(true);
+                        Intent state2 = new Intent(activity,CGBillListActivity.class);
+                        state2.putExtra("state","20");
+                        startActivity(state2);
                         break;
                     case 2:
-                        MainFragmentActivity.myRb.setChecked(true);
+                        Intent state3 = new Intent(activity,CGBillListActivity.class);
+                        state3.putExtra("state","30");
+                        startActivity(state3);
                         break;
                     case 3:
-                        Intent order = new Intent(activity,MyOrderActivity.class);
-                        order.putExtra("orderTag","1");
-                        startActivity(order);
+                        Intent state4 = new Intent(activity,CGBillListActivity.class);
+                        state4.putExtra("state","40");
+                        startActivity(state4);
                         break;
                 }
             }
@@ -147,6 +152,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
             //采购清单列表
             case R.id.my_cg_store_myorder_rel:
                 Intent cgbill = new Intent(activity,CGBillListActivity.class);
+                cgbill.putExtra("state","");
                 startActivity(cgbill);
                 break;
         }
@@ -166,11 +172,11 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                     break;
                 case 1:
                     map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                    map.put("name","待收货");
+                    map.put("name","待发货");
                     break;
                 case 2:
                     map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                    map.put("name","待发货");
+                    map.put("name","待收货");
                     break;
                 case 3:
                     map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
@@ -248,31 +254,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         });
     }
 
-    /**
-     * 获取订单信息
-     */
-    public void GetOrderListHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ORDERS, null, new HttpUtils.requestCallBack() {
 
-            @Override
-            public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
-
-            }
-        });
-    }
     /**
      * 获取用户余额
      */

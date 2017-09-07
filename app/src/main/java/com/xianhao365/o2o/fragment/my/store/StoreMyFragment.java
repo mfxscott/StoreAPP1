@@ -73,6 +73,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         initView();
         SXUtils.showMyProgressDialog(activity,false);
         getUserInfoHttp();
+        GetOrderListHttp();
         return view;
     }
     private void initView(){
@@ -144,7 +145,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         myStoreFwcenterLin.setOnClickListener(this);
         myStoreZxserviceLin.setOnClickListener(this);
         myStoreKffwLin.setOnClickListener(this);
-
 
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {

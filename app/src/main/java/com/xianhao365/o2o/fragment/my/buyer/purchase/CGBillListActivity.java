@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
@@ -15,7 +16,6 @@ import com.xianhao365.o2o.adapter.CGOrderListRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGBillListEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
@@ -39,19 +39,37 @@ public class CGBillListActivity extends BaseActivity {
     private Handler hand;
     private CGOrderListRecyclerViewAdapter simpAdapter;
     private List<CGListInfoEntity> cgList = new ArrayList<>();//采购列表数据
+    private String receiveStateStr;//订单状态值
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cgbill_list);
         activity = this;
+        receiveStateStr = this.getIntent().getStringExtra("state");
         initView();
-        GetGYSBillListHttp(indexPage);
+        GetGYSBillListHttp(indexPage,receiveStateStr);
     }
 
     private void initView(){
         registerBack();
-        setTitle("采购清单列表");
-
+        if(!TextUtils.isEmpty(receiveStateStr)){
+        switch(Integer.parseInt(receiveStateStr)){
+            case 10:
+                setTitle("待接单");
+                break;
+            case 20:
+                setTitle("待发货");
+                break;
+            case 30:
+                setTitle("待收货");
+                break;
+            case 40:
+                setTitle("已完成");
+                break;
+        }}
+        else{
+            setTitle("采购清单列表");
+        }
         mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.cg_list_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -59,24 +77,17 @@ public class CGBillListActivity extends BaseActivity {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-//                httpChanner();
                     indexPage = 0;
-//                    hand.sendEmptyMessage(1000);
-                    GetGYSBillListHttp(indexPage);
-//                    HttpLiveSp(indexPage);
+                    GetGYSBillListHttp(indexPage,receiveStateStr);
                 }else{
-//                    hand.sendEmptyMessage(1000);
                     indexPage ++;
-                    GetGYSBillListHttp(indexPage);
-//                    HttpLiveSp(indexPage);
+                    GetGYSBillListHttp(indexPage,receiveStateStr);
                 }
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.cg_order_list_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        final CGOrderListRecyclerViewAdapter simpAdapter = new CGOrderListRecyclerViewAdapter(activity,getBankData(),1);
-//        recyclerView.setAdapter(simpAdapter);
 
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
@@ -89,7 +100,6 @@ public class CGBillListActivity extends BaseActivity {
                             cgList.clear();
                             cgList.addAll(gde);
                         }
-                        Logs.i("采购列表数量========"+gde.size());
                         if(gde.size()>=10){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
 
@@ -135,11 +145,12 @@ public class CGBillListActivity extends BaseActivity {
     /**
      * 获取供应商采购列表
      */
-    public void GetGYSBillListHttp(int indexPage) {
+    public void GetGYSBillListHttp(int indexPage,String receiveState) {
         HttpParams params = new HttpParams();
         params.put("pageSize","10");
         params.put("pageIndex",indexPage);
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, null, new HttpUtils.requestCallBack() {
+        params.put("receiveState",receiveState);
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
