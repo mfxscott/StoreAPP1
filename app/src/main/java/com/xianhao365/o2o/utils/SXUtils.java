@@ -30,12 +30,11 @@ import com.lzy.okhttputils.model.HttpHeaders;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
-import com.xianhao365.o2o.entity.car.CarList;
+import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
-import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 
 import org.json.JSONException;
@@ -596,9 +595,9 @@ public class SXUtils {
      *
      * @param skuBarcode SKU条码
      * @param quantity   更新数量（0=删除，X=设值）
-     * @param hand
+     * @param
      */
-    public void AddOrUpdateCar(String skuBarcode, String quantity, final Handler hand) {
+    public void AddOrUpdateCar(String skuBarcode, final String quantity) {
         HttpParams params = new HttpParams();
         params.put("skuBarcode", skuBarcode + "");
         params.put("quantity", quantity + "");
@@ -606,20 +605,25 @@ public class SXUtils {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("购物车成功返回参数=======", jsonObject.toString());
-                JSONObject jsonObject1 = null;
-                CarList car = (CarList) ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(), CarList.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = car;
-                hand.sendMessage(msg);
-            }
+//                JSONObject jsonObject1 = null;
+//                CarList car = (CarList) ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(), CarList.class);
+//                Message msg = new Message();
+//                msg.what = AppClient.ADDDELCAR;
+//                msg.obj = car;
+//                hand.sendMessage(msg);
+                if(quantity.equals(0)){
+                    MainFragmentActivity.getInstance().setBadge(false,1);
+                }else{
+                    MainFragmentActivity.getInstance().setBadge(true,1);
+                }
 
+            }
             @Override
             public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
 
             }
         });

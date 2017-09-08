@@ -20,14 +20,16 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.CarRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.car.CarList;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
+import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
+import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
 import org.json.JSONObject;
 
@@ -55,6 +57,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private CheckBox allCheckBox;
     private RelativeLayout  allYhRel;//购物车优惠显示布局
     private  List<GoodsInfoEntity> carlist;
+    private SwipyRefreshLayout mSwipyRefreshLayout;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -96,6 +99,18 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         return carlist;
     }
     private void init(){
+        mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.car_swipyrefreshlayout);
+        SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
+        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+        mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                if(direction == SwipyRefreshLayoutDirection.TOP){
+                    GetCarList();
+                }
+            }
+        });
+
         LinearLayout lin = (LinearLayout) view.findViewById(R.id.car_go_shop_lin);
         lin.setOnClickListener(this);
 
@@ -125,14 +140,16 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         recyclerView = (RecyclerView) view.findViewById(R.id.main_car_recyclerv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        simpAdapter = new CarRecyclerViewAdapter(getActivity(),getTypeInfoData(),delNumTv);
-        simpAdapter.initDate();
-        recyclerView.setAdapter(simpAdapter);
+
+
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1:
-                        SXUtils.getInstance(activity).ToastCenter("成功");
+                        CarList car = (CarList) msg.obj;
+                        simpAdapter = new CarRecyclerViewAdapter(getActivity(),car.getShoppingCartLines(),delNumTv);
+                        simpAdapter.initDate();
+                        recyclerView.setAdapter(simpAdapter);
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;

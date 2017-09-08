@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.car.ShoppingCartLinesEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -35,7 +35,7 @@ public  class CarRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    public List<GoodsInfoEntity> mValues;
+    public List<ShoppingCartLinesEntity> mValues;
     public boolean showCheckb = false;
     private Context context;
     private Map<String,Boolean>  map = new HashMap<String ,Boolean>();
@@ -69,7 +69,7 @@ public  class CarRecyclerViewAdapter
             return super.toString() + " '" + nameTv.getText();
         }
     }
-    public CarRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items, TextView numTv) {
+    public CarRecyclerViewAdapter(Context context, List<ShoppingCartLinesEntity> items, TextView numTv) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -86,6 +86,7 @@ public  class CarRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
         holder.nameTv.setText(mValues.get(position).getGoodsName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +111,6 @@ public  class CarRecyclerViewAdapter
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
 //                if(map.containsKey(""+position)){
 //                    map.remove(""+position);
 //                }else{

@@ -32,11 +32,14 @@ public  class TypeInfoRecyclerViewAdapter
     private int mBackground;
     private List<GoodsInfoEntity> mValues;
     private FoodActionCallback callback;
+    private Context context;
+    private GoodsInfoEntity goodsdetail;
 
     @Override
     public void onClick(View v) {
         if(callback==null) return;
         callback.addAction(v);
+        SXUtils.getInstance(context).AddOrUpdateCar(goodsdetail.getSkuBarcode(),"1");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -78,6 +81,7 @@ public  class TypeInfoRecyclerViewAdapter
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
+        this.context = context;
         this.callback = callback;
     }
 
@@ -90,7 +94,7 @@ public  class TypeInfoRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        GoodsInfoEntity goodsdetail = mValues.get(position);
+         goodsdetail = mValues.get(position);
         holder.modeTView.setVisibility(View.GONE);
 //        if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
 //            Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());

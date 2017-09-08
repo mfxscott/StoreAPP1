@@ -78,9 +78,6 @@ public class GoodsListFragment extends Fragment {
 //        HttpUtil();
         return view;
     }
-
-
-
     private void initView(){
         progressBar = (ProgressBar)view.findViewById(R.id.goods_type_pro);
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.goods_type_swipyrefreshlayout);
@@ -294,11 +291,9 @@ public class GoodsListFragment extends Fragment {
         if(recyclerView != null)
         recyclerView.setAdapter(null);
         progressBar.setVisibility(View.VISIBLE);
-
         HttpParams httpParams = new HttpParams();
-        httpParams.put("cid",cid);
-        httpParams.put("cno",cno);
-        Logs.i("=+++======="+cid);
+        httpParams.put("cid ",cno);
+//        httpParams.put("categoryId",cno);
         HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
