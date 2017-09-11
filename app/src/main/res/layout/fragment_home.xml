@@ -31,7 +31,6 @@
                         android:id="@+id/banner"
                         android:layout_width="match_parent"
                         android:layout_height="190dp"
-                        app:delay_time="3000"
                         app:indicator_margin="5dp"
                         app:indicator_height="8dp"
                         app:indicator_width="8dp"

@@ -120,9 +120,9 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-//                    simpAdapter.selectAll();
+                    simpAdapter.selectStoreAll();
                 }else{
-//                    simpAdapter.initDate();
+                    simpAdapter.initStoreDate();
                 }
             }
         });
@@ -155,8 +155,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                                 }
                             }
                         }
+
                         simpAdapter = new CarStoreRecyclerViewAdapter(getActivity(),car.getShoppingList(),delNumTv);
                         recyclerView.setAdapter(simpAdapter);
+
                         MainFragmentActivity.getInstance().setBadgeNum(MainFragmentActivity.totalCarNum);
                         break;
                     case AppClient.ERRORCODE:

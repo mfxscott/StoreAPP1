@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.utils.Logs;
@@ -36,6 +37,7 @@ import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsActivity;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsChecker;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 
 import org.json.JSONException;
@@ -44,9 +46,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 /**
  * ***************************
@@ -322,23 +321,15 @@ public class StartMainActivity extends Activity {
         }
         return true;
     }
-    //页面启动
-    public void LauncherHttp(){
-        RequestBody requestBody = new FormBody.Builder()
-//                .add("mobile", mobile)
-//                .add("vcode", codeStr)
-//                .add("registerType", "0")//0=手机,1=微信,2=QQ
-//                .add("password", psdStr)
-//                .add("tag","64")
-                .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.APP_LAUNCH, new OKManager.Func4() {
+    public void LauncherHttp() {
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.APP_LAUNCH, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("启动图发送成功返回参数=======",jsonObject.toString());
                 JSONObject jsonObject1 = null;
                 try {
                     jsonObject1 = new JSONObject(jsonObject.toString());
-
                     String secondsStr = jsonObject1.getString("seconds");
                     if(!TextUtils.isEmpty(secondsStr)){
                         seconds = Integer.parseInt(secondsStr);
@@ -347,12 +338,16 @@ public class StartMainActivity extends Activity {
                     }
                     imgUrl = jsonObject1.getString("imgUrl");
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = "返回数据为=="+jsonObject.toString();
+                    hand.sendMessage(msg);
                 }
                 Message msg = new Message();
                 msg.what = 1000;
                 msg.obj = "";
                 hand.sendMessage(msg);
+
             }
             @Override
             public void onResponseError(String strError) {

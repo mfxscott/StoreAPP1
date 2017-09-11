@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.bumptech.glide.Glide;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.activity.SearchActivity;
@@ -30,15 +31,19 @@ import com.xianhao365.o2o.adapter.HomeBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.HomeGridViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.main.BannerSlidEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
+import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
+import com.xianhao365.o2o.utils.view.RequestHttpData;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -53,9 +58,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
@@ -93,11 +95,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         manager = new OKManager(activity);
 //        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.dialog_btn);
-        httpChanner();
+
         initView(view);
         int height = bannerLin.getMeasuredHeight();
         Logs.i("==========","========="+height);
+        initData();
         return view;
+    }
+
+    /**
+     * 初始化接口数据
+     */
+    private void initData(){
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("position", "1");//1 首页
+        RequestHttpData.getInstance(activity).RequestHttp(httpParams,AppClient.APP_SWIPER,hand,1000);
     }
     /**
      * 首页九宫格
@@ -131,34 +143,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         }
         return list;
     }
-    /**
-     * 轮播图
-     */
-    private void httpChanner() {
-        RequestBody requestBody = new FormBody.Builder()
-                .add("position", "1")//1 首页
-                .build();
-        manager.sendStringByPostMethod(requestBody, AppClient.APP_SWIPER, new OKManager.Func4() {
-            @Override
-            public void onResponse(Object jsonObject) {
-//                CacheData.getInstance().WirtCacheData(AppClient.CACHDATAPATH, AppClient.MAINBANNER, jsonObject.toString());
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = "";
-                hand.sendMessage(msg);
-            }
 
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                if(hand != null)
-                    hand.sendMessage(msg);
-                Logs.i("服务器连接异常", "========" + strError.toString());
-            }
-        });
-    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -283,6 +269,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         return typeList;
     }
     private void initView(View view) {
+        banner = (Banner) view.findViewById(R.id.banner);
+
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_container);
 //        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
@@ -398,9 +386,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+                        String obj = (String) msg.obj;
+                        List<BannerSlidEntity> goodsTypeList = (List<BannerSlidEntity>) ResponseData.getInstance(activity).parseJsonArray(obj.toString(), BannerSlidEntity.class);
+                        setBanner(goodsTypeList);
                         break;
                     case AppClient.ERRORCODE:
                         String str = (String) msg.obj;
+
                         SXUtils.getInstance(activity).ToastCenter(str);
                         break;
                     case AppClient.UPDATEVER:
@@ -410,11 +402,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 return true;
             }
         });
-        setBanner();
+//        setBanner();
         setChannel();
     }
-    private void setBanner(){
-        banner = (Banner) view.findViewById(R.id.banner);
+    private void setBanner(final List<BannerSlidEntity> goodsTypeList){
+
 //        List<String> images = new ArrayList<String>();
 //        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
 //        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
@@ -422,20 +414,63 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
-                startActivity(intent);
+              int  action = Integer.parseInt(goodsTypeList.get(position).getImgAction());
+                //动作，1=首页,2=品类,3=必抢靖单,4=购物车,5=我的,6=专题页,7=商品页,8=我的订单,9=我的钱包
+                switch (action){
+                    case 1:
+                        //1=首页
+                        break;
+                    case 2:
+                        //2=品类
+                        MainFragmentActivity.goodsRb.setChecked(true);
+                        break;
+                    case 3:
+                        //3=必抢靖单
+                        MainFragmentActivity.billRb.setChecked(true);
+                        break;
+                    case 4:
+                        //4=购物车
+                        MainFragmentActivity.carRb.setChecked(true);
+                        break;
+                    case 5:
+                        //5=我的
+                        MainFragmentActivity.myRb.setChecked(true);
+                        break;
+                    case 6:
+                        //6=专题页
+                        break;
+                    case 7:
+                        //7=商品页
+                        Intent intent = new Intent(activity, GoodsDetailActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 8:
+                        //8=我的订单
+                        Intent order = new Intent(activity, MyOrderActivity.class);
+                        startActivity(order);
+                        break;
+                    case 9:
+                        //9=我的钱包
+                        Intent wallet = new Intent(activity, MyWalletActivity.class);
+                        startActivity(wallet);
+                        break;
+                }
             }
         });
-        List<Integer> images = new ArrayList<Integer>();
-        images.add(R.mipmap.banner11);
-        images.add(R.mipmap.banner33);
-        images.add(R.mipmap.banner44);
-        images.add(R.mipmap.banner55);
-        images.add(R.mipmap.banner66);
-        List<String> titlestr = new ArrayList<String>();
-        titlestr.add("我是第一个图片");
-        titlestr.add("我是第2个图片");
-        titlestr.add("我是第3个图片");
+        List<String> images = new ArrayList<String>();
+        for(int i=0;i<goodsTypeList.size();i++){
+            images.add(goodsTypeList.get(i).getImgUrl()+"");
+        }
+
+//        images.add(R.mipmap.banner11);
+//        images.add(R.mipmap.banner33);
+//        images.add(R.mipmap.banner44);
+//        images.add(R.mipmap.banner55);
+//        images.add(R.mipmap.banner66);
+//        List<String> titlestr = new ArrayList<String>();
+//        titlestr.add("我是第一个图片");
+//        titlestr.add("我是第2个图片");
+//        titlestr.add("我是第3个图片");
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
 //        //显示标题样式水平显示
@@ -444,6 +479,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //        banner.setBannerTitles(titlestr);
         //设置图片集合
         banner.setImages(images);
+        channelBanner.setDelayTime(Integer.parseInt(goodsTypeList.get(0).getSeconds())*1000);
         //设置banner动画效果
         //DepthPag折叠
         banner.setBannerAnimation(Transformer.Default);
@@ -472,6 +508,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //        //设置标题文本
 //        banner.setBannerTitles(titlestr);
         channelBanner.isAutoPlay(true);
+
         //设置图片集合
         channelBanner.setImages(images);
         //设置banner动画效果
@@ -569,7 +606,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
             //Glide 加载图片简单用法
             Glide.with(context).load(path).error(R.mipmap.default_head).into(imageView);
-
             //Picasso 加载图片简单用法
 //            Picasso.with(context).load(path).into(imageView);
 

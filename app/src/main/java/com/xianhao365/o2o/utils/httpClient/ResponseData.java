@@ -4,6 +4,9 @@ package com.xianhao365.o2o.utils.httpClient;
 import android.content.Context;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.xianhao365.o2o.entity.GoodsTypeEntity;
 import com.xianhao365.o2o.entity.GsonResponseDataEntity;
@@ -208,4 +211,25 @@ public class ResponseData {
         }.getType());
         return result;
     }
+
+
+    public  <T> List<T> parseJsonArray(String strByJson,Class<T> type) {
+        //拿到本地JSON 并转成String
+        //Json的解析类对象
+        JsonParser parser = new JsonParser();
+        //将JSON的String 转成一个JsonArray对象
+        JsonArray jsonArray = parser.parse(strByJson).getAsJsonArray();
+
+        Gson gson = new Gson();
+        List<T> userBeanList = new ArrayList<>();
+
+        //加强for循环遍历JsonArray
+        for (JsonElement user : jsonArray) {
+            //使用GSON，直接转成Bean对象
+            T userBean = gson.fromJson(user, type);
+            userBeanList.add(userBean);
+        }
+        return userBeanList;
+    }
+
 }

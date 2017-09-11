@@ -24,9 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 购物车
+ * 购物车中店铺内的商品
  * @author mfx
- * @time  2017/7/11 16:57
  */
 public  class CarRecyclerViewAdapter
         extends RecyclerView.Adapter<CarRecyclerViewAdapter.ViewHolder> {
@@ -35,7 +34,7 @@ public  class CarRecyclerViewAdapter
     private int mBackground;
     public List<ShoppingCartLinesEntity> mValues;
     private Context context;
-    private Map<String,Boolean>  map = new HashMap<String ,Boolean>();
+    private Map<String,Boolean>  goodsMap = new HashMap<String ,Boolean>();
     public int total=0;//统计选择总条数
     private TextView numTv;
     private ShoppingCartLinesEntity  shopCarinfo;
@@ -99,13 +98,12 @@ public  class CarRecyclerViewAdapter
         });
 
         holder.checkbox.setOnCheckedChangeListener(null);
-        holder.checkbox.setChecked(map.get(position+""));
+        holder.checkbox.setChecked(goodsMap.get(position+""));
         getKeyValue();
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                map.put(position+"",isChecked);
-
+                goodsMap.put(position+"",isChecked);
                 if(isChecked){
                     if(mValues.size() != total){
                         total++;
@@ -192,61 +190,54 @@ public  class CarRecyclerViewAdapter
         notifyItemInserted(position);
     }
     public  void  getKeyValue(){
-        Iterator<String> iter = map.keySet().iterator();
+        Iterator<String> iter = goodsMap.keySet().iterator();
         while(iter.hasNext()){
             String key=iter.next();
-            Boolean value = map.get(key);
-//            Logs.i(key+"========================"+value);
+            Boolean value = goodsMap.get(key);
         }
     }
     //  删除数据
     public void removeData() {
         int i=0;
-        Iterator<String> iter = map.keySet().iterator();
+        Iterator<String> iter = goodsMap.keySet().iterator();
         while(iter.hasNext()){
             String key=iter.next();
-            Boolean value = map.get(key);
+            Boolean value = goodsMap.get(key);
             i++;
             if(value){
                 int postions = Integer.parseInt(key);
                 Logs.i(mValues.size()+"删除的key是多少====","==="+postions+"====="+i++);
-//                if(i!=0)
-//                    postions= postions-1;
 
-                map.remove(postions);
+                goodsMap.remove(postions);
                 mValues.remove(mValues.size() == i ?i -1:i);
-//                notifyItemRemoved(postions);
-//                notifyItemRangeChanged(postions, mValues.size());
             }
             System.out.println(key+" "+value);
         }
-        map.clear();
+        goodsMap.clear();
         initDate();
         notifyDataSetChanged();
     }
     //  删除数据
     public void removeAllData() {
         for(int i=0;i<mValues.size();i++){
-            map.remove(i);
+            goodsMap.remove(i);
             mValues.remove(i);
             notifyItemRemoved(i);
         }
-        map.clear();
+        goodsMap.clear();
         initDate();
         notifyDataSetChanged();
 
     }
-
     /**
      * 全选商品
      */
     public void selectAll() {
         for (int i = 0; i < mValues.size(); i++) {
-//            if(!map.containsKey(""+i))
-            map.put(""+i,true);
+            goodsMap.put(""+i,true);
         }
         total =mValues.size();
-        numTv.setText("已选"+total+"项");
+//        numTv.setText("已选"+total+"项");
         notifyDataSetChanged();
     }
     /**
@@ -254,11 +245,10 @@ public  class CarRecyclerViewAdapter
      */
     public void initDate() {
         for (int i = 0; i < mValues.size(); i++) {
-            map.put(""+i,false);
+            goodsMap.put(""+i,false);
         }
         total = 0;
-        numTv.setText("已选"+total+"项");
-        Logs.i("size大小============"+mValues.size());
+//        numTv.setText("已选"+total+"项");
         notifyDataSetChanged();
 
     }

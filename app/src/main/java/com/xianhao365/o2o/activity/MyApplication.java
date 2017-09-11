@@ -2,6 +2,7 @@ package com.xianhao365.o2o.activity;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -25,6 +26,9 @@ public class MyApplication extends Application{
 
     public String getHttpUrl() {
         return HttpUrl;
+    }
+    public Context getContext(){
+        return this.getApplicationContext();
     }
     @Override
     public void onCreate() {
