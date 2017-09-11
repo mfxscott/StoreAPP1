@@ -157,6 +157,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                         break;
                 }
                 SXUtils.DialogDismiss();
+                Logs.i("=====","====");
                 return true;
             }
         });
