@@ -8,9 +8,9 @@ import java.util.List;
 
 public class CarList {
     private String  grandTotal;
-    private String  discountAmount;
-    private String  freightAmount;
-    private List<ShoppingCartLinesEntity>  shoppingCartLines;
+    private String  discountAmount;//折扣金额
+    private String  freightAmount;  //运费金额
+    private List<ShoppingListEntity> shoppingList;
     private List<TakeNoPartInActivitiesEntity>  takeNoPartInActivities;
     private List<TakePartInActivitiesEntity>  takePartInActivities;
 
@@ -38,12 +38,12 @@ public class CarList {
         this.freightAmount = freightAmount;
     }
 
-    public List<ShoppingCartLinesEntity> getShoppingCartLines() {
-        return shoppingCartLines;
+    public List<ShoppingListEntity> getShoppingList() {
+        return shoppingList;
     }
 
-    public void setShoppingCartLines(List<ShoppingCartLinesEntity> shoppingCartLines) {
-        this.shoppingCartLines = shoppingCartLines;
+    public void setShoppingList(List<ShoppingListEntity> shoppingList) {
+        this.shoppingList = shoppingList;
     }
 
     public List<TakeNoPartInActivitiesEntity> getTakeNoPartInActivities() {

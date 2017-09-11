@@ -3,7 +3,6 @@ package com.xianhao365.o2o.fragment.goods;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,19 +23,16 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.MainGoodsTypeAdapter;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodstype.GoodsDataSetEntity;
 import com.xianhao365.o2o.entity.goodstype.TypeChildrenEntity;
 import com.xianhao365.o2o.entity.goodstype.TypeDataSetEntity;
 import com.xianhao365.o2o.entity.goodstype.TypeGoodsEntity;
-import com.xianhao365.o2o.entity.goodstype.TypeInfoEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
-import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
@@ -44,8 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-
-import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 /**
  * ***************************
  * 首页商品分类
@@ -114,9 +108,9 @@ public class GoodsListFragment extends Fragment {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
                 typeAdapter.changeSelected(position);//刷新
                 if(typeTwoList != null && typeTwoList.size()>0)
-                    idStr = typeTwoList.get(0).getId();
-                cnoStr = typeTwoList.get(0).getCategoryCode();
-                GetGoodsTypeInfoHttp(typeTwoList.get(0).getId(),typeTwoList.get(position).getCategoryCode());
+                    idStr = typeTwoList.get(position).getId();
+                cnoStr = typeTwoList.get(position).getCategoryCode();
+                GetGoodsTypeInfoHttp(typeTwoList.get(position).getId(),typeTwoList.get(position).getCategoryCode());
 
 
             }
@@ -146,7 +140,7 @@ public class GoodsListFragment extends Fragment {
                     case 1001:
                         List<GoodsInfoEntity> goodsDetaiLIst = (List<GoodsInfoEntity>) msg.obj;
                         if(goodsDetaiLIst == null || goodsDetaiLIst.size()<=0) {
-                            return true;
+                            break;
                         }
                         if(goodsDetaiLIst.size() >9){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -154,22 +148,7 @@ public class GoodsListFragment extends Fragment {
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
 
                         }
-                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst,new FoodActionCallback(){
-                            @Override
-                            public void addAction(View view) {
-                                NXHooldeView nxHooldeView = new NXHooldeView(activity);
-                                int position[] = new int[2];
-                                view.getLocationInWindow(position);
-                                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
-                                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
-                                rootView.addView(nxHooldeView);
-                                int endPosition[] = new int[2];
-                                badge1.getLocationInWindow(endPosition);
-                                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
-                                nxHooldeView.startBeizerAnimation();
-                                MainFragmentActivity.getInstance().setBadge(true,1);
-                            }
-                        });
+                        simpAdapter = new TypeInfoRecyclerViewAdapter(getActivity(),goodsDetaiLIst);
                         recyclerView.setAdapter(simpAdapter);
 //                typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getGoodsTypeList());
 //                typeGridView.setAdapter(typeAdapter);
@@ -292,8 +271,8 @@ public class GoodsListFragment extends Fragment {
         recyclerView.setAdapter(null);
         progressBar.setVisibility(View.VISIBLE);
         HttpParams httpParams = new HttpParams();
-        httpParams.put("cid ",cno);
-//        httpParams.put("categoryId",cno);
+        httpParams.put("categoryId",cid);
+//        httpParams.put("categoryCode",cid);
         HttpUtils.getInstance(activity).requestPost(true,AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
@@ -304,10 +283,10 @@ public class GoodsListFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                TypeInfoEntity gde = (TypeInfoEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsobj,TypeInfoEntity.class);
+                GoodsDataSetEntity gde = (GoodsDataSetEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsobj,GoodsDataSetEntity.class);
                 Message msg = new Message();
                 msg.what = 1001;
-                msg.obj = gde.getRows();
+                msg.obj = gde.getDataset();
                 hand.sendMessage(msg);
             }
             @Override

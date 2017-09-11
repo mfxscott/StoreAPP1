@@ -14,18 +14,24 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
+/**
+ * 供应商测试账号
+ * 13129343614  密码 1
+ */
 public class LoginNameActivity extends BaseActivity implements View.OnClickListener {
     private EditText loginAccPhoneEdt;
     private EditText loginAccPsdEdt;
@@ -99,8 +105,12 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                     //登录成功
                     case 1000:
                         SXUtils.getInstance(activity).ToastCenter("登录成功");
-                        Intent mainintent = new Intent(activity, MainFragmentActivity.class);
-                        startActivity(mainintent);
+                        if(MainFragmentActivity.homeRb == null ) {
+                            Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                            startActivity(mainintent);
+                        }else{
+                            EventBus.getDefault().post(new MessageEvent(1,"login suc"));
+                        }
                         finish();
                         break;
                     case AppClient.ERRORCODE:
@@ -136,8 +146,10 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                 startActivity(regist);
                 break;
             case R.id.all_title_back_tv:
-                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
-                startActivity(mainintent);
+                if(MainFragmentActivity.badge1 == null){
+                    Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                    startActivity(mainintent);
+                }
                 finish();
                 break;
         }
@@ -186,4 +198,5 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
             }
         });
     }
+
 }

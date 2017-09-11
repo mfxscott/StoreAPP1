@@ -163,7 +163,7 @@ public class ForGetPsdActivity extends BaseActivity implements View.OnClickListe
         @Override
         public void onTick(long millisUntilFinished) {
             forgetHintSendCodeTv.setVisibility(View.VISIBLE);
-            forgetGetcodeTv.setTextColor(getColor(R.color.qblue));
+            forgetGetcodeTv.setTextColor(getResources().getColor(R.color.qblue));
             forgetGetcodeTv.setText(getString(R.string.regist_send_code_yes_str)+millisUntilFinished / 1000+getString(R.string.regist_second_str));
         }
     }

@@ -1,10 +1,15 @@
 package com.xianhao365.o2o.entity.goodsinfo;
 
+import com.xianhao365.o2o.entity.goodstype.GoodsChildrenEntity;
+
+import java.util.List;
+
 /**
  * Created by mfx-t224 on 2017/7/10.
  */
 
 public class GoodsInfoEntity {
+    private String id;
     private String goodsCode;
     private String goodsName;
     private String goodsNickname;
@@ -12,6 +17,7 @@ public class GoodsInfoEntity {
     private String goodsDesc ;
     private String thumbImg;
     private String albumImg;
+    private String originalImg;
     private String brandId;
     private String brandName;
     private String categoryCode;
@@ -28,6 +34,31 @@ public class GoodsInfoEntity {
     private String vendorCode;
     private String vendorName;
     private String wholesalePrice;
+    private List<GoodsChildrenEntity> chirdren;
+
+    public List<GoodsChildrenEntity> getChirdren() {
+        return chirdren;
+    }
+
+    public String getOriginalImg() {
+        return originalImg;
+    }
+
+    public void setOriginalImg(String originalImg) {
+        this.originalImg = originalImg;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setChirdren(List<GoodsChildrenEntity> chirdren) {
+        this.chirdren = chirdren;
+    }
 
     public String getGoodsCode() {
         return goodsCode;

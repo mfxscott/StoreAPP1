@@ -179,7 +179,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
         @Override
         public void onTick(long millisUntilFinished) {
             loginHintSendCodeTv.setVisibility(View.VISIBLE);
-            loginGetcodeTv.setTextColor(getColor(R.color.qblue));
+            loginGetcodeTv.setTextColor(getResources().getColor(R.color.qblue));
             loginGetcodeTv.setText(getString(R.string.regist_send_code_yes_str)+millisUntilFinished / 1000+getString(R.string.regist_second_str));
         }
     }
@@ -200,6 +200,7 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                 .add("mobile", mobile)
                 .add("password",codeStr)
                 .add("loginType","0")//0=验证码登录,1=密码登录
+                .add("type", "1")//拉取类型(1=登录,2=注册,3=忘记密码,4=安全密码)
                 .build();
 
         new OKManager(this).sendStringByPostMethod(requestBody, AppClient.USER_LOGIN, new OKManager.Func4() {

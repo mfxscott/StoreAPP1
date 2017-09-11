@@ -1,5 +1,6 @@
 package com.xianhao365.o2o.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.view.MyFoodActionCallback;
 
 import java.util.List;
 
@@ -37,11 +39,11 @@ public  class TypeInfoRecyclerViewAdapter
 
     @Override
     public void onClick(View v) {
+        callback = new MyFoodActionCallback((Activity) context,goodsdetail.getChirdren().get(0).getSkuBarcode());
         if(callback==null) return;
         callback.addAction(v);
-        SXUtils.getInstance(context).AddOrUpdateCar(goodsdetail.getSkuBarcode(),"1");
-    }
 
+    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
@@ -77,7 +79,7 @@ public  class TypeInfoRecyclerViewAdapter
             return super.toString() + " '" + mTextView.getText();
         }
     }
-    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items, FoodActionCallback callback) {
+    public TypeInfoRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -98,9 +100,9 @@ public  class TypeInfoRecyclerViewAdapter
         holder.modeTView.setVisibility(View.GONE);
 //        if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
 //            Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
-//            holder.goodsModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
-            holder.marketPrice.setText("¥"+goodsdetail.getMarketPrice());
-            holder.shopPrice.setText("¥"+goodsdetail.getShopPrice());
+            holder.goodsModel.setText("/"+goodsdetail.getChirdren().get(0).getGoodsModel());
+            holder.marketPrice.setText("¥"+goodsdetail.getChirdren().get(0).getShopPrice());
+            holder.shopPrice.setText("¥"+goodsdetail.getChirdren().get(0).getShopPrice());
 //        }
 //        else if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>1){
 //            holder.modeTView.setVisibility(View.VISIBLE);
@@ -125,7 +127,7 @@ public  class TypeInfoRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
-                intent.putExtra("cno",mValues.get(position).getGoodsCode());
+                intent.putExtra("cno",mValues.get(position).getId());
                 holder.mView.getContext().startActivity(intent);
             }
         });
@@ -155,7 +157,7 @@ public  class TypeInfoRecyclerViewAdapter
 //        }else{
 //            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
 //        }
-        SXUtils.getInstance(holder.mImageView.getContext()).GlideSetImg(goodsdetail.getThumbImg(),holder.mImageView);
+        SXUtils.getInstance(holder.mImageView.getContext()).GlideSetImg(goodsdetail.getOriginalImg(),holder.mImageView);
 //        Glide.with(holder.mImageView.getContext())
 //                .load(goodsdetail.getThumbImg())
 //                .fitCenter()

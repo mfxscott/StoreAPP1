@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
@@ -25,6 +26,10 @@ import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 摊主或者个人登录进入我的界面
@@ -72,11 +77,29 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.fragment_store_my, null);
         initView();
         SXUtils.showMyProgressDialog(activity,false);
-        getUserInfoHttp();
-        GetOrderListHttp();
-        GetUserWalletHttp();
+        EventBus.getDefault().register(this);
+
+        LoadData();
         return view;
     }
+
+    /**
+     * 初始化加载用户相关接口数据
+     */
+    private void LoadData(){
+        if(SXUtils.getInstance(activity).IsLogin()) {
+            getUserInfoHttp();
+            GetOrderListHttp();
+            GetUserWalletHttp();
+        }else{
+            if(swipeRefreshLayout != null){
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        }
+    }
+    /**
+     * 初始化
+     */
     private void initView(){
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.user_center_swipe_container);
 //        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
@@ -85,7 +108,8 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             public void onRefresh() {
                 //重新刷新页面
 //                myWebView.reload();
-                getUserInfoHttp();
+//                getUserInfoHttp();
+                LoadData();
 
             }
         });
@@ -164,7 +188,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                         break;
                 }
                 if(swipeRefreshLayout != null){
-                swipeRefreshLayout.setRefreshing(false);
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 SXUtils.DialogDismiss();
                 return true;
@@ -173,10 +197,11 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     }
     @Override
     public void onClick(View v) {
+        if(!SXUtils.getInstance(activity).IsLogin())
+            return ;
         switch (v.getId()){
             case R.id.my_per_wallet:
                 Intent wall = new Intent(activity,MyWalletActivity.class);
-
                 startActivity(wall);
                 break;
             case R.id.my_acc_mamage_tv:
@@ -184,6 +209,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.per_my_message_iv:
+                //消息
                 Intent msg = new Intent(activity,MessageActivity.class);
                 startActivity(msg);
                 break;
@@ -330,4 +356,16 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent){
+        if(messageEvent.getTag()==1){
+            LoadData();
+        }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
+    }
+
 }

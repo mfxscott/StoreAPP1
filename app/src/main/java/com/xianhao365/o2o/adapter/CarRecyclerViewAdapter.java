@@ -12,7 +12,6 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.car.ShoppingCartLinesEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
@@ -27,7 +26,6 @@ import java.util.Map;
 /**
  * 购物车
  * @author mfx
- * @email mfx@ddbill.com
  * @time  2017/7/11 16:57
  */
 public  class CarRecyclerViewAdapter
@@ -36,12 +34,11 @@ public  class CarRecyclerViewAdapter
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     public List<ShoppingCartLinesEntity> mValues;
-    public boolean showCheckb = false;
     private Context context;
     private Map<String,Boolean>  map = new HashMap<String ,Boolean>();
     public int total=0;//统计选择总条数
     private TextView numTv;
-    private int carTotalNum=0;//点击
+    private ShoppingCartLinesEntity  shopCarinfo;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -53,6 +50,7 @@ public  class CarRecyclerViewAdapter
         public final TextView  sub;
         public final TextView  number;
         public final TextView  add;
+        public final TextView modelTv;
 
         public ViewHolder(View view) {
             super(view);
@@ -63,6 +61,7 @@ public  class CarRecyclerViewAdapter
             sub = (TextView) view.findViewById(R.id.car_item_sub_tv);
             number = (TextView) view.findViewById(R.id.car_item_num_edt);
             add = (TextView) view.findViewById(R.id.car_item_add_tv);
+            modelTv = (TextView) view.findViewById(R.id.car_item_model_tv);
         }
         @Override
         public String toString() {
@@ -86,9 +85,11 @@ public  class CarRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
-        holder.nameTv.setText(mValues.get(position).getGoodsName());
-
+        shopCarinfo = mValues.get(position);
+        holder.nameTv.setText(shopCarinfo.getGoodsName());
+        holder.modelTv.setText("￥"+shopCarinfo.getSkuPrice()+"/"+shopCarinfo.getGoodsModel());
+        holder.number.setText(shopCarinfo.getQuantity()+"");
+        MainFragmentActivity.totalCarNum += Integer.parseInt(shopCarinfo.getQuantity());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,26 +98,13 @@ public  class CarRecyclerViewAdapter
             }
         });
 
-//        holder.modeTView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                removeData(position);
-//            }
-//        });
-
-
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(map.get(position+""));
         getKeyValue();
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if(map.containsKey(""+position)){
-//                    map.remove(""+position);
-//                }else{
-                SXUtils.getInstance(holder.checkbox.getContext()).ToastCenter(position+"=="+mValues.get(position).getGoodsName());
                 map.put(position+"",isChecked);
-//                }
 
                 if(isChecked){
                     if(mValues.size() != total){
@@ -145,12 +133,12 @@ public  class CarRecyclerViewAdapter
             }
         });
 
-        if(position%2 ==0){
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(holder.mImageView);
-        }else{
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
-        }
-
+//        if(position%2 ==0){
+//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(holder.mImageView);
+//        }else{
+//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
+//        }
+        SXUtils.getInstance(context).GlideSetImg(shopCarinfo.getGoodsImage(),holder.mImageView);
 //        Glide.with(holder.mImageView.getContext())
 //                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
 //                .fitCenter()
@@ -172,7 +160,7 @@ public  class CarRecyclerViewAdapter
                 textView.setText(carTotalNum+"");
             }
             textView.setTextColor(Color.BLACK);
-            MainFragmentActivity.getInstance().setBadge(true,1);
+            SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"1");
         }else{
             carTotalNum = carTotalNum-1;
             if(carTotalNum > 0){
@@ -186,7 +174,7 @@ public  class CarRecyclerViewAdapter
                 textView.setTextColor(Color.TRANSPARENT);
             }
             if(carTotalNum >= 0)
-            MainFragmentActivity.getInstance().setBadge(false,1);
+                SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
         }
     }
     @Override
