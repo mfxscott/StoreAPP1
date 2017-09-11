@@ -1,6 +1,7 @@
 package com.xianhao365.o2o.entity.car;
 
 /**
+ * 购物车中店铺内商品
  * Created by NN on 2017/9/7.
  */
 

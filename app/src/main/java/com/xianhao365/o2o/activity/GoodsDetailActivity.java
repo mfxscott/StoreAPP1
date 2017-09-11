@@ -53,7 +53,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     private View   xxLine,ggLine;
     private ObservableScrollView  scro;
     private Handler hand;
-    private String cno;//商品id
+    private String goodsId;//商品id
     @BindView(R.id.goods_detail_add_tv)
     TextView addcar;
     @BindView(R.id.goods_detail_car_num_tv)
@@ -79,11 +79,11 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_detail);
         ButterKnife.bind(this);
-        cno = this.getIntent().getStringExtra("cno");
+        goodsId = this.getIntent().getStringExtra("cno");
         activity = this;
         setBanner();
         initView();
-        if(TextUtils.isEmpty(cno)) {
+        if(TextUtils.isEmpty(goodsId)) {
             SXUtils.getInstance(activity).ToastCenter("商品ID为空");
             return;
         }
@@ -341,11 +341,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
      * 获取商品详情
      */
     public void getHttpGoodsDetail(){
-        if(TextUtils.isEmpty(cno)){
-            return;
-        }
         HttpParams params = new HttpParams();
-        params.put("id", cno);
+        params.put("id", goodsId);
         HttpUtils.getInstance(activity).requestPost(false,AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {

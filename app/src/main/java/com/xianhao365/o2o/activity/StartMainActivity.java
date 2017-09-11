@@ -199,7 +199,6 @@ public class StartMainActivity extends Activity {
 //                startActivity(intent);
                 Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
                 startActivity(intent);
-
                 mc.cancel();
                 finish();
             }

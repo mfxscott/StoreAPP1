@@ -71,6 +71,7 @@
                 android:layout_gravity="center_vertical">
 
                 <TextView
+                    android:id="@+id/car_notice_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -166,6 +167,7 @@
                         android:textSize="@dimen/ac_text_size_14"/>
 
                     <TextView
+                        android:id="@+id/car_total_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="￥109."
@@ -218,7 +220,6 @@
 
 
     </RelativeLayout>
-
     <View
         android:id="@+id/main_bill_line_bv"
         android:visibility="visible"

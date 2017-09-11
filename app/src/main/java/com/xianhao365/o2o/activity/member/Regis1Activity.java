@@ -243,17 +243,16 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
         public void onFinish() {
             mc.cancel();
             registGetcodeTv.setEnabled(true);
-            registGetcodeTv.setTextColor(getColor(R.color.col_hint));
+            registGetcodeTv.setTextColor(getResources().getColor(R.color.col_hint));
             registGetcodeTv.setText(getString(R.string.get_code_str));
         }
         @Override
         public void onTick(long millisUntilFinished) {
             sendCodeHintTv.setVisibility(View.VISIBLE);
-            registGetcodeTv.setTextColor(getColor(R.color.qblue));
+            registGetcodeTv.setTextColor(getResources().getColor(R.color.qblue));
             registGetcodeTv.setText(getString(R.string.regist_send_code_yes_str)+millisUntilFinished / 1000+getString(R.string.regist_second_str));
         }
     }
-
     /**
      * 判断三个参数是否满足条件才显示注册按钮
      */

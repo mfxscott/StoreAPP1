@@ -18,9 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.adapter.CarRecyclerViewAdapter;
+import com.xianhao365.o2o.adapter.CarStoreRecyclerViewAdapter;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.car.CarList;
+import com.xianhao365.o2o.entity.car.TakeNoPartInActivitiesEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
@@ -31,9 +34,11 @@ import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,14 +55,17 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private int indexPage= 1;
     private RecyclerView recyclerView;
     private TextView editDelTv;//编辑 确定
-    private CarRecyclerViewAdapter simpAdapter;
+    private CarStoreRecyclerViewAdapter simpAdapter;
     private TextView payDelBtn;//购买删除按钮
     private LinearLayout delNumLin;
     public TextView   delNumTv;//显示选择条目
+    private TextView noticTv;//满减活动
+    private TextView totalTv;//购物车总价格
     private CheckBox allCheckBox;
     private RelativeLayout  allYhRel;//购物车优惠显示布局
     private  List<GoodsInfoEntity> carlist;
     private SwipyRefreshLayout mSwipyRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,39 +73,15 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         activity = getActivity();
         init();
         SXUtils.showMyProgressDialog(activity,false);
-        GetCarList();
+        //注册事件
+        EventBus.getDefault().register(this);
+        if(SXUtils.getInstance(activity).IsLogin())
+            GetCarList(indexPage);
+
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;
     }
-    /**
-     * 商品分类详情商品
-     * @return
-     */
-    private List<GoodsInfoEntity> getTypeInfoData()
-    {
-        carlist=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            GoodsInfoEntity type = new GoodsInfoEntity();
-            switch (i){
-                case 0:
-                    type.setGoodsName("dsfdf");
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                default:
-            }
-            type.setGoodsName("我是商品标题"+i);
-            carlist.add(type);
 
-        }
-        return carlist;
-    }
     private void init(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.car_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
@@ -106,13 +90,19 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-                    GetCarList();
+                    indexPage = 1;
+                    GetCarList(indexPage);
+                }else{
+                    indexPage ++;
+                    GetCarList(indexPage);
                 }
             }
         });
-
         LinearLayout lin = (LinearLayout) view.findViewById(R.id.car_go_shop_lin);
         lin.setOnClickListener(this);
+        noticTv = (TextView) view.findViewById(R.id.car_notice_tv);
+        totalTv = (TextView) view.findViewById(R.id.car_total_tv);
+
 
         allYhRel = (RelativeLayout) view.findViewById(R.id.car_all_yh_rel);
 
@@ -130,31 +120,52 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
-                    simpAdapter.selectAll();
+//                    simpAdapter.selectAll();
                 }else{
-                    simpAdapter.initDate();
+//                    simpAdapter.initDate();
                 }
             }
         });
-
         recyclerView = (RecyclerView) view.findViewById(R.id.main_car_recyclerv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 1:
+                    case 1000:
                         CarList car = (CarList) msg.obj;
-                        simpAdapter = new CarRecyclerViewAdapter(getActivity(),car.getShoppingCartLines(),delNumTv);
-                        simpAdapter.initDate();
+                        totalTv.setText(car.getGrandTotal());
+                        List<TakeNoPartInActivitiesEntity> noticList = car.getTakeNoPartInActivities();
+                        if(noticList !=null && noticList.size() >0){
+                            //取第一个满减信息
+                            noticTv.setText(noticList.get(0).getNotice());
+                        }
+                        if(indexPage == 1){
+                            MainFragmentActivity.totalCarNum = 0;
+                            for (int i = 0; i < car.getShoppingList().size(); i++) {
+                                for (int j = 0; j < car.getShoppingList().get(i).getShoppingCartLines().size(); j++) {
+                                    MainFragmentActivity.totalCarNum += Integer.parseInt(car.getShoppingList().get(i).getShoppingCartLines().get(j).getQuantity());
+                                }
+                            }
+                        }else{
+                            for (int i = 0; i < car.getShoppingList().size(); i++) {
+                                for (int j = 0; j < car.getShoppingList().get(i).getShoppingCartLines().size(); j++) {
+                                    MainFragmentActivity.totalCarNum += Integer.parseInt(car.getShoppingList().get(i).getShoppingCartLines().get(j).getQuantity());
+                                }
+                            }
+                        }
+                        simpAdapter = new CarStoreRecyclerViewAdapter(getActivity(),car.getShoppingList(),delNumTv);
                         recyclerView.setAdapter(simpAdapter);
+                        MainFragmentActivity.getInstance().setBadgeNum(MainFragmentActivity.totalCarNum);
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
                         break;
+                }
+                if(mSwipyRefreshLayout != null){
+                    mSwipyRefreshLayout.setRefreshing(false);
                 }
                 SXUtils.DialogDismiss();
                 Logs.i("=====","====");
@@ -185,8 +196,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.car_pay_del_btn:
                 if(simpAdapter.showCheckb) {
-                    simpAdapter.removeAllData();
-
+                    simpAdapter.simpAdapter.removeAllData();
                 }else{
                     Intent pay = new Intent(activity,GoPayActivity.class);
                     startActivity(pay);
@@ -201,17 +211,20 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     /**
      * 获取购物车列表
      */
-    public void GetCarList() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.CARLIST, null, new HttpUtils.requestCallBack() {
+    public void GetCarList(int indexPage) {
+        HttpParams params = new HttpParams();
+        params.put("pageSize","10");
+        params.put("pageIndex",indexPage+"");
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.CARLIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("购物车成功返回参数=======",jsonObject.toString());
                 JSONObject jsonObject1 = null;
-           CarList car = (CarList) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CarList.class);
-                    Message msg = new Message();
-                    msg.what = 1000;
-                    msg.obj = car;
-                    hand.sendMessage(msg);
+                CarList car = (CarList) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CarList.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = car;
+                hand.sendMessage(msg);
             }
             @Override
             public void onResponseError(String strError) {
@@ -222,6 +235,17 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 
             }
         });
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent){
+        if(messageEvent.getTag()==1){
+            GetCarList(indexPage);
+        }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 
 }

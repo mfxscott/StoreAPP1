@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:background="@color/white"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <LinearLayout
+        android:padding="10dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -47,9 +48,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/car_item_model_tv"
                     android:textColor="@color/col_333"
                     android:textSize="@dimen/ac_text_size_12"
-                    android:text="￥44.00/袋（10斤）"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </RelativeLayout>
@@ -83,12 +85,20 @@
             </RelativeLayout>
 
         </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <LinearLayout
+            android:layout_margin="10dp"
+            android:id="@+id/car_add_sub_num_liny"
             android:layout_marginRight="5dp"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/gray_car_round_shap"
             android:layout_gravity="bottom|right"
-            android:gravity="right"
+            android:gravity="bottom"
+            android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
@@ -107,7 +117,7 @@
             <TextView
                 android:gravity="center_horizontal"
                 android:textSize="@dimen/ac_text_size_14"
-                android:textColor="@color/transparent"
+                android:textColor="@color/col_333"
                 android:id="@+id/car_item_num_edt"
                 android:minEms="2"
                 android:text="0"
@@ -128,11 +138,10 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
-
+        <View
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/line_bg" />
     </LinearLayout>
-    <View
-        android:visibility="visible"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/line_bg" />
-</LinearLayout>
+</RelativeLayout>

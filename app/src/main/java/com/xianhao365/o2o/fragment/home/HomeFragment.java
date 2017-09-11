@@ -142,7 +142,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             @Override
             public void onResponse(Object jsonObject) {
 //                CacheData.getInstance().WirtCacheData(AppClient.CACHDATAPATH, AppClient.MAINBANNER, jsonObject.toString());
-
                 Message msg = new Message();
                 msg.what = 1000;
                 msg.obj = "";
@@ -307,7 +306,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         LinearLayout searchGoneLin = (LinearLayout) view.findViewById(R.id.home_search_gone_lin);
         searchGoneLin.setOnClickListener(this);
 
-         goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
+        goBillRel = (RelativeLayout) view.findViewById(R.id.home_go_bill_rel);
         goBillRel.setOnClickListener(this);
         channelLin = (LinearLayout) view.findViewById(R.id.main_channel_lin);
         homeGridLin = (LinearLayout) view.findViewById(R.id.home_grid_lin);

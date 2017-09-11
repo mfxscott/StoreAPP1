@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -110,6 +111,8 @@ public class MainFragmentActivity extends AppCompatActivity {
         carRb = (RadioButton) findViewById(R.id.main_tab_car_rb);
 
         homeRb.setChecked(true);
+        carRb.setChecked(true);
+        homeRb.setChecked(true);
 //        gesturePhone = SharedPrefsUtil.getSahrePreference(MainFragmentActivity.this, "gesturePhone", "");
 //        if (!(TextUtils.isEmpty(gesturePhone))) {
 //            RequestReqMsgData.ChckGestureStatue(MainFragmentActivity.this,0);
@@ -145,7 +148,31 @@ public class MainFragmentActivity extends AppCompatActivity {
         return instance;
     }
 
+    /**
+     * 在第一次查询购物车调用
+     * 设置购物车数量
+     * @param num
+     */
+    public void setBadgeNum(int num){
+        if(num>0){
+            badge1.setVisibility(View.VISIBLE);
+            badge1.setText(num+"");
+            getBadgeNum();
+        }
+    }
 
+    /**
+     * 获取购物车数量
+     */
+    public int getBadgeNum(){
+                String str = badge1.getText().toString();
+             if(!TextUtils.isEmpty(str)){
+                 totalCarNum = Integer.parseInt(str);
+                 return totalCarNum;
+             }
+             return 0;
+
+    }
     /**
      * 判断是否是减，还是加入购物车
      * @param issub  true 增加

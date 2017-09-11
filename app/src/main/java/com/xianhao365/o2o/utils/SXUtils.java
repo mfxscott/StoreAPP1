@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -30,6 +31,7 @@ import com.lzy.okhttputils.model.HttpHeaders;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
+import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -559,7 +561,6 @@ public class SXUtils {
 
     /**
      * 公共调用图片装置
-     *
      * @param imgUrl
      * @param view
      */
@@ -567,7 +568,7 @@ public class SXUtils {
         Glide.with(mContext)
                 .load(imgUrl)
                 .placeholder(R.mipmap.loading_img)
-                .error(R.mipmap.load_error)
+                .error(R.mipmap.loading_img)
                 .fitCenter()
                 .into(view);
     }
@@ -590,6 +591,20 @@ public class SXUtils {
         dir.delete();// 删除目录本身
     }
 
+    /**
+     * 判断用户是否已经登录
+     * @return
+     */
+    public boolean IsLogin(){
+        if(TextUtils.isEmpty(AppClient.USER_ID) ||TextUtils.isEmpty(AppClient.USER_SESSION)){
+            Intent intent = new Intent(mContext, LoginNameActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("isEnter","12");
+            mContext.startActivity(intent);
+            return  false;
+        }
+        return true;
+    }
     /**
      * 添加或者删除购物车
      *
@@ -620,6 +635,7 @@ public class SXUtils {
             }
             @Override
             public void onResponseError(String strError) {
+                Logs.i("添加购物车错误====="+strError.toString());
 //                Message msg = new Message();
 //                msg.what = AppClient.ERRORCODE;
 //                msg.obj = strError;
@@ -628,4 +644,5 @@ public class SXUtils {
             }
         });
     }
+
 }

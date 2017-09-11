@@ -58,11 +58,19 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         manager = new OKManager(activity);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
-        GetUserInfoHttp();
+        LoadData();
+        return view;
+    }
+    /**
+     * 加载接口数据
+     */
+    private void LoadData(){
+        if(SXUtils.getInstance(activity).IsLogin()) {
+            GetUserInfoHttp();
 //        GetGYSBillListHttp();
 //        GetOrderListHttp();
-        GetUserWalletHttp();
-        return view;
+            GetUserWalletHttp();
+        }
     }
     //初始化
     private void init(){
