@@ -48,6 +48,7 @@
             android:padding="15dp">
 
             <CheckBox
+                android:layout_marginLeft="5dp"
                 android:id="@+id/car_all_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

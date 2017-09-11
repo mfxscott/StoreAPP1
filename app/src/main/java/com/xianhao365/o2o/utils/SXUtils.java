@@ -627,8 +627,10 @@ public class SXUtils {
 //                msg.obj = car;
 //                hand.sendMessage(msg);
                 if(quantity.equals(0)){
+                    //减少购物车数量
                     MainFragmentActivity.getInstance().setBadge(false,1);
                 }else{
+                    //增加购物车数量
                     MainFragmentActivity.getInstance().setBadge(true,1);
                 }
 
@@ -644,5 +646,32 @@ public class SXUtils {
             }
         });
     }
-
+    public Dialog tipDialog;
+    public void MyDialogView(Context context,String title, String contentStr, View.OnClickListener onClickListener) {
+        tipDialog = new AlertDialog.Builder(context).create();
+        tipDialog.show();
+        tipDialog.setCancelable(true);
+        tipDialog.setCanceledOnTouchOutside(false);
+        Window window = tipDialog.getWindow();
+        window.setContentView(R.layout.common_dialog);
+        LinearLayout cancel = (LinearLayout) window.findViewById(R.id.dialog_liny);
+        TextView content = (TextView) window.findViewById(R.id.dialog_message_tv);
+        TextView titletv = (TextView) window.findViewById(R.id.dialog_title_tv);
+        TextView rightBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
+        TextView leftBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
+        View vi = window.findViewById(R.id.add_bank_dialog_view);
+        vi.setVisibility(View.GONE);
+        vi.setPadding(0, 2, 0, 2);
+        leftBtn.setText("确定");
+        titletv.setText(title);
+        ImageView iv = (ImageView) window.findViewById(R.id.dialog_close_iv);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tipDialog.dismiss();
+            }
+        });
+        content.setText(contentStr);
+        cancel.setOnClickListener(onClickListener);
+    }
 }

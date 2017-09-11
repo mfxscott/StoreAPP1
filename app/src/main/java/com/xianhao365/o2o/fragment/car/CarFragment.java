@@ -161,6 +161,14 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 
                         MainFragmentActivity.getInstance().setBadgeNum(MainFragmentActivity.totalCarNum);
                         break;
+
+                    case 1001:
+                        String clearcar = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(clearcar+"");
+                        //清除购物车成功
+                        recyclerView.setAdapter(null);
+                        break;
+
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
@@ -198,7 +206,8 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.car_pay_del_btn:
                 if(simpAdapter.showCheckb) {
-                    simpAdapter.simpAdapter.removeAllData();
+                    SXUtils.showMyProgressDialog(activity,false);
+                    clearCarList();
                 }else{
                     Intent pay = new Intent(activity,GoPayActivity.class);
                     startActivity(pay);
@@ -226,6 +235,30 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 Message msg = new Message();
                 msg.what = 1000;
                 msg.obj = car;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+    /**
+     * 清空购物车
+     */
+    public void clearCarList() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.CARLIST, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("清空购物车成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+                Message msg = new Message();
+                msg.what = 1001;
+                msg.obj = "清空购物车成功";
                 hand.sendMessage(msg);
             }
             @Override

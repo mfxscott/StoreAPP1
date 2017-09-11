@@ -6,18 +6,20 @@
     android:orientation="vertical"
     >
     <LinearLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <CheckBox
             android:visibility="visible"
             android:id="@+id/car_item_store_checkbox"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
             android:button="@null"
             android:background="@drawable/check_box_type_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"
             android:id="@+id/car_item_store_name"
             android:textColor="@color/col_333"
@@ -26,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <ImageView
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_gravity="center_vertical"
             android:layout_centerVertical="true"
             android:id="@+id/car_item_store_flag_iv"
