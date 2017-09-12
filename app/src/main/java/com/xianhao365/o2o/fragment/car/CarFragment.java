@@ -23,6 +23,7 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.CarStoreRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.car.CarList;
+import com.xianhao365.o2o.entity.car.ShoppingListEntity;
 import com.xianhao365.o2o.entity.car.TakeNoPartInActivitiesEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
@@ -39,6 +40,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -65,6 +68,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private RelativeLayout  allYhRel;//购物车优惠显示布局
     private  List<GoodsInfoEntity> carlist;
     private SwipyRefreshLayout mSwipyRefreshLayout;
+    private List<ShoppingListEntity> shopList = new ArrayList<>();//总购物车数量
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,7 +89,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private void init(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.car_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
@@ -129,36 +133,41 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         recyclerView = (RecyclerView) view.findViewById(R.id.main_car_recyclerv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
                         CarList car = (CarList) msg.obj;
+
+                        if(car.getShoppingList().size() >=10){
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                        }else{
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+                        }
                         totalTv.setText("¥"+car.getGrandTotal());
                         List<TakeNoPartInActivitiesEntity> noticList = car.getTakeNoPartInActivities();
                         if(noticList !=null && noticList.size() >0){
                             //取第一个满减信息
                             noticTv.setText(noticList.get(0).getNotice());
                         }
+
                         if(indexPage == 1){
+                            shopList.clear();
+                            if(car.getShoppingList() != null && car.getShoppingList().size()>0){
+                                shopList.addAll(car.getShoppingList());
+                            }
                             MainFragmentActivity.totalCarNum = 0;
-                            for (int i = 0; i < car.getShoppingList().size(); i++) {
-                                for (int j = 0; j < car.getShoppingList().get(i).getShoppingCartLines().size(); j++) {
-                                    MainFragmentActivity.totalCarNum += Integer.parseInt(car.getShoppingList().get(i).getShoppingCartLines().get(j).getQuantity());
-                                }
-                            }
+                            MainFragmentActivity.totalCarNum = getCarTotalItem();
+                            storesimpAdapter = new CarStoreRecyclerViewAdapter(getActivity(),shopList,delNumTv);
+                            recyclerView.setAdapter(storesimpAdapter);
                         }else{
-                            for (int i = 0; i < car.getShoppingList().size(); i++) {
-                                for (int j = 0; j < car.getShoppingList().get(i).getShoppingCartLines().size(); j++) {
-                                    MainFragmentActivity.totalCarNum += Integer.parseInt(car.getShoppingList().get(i).getShoppingCartLines().get(j).getQuantity());
-                                }
+                            if(car.getShoppingList() != null && car.getShoppingList().size()>0){
+                                shopList.addAll(car.getShoppingList());
                             }
+                            MainFragmentActivity.totalCarNum = getCarTotalItem();
+                            if(storesimpAdapter != null)
+                                storesimpAdapter.notifyDataSetChanged();
                         }
-
-                        storesimpAdapter = new CarStoreRecyclerViewAdapter(getActivity(),car.getShoppingList(),delNumTv);
-                        recyclerView.setAdapter(storesimpAdapter);
-
                         MainFragmentActivity.getInstance().setBadgeNum(MainFragmentActivity.totalCarNum);
                         break;
 
@@ -216,6 +225,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     SXUtils.showMyProgressDialog(activity,false);
                     clearCarList();
                 }else{
+                    Logs.i("所有商品价格===="+getCarTotalMoney());
                     Intent pay = new Intent(activity,GoPayActivity.class);
                     startActivity(pay);
                 }
@@ -224,7 +234,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 MainFragmentActivity.goodsRb.setChecked(true);
                 break;
         }
-
     }
     /**
      * 获取购物车列表
@@ -237,7 +246,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("购物车成功返回参数=======",jsonObject.toString());
-                JSONObject jsonObject1 = null;
                 CarList car = (CarList) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CarList.class);
                 Message msg = new Message();
                 msg.what = 1000;
@@ -291,6 +299,34 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * 获取被选中的商品价格及商品skucode
+     * @return
+     */
+    public String getCarTotalMoney(){
+        float priceTotal = 0;
+        Iterator<String> iter = storesimpAdapter.simpAdapter.goodsMap.keySet().iterator();
+       for(int i=0;i<shopList.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = storesimpAdapter.simpAdapter.goodsMap.get(key);
+                 if(value){
+                     int postions = Integer.parseInt(key);
+                     priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSkuPrice());
+                 }
+            }
+        }
+        return priceTotal+"";
+    }
+    public int getCarTotalItem(){
+        int carItem = 0;
+        for (int i = 0; i < shopList.size(); i++) {
+            for (int j = 0; j < shopList.get(i).getShoppingCartLines().size(); j++) {
+                carItem += Integer.parseInt(shopList.get(i).getShoppingCartLines().get(j).getQuantity());
+            }
+        }
+        return carItem;
+    }
 }
 
 

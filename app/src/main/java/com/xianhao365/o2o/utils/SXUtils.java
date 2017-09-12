@@ -45,6 +45,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -606,6 +607,27 @@ public class SXUtils {
             return  false;
         }
         return true;
+    }
+
+    /**
+     * 价格保留两位小数点
+     * @param price
+     * @return
+     */
+    public String priceTwoNum(String price){
+        if(price.indexOf(".") == -1){
+             return "";
+        }
+        try {
+            if(!TextUtils.isEmpty(price)){
+                DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+                return decimalFormat.format(price);//format 返回的是字符串
+            }
+        }catch (Exception e){
+            return "";
+        }
+
+       return "";
     }
     /**
      * 添加或者删除购物车

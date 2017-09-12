@@ -123,8 +123,8 @@ public  class CarStoreRecyclerViewAdapter
                 //获取到点击店铺check的商品 按钮数量
                 int storenum = Integer.parseInt(delNumTv.getText().toString());
                 if(isChecked){
-
                     simpAdapter.selectAll();
+                    delNumTv.setText(storenum+shopCarinfo.getShoppingCartLines().size()+"");
                 }else{
                     delNumTv.setText(storenum-shopCarinfo.getShoppingCartLines().size()+"");
                     simpAdapter.initDate();
@@ -206,7 +206,6 @@ public  class CarStoreRecyclerViewAdapter
     //*********店铺商品中的item****************************************************************************************
 
 
-
     public  class CarRecyclerViewAdapter
             extends RecyclerView.Adapter<CarRecyclerViewAdapter.GoodsViewHolder> {
         private FoodActionCallback callback;
@@ -214,7 +213,7 @@ public  class CarStoreRecyclerViewAdapter
         private int mBackground;
         public List<ShoppingCartLinesEntity> mValues;
         private Context context;
-        private Map<String,Boolean>  goodsMap = new HashMap<String ,Boolean>();
+        public Map<String,Boolean>  goodsMap = new HashMap<String ,Boolean>();
         public int total=0;//统计选择总条数
         private TextView numTv;
         private ShoppingCartLinesEntity  shopCarinfo;
