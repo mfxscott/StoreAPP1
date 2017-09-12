@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
@@ -33,7 +32,6 @@ public class MyFoodActionCallback implements FoodActionCallback {
         badge1.getLocationInWindow(endPosition);
         nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
         nxHooldeView.startBeizerAnimation();
-        MainFragmentActivity.getInstance().setBadge(true,1);
         SXUtils.getInstance(activity).AddOrUpdateCar(skuBarcode,"1");
     }
 }

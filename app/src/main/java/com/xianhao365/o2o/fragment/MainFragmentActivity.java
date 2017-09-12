@@ -49,7 +49,7 @@ public class MainFragmentActivity extends AppCompatActivity {
     public BillFragment billFrag;
     public GoodsListFragment goodsFrag;
     public CarFragment  carFrag;
-//    合伙人，联创中心，供货商
+    //    合伙人，联创中心，供货商
     public BuyerFragment myFrag;
     public StoreMyFragment storeFrag;
     public Fragment lastshowFragment;
@@ -79,7 +79,7 @@ public class MainFragmentActivity extends AppCompatActivity {
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         {
-                activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.qblue));//activity.getResources().getColor(R.color.blue));
+            activity.getWindow().setStatusBarColor(activity.getResources().getColor(R.color.qblue));//activity.getResources().getColor(R.color.blue));
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
@@ -121,7 +121,7 @@ public class MainFragmentActivity extends AppCompatActivity {
         remind(btn4);
     }
     private void remind(View view) { //BadgeView的具体使用
-         badge1 = new BadgeView(this, view);// 创建一个BadgeView对象，view为你需要显示提醒的控件
+        badge1 = new BadgeView(this, view);// 创建一个BadgeView对象，view为你需要显示提醒的控件
         badge1.setText("0"); // 需要显示的提醒类容
         badge1.setBadgePosition(BadgeView.POSITION_TOP_RIGHT);// 显示的位置.右上角,BadgeView.POSITION_BOTTOM_LEFT,下左，还有其他几个属性
         badge1.setTextColor(Color.WHITE); // 文本颜色
@@ -158,6 +158,9 @@ public class MainFragmentActivity extends AppCompatActivity {
             badge1.setVisibility(View.VISIBLE);
             badge1.setText(num+"");
             getBadgeNum();
+        }else{
+            badge1.setText("0");
+            badge1.setVisibility(View.GONE);
         }
     }
 
@@ -165,12 +168,12 @@ public class MainFragmentActivity extends AppCompatActivity {
      * 获取购物车数量
      */
     public int getBadgeNum(){
-                String str = badge1.getText().toString();
-             if(!TextUtils.isEmpty(str)){
-                 totalCarNum = Integer.parseInt(str);
-                 return totalCarNum;
-             }
-             return 0;
+        String str = badge1.getText().toString();
+        if(!TextUtils.isEmpty(str)){
+            totalCarNum = Integer.parseInt(str);
+            return totalCarNum;
+        }
+        return 0;
 
     }
     /**
@@ -179,31 +182,29 @@ public class MainFragmentActivity extends AppCompatActivity {
      * @param strcount  增加条数
      */
     public void setBadge(boolean issub,int strcount){
-//        String nowsize = badge1.getText().toString();
-
-            if(issub){
-//             int num= Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)+strcount;
-                totalCarNum = totalCarNum+strcount;
-                if(totalCarNum >= 100){
-                    badge1.setText("99+");
-                }else{
-                    badge1.setText(totalCarNum+"");
-                }
-                badge1.setVisibility(View.VISIBLE);
+        if(issub){
+//             int num= Integer.parseInt(strNum.equals("99+") ?"99":strNum)+strcount;
+            totalCarNum = totalCarNum+strcount;
+            if(totalCarNum >= 100){
+                badge1.setText("99+");
             }else{
-//                int num =  Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)-strcount;
-                totalCarNum = totalCarNum-strcount;
-                if(totalCarNum > 0){
-                    if(totalCarNum <= 99){
-                        badge1.setText(totalCarNum+"");
-                    }else{
-                        badge1.setText(99+"+");
-                    }
-                }else{
-                    badge1.setText("0");
-                    badge1.setVisibility(View.GONE);
-                }
+                badge1.setText(totalCarNum+"");
             }
+            badge1.setVisibility(View.VISIBLE);
+        }else{
+//                int num =  Integer.parseInt(nowsize.equals("99+") ?"99":nowsize)-strcount;
+            totalCarNum = totalCarNum-strcount;
+            if(totalCarNum > 0){
+                if(totalCarNum <= 99){
+                    badge1.setText(totalCarNum+"");
+                }else{
+                    badge1.setText(99+"+");
+                }
+            }else{
+                badge1.setText("0");
+                badge1.setVisibility(View.GONE);
+            }
+        }
     }
     public void addFragmentToStack(Fragment fragment) {
         if (fragmentManager == null)
@@ -249,7 +250,8 @@ public class MainFragmentActivity extends AppCompatActivity {
                     }
                     addFragmentToStack(myFrag);
 
-                }else if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("32")){
+                }else {
+                    //if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("32"))
                     if (storeFrag == null) {
                         storeFrag = new StoreMyFragment();
                         transaction.add(R.id.content, storeFrag);

@@ -84,7 +84,6 @@ public  class TypeInfoRecyclerViewAdapter
         mBackground = mTypedValue.resourceId;
         mValues = items;
         this.context = context;
-        this.callback = callback;
     }
 
     @Override
@@ -134,34 +133,7 @@ public  class TypeInfoRecyclerViewAdapter
         holder.typeadd1.setOnClickListener(this);
         holder.addImage.setOnClickListener(this);
         holder.addImage2.setOnClickListener(this);
-//        holder.typeadd1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        holder.addImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        holder.addImage2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        if(position%2 ==0){
-//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView);
-//        }else{
-//            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(holder.mImageView);
-//        }
         SXUtils.getInstance(holder.mImageView.getContext()).GlideSetImg(goodsdetail.getOriginalImg(),holder.mImageView);
-//        Glide.with(holder.mImageView.getContext())
-//                .load(goodsdetail.getThumbImg())
-//                .fitCenter()
-//                .into(holder.mImageView);
     }
     @Override
     public int getItemCount() {

@@ -1,5 +1,6 @@
 package com.xianhao365.o2o.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,11 +15,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.car.ShoppingCartLinesEntity;
 import com.xianhao365.o2o.entity.car.ShoppingListEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.view.MyFoodActionCallback;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -45,7 +48,7 @@ public  class CarStoreRecyclerViewAdapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-        public final ImageView mImageView;
+        public final TextView mImageView;
         public final TextView nameTv;
         public final CheckBox  checkbox;
         public final RecyclerView recyclerView;
@@ -53,7 +56,7 @@ public  class CarStoreRecyclerViewAdapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mImageView = (ImageView) view.findViewById(R.id.car_item_store_flag_iv);
+            mImageView = (TextView) view.findViewById(R.id.car_item_store_flag_iv);
             nameTv = (TextView) view.findViewById(R.id.car_item_store_name);
             checkbox = (CheckBox) view.findViewById(R.id.car_item_store_checkbox);
             recyclerView = (RecyclerView) view.findViewById(R.id.car_goods_recyclerv);
@@ -86,6 +89,11 @@ public  class CarStoreRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         shopCarinfo = mValues.get(position);
         holder.nameTv.setText(shopCarinfo.getShopName());
+        if(shopCarinfo.getIsOwner().equals("1")){
+            holder.mImageView.setVisibility(View.VISIBLE);
+        }else{
+            holder.mImageView.setVisibility(View.GONE);
+        }
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,10 +108,11 @@ public  class CarStoreRecyclerViewAdapter
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
         if (simpAdapter == null){
             //当第一次进入是才加载店铺中的商品，后面notifychange不设置子商品，房子店铺刷新子view重置
-            simpAdapter = new CarRecyclerViewAdapter(context, shopCarinfo.getShoppingCartLines(),position, delNumTv);
-            simpAdapter.initDate();
-            holder.recyclerView.setAdapter(simpAdapter);
-
+            if(shopCarinfo.getShoppingCartLines() != null && shopCarinfo.getShoppingCartLines().size()>0){
+                simpAdapter = new CarRecyclerViewAdapter(context, shopCarinfo.getShoppingCartLines(),position, delNumTv);
+                simpAdapter.initDate();
+                holder.recyclerView.setAdapter(simpAdapter);
+            }
         }
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(storeMap.get(position+""));
@@ -111,9 +120,13 @@ public  class CarStoreRecyclerViewAdapter
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 storeMap.put(position+"",isChecked);
+                //获取到点击店铺check的商品 按钮数量
+                int storenum = Integer.parseInt(delNumTv.getText().toString());
                 if(isChecked){
+
                     simpAdapter.selectAll();
                 }else{
+                    delNumTv.setText(storenum-shopCarinfo.getShoppingCartLines().size()+"");
                     simpAdapter.initDate();
                 }
             }
@@ -155,7 +168,7 @@ public  class CarStoreRecyclerViewAdapter
                 simpAdapter.selectAll();
         }
         itemTotal =mValues.size();
-        delNumTv.setText("已选"+itemTotal+"项");
+        delNumTv.setText(itemTotal+"");
         notifyDataSetChanged();
     }
     /**
@@ -168,7 +181,7 @@ public  class CarStoreRecyclerViewAdapter
                 simpAdapter.initDate();
         }
         itemTotal = 0;
-        delNumTv.setText("已选"+itemTotal+"项");
+        delNumTv.setText(itemTotal+"");
         Logs.i("size大小============"+mValues.size());
         notifyDataSetChanged();
 
@@ -196,7 +209,7 @@ public  class CarStoreRecyclerViewAdapter
 
     public  class CarRecyclerViewAdapter
             extends RecyclerView.Adapter<CarRecyclerViewAdapter.GoodsViewHolder> {
-
+        private FoodActionCallback callback;
         private final TypedValue mTypedValue = new TypedValue();
         private int mBackground;
         public List<ShoppingCartLinesEntity> mValues;
@@ -268,6 +281,7 @@ public  class CarStoreRecyclerViewAdapter
             holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    total = Integer.parseInt(numTv.getText().toString());
                     goodsMap.put(position+"",isChecked);
                     if(isChecked){
                         if(mValues.size() != total){
@@ -278,7 +292,7 @@ public  class CarStoreRecyclerViewAdapter
                             total--;
                         }
                     }
-                    numTv.setText("已选"+total+"项");
+                    numTv.setText(total+"");
                     //判断店铺子商品是否全部选中。设置店铺多选框点亮或者取消
                     if(getAllItem()){
                         addCheckBox(storePostion,true);
@@ -298,7 +312,8 @@ public  class CarStoreRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
                     carNum(true,holder.number);
-
+                    callback = new MyFoodActionCallback((Activity) context,shopCarinfo.getSkuBarcode());
+                    callback.addAction(v);
                 }
             });
             SXUtils.getInstance(context).GlideSetImg(shopCarinfo.getGoodsImage(),holder.mImageView);
@@ -311,18 +326,21 @@ public  class CarStoreRecyclerViewAdapter
             String nowsize = textView.getText().toString();
             int carTotalNum = Integer.parseInt(nowsize);
             if(issub){
+                textView.setText((carTotalNum++)+"");
                 SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"1");
             }else{
                 if(carTotalNum == 1){
-                  SXUtils.getInstance(context).MyDialogView(context,"温馨提示!", "只剩最后条了，是否删除?", new View.OnClickListener() {
-                      @Override
-                      public void onClick(View v) {
-                          SXUtils.getInstance(context).tipDialog.dismiss();
-                          SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
-                      }
-                  });
+                    SXUtils.getInstance(context).MyDialogView(context,"温馨提示!", "是否删除商品信息?", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            SXUtils.getInstance(context).tipDialog.dismiss();
+                            SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
+                        }
+                    });
+                }else {
+                    textView.setText((carTotalNum - 1) + "");
+                    SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
                 }
-
             }
         }
         @Override
@@ -386,8 +404,9 @@ public  class CarStoreRecyclerViewAdapter
             for (int i = 0; i < mValues.size(); i++) {
                 goodsMap.put(""+i,true);
             }
+
+            numTv.setText(total-getMapKeyNum()+mValues.size()+"");
             total =mValues.size();
-//        numTv.setText("已选"+total+"项");
             notifyDataSetChanged();
         }
         /**
@@ -398,9 +417,25 @@ public  class CarStoreRecyclerViewAdapter
                 goodsMap.put(""+i,false);
             }
             total = 0;
-//        numTv.setText("已选"+total+"项");
             notifyDataSetChanged();
 
+        }
+
+        /**
+         * 获取店铺中商品被选中数量
+         * @return
+         */
+        public int getMapKeyNum(){
+            int num= 0;
+            Iterator<String> iter = goodsMap.keySet().iterator();
+            while(iter.hasNext()){
+                String key=iter.next();
+                Boolean value = goodsMap.get(key);
+                if(value){
+                    num++;
+                }
+            }
+            return num;
         }
 
         /**

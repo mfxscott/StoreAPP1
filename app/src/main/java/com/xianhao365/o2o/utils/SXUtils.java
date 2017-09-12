@@ -32,6 +32,7 @@ import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -39,6 +40,7 @@ import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -633,7 +635,8 @@ public class SXUtils {
                     //增加购物车数量
                     MainFragmentActivity.getInstance().setBadge(true,1);
                 }
-
+                //每次增加或减除 都刷新购物车
+                EventBus.getDefault().post(new MessageEvent(2,"ref"));
             }
             @Override
             public void onResponseError(String strError) {

@@ -171,12 +171,13 @@
                         android:id="@+id/car_total_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥109."
+                        android:text="￥109"
                         android:textColor="@color/orange"
                         android:textSize="@dimen/ac_text_size_18"
                         android:textStyle="bold"/>
 
                     <TextView
+                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="00"
@@ -193,12 +194,23 @@
                     android:background="@color/white"
                     android:padding="10dp"
                     android:visibility="gone">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="已选"
+                        android:textColor="@color/orange"
+                        android:textSize="@dimen/ac_text_size_16"/>
                     <TextView
                         android:id="@+id/car_del_num_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="已选0项"
+                        android:text="0"
+                        android:textColor="@color/orange"
+                        android:textSize="@dimen/ac_text_size_16"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="项"
                         android:textColor="@color/orange"
                         android:textSize="@dimen/ac_text_size_16"/>
                 </LinearLayout>
