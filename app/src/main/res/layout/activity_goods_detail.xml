@@ -226,12 +226,18 @@
                         android:layout_centerVertical="true"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+                        <ImageView
+                            android:visibility="gone"
+                            android:src="@mipmap/down_img"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
                         <TextView
                             android:id="@+id/goods_detail_pf_price_tv"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/type_info_down_img"
                             android:textColor="@color/orange"
                             android:textSize="@dimen/ac_text_size_16"
+                            android:textStyle="bold"
                             android:text="￥8.80"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -247,7 +253,7 @@
                             android:id="@+id/goods_detail_marke_price_tv"
                             android:layout_marginLeft="5dp"
                             android:textColor="@color/col_999"
-                            android:textSize="@dimen/ac_text_size_14"
+                            android:textSize="@dimen/ac_text_size_12"
                             android:text="￥98.00"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -646,6 +652,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/goods_detail_car_price_tv"
                 android:textStyle="bold"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/ac_text_size_16"

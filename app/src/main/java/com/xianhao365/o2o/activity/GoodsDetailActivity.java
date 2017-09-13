@@ -20,7 +20,7 @@ import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.goods.GoodsDetailEntity;
+import com.xianhao365.o2o.entity.goods.GoodsDetailInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -32,6 +32,9 @@ import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.loader.ImageLoader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +77,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     TextView goodsUnit;//商品包装
     @BindView(R.id.goods_detail_gg_model_tv)
     TextView goodsggModel;//商品规格
+    @BindView(R.id.goods_detail_car_price_tv)
+    TextView totalPrice;
     private String skuBarcode;
+    private  GoodsDetailInfoEntity goodsdetail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,19 +137,19 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                        GoodsDetailEntity goodsdetail = (GoodsDetailEntity) msg.obj;
+                         goodsdetail = (GoodsDetailInfoEntity) msg.obj;
                         if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
                             Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
                             goodsModelTv.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
                             marketPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getMarketPrice());
-                            pfPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getShopWholesalePrice());
+                            pfPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getShopPrice());
                             goodsggModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
                             marketPriceTv.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
                         }
                         goodsNameTv.setText(goodsdetail.getGoodsName()+"");
                         goodsAddress.setText(goodsdetail.getGoodsPlace());
                         goodsUnit.setText(goodsdetail.getGoodsUnit());
-                        goodsLevel.setText(goodsdetail.getFoodGrade());
+//                        goodsLevel.setText(goodsdetail.getFoodGrade());
 
                         break;
                     case AppClient.ERRORCODE:
@@ -269,7 +275,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             carNum.setVisibility(View.VISIBLE);
             carNum.setText(goodsCar+"");
         }
-        SXUtils.getInstance(activity).AddOrUpdateCar(skuBarcode,"1");
+        totalPrice.setText(goodsCar*(Float.parseFloat(goodsdetail.getSkuList().get(0).getShopPrice()))+"");
+        SXUtils.getInstance(activity).AddOrUpdateCar(goodsdetail.getSkuList().get(0).getSkuBarcode(),"1");
     }
 
     public class GlideImageLoader extends ImageLoader {
@@ -347,7 +354,14 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         HttpUtils.getInstance(activity).requestPost(false,AppClient.GOODS_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                GoodsDetailEntity gde = (GoodsDetailEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),GoodsDetailEntity.class);
+                String jsonstr="";
+                try {
+                    JSONObject jso = new JSONObject(jsonObject.toString());
+                 jsonstr = jso.getString("dataset");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                GoodsDetailInfoEntity gde = (GoodsDetailInfoEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonstr.toString(),GoodsDetailInfoEntity.class);
                 if(gde != null){
                     Message msg = new Message();
                     msg.what = 1000;
@@ -361,6 +375,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 }
 
             }
+
 
             @Override
             public void onResponseError(String strError) {
