@@ -24,6 +24,15 @@ public class GoodsDetailSkuListEntity {
     private String ordered;
     private String addiable;
     private String editable;
+    private String skuBarcode;
+
+    public String getSkuBarcode() {
+        return skuBarcode;
+    }
+
+    public void setSkuBarcode(String skuBarcode) {
+        this.skuBarcode = skuBarcode;
+    }
 
     public String getId() {
         return id;

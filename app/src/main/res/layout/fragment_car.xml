@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
         <TextView
+            android:padding="5dp"
             android:id="@+id/car_edit_del"
             android:text="编辑"
             android:textColor="@color/col_333"
@@ -76,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="(在买77元,即可免10元运费)"
+                    android:text=""
                     android:textColor="@color/col_888"
                     android:textSize="@dimen/ac_text_size_12"/>
 
@@ -147,7 +148,7 @@
                 android:text="(单笔订单满100元,即可免10.00元运费)"
                 android:textColor="@color/col_888"
                 android:textSize="@dimen/ac_text_size_12"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -171,7 +172,7 @@
                         android:id="@+id/car_total_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="￥109"
+                        android:text="¥0"
                         android:textColor="@color/orange"
                         android:textSize="@dimen/ac_text_size_18"
                         android:textStyle="bold"/>

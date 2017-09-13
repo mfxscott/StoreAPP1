@@ -30,9 +30,6 @@ import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -154,16 +151,11 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                         }
                         finish();
                         break;
-                    //验证码发送成功
+
                     case AppClient.GETCODEMSG:
-                        String msgstr = (String) msg.obj;
-                        try {
-                            JSONObject jsonObject = new JSONObject(msgstr.toString());
-                            AppClient.USERROLETAG   = jsonObject.getString("secs");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        mc = new MyCountDownTimer(10*6000, 1000);
+                        //验证码发送成功
+                        int secs = Integer.parseInt((String)msg.obj);
+                        mc = new MyCountDownTimer(secs*1000, 1000);
                         mc.start();
                         registGetcodeTv.setEnabled(false);
                         break;

@@ -110,6 +110,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         HttpParams httpParams = new HttpParams();
         httpParams.put("position", "1");//1 首页
         RequestHttpData.getInstance(activity).RequestHttp(httpParams,AppClient.APP_SWIPER,hand,1000);
+        //文件下载 版本升级
+//        DownloadOkHttpUtils.DownFile(activity);
     }
     /**
      * 首页九宫格

@@ -123,11 +123,17 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         allCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //获取到点击店铺check的商品 按钮数量
+                int storenum = Integer.parseInt(delNumTv.getText().toString());
                 if(isChecked){
                     storesimpAdapter.selectStoreAll();
+                    delNumTv.setText(getTotalItem()+"");
                 }else{
                     storesimpAdapter.initStoreDate();
+                    delNumTv.setText("0");
                 }
+                EventBus.getDefault().post(new MessageEvent(3,"car"));
+
             }
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.main_car_recyclerv);
@@ -138,13 +144,12 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 switch (msg.what) {
                     case 1000:
                         CarList car = (CarList) msg.obj;
-
                         if(car.getShoppingList().size() >=10){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
                         }else{
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
                         }
-                        totalTv.setText("¥"+car.getGrandTotal());
+
                         List<TakeNoPartInActivitiesEntity> noticList = car.getTakeNoPartInActivities();
                         if(noticList !=null && noticList.size() >0){
                             //取第一个满减信息
@@ -210,22 +215,24 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     payDelBtn.setText("结算");
                     editDelTv.setText("编辑");
                     storesimpAdapter.showCheckb = false;
-                    storesimpAdapter.notifyDataSetChanged();
                 }else{
                     allYhRel.setVisibility(View.GONE);
                     delNumLin.setVisibility(View.VISIBLE);
                     editDelTv.setText("完成");
                     payDelBtn.setText("删除");
                     storesimpAdapter.showCheckb = true;
-                    storesimpAdapter.notifyDataSetChanged();
+
                 }
+                totalTv.setText("¥0");
+                allCheckBox.setChecked(false);
+                storesimpAdapter.initStoreDate();
+                storesimpAdapter.notifyDataSetChanged();
                 break;
             case R.id.car_pay_del_btn:
                 if(storesimpAdapter.showCheckb) {
                     SXUtils.showMyProgressDialog(activity,false);
                     clearCarList();
                 }else{
-                    Logs.i("所有商品价格===="+getCarTotalMoney());
                     Intent pay = new Intent(activity,GoPayActivity.class);
                     startActivity(pay);
                 }
@@ -288,9 +295,12 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent){
-        //传递1or2  都刷新购物车
+        //传递1or2 登录成功刷新购物车 和点击加入购物车商品 都刷新购物车
         if(messageEvent.getTag()==1 ||messageEvent.getTag()==2){
             GetCarList();
+        }else if(messageEvent.getTag() == 3){
+            //购物车列表 点击商品checkBox调用改变购物车总价格
+            totalTv.setText("¥"+getCarTotalMoney());
         }
     }
     @Override
@@ -318,12 +328,28 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         }
         return priceTotal+"";
     }
+    /**
+     * 得到所有商品加入购物车数量
+     * @return
+     */
     public int getCarTotalItem(){
         int carItem = 0;
         for (int i = 0; i < shopList.size(); i++) {
             for (int j = 0; j < shopList.get(i).getShoppingCartLines().size(); j++) {
                 carItem += Integer.parseInt(shopList.get(i).getShoppingCartLines().get(j).getQuantity());
             }
+        }
+        return carItem;
+    }
+
+    /**
+     * 得到所有商品总条数
+     * @return
+     */
+    public int getTotalItem(){
+        int carItem = 0;
+        for (int i = 0; i < shopList.size(); i++) {
+                carItem += shopList.get(i).getShoppingCartLines().size();
         }
         return carItem;
     }

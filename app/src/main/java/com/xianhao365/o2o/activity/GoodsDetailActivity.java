@@ -74,6 +74,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     TextView goodsUnit;//商品包装
     @BindView(R.id.goods_detail_gg_model_tv)
     TextView goodsggModel;//商品规格
+    private String skuBarcode;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,9 +249,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 break;
         }
     }
-
+    private int goodsCar=0;
     @Override
     public void addAction(View view) {
+        goodsCar++;
         NXHooldeView nxHooldeView = new NXHooldeView(activity);
         int position[] = new int[2];
         view.getLocationInWindow(position);
@@ -261,14 +263,13 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         carNum.getLocationInWindow(endPosition);
         nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
         nxHooldeView.startBeizerAnimation();
-        String carStr = carNum.getText().toString().trim();
-        if(TextUtils.isEmpty(carStr)){
-            carNum.setText("1");
+        if(goodsCar == 0){
+            carNum.setVisibility(View.GONE);
         }else{
-            int carn = Integer.parseInt(carStr);
-            carn ++;
-            carNum.setText(carn+"");
+            carNum.setVisibility(View.VISIBLE);
+            carNum.setText(goodsCar+"");
         }
+        SXUtils.getInstance(activity).AddOrUpdateCar(skuBarcode,"1");
     }
 
     public class GlideImageLoader extends ImageLoader {
@@ -371,4 +372,5 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         });
 
     }
+
 }

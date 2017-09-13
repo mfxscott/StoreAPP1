@@ -184,11 +184,11 @@ public class MainFragmentActivity extends AppCompatActivity {
     public void setBadge(boolean issub,int strcount){
         if(issub){
 //             int num= Integer.parseInt(strNum.equals("99+") ?"99":strNum)+strcount;
-            totalCarNum = totalCarNum+strcount;
-            if(totalCarNum >= 100){
+//            totalCarNum += strcount;
+            if(totalCarNum+strcount >= 100){
                 badge1.setText("99+");
             }else{
-                badge1.setText(totalCarNum+"");
+                badge1.setText(totalCarNum+strcount+"");
             }
             badge1.setVisibility(View.VISIBLE);
         }else{

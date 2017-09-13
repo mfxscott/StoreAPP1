@@ -16,12 +16,15 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.FoodActionCallback;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.car.ShoppingCartLinesEntity;
 import com.xianhao365.o2o.entity.car.ShoppingListEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.view.MyFoodActionCallback;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -124,11 +127,12 @@ public  class CarStoreRecyclerViewAdapter
                 int storenum = Integer.parseInt(delNumTv.getText().toString());
                 if(isChecked){
                     simpAdapter.selectAll();
-                    delNumTv.setText(storenum+shopCarinfo.getShoppingCartLines().size()+"");
+                    delNumTv.setText(getCheckTrue()+"");
                 }else{
-                    delNumTv.setText(storenum-shopCarinfo.getShoppingCartLines().size()+"");
                     simpAdapter.initDate();
+                    delNumTv.setText(getCheckTrue()+"");
                 }
+                EventBus.getDefault().post(new MessageEvent(3,"car"));
             }
         });
     }
@@ -186,20 +190,24 @@ public  class CarStoreRecyclerViewAdapter
         notifyDataSetChanged();
 
     }
-    public int getCarSize(){
-        int carsl =0;
-        for (int i = 0; i <mValues.size(); i++) {
-            carsl += mValues.get(i).getShoppingCartLines().size();
+    /**
+     * 得到所有商品被选中的条数
+     * @return
+     */
+    public String getCheckTrue(){
+        int priceTotal = 0;
+        Iterator<String> iter = simpAdapter.goodsMap.keySet().iterator();
+        for(int i=0;i<mValues.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = simpAdapter.goodsMap.get(key);
+                if(value){
+                    priceTotal ++;
 
+                }
+            }
         }
-        return  carsl;
-    }
-    public  void  getKeyValue(){
-        Iterator<String> iter = storeMap.keySet().iterator();
-        while(iter.hasNext()){
-            String key=iter.next();
-            Boolean value = storeMap.get(key);
-        }
+        return priceTotal+"";
     }
 
 
@@ -216,7 +224,6 @@ public  class CarStoreRecyclerViewAdapter
         public Map<String,Boolean>  goodsMap = new HashMap<String ,Boolean>();
         public int total=0;//统计选择总条数
         private TextView numTv;
-        private ShoppingCartLinesEntity  shopCarinfo;
         private int storePostion;//当前店铺索引
         public  class GoodsViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
@@ -262,7 +269,7 @@ public  class CarStoreRecyclerViewAdapter
         }
         @Override
         public void onBindViewHolder(final GoodsViewHolder holder, final int position) {
-            shopCarinfo = mValues.get(position);
+          final  ShoppingCartLinesEntity shopCarinfo = mValues.get(position);
             holder.nameTv.setText(shopCarinfo.getGoodsName());
             holder.modelTv.setText("￥"+shopCarinfo.getSkuPrice()+"/"+shopCarinfo.getGoodsModel());
             holder.number.setText(shopCarinfo.getQuantity()+"");
@@ -292,25 +299,26 @@ public  class CarStoreRecyclerViewAdapter
                         }
                     }
                     numTv.setText(total+"");
-                    //判断店铺子商品是否全部选中。设置店铺多选框点亮或者取消
+                    //循环遍历如果店铺想的商品被全部选中则店铺chexkBox为选中状态，反之
                     if(getAllItem()){
                         addCheckBox(storePostion,true);
                     }else{
                         addCheckBox(storePostion,false);
                     }
+                    EventBus.getDefault().post(new MessageEvent(3,"car"));
                 }
             });
             holder.sub.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    carNum(false,holder.number);
+                    carNum(false,holder.number,shopCarinfo);
 
                 }
             });
             holder.add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    carNum(true,holder.number);
+                    carNum(true,holder.number,shopCarinfo);
                     callback = new MyFoodActionCallback((Activity) context,shopCarinfo.getSkuBarcode());
                     callback.addAction(v);
                 }
@@ -321,24 +329,24 @@ public  class CarStoreRecyclerViewAdapter
          * 判断是否是减，还是加入购物车
          * @param issub  true 增加
          */
-        public void carNum(boolean issub,TextView textView){
+        public void carNum(boolean issub, TextView textView, final ShoppingCartLinesEntity  shopcar){
             String nowsize = textView.getText().toString();
             int carTotalNum = Integer.parseInt(nowsize);
             if(issub){
                 textView.setText((carTotalNum++)+"");
-                SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"1");
+                SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),"1");
             }else{
                 if(carTotalNum == 1){
                     SXUtils.getInstance(context).MyDialogView(context,"温馨提示!", "是否删除商品信息?", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             SXUtils.getInstance(context).tipDialog.dismiss();
-                            SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
+                            SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),"0");
                         }
                     });
                 }else {
                     textView.setText((carTotalNum - 1) + "");
-                    SXUtils.getInstance(context).AddOrUpdateCar(shopCarinfo.getSkuBarcode(),"0");
+                    SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),"0");
                 }
             }
         }
@@ -351,11 +359,6 @@ public  class CarStoreRecyclerViewAdapter
 //        Log.i("========",position+"");
             return super.getItemViewType(position);
         }
-        //  添加数据
-        public void addData(int position) {
-//      在list中添加数据，并通知条目加入一条
-            notifyItemInserted(position);
-        }
         public  void  getKeyValue(){
             Iterator<String> iter = goodsMap.keySet().iterator();
             while(iter.hasNext()){
@@ -363,39 +366,26 @@ public  class CarStoreRecyclerViewAdapter
                 Boolean value = goodsMap.get(key);
             }
         }
-        //  删除数据
-        public void removeData() {
-            int i=0;
-            Iterator<String> iter = goodsMap.keySet().iterator();
-            while(iter.hasNext()){
-                String key=iter.next();
-                Boolean value = goodsMap.get(key);
-                i++;
-                if(value){
-                    int postions = Integer.parseInt(key);
-                    Logs.i(mValues.size()+"删除的key是多少====","==="+postions+"====="+i++);
-
-                    goodsMap.remove(postions);
-                    mValues.remove(mValues.size() == i ?i -1:i);
-                }
-                System.out.println(key+" "+value);
-            }
-            goodsMap.clear();
-            initDate();
-            notifyDataSetChanged();
-        }
-        //  删除数据
-        public void removeAllData() {
-            for(int i=0;i<mValues.size();i++){
-                goodsMap.remove(i);
-                mValues.remove(i);
-                notifyItemRemoved(i);
-            }
-            goodsMap.clear();
-            initDate();
-            notifyDataSetChanged();
-
-        }
+//        //  删除数据
+//        public void removeData() {
+//            int i=0;
+//            Iterator<String> iter = goodsMap.keySet().iterator();
+//            while(iter.hasNext()){
+//                String key=iter.next();
+//                Boolean value = goodsMap.get(key);
+//                i++;
+//                if(value){
+//                    int postions = Integer.parseInt(key);
+//                    Logs.i(mValues.size()+"删除的key是多少====","==="+postions+"====="+i++);
+//                    goodsMap.remove(postions);
+//                    mValues.remove(mValues.size() == i ?i -1:i);
+//                }
+//                System.out.println(key+" "+value);
+//            }
+//            goodsMap.clear();
+//            initDate();
+//            notifyDataSetChanged();
+//        }
         /**
          * 全选商品
          */
@@ -403,7 +393,6 @@ public  class CarStoreRecyclerViewAdapter
             for (int i = 0; i < mValues.size(); i++) {
                 goodsMap.put(""+i,true);
             }
-
             numTv.setText(total-getMapKeyNum()+mValues.size()+"");
             total =mValues.size();
             notifyDataSetChanged();
@@ -438,7 +427,8 @@ public  class CarStoreRecyclerViewAdapter
         }
 
         /**
-         * 判断当前店铺下的商品是否全部选中
+         * 判断当前店铺下的商品是否全部选中,
+         * 循环遍历如果店铺想的商品被全部选中则店铺chexkBox为选中状态，反之
          * @return
          */
         public boolean getAllItem(){

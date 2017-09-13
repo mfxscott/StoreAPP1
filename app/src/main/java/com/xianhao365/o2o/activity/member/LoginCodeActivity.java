@@ -113,7 +113,8 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
                         break;
                     //验证码发送成功
                     case AppClient.GETCODEMSG:
-                        mc = new MyCountDownTimer(10*6000, 1000);
+                        int secs = Integer.parseInt((String)msg.obj);
+                        mc = new MyCountDownTimer(secs*1000, 1000);
                         mc.start();
                         loginGetcodeTv.setEnabled(false);
                         break;

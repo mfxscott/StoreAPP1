@@ -115,6 +115,7 @@ public class StartMainActivity extends Activity {
         activity = this;
         mPermissionsChecker = new PermissionsChecker(this);
         activity =this;
+        SXUtils.getInstance(activity).deleteDir(SXUtils.getInstance(activity).getSDPath()+"/apk/sx.apk");
         //启动页面倒计时
         mc = new MyCountDownTimer(3000, 1000);
         mc.start();

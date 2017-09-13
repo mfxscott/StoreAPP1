@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
@@ -33,7 +34,6 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.entity.MessageEvent;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
@@ -81,7 +81,48 @@ public class SXUtils {
         }
         return mInstance;
     }
+    // 获取根目录路径
+    public  String getSDPath() {
+        boolean hasSDCard = Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+        // 如果有sd卡，则返回sd卡的目录
+        if (hasSDCard){
+            return Environment.getExternalStorageDirectory().getPath()+"/sx";
+        } else
+            // 如果没有sd卡，则返回存储目录
+            return Environment.getDownloadCacheDirectory().getPath()+"/sx";
+    }
 
+    /**
+     * 创建文件夹
+     * @param path
+     * @return
+     */
+//    public void CreateText(String path) {
+//        File f = new File(path);
+//        System.out.println(f.exists());
+//
+//    }
+    //删除文件夹和文件夹里面的文件
+    public  void deleteDir(final String pPath) {
+        File dir = new File(pPath);
+        if(dir.exists()){
+            deleteDirWihtFile(dir);
+        }
+
+    }
+
+    public  void deleteDirWihtFile(File dir) {
+        if (dir == null || !dir.exists() || !dir.isDirectory())
+            return;
+        for (File file : dir.listFiles()) {
+            if (file.isFile())
+                file.delete(); // 删除所有文件
+            else if (file.isDirectory())
+                deleteDirWihtFile(file); // 递规的方式删除文件夹
+        }
+        dir.delete();// 删除目录本身
+    }
     /**
      * 判断当前摄像头能否被使用（摄像头权限是否开启）
      *
@@ -424,10 +465,16 @@ public class SXUtils {
         new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GET_CODEMSG, new OKManager.Func4() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("验证码发送成功返回参数=======", jsonObject.toString());
+                String secs="";
+                try {
+                    JSONObject jsonO = new JSONObject(jsonObject.toString());
+                    secs = jsonO.getString("secs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Message msg = new Message();
                 msg.what = AppClient.GETCODEMSG;
-                msg.obj = jsonObject + "";
+                msg.obj = secs+ "";
                 handler.sendMessage(msg);
             }
 
@@ -576,23 +623,6 @@ public class SXUtils {
                 .into(view);
     }
 
-    //删除文件夹和文件夹里面的文件
-    public void deleteDir(final String pPath) {
-        File dir = new File(pPath);
-        deleteDirWihtFile(dir);
-    }
-
-    public void deleteDirWihtFile(File dir) {
-        if (dir == null || !dir.exists() || !dir.isDirectory())
-            return;
-        for (File file : dir.listFiles()) {
-            if (file.isFile())
-                file.delete(); // 删除所有文件
-            else if (file.isDirectory())
-                deleteDirWihtFile(file); // 递规的方式删除文件夹
-        }
-        dir.delete();// 删除目录本身
-    }
 
     /**
      * 判断用户是否已经登录
@@ -616,7 +646,7 @@ public class SXUtils {
      */
     public String priceTwoNum(String price){
         if(price.indexOf(".") == -1){
-             return "";
+            return "";
         }
         try {
             if(!TextUtils.isEmpty(price)){
@@ -627,7 +657,7 @@ public class SXUtils {
             return "";
         }
 
-       return "";
+        return "";
     }
     /**
      * 添加或者删除购物车
@@ -644,19 +674,13 @@ public class SXUtils {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("购物车成功返回参数=======", jsonObject.toString());
-//                JSONObject jsonObject1 = null;
-//                CarList car = (CarList) ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(), CarList.class);
-//                Message msg = new Message();
-//                msg.what = AppClient.ADDDELCAR;
-//                msg.obj = car;
-//                hand.sendMessage(msg);
-                if(quantity.equals(0)){
-                    //减少购物车数量
-                    MainFragmentActivity.getInstance().setBadge(false,1);
-                }else{
-                    //增加购物车数量
-                    MainFragmentActivity.getInstance().setBadge(true,1);
-                }
+//                if(quantity.equals(0)){
+//                    //减少购物车数量
+//                    MainFragmentActivity.getInstance().setBadge(false,1);
+//                }else{
+//                    //增加购物车数量
+//                    MainFragmentActivity.getInstance().setBadge(true,1);
+//                }
                 //每次增加或减除 都刷新购物车
                 EventBus.getDefault().post(new MessageEvent(2,"ref"));
             }

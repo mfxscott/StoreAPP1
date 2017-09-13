@@ -1,7 +1,5 @@
 package com.xianhao365.o2o.utils.httpClient;
 
-import android.os.Environment;
-
 /**
  * ***************************
  * 公共资源
@@ -80,20 +78,9 @@ public class AppClient{
     public static boolean TAG3=false;//购物清单
     public static boolean TAG4=false;//购物车
     public static boolean TAG5=false;//我的
-    public static final String CACHDATAPATH = getSDPath() + "/json/cacheData";//缓存json数据路径
+//    public static final String CACHDATAPATH = getSDPath() + "/json/cacheData";//缓存json数据路径
     public static String MAINBANNER = "/main.txt";//首页广告内容缓存文件名
 
-    // 获取根目录路径
-    public static String getSDPath() {
-        boolean hasSDCard = Environment.getExternalStorageState().equals(
-                Environment.MEDIA_MOUNTED);
-        // 如果有sd卡，则返回sd卡的目录
-        if (hasSDCard){
-            return Environment.getExternalStorageDirectory().getPath();
-        } else
-            // 如果没有sd卡，则返回存储目录
-            return Environment.getDownloadCacheDirectory().getPath();
-    }
 
 
 }

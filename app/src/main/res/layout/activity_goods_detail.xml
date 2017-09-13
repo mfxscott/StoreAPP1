@@ -622,12 +622,13 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"/>
             <TextView
+                android:visibility="gone"
                 android:id="@+id/goods_detail_car_num_tv"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_gravity="right"
                 android:background="@drawable/my_msg_shap"
                 android:textColor="@color/white"
-                android:text="12"
+                android:text="0"
                 android:textSize="@dimen/ac_text_size_12"
                 android:layout_width="20dp"
                 android:layout_height="20dp"/>

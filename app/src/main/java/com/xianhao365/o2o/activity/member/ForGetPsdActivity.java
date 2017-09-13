@@ -132,7 +132,8 @@ public class ForGetPsdActivity extends BaseActivity implements View.OnClickListe
                         break;
                     //验证码发送成功
                     case AppClient.GETCODEMSG:
-                        mc = new MyCountDownTimer(10*6000, 1000);
+                        int secs = Integer.parseInt((String)msg.obj);
+                        mc = new MyCountDownTimer(secs*1000, 1000);
                         mc.start();
                         forgetGetcodeTv.setEnabled(false);
                         break;
@@ -174,6 +175,9 @@ public class ForGetPsdActivity extends BaseActivity implements View.OnClickListe
         switch(v.getId()){
             case R.id.forget_getcode_tv:
                 mobilestr = forgetInputPhoneEdt.getText().toString();
+                if(mobilestr.length()>11){
+                    SXUtils.getInstance(activity).ToastCenter("请输入正确的手机号码");
+                }
                 SXUtils.showMyProgressDialog(activity,true);
                 SXUtils.getInstance(activity).getCodeMsgHttp(activity,mobilestr,"1",hand);
                 break;
@@ -214,8 +218,8 @@ public class ForGetPsdActivity extends BaseActivity implements View.OnClickListe
             public void onResponse(Object jsonObject) {
                 Logs.i("忘记密码1发送成功返回参数=======",jsonObject.toString());
                 Message msg = new Message();
-                msg.what = AppClient.GETCODEMSG;
-                msg.obj = "";
+                msg.what = 1000;
+                msg.obj =jsonObject+"";
                 hand.sendMessage(msg);
             }
             @Override

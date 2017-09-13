@@ -55,8 +55,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.xianhao365.o2o.utils.httpClient.AppClient.getSDPath;
-
 /**
  * 供应商采购订单发货流程及相关参数填写
  */
@@ -303,7 +301,7 @@ public class CGOrderDeliveActivity extends BaseActivity {
         return file.getPath();
     }
 
-    public String GETPICPATH = getSDPath() + "/sx/cacheImg";//图片上传，保存图片地址
+    public String GETPICPATH = SXUtils.getInstance(activity).getSDPath() + "/cacheImg";//图片上传，保存图片地址
 
     /**
      * 首页缓存写入数据

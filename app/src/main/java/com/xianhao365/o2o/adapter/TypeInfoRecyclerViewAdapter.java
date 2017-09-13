@@ -28,22 +28,15 @@ import java.util.List;
  * @time  2017/7/10 20:47
  */
 public  class TypeInfoRecyclerViewAdapter
-        extends RecyclerView.Adapter<TypeInfoRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
+        extends RecyclerView.Adapter<TypeInfoRecyclerViewAdapter.ViewHolder>{
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private List<GoodsInfoEntity> mValues;
     private FoodActionCallback callback;
     private Context context;
-    private GoodsInfoEntity goodsdetail;
 
-    @Override
-    public void onClick(View v) {
-        callback = new MyFoodActionCallback((Activity) context,goodsdetail.getChirdren().get(0).getSkuBarcode());
-        if(callback==null) return;
-        callback.addAction(v);
 
-    }
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
@@ -95,7 +88,7 @@ public  class TypeInfoRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-         goodsdetail = mValues.get(position);
+        GoodsInfoEntity   goodsdetail = mValues.get(position);
         holder.modeTView.setVisibility(View.GONE);
 //        if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
 //            Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
@@ -130,9 +123,30 @@ public  class TypeInfoRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-        holder.typeadd1.setOnClickListener(this);
-        holder.addImage.setOnClickListener(this);
-        holder.addImage2.setOnClickListener(this);
+        holder.typeadd1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback = new MyFoodActionCallback((Activity) context,mValues.get(position).getChirdren().get(0).getSkuBarcode());
+                if(callback==null) return;
+                callback.addAction(v);
+            }
+        });
+        holder.addImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback = new MyFoodActionCallback((Activity) context,mValues.get(position).getChirdren().get(0).getSkuBarcode());
+                if(callback==null) return;
+                callback.addAction(v);
+            }
+        });
+        holder.addImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callback = new MyFoodActionCallback((Activity) context,mValues.get(position).getChirdren().get(0).getSkuBarcode());
+                if(callback==null) return;
+                callback.addAction(v);
+            }
+        });
         SXUtils.getInstance(holder.mImageView.getContext()).GlideSetImg(goodsdetail.getOriginalImg(),holder.mImageView);
     }
     @Override
