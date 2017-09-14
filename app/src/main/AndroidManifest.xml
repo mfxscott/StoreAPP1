@@ -31,7 +31,13 @@
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
     <!-- <uses-feature android:name="android.hardware.camera"/> -->
     <!-- <uses-feature android:name="android.hardware.camera.autofocus"/> -->
-    <!-- 帐号13129343614  密码 1 供应商测试账号   个人18682136973  qwe123 -->
+    <!-- 供应商测试账号 帐号13129343614  密码 1
+
+     个人18682136973  qwe123
+    新西兰农场：13129343614  密码：1
+    合伙人：账号（手机号）：18165719379  密码：1
+    联创中心：账号（手机号）：18665966074 密码：1
+    -->
     <application
         android:name=".activity.MyApplication"
         android:icon="@mipmap/app_logo"
