@@ -85,14 +85,15 @@ public class HttpUtils{
                                 return;
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            callBack.onResponseError("解析数据异常"+s.toString());
+                            return;
                         }
                         if(isAll){
                             callBack.onResponse(s);
                         }else{
                             callBack.onResponse(data);
                         }
-                        SXUtils.DialogDismiss();
+//                        SXUtils.DialogDismiss();
                     }
                     @Override
                     public void onError(Call call, Response response, Exception e) {

@@ -40,12 +40,20 @@ public class AppClient{
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
     public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
 
+
     public static String  UPDATE_USER_INFO = "svc.update.user.base.info";//修改用户基本信息
     public static String  UPDATE_PASSWORD="";//修改用户密码信息
+    public static String  UPDATEPAYPSD="svc.user.wallet.updatepwd";//修改支付密码
+    public static String  SETPAYPSD="svc.user.wallet.setpwd";//设置支付密码
     public static String USER_ORDERS="svc.get.user.order.info";//获取用户订单信息
-    public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
+
     public static String  GYS_BILLLIST ="svc.purchase.mypurchaselist";//供应商的采购单列表
     public static String  GYS_CONFIRM_PURCHASE ="svc.purchase.confirmPurchase";//供应商确认采购订单
+    //钱包相关接口
+    public static String  MYTRADELOG="svc.user.list.mytradelog";//我的钱包-收入明细
+    public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
+    public static String  WITHDRAWAPPLY="svc.user.withdraw.apply";//提现申请
+    public static String  ADDBANKCARD="svc.user.wallet.addcard";//添加银行卡
 
     public static String  GYS_CPURCHASE_DELIVER ="svc.purchase.deliverGoods";//供应商采购单发货
 

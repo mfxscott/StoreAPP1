@@ -65,6 +65,30 @@
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/acc_manage_addson_rel"
+        android:layout_marginTop="10dp"
+        android:padding="15dp"
+        android:background="@drawable/white_gray_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="@dimen/ac_text_size_14"
+            android:textColor="@color/col_333"
+            android:text="员工子账号管理"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@mipmap/arrow_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/acc_manage_security_rel"

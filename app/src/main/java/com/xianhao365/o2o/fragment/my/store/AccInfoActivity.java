@@ -41,12 +41,15 @@ public class AccInfoActivity extends BaseActivity {
     Button accInfoUpdateBtn;
     private Activity activity;
     private Handler hand;
+    private UserInfoEntity userinfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acc_info);
         ButterKnife.bind(this);
+        Bundle bundle = this.getIntent().getExtras();
+        userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
         activity = this;
         initView();
     }
@@ -55,8 +58,8 @@ public class AccInfoActivity extends BaseActivity {
         registerBack();
         setTitle("账户信息");
         ImageView headimg = (ImageView) findViewById(R.id.acc_info_headimg);
-        Glide.with(activity).load(AppClient.headImg).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+        Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

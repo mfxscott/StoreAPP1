@@ -84,7 +84,7 @@
                     android:layout_gravity="center_vertical"
                     android:textSize="@dimen/ac_text_size_14"
                     android:textColor="@color/col_999"
-                    android:text="当前金额1000.00元,"
+                    android:text=""
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
                 <TextView

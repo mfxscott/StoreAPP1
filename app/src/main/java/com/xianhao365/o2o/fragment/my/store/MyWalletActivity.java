@@ -13,22 +13,36 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.BankCardListAdapter;
 import com.xianhao365.o2o.adapter.SRDetailListAdapter;
+import com.xianhao365.o2o.entity.wallet.TransLogEntity;
+import com.xianhao365.o2o.entity.wallet.WalletInfoEntity;
 import com.xianhao365.o2o.fragment.my.buyer.ExtractAddBankCardActivity;
 import com.xianhao365.o2o.fragment.my.buyer.ExtractDetailActivity;
 import com.xianhao365.o2o.fragment.my.store.yhj.YHJActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * 我的钱包
+ */
 public class MyWalletActivity extends BaseActivity implements View.OnClickListener{
     private TextView walletTopupBtn;
     private RelativeLayout walletYhjRel;
@@ -45,18 +59,25 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     private LinearLayout bankListLay;
     private ImageView myBankArrow;
     private String walletTag;//判断个人充值还是商户提现
+    private WalletInfoEntity walletInfo;
+    @BindView(R.id.wallet_total_amt_tv)
+    TextView walletTotalAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_wallet);
+        ButterKnife.bind(this);
         walletTag = this.getIntent().getStringExtra("walletTag");
         activity = this;
         initView();
-
+        initData();
+    }
+    private void initData(){
+        GetUserWalletHttp();
+        getTranLog();
     }
     private void initView(){
-
 
         bankListLay = (LinearLayout) findViewById(R.id.wallet_banklist_lin);
         myBankArrow = (ImageView) findViewById(R.id.wallet_mybank_arrow_iv);
@@ -77,7 +98,6 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         registerBack();
         setTitle("我的钱包");
         gridView = (MyGridView) findViewById(R.id.wallet_bank_gridv);
-        gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -85,7 +105,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
             }
         });
         detailGridView = (MyGridView) findViewById(R.id.wallet_srdetail_gridv);
-        detailGridView.setAdapter(new SRDetailListAdapter(activity,getSRDetailData()));
+
         detailGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -113,8 +133,13 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                        SXUtils.getInstance(activity).ToastCenter("登录成功");
-                        finish();
+                        walletInfo = (WalletInfoEntity) msg.obj;
+                        walletTotalAmt.setText(walletInfo.getTotalAmt()+"");
+                        gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
+                        break;
+                    case 1001:
+                        List<TransLogEntity> transList = (List<TransLogEntity>) msg.obj;
+                        detailGridView.setAdapter(new SRDetailListAdapter(activity,transList));
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
@@ -138,8 +163,8 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
 
         for(int i=0;i<1;i++){
             Map<String,String>  map = new HashMap<>();
-            map.put("cardNum","62262654256"+i);
-            map.put("cardName","招商银行"+i);
+            map.put("cardNum",walletInfo.getAccNo());
+            map.put("cardName",walletInfo.getBankName());
             map.put("cardId","cardId===="+i);
             list.add(map);
         }
@@ -174,6 +199,9 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                     startActivity(intent);
                 }else{
                     Intent intent = new Intent(activity,ExtractDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("walletInfo",walletInfo);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
 
@@ -208,5 +236,66 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 break;
         }
 
+    }
+    /**
+     * 钱包信息
+     */
+    public void GetUserWalletHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                WalletInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),WalletInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = "获取钱包余额="+strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+    /**
+     * 收入明细列表
+     */
+    public void getTranLog() {
+        HttpParams params = new HttpParams();
+        params.put("pageSize","10");
+        params.put("pageIndex","1");
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.MYTRADELOG, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Object obj=null;
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                     obj = jsonObject1.get("dataset");
+                } catch (JSONException e) {
+                    Message msg = new Message();
+                    msg.what = AppClient.ERRORCODE;
+                    msg.obj = "未查询到相关明细";
+                    hand.sendMessage(msg);
+                    return;
+                }
+                List<TransLogEntity> gde = (List<TransLogEntity>) ResponseData.getInstance(activity).parseJsonArray(obj.toString(),TransLogEntity.class);
+                Message msg = new Message();
+                msg.what = 1001;
+                msg.obj =gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
     }
 }

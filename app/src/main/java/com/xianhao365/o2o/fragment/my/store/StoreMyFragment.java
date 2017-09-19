@@ -78,7 +78,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         initView();
         SXUtils.showMyProgressDialog(activity,false);
         EventBus.getDefault().register(this);
-
         LoadData();
         return view;
     }
@@ -90,7 +89,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         if(SXUtils.getInstance(activity).IsLogin()) {
             getUserInfoHttp();
             GetOrderListHttp();
-            GetUserWalletHttp();
+//            GetUserWalletHttp();
         }else{
             if(swipeRefreshLayout != null){
                 swipeRefreshLayout.setRefreshing(false);
@@ -180,7 +179,14 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                         name.setText(userinfo.getUsername()+"");
                         ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
                         Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.default_head)
-                                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+                                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+                        break;
+                    case 1001:
+                        //订单列表
+
+                        break;
+                    case 1002:
+                        //钱包
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
@@ -206,6 +212,9 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.my_acc_mamage_tv:
                 Intent intent = new Intent(activity,AccManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("userinfo",userinfo);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.per_my_message_iv:
@@ -256,7 +265,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
      */
     public void getUserInfoHttp() {
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
-
             @Override
             public void onResponse(Object jsonObject) {
                 UserInfoEntity gde = null;
@@ -315,11 +323,11 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+//                UserInfoEntity gde = null;
+//                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
                 Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = "订单条目"+jsonObject.toString();
                 hand.sendMessage(msg);
             }
             @Override
@@ -332,30 +340,30 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-    /**
-     * 获取用户余额
-     */
-    public void GetUserWalletHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = "获取钱包余额="+strError;
-                hand.sendMessage(msg);
-
-            }
-        });
-    }
+//    /**
+//     * 获取用户余额
+//     */
+//    public void GetUserWalletHttp() {
+//        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+////                UserInfoEntity gde = null;
+////                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = "余额="+jsonObject.toString();
+//                hand.sendMessage(msg);
+//            }
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = "获取钱包余额="+strError;
+//                hand.sendMessage(msg);
+//
+//            }
+//        });
+//    }
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent){
         if(messageEvent.getTag()==1){

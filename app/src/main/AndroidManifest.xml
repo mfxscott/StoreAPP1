@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.xianhao365.o2o">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.xianhao365.o2o">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.READ_PROFILE"/>
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <!-- 高德地图权限 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <!-- 要求设备有摄像头 -->
     <!-- <uses-permission android:name="android.permission.CAMERA"/> -->
@@ -31,7 +31,9 @@
     <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE"/> -->
     <!-- <uses-feature android:name="android.hardware.camera"/> -->
     <!-- <uses-feature android:name="android.hardware.camera.autofocus"/> -->
-    <!-- 供应商测试账号 帐号13129343614  密码 1
+    <!--
+ 13974941111 摊主账号  密码1
+    供应商测试账号 帐号13129343614  密码 1
 
      个人18682136973  qwe123
     新西兰农场：13129343614  密码：1
@@ -47,134 +49,136 @@
         tools:replace="android:icon, android:theme,android:label">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="3c411d4c119dbbac86b528317ea3d3fe" />
+            android:value="3c411d4c119dbbac86b528317ea3d3fe"/>
         <!-- 高德地图key -->
-        <service android:name="com.amap.api.location.APSService" />
+        <service android:name="com.amap.api.location.APSService"/>
 
         <activity android:name=".activity.StartMainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".fragment.MainFragmentActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo" />
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".fragment.CommonWebViewMainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-        <activity android:name=".utils.checkPermission.PermissionsActivity"></activity>
+            android:screenOrientation="portrait"/>
+        <activity android:name=".utils.checkPermission.PermissionsActivity"/>
         <activity
             android:name=".activity.member.Regis1Activity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.member.LoginCodeActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.member.LoginNameActivity"
             android:label="@string/title_activity_login_name"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.member.ForGetPsdActivity"
             android:label="@string/title_activity_for_get_psd"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.member.StoreMapActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.member.RegistCheckActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".fragment.my.store.AccManageActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.AccInfoActivity"
             android:label="@string/title_activity_acc_info"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.AccSecurityActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.MessageActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.MyWalletActivity"
             android:label="@string/title_activity_my_wallet"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.TopUpActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.BankCardTopUpActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.yhj.YHJActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".activity.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".activity.GoodsDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".fragment.car.GoPayActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.car.AddressListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".fragment.car.EditAddAddressActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".activity.GoodsFeedbackActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|stateUnchanged"></activity>
+            android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
             android:name=".fragment.my.store.order.MyOrderActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".fragment.my.store.order.OrderDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.SearchDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.DesignDemo"></activity>
+            android:theme="@style/Theme.DesignDemo"/>
         <activity
             android:name=".fragment.my.buyer.ExtractDetailActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.buyer.ExtractAddBankCardActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <receiver android:name=".utils.NetworkConnectChangedReceiver">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
-                <action android:name="android.net.wifi.STATE_CHANGE" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
+                <action android:name="android.net.wifi.STATE_CHANGE"/>
             </intent-filter>
         </receiver>
 
-        <activity android:name=".fragment.my.buyer.purchase.CGBillListActivity"></activity>
-        <activity android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"></activity>
-        <activity android:name=".fragment.my.buyer.purchase.CGOrderDeliveActivity"></activity>
+        <activity android:name=".fragment.my.buyer.purchase.CGBillListActivity"/>
+        <activity android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"/>
+        <activity android:name=".fragment.my.buyer.purchase.CGOrderDeliveActivity"/>
+        <activity android:name=".fragment.my.store.yhj.AddAccActivity">
+        </activity>
     </application>
 
 </manifest>

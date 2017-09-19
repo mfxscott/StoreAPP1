@@ -381,9 +381,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 ////        RequestReqMsgData.UpdateVersion(manager, activity, hand);
 //        mainGopayBtn = (Button) view.findViewById(R.id.home_gopay_btn);
 //        mainGopayBtn.setOnClickListener(this);
-
-
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

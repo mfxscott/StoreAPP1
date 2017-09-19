@@ -11,10 +11,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
+import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.fragment.my.store.yhj.AddAccActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -30,11 +33,13 @@ import okhttp3.RequestBody;
 public class AccManageActivity extends BaseActivity implements View.OnClickListener{
     private Activity activity;
     private Handler hand;
-
+    private UserInfoEntity userinfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_acc_manage);
+        Bundle bundle = this.getIntent().getExtras();
+        userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
         activity = this;
         initView();
     }
@@ -42,14 +47,21 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         registerBack();
         setTitle("账号管理");
         ImageView headimg = (ImageView) findViewById(R.id.acc_manage_headimg);
-        Glide.with(activity).load(AppClient.headImg).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headimg);
+        Glide.with(activity).load(userinfo.getShopLogo()).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
         LinearLayout accinfolin = (LinearLayout) findViewById(R.id.acc_manage_info_lin);
         accinfolin.setOnClickListener(this);
+        TextView tvname = (TextView) findViewById(R.id.acc_manage_name_tv);
+        tvname.setText(userinfo.getShopName()+"");
         Button loginOut = (Button) findViewById(R.id.login_out_btn);
         loginOut.setOnClickListener(this);
         RelativeLayout  rel = (RelativeLayout) findViewById(R.id.acc_manage_security_rel);
         rel.setOnClickListener(this);
+        RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
+        addacc.setOnClickListener(this);
+        if(userinfo.getTag().equals(32)){
+            addacc.setVisibility(View.VISIBLE);
+        }
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -76,11 +88,20 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.acc_manage_info_lin:
                 Intent intent = new Intent(activity,AccInfoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("userinfo",userinfo);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.acc_manage_security_rel:
                 Intent sec = new Intent(activity,AccSecurityActivity.class);
                 startActivity(sec);
+                break;
+            case R.id.acc_manage_addson_rel:
+                //添加子账号界面
+                Intent addacc = new Intent(activity,AddAccActivity.class);
+                startActivity(addacc);
+
                 break;
         }
     }
