@@ -2,6 +2,8 @@ package com.xianhao365.o2o.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,7 +17,7 @@ import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.bill.CategoryListEntity;
 import com.xianhao365.o2o.utils.Logs;
 
 import java.util.List;
@@ -30,7 +32,7 @@ public  class HomeBillRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<GoodsInfoEntity> mValues;
+    public List<CategoryListEntity> mValues;
     private FoodActionCallback callback;
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,6 +41,7 @@ public  class HomeBillRecyclerViewAdapter
         public final ImageView delImageView;
         public final TextView mTextView;
         public final TextView addcar1,addcar2;
+        public final RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             super(view);
@@ -48,6 +51,7 @@ public  class HomeBillRecyclerViewAdapter
             delImageView = (ImageView) view.findViewById(R.id.main_bill_item_del_iv);
             addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
             addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
+            recyclerView = (RecyclerView) view.findViewById(R.id.bill_item_recycler);
         }
         @Override
         public String toString() {
@@ -59,9 +63,10 @@ public  class HomeBillRecyclerViewAdapter
         if(callback==null) return;
         callback.addAction(v);
     }
-    public HomeBillRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items,FoodActionCallback callback) {
+    public HomeBillRecyclerViewAdapter(Context context, List<CategoryListEntity> items,FoodActionCallback callback) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
+        Logs.i("==============------"+items.size());
         mValues = items;
         this.callback = callback;
     }
@@ -75,8 +80,15 @@ public  class HomeBillRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.mTextView.setText(mValues.get(position).getGoodsName());
-
+        CategoryListEntity categInfo = mValues.get(position);
+        holder.mTextView.setText(categInfo.getGoodsName());
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
+//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+//        holder.recyclerView.setLayoutManager(linearLayoutManager);
+        holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(holder.recyclerView.getContext(),categInfo);
+        holder.recyclerView.setAdapter(simpAdapter);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,11 +102,6 @@ public  class HomeBillRecyclerViewAdapter
                 removeData(position);
             }
         });
-        if(position%2 ==0){
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(holder.mImageView);
-        }else{
-            Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(holder.mImageView);
-        }
         holder.addcar1.setOnClickListener(this);
         holder.addcar2.setOnClickListener(this);
 //        holder.addcar1.setOnClickListener(new View.OnClickListener() {
@@ -109,10 +116,10 @@ public  class HomeBillRecyclerViewAdapter
 //                MainFragmentActivity.getInstance().setBadge(true,1);
 //            }
 //        });
-//        Glide.with(holder.mImageView.getContext())
-//                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
-//                .fitCenter()
-//                .into(holder.mImageView);
+        Glide.with(holder.mImageView.getContext())
+                .load(categInfo.getOriginalImg())
+                .fitCenter()
+                .into(holder.mImageView);
     }
     @Override
     public int getItemCount() {

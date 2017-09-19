@@ -81,6 +81,10 @@ public class HttpUtils{
                             String resultText = jsonObject.getString("responseText");
                             data = jsonObject.getString("responseData");
                             if(TextUtils.isEmpty(resultCode) || !resultCode.equals("10000")){
+                                if(resultCode.equals("10002")){
+                                    callBack.onResponseError("未登录");
+                                    return;
+                                }
                                 callBack.onResponseError(resultText);
                                 return;
                             }

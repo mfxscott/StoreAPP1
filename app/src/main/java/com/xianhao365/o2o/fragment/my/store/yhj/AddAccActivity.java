@@ -15,6 +15,6 @@ public class AddAccActivity extends BaseActivity {
     }
     private void initView(){
         registerBack();
-        setTitle("账号管理");
+        setTitle("员工子账号管理");
     }
 }

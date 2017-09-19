@@ -68,7 +68,6 @@
     <RelativeLayout
         android:visibility="gone"
         android:id="@+id/acc_manage_addson_rel"
-        android:layout_marginTop="10dp"
         android:padding="15dp"
         android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"

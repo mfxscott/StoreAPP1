@@ -51,9 +51,9 @@ public class AccInfoActivity extends BaseActivity {
         Bundle bundle = this.getIntent().getExtras();
         userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
         activity = this;
+        String json = SXUtils.getInstance(activity).getFromAssets("file:///android_asset/areas.json");
         initView();
     }
-
     private void initView() {
         registerBack();
         setTitle("账户信息");

@@ -59,6 +59,8 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private Handler hand;
     private UserInfoEntity userinfo;//个人所有用户信息
     private SwipeRefreshLayout swipeRefreshLayout;
+    private TextView store_my_money;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,6 +102,9 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
      * 初始化
      */
     private void initView(){
+        store_my_money = (TextView) view.findViewById(R.id.store_my_money);
+
+
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.user_center_swipe_container);
 //        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -109,7 +114,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 //                myWebView.reload();
 //                getUserInfoHttp();
                 LoadData();
-
             }
         });
 //        Glide.with(activity).load("https://www.baidu.com/img/bdlogo.png").transform(new GlideRoundTransform(activity, 10)).into(headimg);
@@ -180,10 +184,10 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                         ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
                         Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.default_head)
                                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+
                         break;
                     case 1001:
                         //订单列表
-
                         break;
                     case 1002:
                         //钱包
@@ -278,7 +282,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what =AppClient.ERRORCODE;
-                msg.obj = "获取用户信息"+strError;
+                msg.obj = strError;
                 hand.sendMessage(msg);
 
             }

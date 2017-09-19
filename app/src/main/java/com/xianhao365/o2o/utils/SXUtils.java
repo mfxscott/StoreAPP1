@@ -44,7 +44,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,7 +97,6 @@ public class SXUtils {
 
     /**
      * 创建文件夹
-     * @param path
      * @return
      */
 //    public void CreateText(String path) {
@@ -657,6 +658,24 @@ public class SXUtils {
             return "";
         }
 
+        return "";
+    }
+    /**
+     * 从asset路径下读取对应文件转String输出
+     * @return
+     */
+    public  String getFromAssets(String fileName) {
+        try {
+            InputStreamReader inputReader = new InputStreamReader( mContext.getResources().getAssets().open(fileName) );
+            BufferedReader bufReader = new BufferedReader(inputReader);
+            String line="";
+            String Result="";
+            while((line = bufReader.readLine()) != null)
+                Result += line;
+            return Result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "";
     }
     /**

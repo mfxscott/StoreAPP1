@@ -67,7 +67,8 @@ public class AppClient{
     public static String GOODS_DETAIL="svc.goods.ById";//商品详情
     public static String GOODS_TYPE="svc.cat.list";//商品分类
     public static String GOODS_LIST="svc.goods.list";//商品列表 根据参数进行分类查询
-
+     //常用清单
+    public static String  COMMONBILL="svc.common.goods.list";
     //购物车
     public static String CARLIST = "svc.shoppingcart.get";//查询购物车
     public static String CARADDUPDATA="svc.shoppingcart.update";//增加和删除购物车

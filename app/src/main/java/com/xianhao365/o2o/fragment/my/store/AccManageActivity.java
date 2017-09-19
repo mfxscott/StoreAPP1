@@ -59,7 +59,7 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         rel.setOnClickListener(this);
         RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
         addacc.setOnClickListener(this);
-        if(userinfo.getTag().equals(32)){
+        if(userinfo.getTag().equals("32")){
             addacc.setVisibility(View.VISIBLE);
         }
         hand = new Handler(new Handler.Callback() {
