@@ -3,6 +3,7 @@ package com.xianhao365.o2o.fragment.my.store;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -12,11 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.fragment.my.pop.DatePickerPopWin;
 import com.xianhao365.o2o.fragment.my.store.yhj.AddAccActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -87,11 +90,27 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 getLoginOutHttp();
                 break;
             case R.id.acc_manage_info_lin:
-                Intent intent = new Intent(activity,AccInfoActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("userinfo",userinfo);
-                intent.putExtras(bundle);
-                startActivity(intent);
+//                Intent intent = new Intent(activity,AccInfoActivity.class);
+//                Bundle bundle = new Bundle();
+//                bundle.putParcelable("userinfo",userinfo);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(AccManageActivity.this, new DatePickerPopWin.OnDatePickedListener() {
+                    @Override
+                    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
+                        Toast.makeText(AccManageActivity.this, dateDesc, Toast.LENGTH_SHORT).show();
+                    }
+                }).textConfirm("CONFIRM") //text of confirm button
+                        .textCancel("CANCEL") //text of cancel button
+                        .btnTextSize(16) // button text size
+                        .viewTextSize(25) // pick view text size
+                        .colorCancel(Color.parseColor("#999999")) //color of cancel button
+                        .colorConfirm(Color.parseColor("#009900"))//color of confirm button
+                        .minYear(1990) //min year in loop
+                        .maxYear(2550) // max year in loop
+                        .dateChose("2013-11-11") // date chose when init popwindow
+                        .build();
+                pickerPopWin.showPopWin(AccManageActivity.this);
                 break;
             case R.id.acc_manage_security_rel:
                 Intent sec = new Intent(activity,AccSecurityActivity.class);
