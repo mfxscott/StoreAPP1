@@ -2,7 +2,6 @@ package com.xianhao365.o2o.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -13,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.bill.BillChirdrenEntity;
 import com.xianhao365.o2o.entity.bill.CategoryListEntity;
@@ -83,14 +81,14 @@ public  class BillItemRecyclerViewAdapter
         holder.marketPrice.setText(billchirdren.getMarketPrice());
 //        holder.shopPrice.setText(billchirdren.getShopPrice());
         holder.goodsModel.setText(billchirdren.getGoodsModel());
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
-                intent.putExtra("cno",category.getId());
-                holder.mView.getContext().startActivity(intent);
-            }
-        });
+//                holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+//                intent.putExtra("cno",category.getId());
+//                holder.mView.getContext().startActivity(intent);
+//            }
+//        });
         holder.addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

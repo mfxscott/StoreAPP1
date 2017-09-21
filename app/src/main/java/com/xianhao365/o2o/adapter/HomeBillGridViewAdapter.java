@@ -1,7 +1,7 @@
 package com.xianhao365.o2o.adapter;
 
 import android.app.Activity;
-import android.support.v7.widget.DefaultItemAnimator;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.activity.GoodsDetailActivity;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.bill.CategoryListEntity;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -49,7 +51,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
         return position;
     }
     public View getView(final int position, View view, ViewGroup parent) {
-        CategoryListEntity categInfo = result.get(position);
+        final CategoryListEntity categInfo = result.get(position);
         LifeViewHolder vh;
         if (view == null) {
             vh = new LifeViewHolder();
@@ -60,6 +62,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
             vh.addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
             vh.addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
             vh.recyclerView = (RecyclerView) view.findViewById(R.id.bill_item_recycler);
+            vh.liny = (LinearLayout) view.findViewById(R.id.home_bill_item_liny);
             view.setTag(vh);
         } else {
             vh = (LifeViewHolder) view.getTag();
@@ -67,7 +70,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
 
         vh.mTextView.setText(categInfo.getGoodsName());
         vh.recyclerView.setLayoutManager(new LinearLayoutManager(vh.recyclerView.getContext()));
-        vh.recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        vh.recyclerView.setItemAnimator(new DefaultItemAnimator());
         BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(vh.recyclerView.getContext(), categInfo);
         vh.recyclerView.setAdapter(simpAdapter);
         SXUtils.getInstance(context).GlideSetImg(categInfo.getOriginalImg(),vh.mImageView);
@@ -79,6 +82,14 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
 //                removeData(position);
             }
         });
+        vh.liny.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, GoodsDetailActivity.class);
+                intent.putExtra("cno",categInfo.getId());
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
     class LifeViewHolder{
@@ -87,5 +98,6 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
        TextView mTextView;
        TextView addcar1,addcar2;
         RecyclerView recyclerView;
+        LinearLayout liny;
     }
 }

@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:background="@drawable/white_gray_selector"
+        android:background="@color/transparent"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:layout_width="match_parent"

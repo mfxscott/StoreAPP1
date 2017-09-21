@@ -64,6 +64,8 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     TextView walletTotalAmt;
     @BindView(R.id.wallet_counp_liny)
     LinearLayout walletCouponLin;
+    @BindView(R.id.acc_manage_info_lin)
+    LinearLayout  walletLin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,6 +252,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
+                walletLin.setVisibility(View.VISIBLE);
                 WalletInfoEntity gde = null;
                 gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),WalletInfoEntity.class);
                 Message msg = new Message();
@@ -259,10 +262,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
             }
             @Override
             public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = "获取钱包余额="+strError;
-                hand.sendMessage(msg);
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = "";
+//                hand.sendMessage(msg);
 
             }
         });

@@ -72,7 +72,6 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             this.context = context;
             this.listener = listener;
         }
-
         //Option
         private boolean showDayMonthYear = false;
         private int minYear = DEFAULT_MIN_YEAR;

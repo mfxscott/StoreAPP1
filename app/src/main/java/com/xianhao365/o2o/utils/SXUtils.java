@@ -771,4 +771,72 @@ public class SXUtils {
             }
         });
     }
+//    public void psdLoginHttp(final String mobile,final String psdStr,final Handler hand){
+//        RequestBody requestBody = new FormBody.Builder()
+//                .add("mobile", mobile)
+//                .add("password",psdStr)
+//                .add("loginType","1")//0=验证码登录,1=密码登录
+//                .build();
+//        new OKManager(mContext).sendStringByPostMethod(requestBody, AppClient.USER_LOGIN, new OKManager.Func4() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+//                Logs.i("密码登录发送成功返回参数=======",jsonObject.toString());
+//                try {
+//                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+//                    AppClient.USER_ID = jsonObject1.getString("uid");
+//                    AppClient.USER_SESSION = jsonObject1.getString("sid");
+//                    AppClient.USERROLETAG = jsonObject1.getString("tag");
+//                    SXUtils.getInstance(mContext).setSharePreferences("username",mobile);
+//                    SXUtils.getInstance(mContext).setSharePreferences("psd",psdStr);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Message msg = new Message();
+//                msg.what = 1000;
+//                msg.obj = "";
+//                hand.sendMessage(msg);
+//            }
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+//            }
+//        });
+//    }
+
+    public void psdLoginHttp(final Handler hand,final String mobile,final String psdStr) {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("mobile", mobile);
+        httpParams.put("password",psdStr);
+        httpParams.put("loginType","1");//0=验证码登录,1=密码登录
+        HttpUtils.getInstance(mContext).requestPost(false, AppClient.USER_LOGIN, httpParams, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("密码登录发送成功返回参数=======",jsonObject.toString());
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                    AppClient.USER_ID = jsonObject1.getString("uid");
+                    AppClient.USER_SESSION = jsonObject1.getString("sid");
+                    AppClient.USERROLETAG = jsonObject1.getString("tag");
+                    SXUtils.getInstance(mContext).setSharePreferences("username",mobile);
+                    SXUtils.getInstance(mContext).setSharePreferences("psd",psdStr);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = "";
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+    }
 }

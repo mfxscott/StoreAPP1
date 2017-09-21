@@ -60,6 +60,8 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private UserInfoEntity userinfo;//个人所有用户信息
     private SwipeRefreshLayout swipeRefreshLayout;
     private TextView store_my_money;
+    private TextView name;
+    private ImageView headimg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +92,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private void LoadData(){
         if(SXUtils.getInstance(activity).IsLogin()) {
             getUserInfoHttp();
-            GetOrderListHttp();
+//            GetOrderListHttp();
 //            GetUserWalletHttp();
         }else{
             if(swipeRefreshLayout != null){
@@ -173,18 +175,16 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         myStoreFwcenterLin.setOnClickListener(this);
         myStoreZxserviceLin.setOnClickListener(this);
         myStoreKffwLin.setOnClickListener(this);
-
+          name = (TextView) view.findViewById(R.id.user_info_name_tv);
+         headimg = (ImageView) view.findViewById(R.id.my_head_img);
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
                         userinfo = (UserInfoEntity) msg.obj;
-                        TextView  name = (TextView) view.findViewById(R.id.user_info_name_tv);
                         name.setText(userinfo.getUsername()+"");
-                        ImageView headimg = (ImageView) view.findViewById(R.id.my_head_img);
                         Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.default_head)
                                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
-
                         break;
                     case 1001:
                         //订单列表
@@ -372,7 +372,10 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     public void onMoonEvent(MessageEvent messageEvent){
         if(messageEvent.getTag()==1){
             LoadData();
+        }else if(messageEvent.getTag() == 4444){
+            name.setText("未登录");
         }
+
     }
     @Override
     public void onDestroyView() {

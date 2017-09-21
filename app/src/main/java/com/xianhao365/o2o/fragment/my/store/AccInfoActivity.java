@@ -1,9 +1,12 @@
 package com.xianhao365.o2o.fragment.my.store;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,12 +19,16 @@ import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.entity.address.AddressProvinceEntity;
+import com.xianhao365.o2o.fragment.my.pop.MyWheelView;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +80,7 @@ public class AccInfoActivity extends BaseActivity {
         activity = this;
         String json = SXUtils.getInstance(activity).getFromAssets("areas.txt");
         Logs.i("=======json==="+json);
+
         initView();
     }
     private void initView() {
@@ -111,7 +119,35 @@ public class AccInfoActivity extends BaseActivity {
             }
         });
     }
+    @OnClick(R.id.acc_info_address_edt)
+    public void AddressCheck(){
+        String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
+        List<AddressProvinceEntity> addressList = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
+        // 构建弹出框View
+        View outerView = LayoutInflater.from(activity)
+                .inflate(R.layout.wheel_view, null);
 
+        MyWheelView wv = (MyWheelView) outerView
+                .findViewById(R.id.wheel_view_wv);
+        // wv.setOffset(0);// 偏移量
+        wv.setOffset(2);
+        wv.setItems(addressList);// 实际内容
+        wv.setSeletion(0);// 设置默认被选中的项目
+        // wv.setSeletion(3);
+        wv.setOnWheelViewListener(new MyWheelView.OnWheelViewListener() {
+            @Override
+            public void onSelected(int selectedIndex, String item) {
+                // 选中后的处理事件
+                Log.d("====", "[Dialog]selectedIndex: " + selectedIndex
+                        + ", item: " + item);
+            }
+        });
+
+        // 展示弹出框
+        new AlertDialog.Builder(activity)
+                .setTitle("WheelView in Dialog").setView(outerView)
+                .setPositiveButton("OK", null).show();
+    }
     /**
      * 获取用户余额
      */

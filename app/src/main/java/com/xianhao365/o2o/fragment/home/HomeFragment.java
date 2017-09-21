@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private LinearLayout channelLin,homeGridLin;
     private SwipeRefreshLayout swipeRefreshLayout;
     private HomeBillGridViewAdapter billsimpAdapter;
+    private  List<BillDataSetEntity> billlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -337,13 +338,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
         homebillRv = (MyGridView) view.findViewById(R.id.home_list_recyclerv);
 
-        homebillRv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(activity, GoodsDetailActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
 
@@ -400,7 +394,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                         setBanner(goodsTypeList);
                         break;
                     case 1009:
-                        List<BillDataSetEntity> billlist = (List<BillDataSetEntity>) msg.obj;
+                        billlist = (List<BillDataSetEntity>) msg.obj;
                         if(billlist == null || billlist.size()<=0) {
                             break;
                         }

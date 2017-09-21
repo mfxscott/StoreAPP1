@@ -286,18 +286,26 @@
                         android:textSize="@dimen/ac_text_size_16"/>
 
                     <ImageView
+                        android:visibility="gone"
                         android:id="@+id/goods_detail_img1"
+                        android:scaleType="fitXY"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"/>
                     <ImageView
+                        android:visibility="gone"
+                        android:scaleType="fitXY"
                         android:id="@+id/goods_detail_img2"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"/>
                     <ImageView
+                        android:visibility="gone"
+                        android:scaleType="fitXY"
                         android:id="@+id/goods_detail_img3"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"/>
                     <ImageView
+                        android:visibility="gone"
+                        android:scaleType="fitXY"
                         android:id="@+id/goods_detail_img4"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"/>
@@ -371,7 +379,7 @@
                             android:layout_height="10dp"/>
                         <TextView
                             android:id="@+id/goods_detail_level_tv"
-                            android:text="袋（20斤）"
+                            android:text="A"
                             android:textSize="@dimen/ac_text_size_14"
                             android:textColor="@color/col_333"
                             android:layout_width="wrap_content"
@@ -400,7 +408,7 @@
                             android:layout_height="10dp"/>
                         <TextView
                             android:id="@+id/goods_detail_unit_tv"
-                            android:text="袋"
+                            android:text=""
                             android:textSize="@dimen/ac_text_size_14"
                             android:textColor="@color/col_333"
                             android:layout_width="wrap_content"
@@ -656,7 +664,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/ac_text_size_16"
-                android:text="￥109.00"
+                android:text="￥0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView

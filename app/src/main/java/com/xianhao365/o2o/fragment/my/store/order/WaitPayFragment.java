@@ -42,7 +42,7 @@ public class WaitPayFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_pay, container, false);
         initView();
-        getOrderListHttp(indexPage,"");
+//        getOrderListHttp(indexPage,"");
         return view;
     }
     private void initView(){

@@ -89,6 +89,7 @@ public  class HomeBillRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+                intent.putExtra("cno",mValues.get(position).getId());
                 holder.mView.getContext().startActivity(intent);
             }
         });

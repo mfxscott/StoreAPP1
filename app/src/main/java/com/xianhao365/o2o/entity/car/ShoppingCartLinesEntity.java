@@ -15,6 +15,15 @@ public class ShoppingCartLinesEntity {
     private String skuBarcode;
     private String skuPrice;
     private String subTotal;
+    private String goodsCode;
+
+    public String getGoodsCode() {
+        return goodsCode;
+    }
+
+    public void setGoodsCode(String goodsCode) {
+        this.goodsCode = goodsCode;
+    }
 
     public String getDiscountAmount() {
         return discountAmount;

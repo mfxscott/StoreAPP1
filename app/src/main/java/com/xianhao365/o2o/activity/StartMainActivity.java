@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
+import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.checkPermission.PermissionsActivity;
@@ -129,7 +130,6 @@ public class StartMainActivity extends Activity {
         }
 
 
-
 //        // 缺少权限时, 进入权限配置页面
 //        if (mPermissionsChecker.lacksPermissions(PERMISSIONS)) {
 //            startPermissionsActivity();
@@ -140,6 +140,12 @@ public class StartMainActivity extends Activity {
 //        Log.i("手机唯一标示IMEI====",imei+"");
 //        GetuserList();
         initView();
+        String username =SXUtils.getInstance(activity).getSharePreferences("username");
+        String psd =  SXUtils.getInstance(activity).getSharePreferences("psd");
+        if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(psd)){
+            //启动进行登录
+            SXUtils.getInstance(activity).psdLoginHttp(hand,username,psd);
+        }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -175,8 +181,8 @@ public class StartMainActivity extends Activity {
                         SXUtils.getInstance(activity).ToastCenter(map.get("verUrl")+"==");
                         break;
                     case AppClient.ERRORCODE:
-                        String errormsg = (String) msg.obj;
-                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+//                        String errormsg = (String) msg.obj;
+//                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
                         break;
                 }
                 SXUtils.DialogDismiss();
@@ -197,8 +203,15 @@ public class StartMainActivity extends Activity {
             public void onClick(View v) {
 //                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
 //                startActivity(intent);
-                Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
-                startActivity(intent);
+                if(TextUtils.isEmpty(AppClient.USER_SESSION) || TextUtils.isEmpty(AppClient.USER_ID)){
+                    Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                    startActivity(mainintent);
+                }
+                finish();
                 mc.cancel();
                 finish();
             }
@@ -303,8 +316,14 @@ public class StartMainActivity extends Activity {
             }else{
 //                Intent intent = new Intent(StartMainActivity.this, MainFragmentActivity.class);
 //                startActivity(intent);
-                Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
-                startActivity(intent);
+                if(TextUtils.isEmpty(AppClient.USER_SESSION) || TextUtils.isEmpty(AppClient.USER_ID)){
+                    Intent intent = new Intent(StartMainActivity.this, LoginNameActivity.class);
+                    startActivity(intent);
+                }
+                else{
+                    Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+                    startActivity(mainintent);
+                }
                 finish();
             }
 
@@ -341,7 +360,7 @@ public class StartMainActivity extends Activity {
                 } catch (JSONException e) {
                     Message msg = new Message();
                     msg.what = AppClient.ERRORCODE;
-                    msg.obj = "返回数据为=="+jsonObject.toString();
+                    msg.obj = jsonObject.toString();
                     hand.sendMessage(msg);
                 }
                 Message msg = new Message();

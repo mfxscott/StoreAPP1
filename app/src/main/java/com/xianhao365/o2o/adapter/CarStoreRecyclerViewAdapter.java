@@ -100,8 +100,9 @@ public  class CarStoreRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = v.getContext();
-                SXUtils.getInstance(context).ToastCenter("====" + position);
+//                Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+//                intent.putExtra("cno",mValues.get(position).getShoppingCartLines().get(position).getGoodsCode());
+//                holder.mView.getContext().startActivity(intent);
             }
         });
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
@@ -277,8 +278,9 @@ public  class CarStoreRecyclerViewAdapter
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Context context = v.getContext();
-                    SXUtils.getInstance(context).ToastCenter("===="+position);
+//                    Intent intent = new Intent( holder.mView.getContext(), GoodsDetailActivity.class);
+//                    intent.putExtra("cno",shopCarinfo.getGoodsCode());
+//                    holder.mView.getContext().startActivity(intent);
                 }
             });
             holder.checkbox.setOnCheckedChangeListener(null);

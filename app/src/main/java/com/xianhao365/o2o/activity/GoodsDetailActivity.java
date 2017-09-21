@@ -81,6 +81,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     TextView totalPrice;
     private String skuBarcode;
     private  GoodsDetailInfoEntity goodsdetail;
+    private ImageView img1,img2,img3,img4;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +89,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         ButterKnife.bind(this);
         goodsId = this.getIntent().getStringExtra("cno");
         activity = this;
-        setBanner();
+//        setBanner();
         initView();
         if(TextUtils.isEmpty(goodsId)) {
             SXUtils.getInstance(activity).ToastCenter("商品ID为空");
@@ -124,33 +125,32 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         disTitleRel = (RelativeLayout) findViewById(R.id.goods_detail_dis_title_rel);
         xxxxlin = (LinearLayout) findViewById(R.id.goods_detail_xxxx_lin);
 
-        ImageView img1 = (ImageView) findViewById(R.id.goods_detail_img1);
-        ImageView img2 = (ImageView) findViewById(R.id.goods_detail_img2);
-        ImageView img3 = (ImageView) findViewById(R.id.goods_detail_img3);
-        ImageView img4 = (ImageView) findViewById(R.id.goods_detail_img4);
-        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(img1);
-        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(img2);
-        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(img3);
-        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(img4);
+        img1 = (ImageView) findViewById(R.id.goods_detail_img1);
+        img2 = (ImageView) findViewById(R.id.goods_detail_img2);
+        img3 = (ImageView) findViewById(R.id.goods_detail_img3);
+        img4 = (ImageView) findViewById(R.id.goods_detail_img4);
+
 
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                         goodsdetail = (GoodsDetailInfoEntity) msg.obj;
+                        goodsdetail = (GoodsDetailInfoEntity) msg.obj;
                         if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
                             Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
                             goodsModelTv.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
-                            marketPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getMarketPrice());
-                            pfPriceTv.setText("¥"+goodsdetail.getSkuList().get(0).getShopPrice());
+                            marketPriceTv.setText("¥ "+goodsdetail.getSkuList().get(0).getMarketPrice());
+                            pfPriceTv.setText("¥ "+goodsdetail.getSkuList().get(0).getShopPrice());
                             goodsggModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
                             marketPriceTv.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
                         }
                         goodsNameTv.setText(goodsdetail.getGoodsName()+"");
                         goodsAddress.setText(goodsdetail.getGoodsPlace());
                         goodsUnit.setText(goodsdetail.getGoodsUnit());
-//                        goodsLevel.setText(goodsdetail.getFoodGrade());
-
+                        String [] desImg = goodsdetail.getGoodsDesc().split(",");
+                        String [] bannerImg = goodsdetail.getAlbumImg().split(",");
+                        setInfoImg(desImg);
+                        setBanner(bannerImg);
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
@@ -162,16 +162,46 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             }
         });
     }
-    private void setBanner(){
+    private void  setInfoImg(String [] infoImg){
+        for (int i=0;i<infoImg.length;i++){
+            switch (i){
+                case 0:
+                    img1.setVisibility(View.VISIBLE);
+                    SXUtils.getInstance(activity).GlideSetImg(infoImg[0],img1);
+                    break;
+                case 1:
+                    img2.setVisibility(View.VISIBLE);
+                    SXUtils.getInstance(activity).GlideSetImg(infoImg[1],img2);
+                    break;
+                case 2:
+                    img3.setVisibility(View.VISIBLE);
+                    SXUtils.getInstance(activity).GlideSetImg(infoImg[2],img3);
+                    break;
+                case 3:
+                    img4.setVisibility(View.VISIBLE);
+                    SXUtils.getInstance(activity).GlideSetImg(infoImg[3],img4);
+                    break;
+            }
+
+        }
+//        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(img1);
+//        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(img2);
+//        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dg).into(img3);
+//        Glide.with(activity).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_jd).into(img4);
+    }
+    private void setBanner(String [] bannerImg){
         banner = (Banner) findViewById(R.id.goods_detail_banner);
-//        List<String> images = new ArrayList<String>();
+        List<String> images = new ArrayList<String>();
+        for(int i=0;i<bannerImg.length;i++){
+            images.add(bannerImg[i]);
+        }
 //        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
 //        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
 //        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
-        List<Integer> images = new ArrayList<Integer>();
-        images.add(R.mipmap.img_jd);
-        images.add(R.mipmap.img_dg);
-        images.add(R.mipmap.img_dy);
+//        List<Integer> images = new ArrayList<Integer>();
+//        images.add(R.mipmap.img_jd);
+//        images.add(R.mipmap.img_dg);
+//        images.add(R.mipmap.img_dy);
 
         List<String> titlestr = new ArrayList<String>();
         titlestr.add("我是第一个图片");
@@ -205,7 +235,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             titleRelay.setVisibility(View.VISIBLE);
             disTitleRel.setVisibility(View.GONE);
         }
-        Logs.i(y+"============"+(xxxxlin.getHeight()+"==="+banner.getHeight()));
+//        Logs.i(y+"============"+(xxxxlin.getHeight()+"==="+banner.getHeight()));
         if(y >= xxxxlin.getHeight()/2){
             xxTv.setTextColor(getResources().getColor(R.color.col_999));
             xxLine.setBackgroundResource(R.color.transparent);
@@ -357,7 +387,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 String jsonstr="";
                 try {
                     JSONObject jso = new JSONObject(jsonObject.toString());
-                 jsonstr = jso.getString("dataset");
+                    jsonstr = jso.getString("dataset");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -18,6 +18,16 @@ public class GoodsDetailInfoEntity {
     private String goodsNickname;
     private String goodsPlace;
     private String originalImg;
+    private String albumImg;
+
+    public String getAlbumImg() {
+        return albumImg;
+    }
+
+    public void setAlbumImg(String albumImg) {
+        this.albumImg = albumImg;
+    }
+
     private List<GoodsDetailSkuListEntity> skuList;
 
     public String getGoodsCode() {

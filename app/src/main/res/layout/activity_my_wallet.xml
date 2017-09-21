@@ -24,72 +24,78 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
-            <LinearLayout
-                android:id="@+id/acc_manage_info_lin"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:padding="15dp">
-
-                <ImageView
-                    android:id="@+id/acc_manage_headimg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/wallet_my_img"/>
+                android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/acc_manage_info_lin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    >
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:padding="15dp">
 
-                    <RelativeLayout
+                    <ImageView
+                        android:id="@+id/acc_manage_headimg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/wallet_my_img"/>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
                         >
 
-                        <TextView
-                            android:id="@+id/wallet_name_tv"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="账号余额(元)"
-                            android:textColor="@color/col_888"
-                            android:textSize="@dimen/ac_text_size_12"/>
+                            android:layout_gravity="center_vertical"
+                            >
 
-                        <TextView
-                            android:id="@+id/wallet_total_amt_tv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/wallet_name_tv"
-                            android:layout_marginTop="5dp"
-                            android:text=""
-                            android:textColor="@color/col_333"
-                            android:textSize="@dimen/ac_text_size_16"/>
+                            <TextView
+                                android:id="@+id/wallet_name_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="账号余额(元)"
+                                android:textColor="@color/col_888"
+                                android:textSize="@dimen/ac_text_size_12"/>
 
-                        <TextView
-                            android:paddingTop="5dp"
-                            android:paddingBottom="5dp"
-                            android:id="@+id/wallet_topup_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/topup_button_selector"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:text="提现"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"/>
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/wallet_total_amt_tv"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/wallet_name_tv"
+                                android:layout_marginTop="5dp"
+                                android:text=""
+                                android:textColor="@color/col_333"
+                                android:textSize="@dimen/ac_text_size_16"/>
+
+                            <TextView
+                                android:paddingTop="5dp"
+                                android:paddingBottom="5dp"
+                                android:id="@+id/wallet_topup_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/topup_button_selector"
+                                android:paddingLeft="25dp"
+                                android:paddingRight="25dp"
+                                android:text="提现"
+                                android:textColor="@color/white"
+                                android:textSize="16sp"/>
+                        </RelativeLayout>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+                <include layout="@layout/layout_no_info"/>
+            </RelativeLayout>
             <LinearLayout
                 android:visibility="gone"
                 android:id="@+id/wallet_counp_liny"
@@ -211,7 +217,7 @@
                                 android:background="@drawable/my_msg_shap"
                                 android:gravity="center_horizontal|center_vertical"
                                 android:padding="2dp"
-                                android:text="13"
+                                android:text="0"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/ac_text_size_12"
                                 android:textStyle="bold"/>
@@ -225,49 +231,49 @@
                             android:textColor="@color/col_333"
                             android:textSize="@dimen/ac_text_size_12"/>
                     </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/wallet_used_lin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/white_gray_selector"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
+                    <LinearLayout
+                        android:id="@+id/wallet_used_lin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_gray_selector"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
+                        <FrameLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:src="@mipmap/yhj_used"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:src="@mipmap/yhj_used"/>
+
+                            <TextView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="right"
+                                android:background="@drawable/my_msg_shap"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:padding="2dp"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/ac_text_size_12"
+                                android:textStyle="bold"/>
+                        </FrameLayout>
 
                         <TextView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/my_msg_shap"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:padding="2dp"
-                            android:text="9"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/ac_text_size_12"
-                            android:textStyle="bold"/>
-                    </FrameLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="已过期"
-                        android:textColor="@color/col_333"
-                        android:textSize="@dimen/ac_text_size_12"/>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="已过期"
+                            android:textColor="@color/col_333"
+                            android:textSize="@dimen/ac_text_size_12"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
