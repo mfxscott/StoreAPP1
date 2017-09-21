@@ -81,7 +81,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         EventBus.getDefault().register(this);
         if(SXUtils.getInstance(activity).IsLogin())
             GetCarList();
-
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;
     }
@@ -327,6 +326,27 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             }
         }
         return priceTotal+"";
+    }
+    /**
+     * 获取被选中的商品skucode 用于删除单选商品
+     * @return
+     */
+    public List<String> getCarTotalSkucode(){
+        List<String> skuList = new ArrayList<>();
+        float priceTotal = 0;
+        Iterator<String> iter = storesimpAdapter.simpAdapter.goodsMap.keySet().iterator();
+        for(int i=0;i<shopList.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = storesimpAdapter.simpAdapter.goodsMap.get(key);
+                if(value){
+                    int postions = Integer.parseInt(key);
+                    skuList.add(shopList.get(i).getShoppingCartLines().get(postions).getSkuBarcode());
+//                    priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSkuPrice());
+                }
+            }
+        }
+        return skuList;
     }
     /**
      * 得到所有商品加入购物车数量

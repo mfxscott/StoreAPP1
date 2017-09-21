@@ -64,7 +64,7 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         rel.setOnClickListener(this);
         RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
         addacc.setOnClickListener(this);
-        if(AppClient.USERROLETAG.equals("64")){
+        if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("4") ){
             tvname.setText(userinfo.getAcount()+"");
         }else{
             tvname.setText(userinfo.getShopName()+"");
@@ -105,22 +105,6 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 bundle.putParcelable("userinfo",userinfo);
                 intent.putExtras(bundle);
                 startActivity(intent);
-//                DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(AccManageActivity.this, new DatePickerPopWin.OnDatePickedListener() {
-//                    @Override
-//                    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
-//                        Toast.makeText(AccManageActivity.this, dateDesc, Toast.LENGTH_SHORT).show();
-//                    }
-//                }).textConfirm("CONFIRM") //text of confirm button
-//                        .textCancel("CANCEL") //text of cancel button
-//                        .btnTextSize(16) // button text size
-//                        .viewTextSize(25) // pick view text size
-//                        .colorCancel(Color.parseColor("#999999")) //color of cancel button
-//                        .colorConfirm(Color.parseColor("#009900"))//color of confirm button
-//                        .minYear(1990) //min year in loop
-//                        .maxYear(2550) // max year in loop
-//                        .dateChose("2013-11-11") // date chose when init popwindow
-//                        .build();
-//                pickerPopWin.showPopWin(AccManageActivity.this);
                 break;
             case R.id.acc_manage_security_rel:
                 Intent sec = new Intent(activity,AccSecurityActivity.class);

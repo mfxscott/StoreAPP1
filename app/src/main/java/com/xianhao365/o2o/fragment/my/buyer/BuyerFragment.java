@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.BuyerBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.BuyerQHGridViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.fragment.my.buyer.purchase.CGBillListActivity;
+import com.xianhao365.o2o.fragment.my.store.AccManageActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
+import com.xianhao365.o2o.utils.view.GlideRoundTransform;
 import com.xianhao365.o2o.utils.view.MyGridView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,19 +61,23 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     private MyGridView gridView;
     private MyGridView qsgridView;
     private RelativeLayout cgOrderListLin;
+    @BindView(R.id.my_acc_mamage_tv)
+    TextView  accmanage;
     @BindView(R.id.buyer_hhr_liny)
     LinearLayout qhshLiny;
-//    @BindView(R.id.buyer_wallet_have_liny)//有钱包相关数据
-     LinearLayout walletHaveLin;
-//    @BindView(R.id.buyer_wallet_null_liny)//没有钱包相关数据
-     LinearLayout walletNullLin;
+    //    @BindView(R.id.buyer_wallet_have_liny)//有钱包相关数据
+    LinearLayout walletHaveLin;
+    //    @BindView(R.id.buyer_wallet_null_liny)//没有钱包相关数据
+    LinearLayout walletNullLin;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private Unbinder unbinder;
+    private UserInfoEntity userinfo;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my, null);
         activity = getActivity();
-        unbinder =  ButterKnife.bind(activity);
+        unbinder =   ButterKnife.bind(this, view);
         manager = new OKManager(activity);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
@@ -81,7 +89,8 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
      */
     private void LoadData(){
         if(SXUtils.getInstance(activity).IsLogin()) {
-            GetUserInfoHttp();
+//            GetUserInfoHttp();
+            getUserInfoHttp();
 //        GetGYSBillListHttp();
 //        GetOrderListHttp();
             GetUserWalletHttp();
@@ -89,7 +98,9 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     }
     //初始化
     private void init(){
-         walletNullLin = (LinearLayout) view.findViewById(R.id.buyer_wallet_null_liny);
+        accmanage.setOnClickListener(this);
+
+        walletNullLin = (LinearLayout) view.findViewById(R.id.buyer_wallet_null_liny);
         walletHaveLin = (LinearLayout) view.findViewById(R.id.buyer_wallet_have_liny);
         if(AppClient.USERROLETAG.equals("16")){
             qhshLiny.setVisibility(View.VISIBLE);
@@ -139,11 +150,22 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
 
             }
         });
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.buyer_center_swipe_container);
+//        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //重新刷新页面
+//                myWebView.reload();
+//                getUserInfoHttp();
+                LoadData();
+            }
+        });
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                        UserInfoEntity userinfo = (UserInfoEntity) msg.obj;
+                         userinfo = (UserInfoEntity) msg.obj;
                         initUserInfo(userinfo);
                         break;
                     case 1001:
@@ -152,6 +174,9 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                     case AppClient.ERRORCODE:
                         String str = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(str+"");
+                }
+                if(swipeRefreshLayout != null){
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 return true;
             }
@@ -162,8 +187,8 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         TextView name = (TextView) view.findViewById(R.id.buyer_name_tv);
         ImageView headImg = (ImageView) view.findViewById(R.id.my_head_img);
 
-//        Glide.with(activity).load((String)userInfo.getIcon()).placeholder(R.mipmap.default_head)
-//                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headImg);
+        Glide.with(activity).load((String)userInfo.getIcon()).placeholder(R.mipmap.default_head)
+                .error(R.mipmap.default_head).transform( new GlideRoundTransform(activity)).into(headImg);
         name.setText(userInfo.getUsername());
 
     }
@@ -184,6 +209,13 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                 Intent cgbill = new Intent(activity,CGBillListActivity.class);
                 cgbill.putExtra("state","");
                 startActivity(cgbill);
+                break;
+            case R.id.my_acc_mamage_tv:
+                Intent manage = new Intent(activity,AccManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("userinfo",userinfo);
+                manage.putExtras(bundle);
+                startActivity(manage);
                 break;
         }
     }
@@ -257,8 +289,6 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         }
         return list;
     }
-
-
     /**
      * 获取供应商信息
      */
@@ -266,7 +296,6 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ISPPLY_NFO, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-
                 UserInfoEntity gde = null;
                 gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
                 Message msg = new Message();
@@ -285,7 +314,30 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         });
     }
 
+    /**
+     * 获取不同用户信息
+     */
+    public void getUserInfoHttp() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what =AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
 
+            }
+        });
+    }
     /**
      * 获取用户余额
      */
@@ -293,6 +345,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
+
                 walletHaveLin.setVisibility(View.VISIBLE);
 //                WalletInfoEntity gde = null;
 //                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),WalletInfoEntity.class);

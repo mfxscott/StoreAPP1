@@ -81,8 +81,8 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         private String dateChose = getStrDate();
         private int colorCancel = Color.parseColor("#999999");
         private int colorConfirm = Color.parseColor("#303F9F");
-        private int btnTextSize = 16;//text btnTextsize of cancel and confirm button
-        private int viewTextSize = 25;
+        private int btnTextSize = 14;//text btnTextsize of cancel and confirm button
+        private int viewTextSize = 14;
 
         public Builder minYear(int minYear){
             this.minYear = minYear;
@@ -168,7 +168,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         String json = SXUtils.getInstance(mContext).getFromAssets("areas.json");
          addressList = ResponseData.getInstance(mContext).parseJsonArray(json.toString(), AddressProvinceEntity.class);
         Logs.i("=======>"+addressList.size());
-        contentView = LayoutInflater.from(mContext).inflate(showDayMonthYear ? R.layout.layout_date_picker_inverted : R.layout.layout_date_picker, null);
+        contentView = LayoutInflater.from(mContext).inflate(R.layout.layout_date_picker, null);
         cancelBtn = (Button) contentView.findViewById(R.id.btn_cancel);
         cancelBtn.setTextColor(colorCancel);
         cancelBtn.setTextSize(btnTextsize);
@@ -186,16 +186,16 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
 //        dayLoopView.setNotLoop();
 //
 //        //set loopview text size
-//        yearLoopView.setTextSize(25);
-//        monthLoopView.setTextSize(25);
-//        dayLoopView.setTextSize(25);
+        yearLoopView.setTextSize(18);
+        monthLoopView.setTextSize(18);
+        dayLoopView.setTextSize(18);
 
         //set checked listen
         yearLoopView.setLoopListener(new LoopScrollListener() {
             @Override
             public void onItemSelect(int item) {
                 yearPos = item;
-                initDayPickerView();
+                initMonthPickerView();
             }
         });
         monthLoopView.setLoopListener(new LoopScrollListener() {
@@ -213,7 +213,7 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
         });
 
         initPickerViews(); // init year and month loop view
-        initDayPickerView(); //init day loop view
+//        initDayPickerView(); //init day loop view
 
         cancelBtn.setOnClickListener(this);
         confirmBtn.setOnClickListener(this);
@@ -249,37 +249,38 @@ public class DatePickerPopWin extends PopupWindow implements OnClickListener {
             yearList.add(addressList.get(i).getLabel());
         }
 
-        for (int j = 0; j < 12; j++) {
-            monthList.add(j+"");
+        for (int j = 0; j < addressList.get(0).getChildren().size(); j++) {
+            monthList.add(addressList.get(0).getChildren().get(j).getLabel());
         }
-     Logs.i("+++++++++++++"+addressList.get(0).getChildren().size());
+        for (int i = 0; i < addressList.get(0).getChildren().get(0).getChildren().size(); i++) {
+            dayList.add(addressList.get(0).getChildren().get(0).getChildren().get(i).getLabel());
+        }
         yearLoopView.setDataList(yearList);
         yearLoopView.setInitPosition(0);
 
-        monthLoopView.setDataList((ArrayList) monthList);
+        monthLoopView.setDataList(monthList);
         monthLoopView.setInitPosition(0);
+        dayLoopView.setDataList(dayList);
+        dayLoopView.setInitPosition(0);
     }
     /**
      * Init day item
      */
     private void initDayPickerView() {
-
-        int dayMaxInMonth;
-        Calendar calendar = Calendar.getInstance();
-        dayList = new ArrayList<String>();
-
-        calendar.set(Calendar.YEAR, minYear + yearPos);
-        calendar.set(Calendar.MONTH, monthPos);
-
-        //get max day in month
-        dayMaxInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        for (int i = 0; i < dayMaxInMonth; i++) {
-            dayList.add(format2LenStr(i + 1));
+        dayList.clear();
+        for (int i = 0; i < addressList.get(yearPos).getChildren().get(monthPos).getChildren().size(); i++) {
+            dayList.add(addressList.get(yearPos).getChildren().get(monthPos).getChildren().get(i).getLabel());
         }
-
-        dayLoopView.setDataList((ArrayList) dayList);
-        dayLoopView.setInitPosition(dayPos);
+        dayLoopView.setDataList(dayList);
+        dayLoopView.setInitPosition(0);
+    }
+    private void initMonthPickerView() {
+        monthList.clear();
+        for (int i = 0; i < addressList.get(yearPos).getChildren().size(); i++) {
+            monthList.add(addressList.get(yearPos).getChildren().get(i).getLabel());
+        }
+        monthLoopView.setDataList(monthList);
+        monthLoopView.setInitPosition(0);
     }
 
     /**

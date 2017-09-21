@@ -267,7 +267,6 @@ public class LoopView extends View {
             }
             count++;
         }
-
         //draw top and bottom line
         canvas.drawLine(0.0F, mTopLineY, mWidgetWidth, mTopLineY, mCenterLinePaint);
         canvas.drawLine(0.0F, mBottomLineY, mWidgetWidth, mBottomLineY, mCenterLinePaint);

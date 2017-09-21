@@ -51,24 +51,29 @@
 
                 <com.xianhao365.o2o.fragment.my.pop.LoopView
                     android:id="@+id/picker_day"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:maxEms="4"
+                    android:ellipsize="end"
                     android:layout_weight="1" />
 
                 <com.xianhao365.o2o.fragment.my.pop.LoopView
                     android:id="@+id/picker_month"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="1dp"
                     android:layout_weight="1" />
 
                 <com.xianhao365.o2o.fragment.my.pop.LoopView
+                    android:ellipsize="end"
                     android:id="@+id/picker_year"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1" />
             </LinearLayout>
+
         </RelativeLayout>
     </LinearLayout>
 

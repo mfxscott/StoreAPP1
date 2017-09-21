@@ -121,7 +121,7 @@
                 android:text="门店地址"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <EditText
+            <TextView
                 android:id="@+id/acc_store_add_edt"
                 android:textSize="@dimen/ac_text_size_14"
                 android:padding="5dp"
@@ -257,7 +257,7 @@
                 android:text="收货地址"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
-            <EditText
+            <TextView
                 android:id="@+id/acc_info_address_edt"
                 android:textSize="@dimen/ac_text_size_14"
                 android:padding="5dp"

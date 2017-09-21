@@ -633,7 +633,7 @@ public class SXUtils {
      * @return
      */
     public boolean IsLogin(){
-        if(TextUtils.isEmpty(AppClient.USER_ID) ||TextUtils.isEmpty(AppClient.USER_SESSION)){
+        if(TextUtils.isEmpty(AppClient.USER_ID) || TextUtils.isEmpty(AppClient.USER_SESSION)){
             Intent intent = new Intent(mContext, LoginNameActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("isEnter","12");

@@ -4,7 +4,10 @@
               android:layout_height="match_parent"
               android:background="@color/app_bg"
               tools:context="com.xianhao365.o2o.fragment.my.store.StoreMyFragment">
-
+    <com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout
+        android:id="@+id/buyer_center_swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -380,4 +383,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+    </com.xianhao365.o2o.utils.view.WebViewSwipeRefreshLayout>
 </LinearLayout>
