@@ -1,6 +1,9 @@
 package com.xianhao365.o2o.adapter;
 
 import android.app.Activity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,24 +11,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.FoodActionCallback;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.bill.CategoryListEntity;
+import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
 
 /**
- * 首页九宫格
+ * 常用清单
  * @author mfx
  * @time  2017/7/10 10:13
  */
 public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClickListener{
-    private  List<GoodsInfoEntity> result;
+    private   List<CategoryListEntity> result;
     private final LayoutInflater mLayoutInflater;
     private Activity context;
     private FoodActionCallback callback;
-    public HomeBillGridViewAdapter(Activity context,  List<GoodsInfoEntity> result,FoodActionCallback callback) {
+    public HomeBillGridViewAdapter(Activity context,   List<CategoryListEntity> result,FoodActionCallback callback) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
@@ -46,7 +49,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
         return position;
     }
     public View getView(final int position, View view, ViewGroup parent) {
-        GoodsInfoEntity goodsinfo = result.get(position);
+        CategoryListEntity categInfo = result.get(position);
         LifeViewHolder vh;
         if (view == null) {
             vh = new LifeViewHolder();
@@ -56,21 +59,18 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
             vh.delImageView = (ImageView) view.findViewById(R.id.main_bill_item_del_iv);
             vh.addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
             vh.addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
+            vh.recyclerView = (RecyclerView) view.findViewById(R.id.bill_item_recycler);
             view.setTag(vh);
         } else {
             vh = (LifeViewHolder) view.getTag();
         }
 
-
-        vh.mTextView.setText(goodsinfo.getGoodsName());
-//
-//        vh.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent( vh.mView.getContext(), GoodsDetailActivity.class);
-//                vh.mView.getContext().startActivity(intent);
-//            }
-//        });
+        vh.mTextView.setText(categInfo.getGoodsName());
+        vh.recyclerView.setLayoutManager(new LinearLayoutManager(vh.recyclerView.getContext()));
+        vh.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(vh.recyclerView.getContext(), categInfo);
+        vh.recyclerView.setAdapter(simpAdapter);
+        SXUtils.getInstance(context).GlideSetImg(categInfo.getOriginalImg(),vh.mImageView);
         vh.delImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,27 +79,6 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
 //                removeData(position);
             }
         });
-        if(position%2 ==0){
-            Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_dy).into(vh.mImageView);
-        }else{
-            Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_whr).into(vh.mImageView);
-
-        }
-        vh.addcar1.setOnClickListener(this);
-        vh.addcar2.setOnClickListener(this);
-//        vh.addcar1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        vh.addcar2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        goodsinfo
         return view;
     }
     class LifeViewHolder{
@@ -107,5 +86,6 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
        ImageView delImageView;
        TextView mTextView;
        TextView addcar1,addcar2;
+        RecyclerView recyclerView;
     }
 }

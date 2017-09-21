@@ -96,11 +96,11 @@ public class CGOrderDetailActivity extends BaseActivity implements View.OnClickL
                 takeOrder.setText("立即发货");
                 break;
             case 30:
-                takeOrder.setText("已收货");
+                takeOrder.setText("待收货");
                 takeOrder.setTextColor(getResources().getColor(R.color.orange));
                 takeOrder.setBackgroundResource(R.color.transparent);
                 break;
-            case 44:
+            case 40:
                 takeOrder.setText("已完成");
                 takeOrder.setTextColor(getResources().getColor(R.color.orange));
                 takeOrder.setBackgroundResource(R.color.transparent);

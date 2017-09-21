@@ -62,6 +62,8 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     private WalletInfoEntity walletInfo;
     @BindView(R.id.wallet_total_amt_tv)
     TextView walletTotalAmt;
+    @BindView(R.id.wallet_counp_liny)
+    LinearLayout walletCouponLin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
             walletTopupBtn.setText("充值");
         }else{
             walletTopupBtn.setText("提现");
+
+        }
+        if(AppClient.USERROLETAG.equals("32")||AppClient.USERROLETAG.equals("64")){
+            walletCouponLin.setVisibility(View.VISIBLE);
         }
         walletYhjRel = (RelativeLayout) findViewById(R.id.wallet_yhj_rel);
         walletTopupBtn.setOnClickListener(this);

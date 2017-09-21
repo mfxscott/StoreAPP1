@@ -77,7 +77,7 @@ public class SRDetailListAdapter extends BaseAdapter {
         else if(tradeType.equals("WITHDRAW")){
             vh.type.setText("提现");
         }
-        vh.time.setText("");
+        vh.time.setText(transInfo.getCreated());
         vh.order.setText(transInfo.getBillNo()+"");
         vh.state.setText("已到账");
         return convertView;

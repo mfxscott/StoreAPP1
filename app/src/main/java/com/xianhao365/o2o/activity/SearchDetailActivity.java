@@ -2,6 +2,8 @@ package com.xianhao365.o2o.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.TypeInfoRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.goodstype.GoodsDataSetEntity;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +39,7 @@ private Activity activity;
     private RecyclerView recyclerView;
     private String searchValueStr;
     private SwipyRefreshLayout mSwipyRefreshLayout;
+    private Handler hand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +47,7 @@ private Activity activity;
         activity = this;
         searchValueStr = this.getIntent().getStringExtra("searchValue");
         initView();
+        GetGoodsTypeInfoHttp(searchValueStr+"");
     }
     private void initView(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.search_detail_swipyrefreshlayout);
@@ -80,8 +92,35 @@ private Activity activity;
         recyclerView = (RecyclerView) findViewById(R.id.search_detail_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final TypeInfoRecyclerViewAdapter simpAdapter = new TypeInfoRecyclerViewAdapter(activity,getTypeInfoData());
-        recyclerView.setAdapter(simpAdapter);
+//        final TypeInfoRecyclerViewAdapter simpAdapter = new TypeInfoRecyclerViewAdapter(activity,getTypeInfoData());
+//        recyclerView.setAdapter(simpAdapter);
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    //热词搜索成功
+                    case 1000:
+                        List<GoodsInfoEntity> goodsDetaiLIst = (List<GoodsInfoEntity>) msg.obj;
+                        if(goodsDetaiLIst == null || goodsDetaiLIst.size()<=0) {
+                            break;
+                        }
+                        if(goodsDetaiLIst.size() >9){
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                        }else{
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+
+                        }
+                        TypeInfoRecyclerViewAdapter   simpAdapter = new TypeInfoRecyclerViewAdapter(activity,goodsDetaiLIst);
+                        recyclerView.setAdapter(simpAdapter);
+                        break;
+                    case AppClient.ERRORCODE:
+                        String errormsg = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(errormsg+"");
+                        break;
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
     }
 
     /**
@@ -117,5 +156,37 @@ private Activity activity;
 
         }
         return typeList;
+    }
+    public void GetGoodsTypeInfoHttp(String goodsName){
+        if(recyclerView != null)
+            recyclerView.setAdapter(null);
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("goodsName",goodsName);
+//        httpParams.put("categoryCode",cid);
+        HttpUtils.getInstance(activity).requestPost(true, AppClient.GOODS_LIST, httpParams, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                String jsobj="";
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                    jsobj = jsonObject1.getString("responseData");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                GoodsDataSetEntity gde = (GoodsDataSetEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsobj,GoodsDataSetEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde.getDataset();
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+
     }
 }

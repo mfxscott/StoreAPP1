@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <LinearLayout
-         android:background="@drawable/white_gray_selector"
+        android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -15,11 +15,12 @@
             android:src="@mipmap/loading_img"
             android:layout_width="@dimen/goods_img_size"
             android:layout_height="@dimen/goods_img_size"/>
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <RelativeLayout
+                android:id="@+id/bill_item_type_rely"
                 android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -46,16 +47,24 @@
                     android:layout_height="1dp"
                     android:background="@color/line_bg" />
             </RelativeLayout>
-            <LinearLayout
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/bill_item_type_rely"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <LinearLayout
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <android.support.v7.widget.RecyclerView
                         android:scrollbars="none"
+                        android:layout_centerVertical="true"
                         android:id="@+id/bill_item_recycler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -149,9 +158,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
-            </LinearLayout>
+            </RelativeLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
     <View

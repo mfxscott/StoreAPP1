@@ -18,20 +18,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.SearchHotWordEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.FlowLayout;
 import com.xianhao365.o2o.utils.view.MyGridView;
 import com.xianhao365.o2o.utils.view.MyViewGroup;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
+import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
     //    private GridView gridView;
@@ -106,7 +105,7 @@ public class SearchActivity extends AppCompatActivity {
                 finish();
             }
         });
-        searchHot();
+//        searchHot();
 //        gridView = (GridView) findViewById(R.id.search_hot_mygridv);
 //        searchHotAdapter= new SearchHotAdapter(activity,getTypeInfoData());
 //        gridView.setAdapter(searchHotAdapter);
@@ -122,10 +121,12 @@ public class SearchActivity extends AppCompatActivity {
                 switch (msg.what) {
                     //热词搜索成功
                     case 1000:
-                        SXUtils.getInstance(activity).ToastCenter("登录成功");
+                        List<SearchHotWordEntity> goodsTypeList = (List<SearchHotWordEntity>) msg.obj;
+//                        SXUtils.getInstance(activity).ToastCenter("登录成功");
 //                        Intent mainintent = new Intent(activity, MainFragmentActivity.class);
 //                        startActivity(mainintent);
-                        finish();
+//                        finish();
+                        searchHot(goodsTypeList);
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
@@ -140,12 +141,12 @@ public class SearchActivity extends AppCompatActivity {
     /**
      * 热门搜索词 按钮样式
      */
-    private void searchHot() {
+    private void searchHot(List<SearchHotWordEntity> goodsTypeList) {
         FlowLayout flowLayout = (FlowLayout) findViewById(R.id.flow_layout);
         // 循环添加TextView到容器
-        for (int i = 0; i < mDatas.length; i++) {
+        for (int i = 0; i < goodsTypeList.size(); i++) {
             final TextView view = new TextView(this);
-            view.setText(mDatas[i]);
+            view.setText(goodsTypeList.get(i).getSearchWord());
             view.setTextColor(getResources().getColor(R.color.col_333));
             view.setPadding(5, 5, 5, 5);
             view.setGravity(Gravity.CENTER);
@@ -261,30 +262,52 @@ public class SearchActivity extends AppCompatActivity {
 
         return searchlist;
     }
-    public void getHotSearchHttp(){
-        RequestBody requestBody = new FormBody.Builder()
-//                .add("mobile", mobile)
-//                .add("password",psdStr)
-//                .add("loginType","1")//0=验证码登录,1=密码登录
-                .build();
-        new OKManager(this).sendStringByPostMethod(requestBody, AppClient.HOTSEARCH, new OKManager.Func4() {
+//    public void getHotSearchHttp(){
+//        RequestBody requestBody = new FormBody.Builder()
+////                .add("mobile", mobile)
+////                .add("password",psdStr)
+////                .add("loginType","1")//0=验证码登录,1=密码登录
+//                .build();
+//        new OKManager(this).sendStringByPostMethod(requestBody, AppClient.HOTSEARCH, new OKManager.Func4() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+//                Logs.i("热门搜索词汇发送成功返回参数=======",jsonObject.toString());
+//                try {
+//                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+//
+////                    "responseData":{"searchWordNo",123456,"searchWord":"周周周"}
+//
+////                    AppClient.USER_ID = jsonObject1.getString("searchWordNo");
+////                    AppClient.USER_SESSION = jsonObject1.getString("searchWord");
+////                    AppClient.USERROLETAG = jsonObject1.getString("tag");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Message msg = new Message();
+//                msg.what = 1000;
+//                msg.obj = "";
+//                hand.sendMessage(msg);
+//            }
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+//            }
+//        });
+//    }
+
+    public void getHotSearchHttp() {
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.HOTSEARCH, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("热门搜索词汇发送成功返回参数=======",jsonObject.toString());
-                try {
-                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
-
-//                    "responseData":{"searchWordNo",123456,"searchWord":"周周周"}
-
-//                    AppClient.USER_ID = jsonObject1.getString("searchWordNo");
-//                    AppClient.USER_SESSION = jsonObject1.getString("searchWord");
-//                    AppClient.USERROLETAG = jsonObject1.getString("tag");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Logs.i("常用发送成功返回参数=======",jsonObject.toString());
+                List<SearchHotWordEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(jsonObject.toString(), SearchHotWordEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;
-                msg.obj = "";
+                msg.obj = goodsTypeList;
                 hand.sendMessage(msg);
             }
             @Override
@@ -296,4 +319,5 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+
 }

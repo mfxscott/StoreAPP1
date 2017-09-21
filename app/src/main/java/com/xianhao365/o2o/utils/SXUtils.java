@@ -34,10 +34,12 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.entity.MessageEvent;
+import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.OKManager;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -50,6 +52,7 @@ import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
@@ -666,7 +669,7 @@ public class SXUtils {
      */
     public  String getFromAssets(String fileName) {
         try {
-            InputStreamReader inputReader = new InputStreamReader( mContext.getResources().getAssets().open(fileName) );
+            InputStreamReader inputReader = new InputStreamReader( mContext.getResources().getAssets().open(fileName));
             BufferedReader bufReader = new BufferedReader(inputReader);
             String line="";
             String Result="";
@@ -677,6 +680,34 @@ public class SXUtils {
             e.printStackTrace();
         }
         return "";
+    }
+    public Dialog tipDialog;
+    public void MyDialogView(Context context,String title, String contentStr, View.OnClickListener onClickListener) {
+        tipDialog = new AlertDialog.Builder(context).create();
+        tipDialog.show();
+        tipDialog.setCancelable(true);
+        tipDialog.setCanceledOnTouchOutside(false);
+        Window window = tipDialog.getWindow();
+        window.setContentView(R.layout.common_dialog);
+        LinearLayout cancel = (LinearLayout) window.findViewById(R.id.dialog_liny);
+        TextView content = (TextView) window.findViewById(R.id.dialog_message_tv);
+        TextView titletv = (TextView) window.findViewById(R.id.dialog_title_tv);
+        TextView rightBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
+        TextView leftBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
+        View vi = window.findViewById(R.id.add_bank_dialog_view);
+        vi.setVisibility(View.GONE);
+        vi.setPadding(0, 2, 0, 2);
+        leftBtn.setText("确定");
+        titletv.setText(title);
+        ImageView iv = (ImageView) window.findViewById(R.id.dialog_close_iv);
+        iv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tipDialog.dismiss();
+            }
+        });
+        content.setText(contentStr);
+        cancel.setOnClickListener(onClickListener);
     }
     /**
      * 添加或者删除购物车
@@ -714,32 +745,30 @@ public class SXUtils {
             }
         });
     }
-    public Dialog tipDialog;
-    public void MyDialogView(Context context,String title, String contentStr, View.OnClickListener onClickListener) {
-        tipDialog = new AlertDialog.Builder(context).create();
-        tipDialog.show();
-        tipDialog.setCancelable(true);
-        tipDialog.setCanceledOnTouchOutside(false);
-        Window window = tipDialog.getWindow();
-        window.setContentView(R.layout.common_dialog);
-        LinearLayout cancel = (LinearLayout) window.findViewById(R.id.dialog_liny);
-        TextView content = (TextView) window.findViewById(R.id.dialog_message_tv);
-        TextView titletv = (TextView) window.findViewById(R.id.dialog_title_tv);
-        TextView rightBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
-        TextView leftBtn = (TextView) window.findViewById(R.id.dialog_right_btn);
-        View vi = window.findViewById(R.id.add_bank_dialog_view);
-        vi.setVisibility(View.GONE);
-        vi.setPadding(0, 2, 0, 2);
-        leftBtn.setText("确定");
-        titletv.setText(title);
-        ImageView iv = (ImageView) window.findViewById(R.id.dialog_close_iv);
-        iv.setOnClickListener(new View.OnClickListener() {
+
+    /**
+     * 获取常用清单列表
+     * @param hand
+     */
+    public void getBill(final Handler hand) {
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.getInstance(mContext).requestPost(false, AppClient.COMMONBILL, httpParams, new HttpUtils.requestCallBack() {
             @Override
-            public void onClick(View view) {
-                tipDialog.dismiss();
+            public void onResponse(Object jsonObject) {
+                Logs.i("常用发送成功返回参数=======",jsonObject.toString());
+                List<BillDataSetEntity> goodsTypeList = ResponseData.getInstance(mContext).parseJsonArray(jsonObject.toString(), BillDataSetEntity.class);
+                Message msg = new Message();
+                msg.what = 1009;
+                msg.obj = goodsTypeList;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
             }
         });
-        content.setText(contentStr);
-        cancel.setOnClickListener(onClickListener);
     }
 }

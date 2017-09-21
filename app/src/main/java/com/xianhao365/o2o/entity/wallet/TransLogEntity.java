@@ -10,6 +10,15 @@ public class TransLogEntity {
     private String tradeType;
     private String fundType;
     private String amt;
+    private String created;
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
 
     public String getBillNo() {
         return billNo;

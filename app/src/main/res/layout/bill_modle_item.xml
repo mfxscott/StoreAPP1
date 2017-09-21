@@ -5,6 +5,9 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:background="@drawable/white_gray_selector"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">

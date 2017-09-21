@@ -109,7 +109,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                             Intent mainintent = new Intent(activity, MainFragmentActivity.class);
                             startActivity(mainintent);
                         }else{
-                            //登录成狗刷新购物车和我的数据
+                            //登录成功刷新购物车和我的数据
                             EventBus.getDefault().post(new MessageEvent(1,"login suc"));
                         }
                         finish();

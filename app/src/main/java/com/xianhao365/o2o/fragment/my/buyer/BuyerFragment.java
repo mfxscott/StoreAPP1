@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -27,15 +28,22 @@ import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * ***************************
  * 初始我的界面 区分类型 合伙人，联创中心，供货商
+ * 4:供应商,8:联创中心,16:合伙人,32:摊主店铺,64:消费者,
  * @author mfx
  * 深圳市优讯信息技术有限公司
  * 17/2/16 上午11:56
@@ -49,12 +57,19 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     private MyGridView gridView;
     private MyGridView qsgridView;
     private RelativeLayout cgOrderListLin;
-
+    @BindView(R.id.buyer_hhr_liny)
+    LinearLayout qhshLiny;
+//    @BindView(R.id.buyer_wallet_have_liny)//有钱包相关数据
+     LinearLayout walletHaveLin;
+//    @BindView(R.id.buyer_wallet_null_liny)//没有钱包相关数据
+     LinearLayout walletNullLin;
+    private Unbinder unbinder;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_my, null);
         activity = getActivity();
+        unbinder =  ButterKnife.bind(activity);
         manager = new OKManager(activity);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.red);
         init();
@@ -74,6 +89,11 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     }
     //初始化
     private void init(){
+         walletNullLin = (LinearLayout) view.findViewById(R.id.buyer_wallet_null_liny);
+        walletHaveLin = (LinearLayout) view.findViewById(R.id.buyer_wallet_have_liny);
+        if(AppClient.USERROLETAG.equals("16")){
+            qhshLiny.setVisibility(View.VISIBLE);
+        }
         TextView  buyerTv = (TextView) view.findViewById(R.id.buyer_topup_btn);
         buyerTv.setOnClickListener(this);
         RelativeLayout wallet = (RelativeLayout) view.findViewById(R.id.buyer_per_wallet);
@@ -126,6 +146,9 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
                         UserInfoEntity userinfo = (UserInfoEntity) msg.obj;
                         initUserInfo(userinfo);
                         break;
+                    case 1001:
+
+                        break;
                     case AppClient.ERRORCODE:
                         String str = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(str+"");
@@ -138,7 +161,6 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     private void initUserInfo(UserInfoEntity userInfo){
         TextView name = (TextView) view.findViewById(R.id.buyer_name_tv);
         ImageView headImg = (ImageView) view.findViewById(R.id.my_head_img);
-
 
 //        Glide.with(activity).load((String)userInfo.getIcon()).placeholder(R.mipmap.default_head)
 //                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity, 60)).into(headImg);
@@ -244,6 +266,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ISPPLY_NFO, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
+
                 UserInfoEntity gde = null;
                 gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
                 Message msg = new Message();
@@ -270,22 +293,24 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_WALLET, null, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
+                walletHaveLin.setVisibility(View.VISIBLE);
+//                WalletInfoEntity gde = null;
+//                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),WalletInfoEntity.class);
+//                Message msg = new Message();
+//                msg.what = 1001;
+//                msg.obj = gde;
+//                hand.sendMessage(msg);
             }
             @Override
             public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = "供应商钱包="+strError;
-                hand.sendMessage(msg);
-
+                walletNullLin.setVisibility(View.VISIBLE);
             }
         });
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+        EventBus.getDefault().unregister(this);
+    }
 }

@@ -1,36 +1,22 @@
 package com.xianhao365.o2o.entity.bill;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Created by NN on 2017/9/19.
  */
 
-public class BillChirdrenEntity implements Parcelable{
-    private String marketPrice;
-    private String skuBarcode;
-    private String shopPrice;
-    private String goodsModel;
+public class BillChirdrenEntity{
+    private String  goodsModel;
+    private String  marketPrice;
+    private String  shopPrice;
+    private String  skuBarcode;
 
-    protected BillChirdrenEntity(Parcel in) {
-        marketPrice = in.readString();
-        skuBarcode = in.readString();
-        shopPrice = in.readString();
-        goodsModel = in.readString();
+    public String getGoodsModel() {
+        return goodsModel;
     }
 
-    public static final Creator<BillChirdrenEntity> CREATOR = new Creator<BillChirdrenEntity>() {
-        @Override
-        public BillChirdrenEntity createFromParcel(Parcel in) {
-            return new BillChirdrenEntity(in);
-        }
-
-        @Override
-        public BillChirdrenEntity[] newArray(int size) {
-            return new BillChirdrenEntity[size];
-        }
-    };
+    public void setGoodsModel(String goodsModel) {
+        this.goodsModel = goodsModel;
+    }
 
     public String getMarketPrice() {
         return marketPrice;
@@ -38,14 +24,6 @@ public class BillChirdrenEntity implements Parcelable{
 
     public void setMarketPrice(String marketPrice) {
         this.marketPrice = marketPrice;
-    }
-
-    public String getSkuBarcode() {
-        return skuBarcode;
-    }
-
-    public void setSkuBarcode(String skuBarcode) {
-        this.skuBarcode = skuBarcode;
     }
 
     public String getShopPrice() {
@@ -56,24 +34,12 @@ public class BillChirdrenEntity implements Parcelable{
         this.shopPrice = shopPrice;
     }
 
-    public String getGoodsModel() {
-        return goodsModel;
+    public String getSkuBarcode() {
+        return skuBarcode;
     }
 
-    public void setGoodsModel(String goodsModel) {
-        this.goodsModel = goodsModel;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(marketPrice);
-        dest.writeString(skuBarcode);
-        dest.writeString(shopPrice);
-        dest.writeString(goodsModel);
+    public void setSkuBarcode(String skuBarcode) {
+        this.skuBarcode = skuBarcode;
     }
 }
+

@@ -4,15 +4,19 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
@@ -39,6 +43,22 @@ public class AccInfoActivity extends BaseActivity {
     EditText accInfoPersonPhoneEdt;
     @BindView(acc_info_update_btn)
     Button accInfoUpdateBtn;
+    @BindView(R.id.acc_info_name_tv)
+    TextView acount;
+    @BindView(R.id.acc_userinfo_update_liny)
+    LinearLayout userLin;
+    //店铺信息
+    @BindView(R.id.acc_store_add_edt)
+    EditText storeAdd;
+    @BindView(R.id.acc_store_fz_edt)
+    EditText storefzr;
+    @BindView(R.id.acc_store_id_edt)
+    EditText storeId;
+    @BindView(R.id.acc_store_info_edt)
+    EditText storeInfo;
+    @BindView(R.id.acc_storeinfo_update_liny)
+    LinearLayout storeLin;
+
     private Activity activity;
     private Handler hand;
     private UserInfoEntity userinfo;
@@ -51,15 +71,29 @@ public class AccInfoActivity extends BaseActivity {
         Bundle bundle = this.getIntent().getExtras();
         userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
         activity = this;
-        String json = SXUtils.getInstance(activity).getFromAssets("file:///android_asset/areas.json");
+        String json = SXUtils.getInstance(activity).getFromAssets("areas.txt");
+        Logs.i("=======json==="+json);
         initView();
     }
     private void initView() {
         registerBack();
         setTitle("账户信息");
         ImageView headimg = (ImageView) findViewById(R.id.acc_info_headimg);
-        Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.ic_launcher)
+        Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.loading_img)
                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+        acount.setText(userinfo.getAcount()+"");
+        if(AppClient.USERROLETAG.equals("64")){
+        userLin.setVisibility(View.VISIBLE);
+        accInfoUsernameEdt.setText(userinfo.getUsername());
+        accInfoPersonPhoneEdt.setText(userinfo.getMobile());
+        accInfoAddressEdt.setText(userinfo.getProvince()+userinfo.getCity()+userinfo.getDistrict()+userinfo.getAddr());
+        }else{
+            storeLin.setVisibility(View.VISIBLE);
+            storeAdd.setText(userinfo.getProvince()+userinfo.getCity()+userinfo.getDistrict()+userinfo.getAddr());
+            storefzr.setText(userinfo.getManager());
+            storeId.setText("");
+            storeInfo.setText("");
+        }
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {

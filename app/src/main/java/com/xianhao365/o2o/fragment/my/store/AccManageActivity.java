@@ -55,14 +55,19 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         LinearLayout accinfolin = (LinearLayout) findViewById(R.id.acc_manage_info_lin);
         accinfolin.setOnClickListener(this);
         TextView tvname = (TextView) findViewById(R.id.acc_manage_name_tv);
-        tvname.setText(userinfo.getShopName()+"");
+
+
+
         Button loginOut = (Button) findViewById(R.id.login_out_btn);
         loginOut.setOnClickListener(this);
         RelativeLayout  rel = (RelativeLayout) findViewById(R.id.acc_manage_security_rel);
         rel.setOnClickListener(this);
         RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
         addacc.setOnClickListener(this);
-        if(userinfo.getTag().equals("32")){
+        if(AppClient.USERROLETAG.equals("64")){
+            tvname.setText(userinfo.getAcount()+"");
+        }else{
+            tvname.setText(userinfo.getShopName()+"");
             addacc.setVisibility(View.VISIBLE);
         }
         hand = new Handler(new Handler.Callback() {

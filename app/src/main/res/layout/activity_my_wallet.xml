@@ -90,137 +90,141 @@
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/wallet_yhj_rel"
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/wallet_counp_liny"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/white_gray_selector"
-                android:padding="15dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/wallet_yhj_rel"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="优惠券"
-                    android:textColor="@color/col_333"
-                    android:textSize="@dimen/ac_text_size_14"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true">
-
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/white_gray_selector"
+                    android:padding="15dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:text="查看全部优惠券"
-                        android:textColor="@color/col_999"
+                        android:text="优惠券"
+                        android:textColor="@color/col_333"
                         android:textSize="@dimen/ac_text_size_14"/>
 
-                    <ImageView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/arrow_right"/>
-                </LinearLayout>
-            </RelativeLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/line_bg"
-                android:visibility="visible"/>
+                        android:layout_alignParentRight="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white">
-
-                <LinearLayout
-                    android:id="@+id/wallet_no_use_lin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/white_gray_selector"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="查看全部优惠券"
+                            android:textColor="@color/col_999"
+                            android:textSize="@dimen/ac_text_size_14"/>
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:src="@mipmap/yhj_no_use"/>
-
-                        <TextView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/my_msg_shap"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:padding="2dp"
-                            android:text="0"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/ac_text_size_12"
-                            android:textStyle="bold"/>
-                    </FrameLayout>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="未使用"
-                        android:textColor="@color/col_333"
-                        android:textSize="@dimen/ac_text_size_12"/>
-                </LinearLayout>
+                            android:src="@mipmap/arrow_right"/>
+                    </LinearLayout>
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/line_bg"
+                    android:visibility="visible"/>
 
                 <LinearLayout
-                    android:id="@+id/wallet_use_lin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/white_gray_selector"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:orientation="vertical"
-                    android:paddingBottom="15dp"
-                    android:paddingTop="15dp">
+                    android:background="@color/white">
 
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:id="@+id/wallet_no_use_lin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@drawable/white_gray_selector"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
 
-                        <ImageView
+                        <FrameLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:src="@mipmap/yhj_use"/>
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:src="@mipmap/yhj_no_use"/>
+
+                            <TextView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="right"
+                                android:background="@drawable/my_msg_shap"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:padding="2dp"
+                                android:text="0"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/ac_text_size_12"
+                                android:textStyle="bold"/>
+                        </FrameLayout>
 
                         <TextView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/my_msg_shap"
-                            android:gravity="center_horizontal|center_vertical"
-                            android:padding="2dp"
-                            android:text="13"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/ac_text_size_12"
-                            android:textStyle="bold"/>
-                    </FrameLayout>
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="未使用"
+                            android:textColor="@color/col_333"
+                            android:textSize="@dimen/ac_text_size_12"/>
+                    </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/wallet_use_lin"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="已使用"
-                        android:textColor="@color/col_333"
-                        android:textSize="@dimen/ac_text_size_12"/>
-                </LinearLayout>
+                        android:layout_weight="1"
+                        android:background="@drawable/white_gray_selector"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="vertical"
+                        android:paddingBottom="15dp"
+                        android:paddingTop="15dp">
 
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:src="@mipmap/yhj_use"/>
+
+                            <TextView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="right"
+                                android:background="@drawable/my_msg_shap"
+                                android:gravity="center_horizontal|center_vertical"
+                                android:padding="2dp"
+                                android:text="13"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/ac_text_size_12"
+                                android:textStyle="bold"/>
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="已使用"
+                            android:textColor="@color/col_333"
+                            android:textSize="@dimen/ac_text_size_12"/>
+                    </LinearLayout>
                 <LinearLayout
                     android:id="@+id/wallet_used_lin"
                     android:layout_width="match_parent"
@@ -264,7 +268,7 @@
                         android:textSize="@dimen/ac_text_size_12"/>
                 </LinearLayout>
             </LinearLayout>
-
+            </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="10dp"
                 android:id="@+id/wallet_bank_card_lin"
@@ -379,47 +383,47 @@
                 android:layout_height="1dp"
                 android:background="@color/line_bg"
                 android:visibility="visible"/>
-         <RelativeLayout
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:background="@color/white"
-                 android:gravity="center_horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:gravity="center_horizontal">
 
-                 <ImageView
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:src="@mipmap/default_res"/>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/default_res"/>
 
-                 <TextView
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_gravity="center_vertical"
-                     android:text="暂无信息"
-                     android:textColor="@color/col_888"
-                     android:textSize="@dimen/ac_text_size_14"/>
-             </LinearLayout>
-             <LinearLayout
-                 android:orientation="vertical"
-                 android:id="@+id/wallet_srdetail_lin"
-                 android:layout_marginTop="10dp"
-                 android:layout_marginBottom="10dp"
-                 android:background="@color/white"
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content">
-                 <com.xianhao365.o2o.utils.view.MyGridView
-                     android:id="@+id/wallet_srdetail_gridv"
-                     android:listSelector="@null"
-                     android:numColumns="1"
-                     android:stretchMode="columnWidth"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:divider="#00000000"
-                     />
-             </LinearLayout>
-         </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="暂无信息"
+                        android:textColor="@color/col_888"
+                        android:textSize="@dimen/ac_text_size_14"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/wallet_srdetail_lin"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <com.xianhao365.o2o.utils.view.MyGridView
+                        android:id="@+id/wallet_srdetail_gridv"
+                        android:listSelector="@null"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:divider="#00000000"
+                        />
+                </LinearLayout>
+            </RelativeLayout>
 
 
         </LinearLayout>

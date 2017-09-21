@@ -30,6 +30,7 @@ import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.HomeGridViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
+import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.main.BannerSlidEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
@@ -83,9 +84,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private MyGridView gridView;
     private MyGridView homebillRv;
     private XTabLayout scrollXtablayout;
+    private XTabLayout tabLayout;
     private RelativeLayout goBillRel;
     private LinearLayout channelLin,homeGridLin;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private HomeBillGridViewAdapter billsimpAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,7 +112,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private void initData(){
         HttpParams httpParams = new HttpParams();
         httpParams.put("position", "1");//1 首页
-        RequestHttpData.getInstance(activity).RequestHttp(httpParams,AppClient.APP_SWIPER,hand,1000);
+        RequestHttpData.getInstance(activity).RequestHttp(httpParams, AppClient.APP_SWIPER,hand,1000);
+        SXUtils.getInstance(activity).getBill(hand);
         //文件下载 版本升级
 //        DownloadOkHttpUtils.DownFile(activity);
     }
@@ -213,19 +217,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         }
     }
 
-    private void initViewPager( XTabLayout tabLayout) {
+    private void initViewPager(final List<BillDataSetEntity> billlist,XTabLayout tabLayout) {
 
+        for(int i=0;i<billlist.size();i++){
+            tabLayout.addTab(tabLayout.newTab().setText(billlist.get(i).getCategoryName()));
+        }
 //        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
-        tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
-        tabLayout.addTab(tabLayout.newTab().setText("米面粮油"));
-        tabLayout.addTab(tabLayout.newTab().setText("水产冻货"));
-        tabLayout.addTab(tabLayout.newTab().setText("休闲酒饮"));
-        tabLayout.addTab(tabLayout.newTab().setText("面食面粉"));
+//        tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
+//        tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
+//        tabLayout.addTab(tabLayout.newTab().setText("米面粮油"));
+//        tabLayout.addTab(tabLayout.newTab().setText("水产冻货"));
+//        tabLayout.addTab(tabLayout.newTab().setText("休闲酒饮"));
+//        tabLayout.addTab(tabLayout.newTab().setText("面食面粉"));
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
-                Logs.i("tab===============111111="+ tab.getPosition());
+                if(billlist.get(tab.getPosition()).getCategoryList() != null && billlist.get(tab.getPosition()).getCategoryList().size()>0){
+                    billsimpAdapter = new HomeBillGridViewAdapter(getActivity(),billlist.get(tab.getPosition()).getCategoryList(),new FoodActionCallback(){
+                        @Override
+                        public void addAction(View view) {
+                            NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                            int position[] = new int[2];
+                            view.getLocationInWindow(position);
+                            nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                            ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                            rootView.addView(nxHooldeView);
+                            int endPosition[] = new int[2];
+                            badge1.getLocationInWindow(endPosition);
+                            nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                            nxHooldeView.startBeizerAnimation();
+                            MainFragmentActivity.getInstance().setBadge(true,1);
+                        }
+                    });
+                    homebillRv.setAdapter(billsimpAdapter);
+                }else{
+                    homebillRv.setAdapter(null);
+                }
             }
 
             @Override
@@ -275,21 +302,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_container);
-//        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
+        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 //重新刷新页面
 //                myWebView.reload();
-                swipeRefreshLayout.setRefreshing(false);
+                initData();
+//                swipeRefreshLayout.setRefreshing(false);
             }
         });
 
 
         scrollXtablayout = (XTabLayout) view.findViewById(R.id.main_scroll_Tablayout);
-        XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
-        initViewPager(scrollXtablayout);
-        initViewPager(tabLayout);
+        tabLayout = (XTabLayout) view.findViewById(R.id.main_xTablayout);
+
 
         LinearLayout searchLin = (LinearLayout) view.findViewById(R.id.home_search_lin);
         searchLin.setOnClickListener(this);
@@ -309,24 +336,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
 
         homebillRv = (MyGridView) view.findViewById(R.id.home_list_recyclerv);
-        HomeBillGridViewAdapter simpAdapter = new HomeBillGridViewAdapter(getActivity(),getTypeInfoData(),new FoodActionCallback(){
 
-            @Override
-            public void addAction(View view) {
-                NXHooldeView nxHooldeView = new NXHooldeView(activity);
-                int position[] = new int[2];
-                view.getLocationInWindow(position);
-                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
-                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
-                rootView.addView(nxHooldeView);
-                int endPosition[] = new int[2];
-                badge1.getLocationInWindow(endPosition);
-                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
-                nxHooldeView.startBeizerAnimation();
-                MainFragmentActivity.getInstance().setBadge(true,1);
-            }
-        });
-        homebillRv.setAdapter(simpAdapter);
         homebillRv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -389,6 +399,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                         List<BannerSlidEntity> goodsTypeList = (List<BannerSlidEntity>) ResponseData.getInstance(activity).parseJsonArray(obj.toString(), BannerSlidEntity.class);
                         setBanner(goodsTypeList);
                         break;
+                    case 1009:
+                        List<BillDataSetEntity> billlist = (List<BillDataSetEntity>) msg.obj;
+                        if(billlist == null || billlist.size()<=0) {
+                            break;
+                        }
+                        billsimpAdapter = new HomeBillGridViewAdapter(getActivity(),billlist.get(0).getCategoryList(),new FoodActionCallback(){
+                            @Override
+                            public void addAction(View view) {
+                                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                                int position[] = new int[2];
+                                view.getLocationInWindow(position);
+                                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                                rootView.addView(nxHooldeView);
+                                int endPosition[] = new int[2];
+                                badge1.getLocationInWindow(endPosition);
+                                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                                nxHooldeView.startBeizerAnimation();
+                                MainFragmentActivity.getInstance().setBadge(true,1);
+                            }
+                        });
+                        homebillRv.setAdapter(billsimpAdapter);
+                        initViewPager(billlist,scrollXtablayout);
+                        initViewPager(billlist,tabLayout);
+//                        initViewPager(billlist);
+                        break;
                     case AppClient.ERRORCODE:
                         String str = (String) msg.obj;
 
@@ -397,6 +433,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                     case AppClient.UPDATEVER:
 //                        SXUtils.getInstance().ToastCenter(activity, "版本更新");
                         break;
+                }
+                if(swipeRefreshLayout != null){
+                    swipeRefreshLayout.setRefreshing(false);
                 }
                 return true;
             }
@@ -413,7 +452,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
-              int  action = Integer.parseInt(goodsTypeList.get(position).getImgAction());
+                int  action = Integer.parseInt(goodsTypeList.get(position).getImgAction());
                 //动作，1=首页,2=品类,3=必抢靖单,4=购物车,5=我的,6=专题页,7=商品页,8=我的订单,9=我的钱包
                 switch (action){
                     case 1:

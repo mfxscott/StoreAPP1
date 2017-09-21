@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
-import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.SearchActivity;
 import com.xianhao365.o2o.adapter.HomeBillRecyclerViewAdapter;
@@ -26,9 +25,6 @@ import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
-import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
@@ -50,8 +46,8 @@ public class BillFragment extends Fragment {
     private Handler hand;
     private int indexPage= 1;
     private RecyclerView recyclerView;
-    private HomeBillRecyclerViewAdapter billInfoAdapter;
     private SwipyRefreshLayout   mSwipyRefreshLayout;
+    private HomeBillRecyclerViewAdapter simpAdapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,7 +60,7 @@ public class BillFragment extends Fragment {
         return view;
     }
     private  void initData(){
-        getBill();
+        SXUtils.getInstance(activity).getBill(hand);
     }
     /**
      * 商品分类详情商品
@@ -99,15 +95,13 @@ public class BillFragment extends Fragment {
     private void init(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.bill_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
-        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-//                httpChanner();
                     indexPage = 1;
-                    hand.sendEmptyMessage(1);
-//                    HttpLiveSp(indexPage);
+                    SXUtils.getInstance(activity).getBill(hand);
                 }else{
                     hand.sendEmptyMessage(1);
                     indexPage ++;
@@ -141,10 +135,17 @@ public class BillFragment extends Fragment {
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
-                    case 1000:
+                    case 1009:
                         List<BillDataSetEntity> billlist = (List<BillDataSetEntity>) msg.obj;
-                        Logs.i("============>>>>"+billlist.get(0).getCategoryName()+"");
+                        if(billlist == null || billlist.size()<=0) {
+                            break;
+                        }
                         initViewPager(billlist);
+                        if(billlist.size() >9){
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                        }else{
+                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+                        }
                         break;
                 }
                 if(mSwipyRefreshLayout != null){
@@ -154,13 +155,14 @@ public class BillFragment extends Fragment {
             }
         });
     }
-    private void initViewPager(List<BillDataSetEntity> billList) {
+    private void initViewPager(final List<BillDataSetEntity> billList) {
         XTabLayout tabLayout = (XTabLayout) view.findViewById(R.id.bill_xTablayout);
+        tabLayout.removeAllTabs();
 //        tabLayout.setupWithViewPager(viewPager);
         for(int i=0;i<billList.size();i++){
             tabLayout.addTab(tabLayout.newTab().setText(billList.get(i).getCategoryName()));
         }
-         HomeBillRecyclerViewAdapter simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),billList.get(0).getCategoryList(),new FoodActionCallback(){
+        simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),billList.get(0).getCategoryList(),new FoodActionCallback(){
             @Override
             public void addAction(View view) {
                 NXHooldeView nxHooldeView = new NXHooldeView(activity);
@@ -187,7 +189,28 @@ public class BillFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
-                Logs.i("tab===============111111="+ tab.getPosition());
+                if(billList.get(tab.getPosition()).getCategoryList() != null && billList.get(tab.getPosition()).getCategoryList().size()>0){
+                    simpAdapter = new HomeBillRecyclerViewAdapter(getActivity(),billList.get(tab.getPosition()).getCategoryList(),new FoodActionCallback() {
+                        @Override
+                        public void addAction(View view) {
+                            NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                            int position[] = new int[2];
+                            view.getLocationInWindow(position);
+                            nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                            ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                            rootView.addView(nxHooldeView);
+                            int endPosition[] = new int[2];
+                            badge1.getLocationInWindow(endPosition);
+                            nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                            nxHooldeView.startBeizerAnimation();
+                            MainFragmentActivity.getInstance().setBadge(true,1);
+                        }
+
+                    });
+                    recyclerView.setAdapter(simpAdapter);
+                }else{
+                    recyclerView.setAdapter(null);
+                }
             }
             @Override
             public void onTabUnselected(XTabLayout.Tab tab) {
@@ -199,27 +222,7 @@ public class BillFragment extends Fragment {
             }
         });
     }
-    public void getBill() {
-        HttpParams httpParams = new HttpParams();
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.COMMONBILL, httpParams, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                Logs.i("常用发送成功返回参数=======",jsonObject.toString());
-                List<BillDataSetEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(jsonObject.toString(), BillDataSetEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = goodsTypeList;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
-            }
-        });
-    }
+
 }
 
 

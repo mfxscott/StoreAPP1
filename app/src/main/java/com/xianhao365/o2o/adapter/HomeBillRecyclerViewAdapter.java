@@ -40,7 +40,7 @@ public  class HomeBillRecyclerViewAdapter
         public final ImageView mImageView;
         public final ImageView delImageView;
         public final TextView mTextView;
-        public final TextView addcar1,addcar2;
+//        public final TextView addcar1,addcar2;
         public final RecyclerView recyclerView;
 
         public ViewHolder(View view) {
@@ -49,8 +49,8 @@ public  class HomeBillRecyclerViewAdapter
             mImageView = (ImageView) view.findViewById(R.id.main_bill_item_iv);
             mTextView = (TextView) view.findViewById(R.id.main_bill_item_name);
             delImageView = (ImageView) view.findViewById(R.id.main_bill_item_del_iv);
-            addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
-            addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
+//            addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
+//            addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
             recyclerView = (RecyclerView) view.findViewById(R.id.bill_item_recycler);
         }
         @Override
@@ -66,7 +66,6 @@ public  class HomeBillRecyclerViewAdapter
     public HomeBillRecyclerViewAdapter(Context context, List<CategoryListEntity> items,FoodActionCallback callback) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        Logs.i("==============------"+items.size());
         mValues = items;
         this.callback = callback;
     }
@@ -83,12 +82,9 @@ public  class HomeBillRecyclerViewAdapter
         CategoryListEntity categInfo = mValues.get(position);
         holder.mTextView.setText(categInfo.getGoodsName());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(holder.recyclerView.getContext());
-//        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-//        holder.recyclerView.setLayoutManager(linearLayoutManager);
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
-        BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(holder.recyclerView.getContext(),categInfo);
-        holder.recyclerView.setAdapter(simpAdapter);
+            BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(holder.recyclerView.getContext(), categInfo);
+            holder.recyclerView.setAdapter(simpAdapter);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,20 +98,6 @@ public  class HomeBillRecyclerViewAdapter
                 removeData(position);
             }
         });
-        holder.addcar1.setOnClickListener(this);
-        holder.addcar2.setOnClickListener(this);
-//        holder.addcar1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
-//        holder.addcar2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MainFragmentActivity.getInstance().setBadge(true,1);
-//            }
-//        });
         Glide.with(holder.mImageView.getContext())
                 .load(categInfo.getOriginalImg())
                 .fitCenter()
