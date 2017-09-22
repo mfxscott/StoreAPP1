@@ -256,6 +256,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                  * 添加地区数据
                  */
                 options3Items.add(Province_AreaList);
+                //shide
                 //时间选择器
                 OptionsPickerView pvOptions = new  OptionsPickerView.Builder(activity, new OptionsPickerView.OnOptionsSelectListener() {
                     @Override
