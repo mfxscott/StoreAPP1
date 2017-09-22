@@ -253,7 +253,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 options2Items.add(CityList);
 
                 /**
-                 * 添加地区数据
+                 * 添加地区数据OK
                  */
                 options3Items.add(Province_AreaList);
                 //shide
