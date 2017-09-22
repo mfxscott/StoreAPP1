@@ -268,6 +268,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 //                        tvOptions.setText(tx);
                     }
                 })
+
                         .setSubmitText("确定")//确定按钮文字
                         .setCancelText("取消")//取消按钮文字
                         .setTitleText("选择城市")//标题
@@ -279,7 +280,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                         .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
                         .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
                         .setContentTextSize(18)//滚轮文字大小
-                        .setLinkage(false)//设置是否联动，默认true
+                        .setLinkage(true)//设置是否联动，默认true
                         .setLabels("省", "市", "区")//设置选择的三级单位
                         .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
                         .setCyclic(false, false, false)//循环与否
