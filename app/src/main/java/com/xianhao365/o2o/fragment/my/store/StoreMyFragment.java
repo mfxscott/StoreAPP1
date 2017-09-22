@@ -270,7 +270,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 })
                         .setSubmitText("确定")//确定按钮文字
                         .setCancelText("取消")//取消按钮文字
-                        .setTitleText("城市选择")//标题
+                        .setTitleText("选择城市")//标题
                         .setSubCalSize(18)//确定和取消文字大小
                         .setTitleSize(20)//标题文字大小
                         .setTitleColor(Color.BLACK)//标题文字颜色
@@ -287,7 +287,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                         .setOutSideCancelable(false)//点击外部dismiss default true
                         .isDialog(false)//是否显示为对话框样式
                         .build();
-
                 pvOptions.setPicker(options1Items, options2Items, options3Items);//添加数据源
                 pvOptions.show();
 //                Intent intent = new Intent(activity,AccManageActivity.class);
