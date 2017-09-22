@@ -86,7 +86,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_detail);
-        ButterKnife.bind(this);
+
         goodsId = this.getIntent().getStringExtra("cno");
         activity = this;
 //        setBanner();

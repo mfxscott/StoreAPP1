@@ -18,6 +18,7 @@ public class BaseActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (MyApplication) getApplicationContext();
+
     }
     /**
      * 设置点击左上角的返回事件.默认是finish界面

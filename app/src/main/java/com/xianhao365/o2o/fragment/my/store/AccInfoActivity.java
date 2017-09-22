@@ -1,20 +1,15 @@
 package com.xianhao365.o2o.fragment.my.store;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
@@ -22,8 +17,6 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.address.AddressProvinceEntity;
-import com.xianhao365.o2o.fragment.my.pop.DatePickerPopWin;
-import com.xianhao365.o2o.fragment.my.pop.MyWheelView;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -31,6 +24,7 @@ import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.GlideRoundTransform;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -74,34 +68,40 @@ public class AccInfoActivity extends BaseActivity {
     private Handler hand;
     private UserInfoEntity userinfo;
     private Unbinder unbinder;
+    private List<AddressProvinceEntity> options1Items = new ArrayList<>();
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();
+    private ArrayList<ArrayList> options3Items = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acc_info);
         unbinder = ButterKnife.bind(this);
         Bundle bundle = this.getIntent().getExtras();
-        userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
+        userinfo = (UserInfoEntity) bundle.getParcelable("userinfo");
         activity = this;
+        ButterKnife.bind(this);
         String json = SXUtils.getInstance(activity).getFromAssets("areas.txt");
-        Logs.i("=======json==="+json);
+        Logs.i("=======json===" + json);
 
         initView();
     }
+
     private void initView() {
         registerBack();
         setTitle("账户信息");
         ImageView headimg = (ImageView) findViewById(R.id.acc_info_headimg);
         Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.loading_img)
                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
-        acount.setText(userinfo.getAcount()+"");
-        if(AppClient.USERROLETAG.equals("64")){
-        userLin.setVisibility(View.VISIBLE);
-        accInfoUsernameEdt.setText(userinfo.getUsername());
-        accInfoPersonPhoneEdt.setText(userinfo.getMobile());
-        accInfoAddressEdt.setText(userinfo.getProvince()+userinfo.getCity()+userinfo.getDistrict()+userinfo.getAddr());
-        }else{
+        acount.setText(userinfo.getAcount() + "");
+        if (AppClient.USERROLETAG.equals("64")) {
+            userLin.setVisibility(View.VISIBLE);
+            accInfoUsernameEdt.setText(userinfo.getUsername());
+            accInfoPersonPhoneEdt.setText(userinfo.getMobile());
+            accInfoAddressEdt.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
+        } else {
             storeLin.setVisibility(View.VISIBLE);
-            storeAdd.setText(userinfo.getProvince()+userinfo.getCity()+userinfo.getDistrict()+userinfo.getAddr());
+            storeAdd.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
             storefzr.setText(userinfo.getManager());
             storeId.setText("");
             storeInfo.setText("");
@@ -125,24 +125,6 @@ public class AccInfoActivity extends BaseActivity {
         accInfoAddressEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
-                List<AddressProvinceEntity> addressList = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
-            DatePickerPopWin pickerPopWin = new DatePickerPopWin.Builder(activity, new DatePickerPopWin.OnDatePickedListener() {
-                    @Override
-                    public void onDatePickCompleted(int year, int month, int day, String dateDesc) {
-                        Toast.makeText(activity, dateDesc, Toast.LENGTH_SHORT).show();
-                    }
-                }).textConfirm("CONFIRM") //text of confirm button
-                        .textCancel("CANCEL") //text of cancel button
-                        .btnTextSize(14) // button text size
-                        .viewTextSize(14) // pick view text size
-                        .colorCancel(Color.parseColor("#999999")) //color of cancel button
-                        .colorConfirm(Color.parseColor("#009900"))//color of confirm button
-                        .minYear(1990) //min year in loop
-                        .maxYear(2550) // max year in loop
-                        .dateChose("2013-11-11") // date chose when init popwindow
-                        .build();
-                pickerPopWin.showPopWin(activity);
             }
         });
         storeAdd.setOnClickListener(new View.OnClickListener() {
@@ -150,32 +132,49 @@ public class AccInfoActivity extends BaseActivity {
             public void onClick(View v) {
                 String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
                 List<AddressProvinceEntity> addressList = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
-                // 构建弹出框View
-                View outerView = LayoutInflater.from(activity)
-                        .inflate(R.layout.wheel_view, null);
 
-                MyWheelView wv = (MyWheelView) outerView
-                        .findViewById(R.id.wheel_view_wv);
-                // wv.setOffset(0);// 偏移量
-                wv.setOffset(2);
-                wv.setItems(addressList);// 实际内容
-                wv.setSeletion(0);// 设置默认被选中的项目
-                // wv.setSeletion(3);
-                wv.setOnWheelViewListener(new MyWheelView.OnWheelViewListener() {
-                    @Override
-                    public void onSelected(int selectedIndex, String item) {
-                        // 选中后的处理事件
-                        Log.d("====", "[Dialog]selectedIndex: " + selectedIndex
-                                + ", item: " + item);
-                    }
-                });
-
-                // 展示弹出框
-                new AlertDialog.Builder(activity)
-                        .setTitle("WheelView in Dialog").setView(outerView)
-                        .setPositiveButton("OK", null).show();
             }
         });
+    }
+
+    private void initJsonData() {//解析数据
+
+        /**
+         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
+         * 关键逻辑在于循环体
+         *
+         * */
+        String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
+        List<AddressProvinceEntity> jsonBean = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
+
+
+        /**
+         * 添加省份数据
+         *
+         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
+         * PickerView会通过getPickerViewText方法获取字符串显示出来。
+         */
+        options1Items = jsonBean;
+        ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+        ArrayList<String> areasList = new ArrayList<>();//该省的城市列表（第二级）
+        ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+
+        for (int j = 0; j < jsonBean.get(0).getChildren().size(); j++) {
+            CityList.add(jsonBean.get(0).getChildren().get(j).getLabel());
+        }
+        for (int i = 0; i < jsonBean.get(0).getChildren().get(0).getChildren().size(); i++) {
+            areasList.add(jsonBean.get(0).getChildren().get(0).getChildren().get(i).getLabel());
+        }
+
+        /**
+         * 添加城市数据
+         */
+        options2Items.add(CityList);
+
+        /**
+         * 添加地区数据
+         */
+        options3Items.add(areasList);
     }
     /**
      * 获取用户余额
