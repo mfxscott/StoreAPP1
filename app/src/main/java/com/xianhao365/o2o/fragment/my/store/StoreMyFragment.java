@@ -248,7 +248,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 }
 
                 /**
-                 * 添加城市数据
+                 * 添加城市数据 shide
                  */
                 options2Items.add(CityList);
 
