@@ -34,6 +34,7 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.entity.MessageEvent;
+import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -836,6 +837,30 @@ public class SXUtils {
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 hand.sendMessage(msg);
+            }
+        });
+    }
+    /**
+     * 获取不同用户信息
+     */
+    public void getUserInfoHttp(final Handler hand) {
+        HttpUtils.getInstance(mContext).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what =AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
             }
         });
     }

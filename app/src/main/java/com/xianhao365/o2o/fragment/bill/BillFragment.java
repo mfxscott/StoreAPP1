@@ -25,6 +25,7 @@ import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
@@ -48,6 +49,7 @@ public class BillFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipyRefreshLayout   mSwipyRefreshLayout;
     private HomeBillRecyclerViewAdapter simpAdapter;
+    private LinearLayout  billListLin;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,6 +95,9 @@ public class BillFragment extends Fragment {
         return typeList;
     }
     private void init(){
+        billListLin = (LinearLayout) view.findViewById(R.id.bill_list_liny);
+
+
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.bill_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
@@ -132,6 +137,7 @@ public class BillFragment extends Fragment {
 ////                billInfoAdapter.changeSelected(position);//刷新
 //            }
 //        });
+
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -146,6 +152,9 @@ public class BillFragment extends Fragment {
                         }else{
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
                         }
+                        break;
+                    case AppClient.ERRORCODE:
+                        billListLin.setVisibility(View.GONE);
                         break;
                 }
                 if(mSwipyRefreshLayout != null){

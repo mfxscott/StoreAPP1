@@ -3,7 +3,7 @@ package com.xianhao365.o2o.fragment.my.store;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,12 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bigkoo.pickerview.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.UserInfoEntity;
-import com.xianhao365.o2o.entity.address.AddressProvinceEntity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -68,7 +66,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private TextView store_my_money;
     private TextView name;
     private ImageView headimg;
-
+    private TextView orderNum1,orderNum2,orderNum3;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -111,7 +109,10 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
      */
     private void initView(){
         store_my_money = (TextView) view.findViewById(R.id.store_my_money);
-
+        //订单状态订单数量
+        orderNum1 = (TextView) view.findViewById(R.id.store_order_num1_tv);
+        orderNum2 = (TextView) view.findViewById(R.id.store_order_num2_tv);
+        orderNum3 = (TextView) view.findViewById(R.id.store_order_num3_tv);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.user_center_swipe_container);
 //        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
@@ -224,77 +225,77 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 startActivity(wall);
                 break;
             case R.id.my_acc_mamage_tv:
-                String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
-                List<AddressProvinceEntity> jsonBean = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
-                ArrayList<String>  jsoList = new ArrayList<>();
-                for (int c = 0; c < jsonBean.size(); c++) {//遍历该省份的所有城市
-                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
-                    jsoList.add(CityName);//添加城市
-                }
-
-                options1Items = jsoList;
-                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-                ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
-                ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
-                for (int c = 0; c < jsonBean.get(0).getChildren().size(); c++) {//遍历该省份的所有城市
-                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
-                    CityList.add(CityName);//添加城市
-
-                    Province_AreaList.add(City_AreaList);//添加该省所有地区数据
-                }
-                for (int d = 0; d <jsonBean.get(0).getChildren().get(0).getChildren().size(); d++) {//该城市对应地区所有数据
-                    String AreaName = jsonBean.get(0).getChildren().get(0).getChildren().get(d).getLabel();
-                    City_AreaList.add(AreaName);//添加该城市所有地区数据
-                }
-
-                /**
-                 * 添加城市数据 shide
-                 */
-                options2Items.add(CityList);
-
-                /**
-                 * 添加地区数据OK
-                 */
-                options3Items.add(Province_AreaList);
-                //shide
-                //时间选择器
-                OptionsPickerView pvOptions = new  OptionsPickerView.Builder(activity, new OptionsPickerView.OnOptionsSelectListener() {
-                    @Override
-                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
-                        //返回的分别是三个级别的选中位置
-//                        String tx = options1Items.get(options1).getPickerViewText()
-//                                + options2Items.get(options1).get(option2)
-//                                + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
-//                        tvOptions.setText(tx);
-                    }
-                })
-
-                        .setSubmitText("确定")//确定按钮文字
-                        .setCancelText("取消")//取消按钮文字
-                        .setTitleText("选择城市")//标题
-                        .setSubCalSize(18)//确定和取消文字大小
-                        .setTitleSize(20)//标题文字大小
-                        .setTitleColor(Color.BLACK)//标题文字颜色
-                        .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-                        .setCancelColor(Color.BLUE)//取消按钮文字颜色
-                        .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
-                        .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
-                        .setContentTextSize(18)//滚轮文字大小
-                        .setLinkage(true)//设置是否联动，默认true
-                        .setLabels("省", "市", "区")//设置选择的三级单位
-                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                        .setCyclic(false, false, false)//循环与否
-                        .setSelectOptions(1, 1, 1)  //设置默认选中项
-                        .setOutSideCancelable(false)//点击外部dismiss default true
-                        .isDialog(false)//是否显示为对话框样式
-                        .build();
-                pvOptions.setPicker(options1Items, options2Items, options3Items);//添加数据源
-                pvOptions.show();
-//                Intent intent = new Intent(activity,AccManageActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putParcelable("userinfo",userinfo);
-//                intent.putExtras(bundle);
-//                startActivity(intent);
+//                String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
+//                List<AddressProvinceEntity> jsonBean = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
+//                ArrayList<String>  jsoList = new ArrayList<>();
+//                for (int c = 0; c < jsonBean.size(); c++) {//遍历该省份的所有城市
+//                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
+//                    jsoList.add(CityName);//添加城市
+//                }
+//
+//                options1Items = jsoList;
+//                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
+//                ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
+//                ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
+//                for (int c = 0; c < jsonBean.get(0).getChildren().size(); c++) {//遍历该省份的所有城市
+//                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
+//                    CityList.add(CityName);//添加城市
+//
+//                    Province_AreaList.add(City_AreaList);//添加该省所有地区数据
+//                }
+//                for (int d = 0; d <jsonBean.get(0).getChildren().get(0).getChildren().size(); d++) {//该城市对应地区所有数据
+//                    String AreaName = jsonBean.get(0).getChildren().get(0).getChildren().get(d).getLabel();
+//                    City_AreaList.add(AreaName);//添加该城市所有地区数据
+//                }
+//
+//                /**
+//                 * 添加城市数据 shide
+//                 */
+//                options2Items.add(CityList);
+//
+//                /**
+//                 * 添加地区数据OK
+//                 */
+//                options3Items.add(Province_AreaList);
+//                //shide
+//                //时间选择器
+//                OptionsPickerView pvOptions = new  OptionsPickerView.Builder(activity, new OptionsPickerView.OnOptionsSelectListener() {
+//                    @Override
+//                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
+//                        //返回的分别是三个级别的选中位置
+////                        String tx = options1Items.get(options1).getPickerViewText()
+////                                + options2Items.get(options1).get(option2)
+////                                + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
+////                        tvOptions.setText(tx);
+//                    }
+//                })
+//
+//                        .setSubmitText("确定")//确定按钮文字
+//                        .setCancelText("取消")//取消按钮文字
+//                        .setTitleText("选择城市")//标题
+//                        .setSubCalSize(18)//确定和取消文字大小
+//                        .setTitleSize(20)//标题文字大小
+//                        .setTitleColor(Color.BLACK)//标题文字颜色
+//                        .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+//                        .setCancelColor(Color.BLUE)//取消按钮文字颜色
+//                        .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
+//                        .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
+//                        .setContentTextSize(18)//滚轮文字大小
+//                        .setLinkage(true)//设置是否联动，默认true
+//                        .setLabels("省", "市", "区")//设置选择的三级单位
+//                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+//                        .setCyclic(false, false, false)//循环与否
+//                        .setSelectOptions(1, 1, 1)  //设置默认选中项
+//                        .setOutSideCancelable(false)//点击外部dismiss default true
+//                        .isDialog(false)//是否显示为对话框样式
+//                        .build();
+//                pvOptions.setPicker(options1Items, options2Items, options3Items);//添加数据源
+//                pvOptions.show();
+                Intent accm = new Intent(activity,AccManageActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("userinfo",userinfo);
+                accm.putExtras(bundle);
+                startActivity(accm);
                 break;
             case R.id.per_my_message_iv:
                 //消息
@@ -326,15 +327,21 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             case R.id.my_store_return_lin:
             case R.id.my_store_new_lin:
             case R.id.my_store_myfp_lin:
-            case R.id.my_store_help_center_rel:
+//            case R.id.my_store_help_center_rel:
             case R.id.my_store_quesion_lin:
             case R.id.my_store_fwcenter_lin:
             case R.id.my_store_zxservice_lin:
-            case R.id.my_store_kffw_lin:
                 Intent mykey = new Intent(activity, CommonWebViewMainActivity.class);
                 mykey.putExtra("tag","2");
                 mykey.putExtra("postUrl","http:www.baidu.com");
                 startActivity(mykey);
+                break;
+            case R.id.my_store_kffw_lin:
+                //拨打客服电话
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + AppClient.CUST_TELEPHONE);
+                intent.setData(data);
+                startActivity(intent);
                 break;
         }
     }

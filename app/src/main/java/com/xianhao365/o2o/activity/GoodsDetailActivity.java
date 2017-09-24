@@ -8,6 +8,9 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.adapter.GoodsDetailInfoRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.goods.GoodsDetailInfoEntity;
 import com.xianhao365.o2o.utils.Logs;
@@ -79,6 +83,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     TextView goodsggModel;//商品规格
     @BindView(R.id.goods_detail_car_price_tv)
     TextView totalPrice;
+    @BindView(R.id.goods_detail_list_recycler)
+     RecyclerView recyclerView;
     private String skuBarcode;
     private  GoodsDetailInfoEntity goodsdetail;
     private ImageView img1,img2,img3,img4;
@@ -86,9 +92,9 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_goods_detail);
-
         goodsId = this.getIntent().getStringExtra("cno");
         activity = this;
+        ButterKnife.bind(activity);
 //        setBanner();
         initView();
         if(TextUtils.isEmpty(goodsId)) {
@@ -99,6 +105,10 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         getHttpGoodsDetail();
     }
     private void initView(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         LinearLayout   tabXXXXLin = (LinearLayout) findViewById(R.id.goods_detail_tab_xxxx_lin);
         tabXXXXLin.setOnClickListener(this);
         LinearLayout    tabGGCSLin = (LinearLayout) findViewById(R.id.goods_detail_tab_ggcs_lin);
@@ -149,8 +159,9 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                         goodsUnit.setText(goodsdetail.getGoodsUnit());
                         String [] desImg = goodsdetail.getGoodsDesc().split(",");
                         String [] bannerImg = goodsdetail.getAlbumImg().split(",");
-                        setInfoImg(desImg);
+//                        setInfoImg(desImg);
                         setBanner(bannerImg);
+                        recyclerView.setAdapter(new GoodsDetailInfoRecyclerViewAdapter(activity,desImg));
                         break;
                     case AppClient.ERRORCODE:
                         String msgs = (String) msg.obj;
@@ -405,8 +416,6 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                 }
 
             }
-
-
             @Override
             public void onResponseError(String strError) {
                 Message msg = new Message();

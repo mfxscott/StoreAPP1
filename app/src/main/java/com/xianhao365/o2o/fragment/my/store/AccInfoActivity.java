@@ -91,20 +91,22 @@ public class AccInfoActivity extends BaseActivity {
         registerBack();
         setTitle("账户信息");
         ImageView headimg = (ImageView) findViewById(R.id.acc_info_headimg);
-        Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.loading_img)
-                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
-        acount.setText(userinfo.getAcount() + "");
-        if (AppClient.USERROLETAG.equals("64")) {
-            userLin.setVisibility(View.VISIBLE);
-            accInfoUsernameEdt.setText(userinfo.getUsername());
-            accInfoPersonPhoneEdt.setText(userinfo.getMobile());
-            accInfoAddressEdt.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
-        } else {
-            storeLin.setVisibility(View.VISIBLE);
-            storeAdd.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
-            storefzr.setText(userinfo.getManager());
-            storeId.setText("");
-            storeInfo.setText("");
+        if(userinfo != null) {
+            Glide.with(activity).load(userinfo.getIcon()).placeholder(R.mipmap.loading_img)
+                    .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+            acount.setText(userinfo.getAcount() + "");
+            if (AppClient.USERROLETAG.equals("64")) {
+                userLin.setVisibility(View.VISIBLE);
+                accInfoUsernameEdt.setText(userinfo.getUsername());
+                accInfoPersonPhoneEdt.setText(userinfo.getMobile());
+                accInfoAddressEdt.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
+            } else {
+                storeLin.setVisibility(View.VISIBLE);
+                storeAdd.setText(userinfo.getProvince() + userinfo.getCity() + userinfo.getDistrict() + userinfo.getAddr());
+                storefzr.setText(userinfo.getManager());
+                storeId.setText("");
+                storeInfo.setText("");
+            }
         }
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {

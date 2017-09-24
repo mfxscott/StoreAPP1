@@ -19,6 +19,7 @@ public class AppClient{
 
     public static String USER_ID = "";//用户ID
     public static String USER_SESSION = ""; //用户会话
+    public static String CUST_TELEPHONE="10010";//我的 客服电话号码
     /**
      *  用户登录不同角色区分
      *  32 商户摊主

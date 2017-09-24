@@ -46,6 +46,7 @@ dependencies {
     //扩展了下载管理和上传管理，根据需要添加
     //版本号使用 + 可以自动引用最新版
     //版本号使用 + 可以自动引用最新版
+    compile project(':pickerview')
     compile 'com.lzy.net:okhttpserver:1.0.3'
     compile 'com.lzy.net:okhttputils:+'
     compile 'com.android.support:design:23.0.1'
@@ -61,5 +62,4 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     testCompile 'junit:junit:4.12'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile project(':pickerview')
 }

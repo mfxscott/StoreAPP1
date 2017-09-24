@@ -16,23 +16,23 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cg_order_list_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:divider="@color/line_bg"
+            android:dividerHeight="1dp"
+            android:gravity="center_horizontal"
+            android:numColumns="1"
+            android:scrollbars="none"
+            android:stretchMode="columnWidth" />
+
         <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
             android:id="@+id/cg_list_swipyrefreshlayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            >
-        <android.support.v7.widget.RecyclerView
-            android:scrollbars="none"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:id="@+id/cg_order_list_recycler"
-            android:numColumns="1"
-            android:stretchMode="columnWidth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:divider="@color/line_bg"
-            android:dividerHeight="1dp"
-            />
-        </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
+            ></com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
     </LinearLayout>
 </LinearLayout>

@@ -45,18 +45,15 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
         activity = this;
         initView();
+        initData(userinfo);
     }
     private void initView(){
         registerBack();
         setTitle("账号管理");
-        ImageView headimg = (ImageView) findViewById(R.id.acc_manage_headimg);
-        Glide.with(activity).load(userinfo.getShopLogo()).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+
+
         LinearLayout accinfolin = (LinearLayout) findViewById(R.id.acc_manage_info_lin);
         accinfolin.setOnClickListener(this);
-        TextView tvname = (TextView) findViewById(R.id.acc_manage_name_tv);
-
-
 
         Button loginOut = (Button) findViewById(R.id.login_out_btn);
         loginOut.setOnClickListener(this);
@@ -64,12 +61,7 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         rel.setOnClickListener(this);
         RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
         addacc.setOnClickListener(this);
-        if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("4") ){
-            tvname.setText(userinfo.getAcount()+"");
-        }else{
-            tvname.setText(userinfo.getShopName()+"");
-            addacc.setVisibility(View.VISIBLE);
-        }
+
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -91,6 +83,20 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 return true;
             }
         });
+    }
+    private void  initData(UserInfoEntity usrnfo){
+        if(usrnfo == null)
+            return;
+        ImageView headimg = (ImageView) findViewById(R.id.acc_manage_headimg);
+        Glide.with(activity).load(usrnfo.getShopLogo()).placeholder(R.mipmap.default_head)
+                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+        TextView tvname = (TextView) findViewById(R.id.acc_manage_name_tv);
+        if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("4") ){
+            tvname.setText(usrnfo.getAcount()+"");
+        }else{
+            tvname.setText(usrnfo.getShopName()+"");
+//            addacc.setVisibility(View.VISIBLE);
+        }
     }
     @Override
     public void onClick(View v) {

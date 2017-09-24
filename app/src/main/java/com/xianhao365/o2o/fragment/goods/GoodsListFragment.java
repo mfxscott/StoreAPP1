@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.lzy.okhttputils.model.HttpParams;
@@ -59,6 +60,7 @@ public class GoodsListFragment extends Fragment {
     private XTabLayout tabLayout;
     private List<TypeChildrenEntity> typeTwoList ;
     private ProgressBar progressBar;
+    private RelativeLayout noInfoRel;
     private String idStr;//品牌ID
     private String cnoStr;
     @Override
@@ -74,6 +76,7 @@ public class GoodsListFragment extends Fragment {
     }
     private void initView(){
         progressBar = (ProgressBar)view.findViewById(R.id.goods_type_pro);
+        noInfoRel = (RelativeLayout) view.findViewById(R.id.goods_type_no_rel);
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.goods_type_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -107,6 +110,7 @@ public class GoodsListFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                SXUtils.getInstance(activity).ToastCenter("=="+position);
                 typeAdapter.changeSelected(position);//刷新
+                indexPage =1;
                 if(typeTwoList != null && typeTwoList.size()>0)
                     idStr = typeTwoList.get(position).getId();
                 cnoStr = typeTwoList.get(position).getCategoryCode();
@@ -140,8 +144,12 @@ public class GoodsListFragment extends Fragment {
                     case 1001:
                         List<GoodsInfoEntity> goodsDetaiLIst = (List<GoodsInfoEntity>) msg.obj;
                         if(goodsDetaiLIst == null || goodsDetaiLIst.size()<=0) {
+                            if(indexPage ==1){
+                                noInfoRel.setVisibility(View.VISIBLE);
+                            }
                             break;
                         }
+                        noInfoRel.setVisibility(View.GONE);
                         if(goodsDetaiLIst.size() >9){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
                         }else{
@@ -154,9 +162,9 @@ public class GoodsListFragment extends Fragment {
 //                typeGridView.setAdapter(typeAdapter);
                         break;
                     case AppClient.ERRORCODE:
+                        noInfoRel.setVisibility(View.VISIBLE);
                         String msgs = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(msgs);
-
                         break;
                 }
                 if(mSwipyRefreshLayout != null){
@@ -196,6 +204,7 @@ public class GoodsListFragment extends Fragment {
         tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(XTabLayout.Tab tab) {
+                indexPage = 1;
                 typeAdapter= new MainGoodsTypeAdapter(activity,typeList.get(tab.getPosition()).getChildren());
                 typeGridView.setAdapter(typeAdapter);
                 if(typeList.get(tab.getPosition()).getChildren() != null && typeList.get(tab.getPosition()).getChildren().size()>0){
@@ -297,6 +306,5 @@ public class GoodsListFragment extends Fragment {
                 hand.sendMessage(msg);
             }
         });
-
     }
 }

@@ -110,6 +110,15 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/goods_type_no_rel"
+                    android:layout_centerVertical="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <include
+                        layout="@layout/layout_no_info"/>
+                </RelativeLayout>
                 <ProgressBar
                     android:visibility="gone"
                     android:id="@+id/goods_type_pro"
@@ -139,7 +148,6 @@
                     />
                 </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
                 </LinearLayout>
-
             </RelativeLayout>
         </LinearLayout>
 

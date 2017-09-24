@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:background="@color/line_bg"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/line_bg"
     >
     <RelativeLayout
         android:background="@color/white"
@@ -57,55 +57,69 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/line_bg" />
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.androidkun.xtablayout.XTabLayout
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/bill_xTablayout"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_gravity="start"
-            app:xTabMode="scrollable"
-            app:xTabIndicatorColor="@color/qblue"
-            app:xTabIndicatorHeight="2dp"
-            app:xTabIndicatorWidth="60dp"
-            app:xTabSelectedTextColor="@color/qblue"
-            app:xTabTextColor="@color/col_888"
-            app:xTabTextSize="14sp"
-            app:xTabSelectedTextSize="14sp"
-            app:xTabDisplayNum="5"
-            />
-    </LinearLayout>
-
-
+        android:layout_height="match_parent">
+        <include
+            android:id="@+id/include_bill"
+            layout="@layout/layout_no_info"/>
         <LinearLayout
+            android:id="@+id/bill_list_liny"
             android:orientation="vertical"
-            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
-                android:id="@+id/bill_swipyrefreshlayout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                >
-            <android.support.v7.widget.RecyclerView
-                android:scrollbars="none"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                android:id="@+id/main_bill_gridv"
-                android:numColumns="1"
-                android:stretchMode="columnWidth"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:divider="@color/line_bg"
-                android:dividerHeight="1dp"
-                />
-            </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
-        </LinearLayout>
 
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.androidkun.xtablayout.XTabLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/bill_xTablayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="start"
+                    app:xTabMode="scrollable"
+                    app:xTabIndicatorColor="@color/qblue"
+                    app:xTabIndicatorHeight="2dp"
+                    app:xTabIndicatorWidth="60dp"
+                    app:xTabSelectedTextColor="@color/qblue"
+                    app:xTabTextColor="@color/col_888"
+                    app:xTabTextSize="14sp"
+                    app:xTabSelectedTextSize="14sp"
+                    app:xTabDisplayNum="5"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
+                    android:id="@+id/bill_swipyrefreshlayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <android.support.v7.widget.RecyclerView
+                        android:scrollbars="none"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:id="@+id/main_bill_gridv"
+                        android:numColumns="1"
+                        android:stretchMode="columnWidth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:divider="@color/line_bg"
+                        android:dividerHeight="1dp"
+                        />
+                </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
 
 

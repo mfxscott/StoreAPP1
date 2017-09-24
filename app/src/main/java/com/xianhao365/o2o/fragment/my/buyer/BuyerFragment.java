@@ -90,7 +90,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
     private void LoadData(){
         if(SXUtils.getInstance(activity).IsLogin()) {
 //            GetUserInfoHttp();
-            getUserInfoHttp();
+            SXUtils.getInstance(activity).getUserInfoHttp(hand);
 //        GetGYSBillListHttp();
 //        GetOrderListHttp();
             GetUserWalletHttp();
@@ -314,30 +314,7 @@ public class BuyerFragment extends Fragment implements View.OnClickListener{
         });
     }
 
-    /**
-     * 获取不同用户信息
-     */
-    public void getUserInfoHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_INFO, null, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what =AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
 
-            }
-        });
-    }
     /**
      * 获取用户余额
      */

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -105,7 +106,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SXUtils.getInstance(activity).ToastCenter("=="+position);
+//                SXUtils.getInstance(activity).ToastCenter("=="+position);
             }
         });
         detailGridView = (MyGridView) findViewById(R.id.wallet_srdetail_gridv);
@@ -143,6 +144,9 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                     case 1000:
                         walletInfo = (WalletInfoEntity) msg.obj;
                         walletTotalAmt.setText(walletInfo.getTotalAmt()+"");
+                        if(TextUtils.isEmpty(walletInfo.getAccNo()) || TextUtils.isEmpty(walletInfo.getIdNo())){
+                            bankListLay.setVisibility(View.GONE);
+                        }
                         gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
                         break;
                     case 1001:

@@ -27,7 +27,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
+                <include layout="@layout/layout_no_info"/>
                 <LinearLayout
                     android:visibility="gone"
                     android:id="@+id/acc_manage_info_lin"
@@ -94,7 +94,6 @@
                         </RelativeLayout>
                     </LinearLayout>
                 </LinearLayout>
-                <include layout="@layout/layout_no_info"/>
             </RelativeLayout>
             <LinearLayout
                 android:visibility="gone"
