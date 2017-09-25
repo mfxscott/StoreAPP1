@@ -40,7 +40,13 @@ public class AppClient{
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
     public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
-
+    /**
+     *订单相关接口
+     */
+    public static String ORDER_FORM="svc.order.form";//订单结算
+    public static String ORDER_SUBMIT = "svc.submit.order";//提交订单
+    public static String  ORDER_LIST= "svc.order.list";//订单列表
+    public static String  ORDER_DETAIL= "svc.order.detail";//订单详情
 
     public static String  UPDATE_USER_INFO = "svc.update.user.base.info";//修改用户基本信息
     public static String  UPDATE_PASSWORD="";//修改用户密码信息

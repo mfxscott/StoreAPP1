@@ -2,13 +2,13 @@ package com.xianhao365.o2o.fragment.car;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +81,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         EventBus.getDefault().register(this);
         if(SXUtils.getInstance(activity).IsLogin())
             SXUtils.showMyProgressDialog(activity,false);
-            GetCarList();
+        GetCarList();
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;
     }
@@ -189,7 +189,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                         MainFragmentActivity.getInstance().setBadgeNum(0);
                         storesimpAdapter.notifyDataSetChanged();
                         break;
+                    case 1003:
+                        //订单结算成功返回
 
+                        break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(errormsg+"");
@@ -233,8 +236,11 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     SXUtils.showMyProgressDialog(activity,false);
                     clearCarList();
                 }else{
-                    Intent pay = new Intent(activity,GoPayActivity.class);
-                    startActivity(pay);
+                    String suk=  getCarTotalStrSkucode();
+                    if(!TextUtils.isEmpty(suk))
+                    getFromOrder(suk);
+//                    Intent pay = new Intent(activity,GoPayActivity.class);
+//                    startActivity(pay);
                 }
                 break;
             case R.id.car_go_shop_lin:
@@ -293,6 +299,35 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
+
+    /**
+     * 订单结算
+     */
+    public void getFromOrder(String sku) {
+        HttpParams httpp = new HttpParams();
+        httpp.put("couponNos","");//优化劵 用逗号隔开
+        httpp.put("skuBarcodes",sku);//skucode 逗号隔开
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.ORDER_FORM, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("订单结算成功返回参数=======",jsonObject.toString());
+                JSONObject jsonObject1 = null;
+                Message msg = new Message();
+                msg.what = 1003;
+                msg.obj = "";
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent){
         //传递1or2 登录成功刷新购物车 和点击加入购物车商品 都刷新购物车
@@ -310,23 +345,43 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     }
 
     /**
-     * 获取被选中的商品价格及商品skucode
+     * 获取被选中的商品价格及
      * @return
      */
     public String getCarTotalMoney(){
         float priceTotal = 0;
         Iterator<String> iter = storesimpAdapter.simpAdapter.goodsMap.keySet().iterator();
-       for(int i=0;i<shopList.size();i++){
+        for(int i=0;i<shopList.size();i++){
             while (iter.hasNext()) {
                 String key = iter.next();
                 Boolean value = storesimpAdapter.simpAdapter.goodsMap.get(key);
-                 if(value){
-                     int postions = Integer.parseInt(key);
-                     priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSkuPrice());
-                 }
+                if(value){
+                    int postions = Integer.parseInt(key);
+                    priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSkuPrice());
+                }
             }
         }
         return priceTotal+"";
+    }
+
+    /**
+     * 获取选中商品skucode 用于结算订单
+     * @return
+     */
+    public String getCarTotalStrSkucode(){
+        String skuCodestr = "";
+        Iterator<String> iter = storesimpAdapter.simpAdapter.goodsMap.keySet().iterator();
+        for(int i=0;i<shopList.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = storesimpAdapter.simpAdapter.goodsMap.get(key);
+                if(value){
+                    int postions = Integer.parseInt(key);
+                    skuCodestr += shopList.get(i).getShoppingCartLines().get(postions).getSkuBarcode()+",";
+                }
+            }
+        }
+        return skuCodestr.substring(0,skuCodestr.length()-1)+"";
     }
     /**
      * 获取被选中的商品skucode 用于删除单选商品
@@ -370,7 +425,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     public int getTotalItem(){
         int carItem = 0;
         for (int i = 0; i < shopList.size(); i++) {
-                carItem += shopList.get(i).getShoppingCartLines().size();
+            carItem += shopList.get(i).getShoppingCartLines().size();
         }
         return carItem;
     }
