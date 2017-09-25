@@ -10,7 +10,27 @@ import java.util.List;
 public class AddressProvinceEntity {
     private String value;
     private String label;
+//    private ArrayList<AddressProvinceEntity> children;
+//
+//    public ArrayList<AddressProvinceEntity> getChildren() {
+//        return children;
+//    }
+//
+//    public void setChildren(ArrayList<AddressProvinceEntity> children) {
+//        this.children = children;
+//    }
+
     private List<AddressCityEntity> children;
+    public List<AddressCityEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<AddressCityEntity> children) {
+        this.children = children;
+    }
+
+
+
 
     public String getValue() {
         return value;
@@ -28,11 +48,5 @@ public class AddressProvinceEntity {
         this.label = label;
     }
 
-    public List<AddressCityEntity> getChildren() {
-        return children;
-    }
 
-    public void setChildren(List<AddressCityEntity> children) {
-        this.children = children;
-    }
 }

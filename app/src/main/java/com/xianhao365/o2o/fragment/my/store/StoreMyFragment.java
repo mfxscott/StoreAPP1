@@ -84,17 +84,17 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 //        }
         view = inflater.inflate(R.layout.fragment_store_my, null);
         initView();
-        SXUtils.showMyProgressDialog(activity,false);
+
         EventBus.getDefault().register(this);
         LoadData();
         return view;
     }
-
     /**
      * 初始化加载用户相关接口数据
      */
     private void LoadData(){
         if(SXUtils.getInstance(activity).IsLogin()) {
+            SXUtils.showMyProgressDialog(activity,false);
             getUserInfoHttp();
 //            GetOrderListHttp();
 //            GetUserWalletHttp();
@@ -217,8 +217,8 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
     @Override
     public void onClick(View v) {
-        if(!SXUtils.getInstance(activity).IsLogin())
-            return ;
+//        if(!SXUtils.getInstance(activity).IsLogin())
+//            return ;
         switch (v.getId()){
             case R.id.my_per_wallet:
                 Intent wall = new Intent(activity,MyWalletActivity.class);
@@ -227,6 +227,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             case R.id.my_acc_mamage_tv:
 //                String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
 //                List<AddressProvinceEntity> jsonBean = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
+
 //                ArrayList<String>  jsoList = new ArrayList<>();
 //                for (int c = 0; c < jsonBean.size(); c++) {//遍历该省份的所有城市
 //                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
@@ -247,7 +248,6 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
 //                    String AreaName = jsonBean.get(0).getChildren().get(0).getChildren().get(d).getLabel();
 //                    City_AreaList.add(AreaName);//添加该城市所有地区数据
 //                }
-//
 //                /**
 //                 * 添加城市数据 shide
 //                 */

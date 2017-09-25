@@ -64,6 +64,7 @@
             android:id="@+id/include_bill"
             layout="@layout/layout_no_info"/>
         <LinearLayout
+            android:background="@color/white"
             android:id="@+id/bill_list_liny"
             android:orientation="vertical"
             android:layout_width="match_parent"

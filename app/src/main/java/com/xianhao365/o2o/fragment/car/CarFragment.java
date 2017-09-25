@@ -76,10 +76,11 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.fragment_car, null);
         activity = getActivity();
         init();
-        SXUtils.showMyProgressDialog(activity,false);
+
         //注册事件
         EventBus.getDefault().register(this);
         if(SXUtils.getInstance(activity).IsLogin())
+            SXUtils.showMyProgressDialog(activity,false);
             GetCarList();
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;

@@ -124,7 +124,6 @@ public class WheelOptions<T> {
                     wv_option3.setAdapter(new ArrayWheelAdapter(mOptions3Items
                             .get(wv_option1.getCurrentItem()).get(index)));
                     wv_option3.setCurrentItem(opt3);
-
                 }
             }
         };
