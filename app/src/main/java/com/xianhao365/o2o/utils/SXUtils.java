@@ -941,4 +941,30 @@ public class SXUtils {
             }
         });
     }
+    /**
+     * 删除我的地址
+     */
+    public void delAddress(String id) {
+        HttpParams httpp = new HttpParams();
+        HttpUtils.getInstance(mContext).requestPost(false, AppClient.ADDRESS_SELECT, httpp, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("删除地址=====",jsonObject.toString());
+//                JSONObject jsonObject1 = null;
+//                List<AddressInfoEntity> orderFrom = ResponseData.getInstance(mContext).parseJsonArray(jsonObject.toString(),AddressInfoEntity.class);
+//                Message msg = new Message();
+//                msg.what = 1000;
+//                msg.obj = orderFrom;
+//                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+
+            }
+        });
+    }
 }

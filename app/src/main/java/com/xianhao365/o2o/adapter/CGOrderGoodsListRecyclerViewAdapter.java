@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.car.OrderLinesEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGPurchaseLinesEntity;
 import com.xianhao365.o2o.utils.SXUtils;
 
@@ -26,13 +27,14 @@ public class CGOrderGoodsListRecyclerViewAdapter
 
     private int mBackground;
     private List<CGPurchaseLinesEntity> mValues;
+    private List<OrderLinesEntity>  orderLinesList;//个人提交订单中显示的商品明细
     private Context context;
-    private int tag;//标示订单类型进入显示不同按钮
+    private int tag=0;//标示订单类型进入显示不同按钮
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-      public ImageView itemImg;
+        public ImageView itemImg;
 
         public ViewHolder(View view) {
             super(view);
@@ -46,10 +48,16 @@ public class CGOrderGoodsListRecyclerViewAdapter
         }
     }
 
-    public CGOrderGoodsListRecyclerViewAdapter(Context context, List<CGPurchaseLinesEntity> items, int tag) {
+    public CGOrderGoodsListRecyclerViewAdapter(Context context, List<CGPurchaseLinesEntity> items) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
+        this.context = context;
+    }
+    public CGOrderGoodsListRecyclerViewAdapter(Context context, List<OrderLinesEntity> items, int tag) {
+        context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
+        mBackground = mTypedValue.resourceId;
+        orderLinesList = items;
         this.context = context;
         this.tag = tag;
     }
@@ -64,18 +72,28 @@ public class CGOrderGoodsListRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        CGPurchaseLinesEntity gcpurchase = mValues.get(position);
-        SXUtils.getInstance(context).GlideSetImg(gcpurchase.getThumbImg(),holder.itemImg);
+
+        if(tag == 0){
+            CGPurchaseLinesEntity gcpurchase = mValues.get(position);
+            SXUtils.getInstance(context).GlideSetImg(gcpurchase.getThumbImg(),holder.itemImg);
+        }else{
+            OrderLinesEntity orderlines = orderLinesList.get(position);
+            SXUtils.getInstance(context).GlideSetImg(orderlines.getGoodsImage(),holder.itemImg);
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        if (tag == 0) {
+            return mValues.size();
+        } else {
+            return orderLinesList.size();
+        }
     }
+        @Override
+        public int getItemViewType(int position) {
+            return super.getItemViewType(position);
+        }
 
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
     }
-
-}

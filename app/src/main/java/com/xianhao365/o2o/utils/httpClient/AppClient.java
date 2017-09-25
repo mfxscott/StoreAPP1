@@ -40,6 +40,12 @@ public class AppClient{
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
     public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
+
+    public static String ADDRESS_ADD="svc.add.shipping.address";//		添加收货地址
+    public static String ADDRESS_UPDATE="svc.mod.shipping.address";//	修改收货地址
+    public static String ADDRESS_DEL="svc.del.shipping.address";//		删除收货地址
+    public static String ADDRESS_SELECT="svc.my.shipping.address";//		我的收货地址
+
     /**
      *订单相关接口
      */

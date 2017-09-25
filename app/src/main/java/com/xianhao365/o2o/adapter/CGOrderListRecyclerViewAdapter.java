@@ -96,7 +96,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.cgOrderItemRecycler.setLayoutManager(linearLayoutManager);
         holder.cgOrderItemRecycler.setItemAnimator(new DefaultItemAnimator());
-        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,cgInfo.getPurchaseLineVos(),1);
+        final CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(context,cgInfo.getPurchaseLineVos());
         holder.cgOrderItemRecycler.setAdapter(simpAdapter);
 
         holder.cgOrderNumTv.setText(cgInfo.getPurchaseCode()+"");

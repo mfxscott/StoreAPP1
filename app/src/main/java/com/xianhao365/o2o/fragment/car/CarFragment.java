@@ -2,6 +2,7 @@ package com.xianhao365.o2o.fragment.car;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -23,6 +24,7 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.CarStoreRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.car.CarList;
+import com.xianhao365.o2o.entity.car.FromOrderEntity;
 import com.xianhao365.o2o.entity.car.ShoppingListEntity;
 import com.xianhao365.o2o.entity.car.TakeNoPartInActivitiesEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
@@ -190,8 +192,22 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                         storesimpAdapter.notifyDataSetChanged();
                         break;
                     case 1003:
+                        FromOrderEntity fromOrder = (FromOrderEntity) msg.obj;
                         //订单结算成功返回
-
+//                        ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+//                        list.add(cgInfo.getPurchaseLineVos());
+//                        bundle.putParcelableArrayList("PurchaseList",list);
+//                        bundle.putParcelable("orderList", cgInfo);
+//                        intent.putExtras(bundle);
+                        Intent pay = new Intent(activity,GoPayActivity.class);
+                        Bundle bundle = new Bundle();
+                        ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                        list.add(fromOrder.getOrderLines());
+                        bundle.putParcelable("fromOrder",fromOrder);
+                        bundle.putParcelableArrayList("orderLine",list);
+                       Logs.i("++++++++++++++++"+fromOrder.getOrderLines().size());
+                        pay.putExtras(bundle);
+                        startActivity(pay);
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
@@ -238,9 +254,8 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 }else{
                     String suk=  getCarTotalStrSkucode();
                     if(!TextUtils.isEmpty(suk))
-                    getFromOrder(suk);
-//                    Intent pay = new Intent(activity,GoPayActivity.class);
-//                    startActivity(pay);
+                        getFromOrder(suk);
+
                 }
                 break;
             case R.id.car_go_shop_lin:
@@ -299,7 +314,6 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             }
         });
     }
-
     /**
      * 订单结算
      */
@@ -307,14 +321,15 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         HttpParams httpp = new HttpParams();
         httpp.put("couponNos","");//优化劵 用逗号隔开
         httpp.put("skuBarcodes",sku);//skucode 逗号隔开
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.ORDER_FORM, null, new HttpUtils.requestCallBack() {
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.ORDER_FORM, httpp, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("订单结算成功返回参数=======",jsonObject.toString());
                 JSONObject jsonObject1 = null;
+                FromOrderEntity orderFrom = (FromOrderEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),FromOrderEntity.class);
                 Message msg = new Message();
                 msg.what = 1003;
-                msg.obj = "";
+                msg.obj = orderFrom;
                 hand.sendMessage(msg);
             }
             @Override
@@ -381,6 +396,8 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 }
             }
         }
+        if(TextUtils.isEmpty(skuCodestr) || skuCodestr.equals(","))
+            return "";
         return skuCodestr.substring(0,skuCodestr.length()-1)+"";
     }
     /**

@@ -212,7 +212,13 @@ public class ResponseData {
         return result;
     }
 
-
+    /**
+     * 解析返回数据数组json数据
+     * @param strByJson
+     * @param type
+     * @param <T>
+     * @return
+     */
     public  <T> List<T> parseJsonArray(String strByJson,Class<T> type) {
         //拿到本地JSON 并转成String
         //Json的解析类对象

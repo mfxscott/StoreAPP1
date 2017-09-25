@@ -14,10 +14,11 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.AddressInfoEntity;
+import com.xianhao365.o2o.entity.address.AddressInfoEntity;
 import com.xianhao365.o2o.fragment.car.EditAddAddressActivity;
+import com.xianhao365.o2o.utils.SXUtils;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public  class AddressRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<AddressInfoEntity> mValues;
+    private List<AddressInfoEntity> mValues = new ArrayList<>();
     private Activity activity;
     private int dfposiont=-1;
     private boolean isOnclick=false;//判断只要点击过设置默认地址就不已默认字段标示为判断
@@ -76,10 +77,8 @@ public  class AddressRecyclerViewAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final AddressInfoEntity  addrss = mValues.get(position);
-        holder.namePhone.setText(addrss.getName()+"    "+addrss.getPhone());
-        holder.cityStreet.setText(addrss.getCity()+addrss.getStreet());
-
-
+        holder.namePhone.setText(addrss.getConsigneeName()+"    "+addrss.getConsigneeMobile());
+        holder.cityStreet.setText(addrss.getProvinceName()+addrss.getCityName()+addrss.getDistrictName()+addrss.getAddress());
         holder.isDefaultCb.setOnCheckedChangeListener(null);
         if(isOnclick){
             if (dfposiont == position) {
@@ -111,6 +110,13 @@ public  class AddressRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("addressInfo",addrss);
+                intent.putExtras(bundle);
+                //通过intent对象返回结果，必须要调用一个setResult方法，
+                //setResult(resultCode, data);第一个参数表示结果返回码，一般只要大于1就可以，但是
+                activity.setResult(1000, intent);
                 activity.finish();
             }
         });
@@ -118,6 +124,7 @@ public  class AddressRecyclerViewAdapter
             @Override
             public void onClick(View v) {
                 removeData(position);
+                SXUtils.getInstance(activity).delAddress(addrss.getConsigneeId());
             }
         });
         holder.editTv.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +133,7 @@ public  class AddressRecyclerViewAdapter
                 Intent intent = new Intent(holder.mView.getContext(), EditAddAddressActivity.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putString("tag","1");
-                mBundle.putSerializable("address", (Serializable) mValues.get(position));
+                mBundle.putParcelable("address", mValues.get(position));
                 intent.putExtras(mBundle);
                 holder.mView.getContext().startActivity(intent);
             }
