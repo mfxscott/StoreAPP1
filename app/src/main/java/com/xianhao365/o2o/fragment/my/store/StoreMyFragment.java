@@ -304,7 +304,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.my_store_myorder_rel:
                 Intent order = new Intent(activity,MyOrderActivity.class);
-                order.putExtra("orderTag","1");
+                order.putExtra("orderTag","4");
                 startActivity(order);
                 break;
             case R.id.my_store_waitpay_lin:

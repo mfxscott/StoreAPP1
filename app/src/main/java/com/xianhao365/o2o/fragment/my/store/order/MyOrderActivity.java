@@ -1,5 +1,4 @@
 package com.xianhao365.o2o.fragment.my.store.order;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,8 +17,6 @@ import com.xianhao365.o2o.utils.Logs;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 public class MyOrderActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private String orderTag;

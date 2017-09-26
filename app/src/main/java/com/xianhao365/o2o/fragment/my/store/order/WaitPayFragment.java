@@ -15,9 +15,10 @@ import android.view.ViewGroup;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
+import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.orderlist.OrderListEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -30,19 +31,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WaitPayFragment extends Fragment {
-      private RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private View view;
     private Activity activity;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
     private Handler hand;
+    private List<CGListInfoEntity> cgList = new ArrayList<>();//采购列表数据
+    private WaitPayRecyclerViewAdapter simpAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_pay, container, false);
         initView();
-//        getOrderListHttp(indexPage,"");
+        getOrderListHttp(indexPage);
         return view;
     }
     private void initView(){
@@ -54,39 +57,33 @@ public class WaitPayFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    getOrderListHttp(indexPage,"");
+                    getOrderListHttp(indexPage);
                 }else{
                     indexPage ++;
-                    getOrderListHttp(indexPage,"");
+                    getOrderListHttp(indexPage);
                 }
             }
         });
-
-
-
         recyclerView = (RecyclerView) view.findViewById(R.id.order_wait_pay_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
-        recyclerView.setAdapter(simpAdapter);
-
-
-
+//        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
+//        recyclerView.setAdapter(simpAdapter);
 
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
                         List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-//                        if(indexPage > 0 && gde.size()>0){
-//                            cgList.addAll(gde);
-//                        }else{
-//                            cgList.clear();
-//                            cgList.addAll(gde);
-//                        }
+                        if(indexPage > 0 && gde.size()>0){
+                            cgList.addAll(gde);
+                        }else{
+                            cgList.clear();
+                            cgList.addAll(gde);
+                        }
                         if(gde.size()>=10){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-
                         }else{
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
                         }
@@ -94,7 +91,7 @@ public class WaitPayFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-//                            simpAdapter = new CGOrderListRecyclerViewAdapter(activity,cgList,1);
+                             simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
                             recyclerView.setAdapter(simpAdapter);
                         }
                         break;
@@ -129,19 +126,23 @@ public class WaitPayFragment extends Fragment {
     /**
      * 摊主获取订单列表
      */
-    public void getOrderListHttp(int indexPage,String receiveState) {
+    public void getOrderListHttp(int indexPage) {
         HttpParams params = new HttpParams();
         params.put("pageSize","10");
         params.put("pageIndex",indexPage);
+//        params.put("status","1");
         HttpUtils.getInstance(activity).requestPost(false, AppClient.TZ_ORDER_LIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("订单列表=========",jsonObject.toString());
+                Logs.i("订单列表========",jsonObject.toString());
+
 //                CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
-//                Message msg = new Message();
-//                msg.what = 1000;
-//                msg.obj = gde.getDataset();
-//                hand.sendMessage(msg);
+
+                OrderListEntity gde =  ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),OrderListEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde.getDataset().getRows();
+                hand.sendMessage(msg);
             }
             @Override
             public void onResponseError(String strError) {
