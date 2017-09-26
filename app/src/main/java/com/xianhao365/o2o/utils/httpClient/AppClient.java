@@ -40,11 +40,16 @@ public class AppClient{
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
     public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
-
+//收货地址
     public static String ADDRESS_ADD="svc.add.shipping.address";//		添加收货地址
     public static String ADDRESS_UPDATE="svc.mod.shipping.address";//	修改收货地址
     public static String ADDRESS_DEL="svc.del.shipping.address";//		删除收货地址
     public static String ADDRESS_SELECT="svc.my.shipping.address";//		我的收货地址
+    //优惠券
+
+    public static String COUPONS_USE="svc.usable.coupons";//未使用优惠券
+    public static String COUPONS_NOUSE="svc.used.coupons";//已使用优惠券
+    public static String COUPONS_PASSUSE="svc.expired.coupons";//已过期
 
     /**
      *订单相关接口
@@ -67,6 +72,9 @@ public class AppClient{
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
     public static String  WITHDRAWAPPLY="svc.user.withdraw.apply";//提现申请
     public static String  ADDBANKCARD="svc.user.wallet.addcard";//添加银行卡
+    public static String  UPDATE_STORE_INFO="svc.user.add.shop";//修改获取门店信息
+    public static String  GET_BANKLIST="svc.user.list.bank";//获取开户行
+    public static String  GET_CITYAREA="svc.user.area";//获取省市区
 
     public static String  GYS_CPURCHASE_DELIVER ="svc.purchase.deliverGoods";//供应商采购单发货
 

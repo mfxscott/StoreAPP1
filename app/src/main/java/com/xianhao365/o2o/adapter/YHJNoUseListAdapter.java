@@ -9,7 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.YHJEneity;
+import com.xianhao365.o2o.entity.car.UserCouponEntity;
 
 import java.util.ArrayList;
 
@@ -20,13 +20,15 @@ import java.util.ArrayList;
  * ***************************
  */
 public class YHJNoUseListAdapter extends BaseAdapter {
-    private ArrayList<YHJEneity> result;
+    private ArrayList<UserCouponEntity> result;
     private final LayoutInflater mLayoutInflater;
+    private int tag;
     private Activity context;
-    public YHJNoUseListAdapter(Activity context, ArrayList<YHJEneity> result) {
+    public YHJNoUseListAdapter(Activity context, ArrayList<UserCouponEntity> result, int tag) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
+        this.tag = tag;
     }
     public int getCount() {
             return result.size();
@@ -38,7 +40,7 @@ public class YHJNoUseListAdapter extends BaseAdapter {
         return position;
     }
     public View getView(int position, View convertView, ViewGroup parent) {
-        YHJEneity info = result.get(position);
+        UserCouponEntity info = result.get(position);
         LifeViewHolder vh;
         if (convertView == null) {
             vh = new LifeViewHolder();
@@ -52,14 +54,14 @@ public class YHJNoUseListAdapter extends BaseAdapter {
         } else {
             vh = (LifeViewHolder) convertView.getTag();
         }
-        vh.price.setText(info.getPrice()+"");
-        vh.des.setText(info.getDes());
-        vh.time.setText(info.getTime());
+        vh.price.setText(info.getCouponMoney()+"");
+        vh.des.setText(info.getCouponTerm());
+        vh.time.setText(info.getCouponTime());
 
-        if(info.getState().equals("1")){
+        if(tag==2){
             vh.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
             vh.hs.setText("已经使用");
-        }else if(info.getState().equals("3")){
+        }else if(tag==3){
             vh.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
             vh.hs.setText("已经过期");
         }else{

@@ -150,11 +150,13 @@
                             />
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/go_pay_order_detail_lin"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
+                            android:id="@+id/go_pay_goods_num_tv"
                             android:textColor="@color/col_999"
                             android:textSize="@dimen/ac_text_size_14"
                             android:layout_gravity="center_vertical"
@@ -273,6 +275,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/go_pay_coupons_tv"
                         android:layout_marginLeft="10dp"
                         android:textColor="@color/col_999"
                         android:textSize="@dimen/ac_text_size_14"
@@ -308,6 +311,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <RelativeLayout
+                    android:visibility="gone"
                     android:padding="15dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -520,13 +524,13 @@
                 android:textStyle="bold"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/ac_text_size_18"
-                android:text="￥109."
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
                 android:textColor="@color/orange"
                 android:textSize="@dimen/ac_text_size_12"
-                android:text="00"
+                android:text="元"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>

@@ -3,6 +3,7 @@ package com.xianhao365.o2o.fragment.my.store;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
+import com.xianhao365.o2o.utils.SXUtils;
 
 /**
  * 账号充值,商品支付  支付方式选择界面
@@ -30,6 +32,7 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
     private  int  payTag = 3;//1 微信 2 支付宝 3 银行卡选择支付方式标识
     private String TagStr,paySum;//标识充值还是支付，金额
     private EditText sumEdit;
+    private String orderNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
         setContentView(R.layout.activity_top_up);
         TagStr = this.getIntent().getStringExtra("payTag");
         paySum = this.getIntent().getStringExtra("paySum");
+        orderNo = this.getIntent().getStringExtra("orderNo");
         activity = this;
         initView();
     }
@@ -53,7 +57,9 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
             sumEdit.setText(paySum+"");
             sumEdit.setEnabled(false);
         }
-
+         if(!TextUtils.isEmpty(orderNo)){
+             SXUtils.getInstance(activity).ToastCenter("订单号为"+orderNo);
+         }
         topupWxpayRel = (RelativeLayout) findViewById(R.id.topup_wxpay_rel);
         topupWxCheckImg = (ImageView) findViewById(R.id.topup_wx_check_img);
         topupZfbpayRel = (RelativeLayout) findViewById(R.id.topup_zfbpay_rel);

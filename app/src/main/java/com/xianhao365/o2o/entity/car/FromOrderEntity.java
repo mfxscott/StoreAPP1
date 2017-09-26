@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.xianhao365.o2o.entity.address.AddressInfoEntity;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 购物车订单结算
@@ -17,8 +17,9 @@ public class FromOrderEntity implements Parcelable{
     private String freightAmount;
     private String settlementAmount;
     private String transactionAmount;
-    private PayModelEntity settlementModes;
-    private List<OrderLinesEntity> orderLines;
+    private ArrayList<PayTypeEntity> settlementModes; //支付方式 在线支付和到付
+    private ArrayList<OrderLinesEntity> orderLines; //支付商品列表
+    private  ArrayList<OrderCouponsEntity> orderCoupons;//优惠券列表
 
     protected FromOrderEntity(Parcel in) {
         defaultAddress = in.readParcelable(AddressInfoEntity.class.getClassLoader());
@@ -27,6 +28,7 @@ public class FromOrderEntity implements Parcelable{
         settlementAmount = in.readString();
         transactionAmount = in.readString();
         orderLines = in.createTypedArrayList(OrderLinesEntity.CREATOR);
+        orderCoupons = in.createTypedArrayList(OrderCouponsEntity.CREATOR);
     }
 
     public static final Creator<FromOrderEntity> CREATOR = new Creator<FromOrderEntity>() {
@@ -40,14 +42,6 @@ public class FromOrderEntity implements Parcelable{
             return new FromOrderEntity[size];
         }
     };
-
-    public PayModelEntity getSettlementModes() {
-        return settlementModes;
-    }
-
-    public void setSettlementModes(PayModelEntity settlementModes) {
-        this.settlementModes = settlementModes;
-    }
 
     public AddressInfoEntity getDefaultAddress() {
         return defaultAddress;
@@ -89,20 +83,28 @@ public class FromOrderEntity implements Parcelable{
         this.transactionAmount = transactionAmount;
     }
 
-//    public String getSettlementModes() {
-//        return settlementModes;
-//    }
-//
-//    public void setSettlementModes(String settlementModes) {
-//        this.settlementModes = settlementModes;
-//    }
+    public ArrayList<PayTypeEntity> getSettlementModes() {
+        return settlementModes;
+    }
 
-    public List<OrderLinesEntity> getOrderLines() {
+    public void setSettlementModes(ArrayList<PayTypeEntity> settlementModes) {
+        this.settlementModes = settlementModes;
+    }
+
+    public ArrayList<OrderLinesEntity> getOrderLines() {
         return orderLines;
     }
 
-    public void setOrderLines(List<OrderLinesEntity> orderLines) {
+    public void setOrderLines(ArrayList<OrderLinesEntity> orderLines) {
         this.orderLines = orderLines;
+    }
+
+    public ArrayList<OrderCouponsEntity> getOrderCoupons() {
+        return orderCoupons;
+    }
+
+    public void setOrderCoupons(ArrayList<OrderCouponsEntity> orderCoupons) {
+        this.orderCoupons = orderCoupons;
     }
 
     @Override
@@ -118,5 +120,6 @@ public class FromOrderEntity implements Parcelable{
         dest.writeString(settlementAmount);
         dest.writeString(transactionAmount);
         dest.writeTypedList(orderLines);
+        dest.writeTypedList(orderCoupons);
     }
 }

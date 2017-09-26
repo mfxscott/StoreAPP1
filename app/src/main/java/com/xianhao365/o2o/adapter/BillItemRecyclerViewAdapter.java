@@ -38,7 +38,7 @@ public  class BillItemRecyclerViewAdapter
 
         public final View mView;
         public final ImageView addImage;
-        public final TextView  shopPrice;
+        public final TextView shopPrice;
         public final TextView  goodsUnit;
         public final TextView  goodsModel;
         public final TextView  marketPrice;
@@ -66,7 +66,6 @@ public  class BillItemRecyclerViewAdapter
         goodsUnit = category.getGoodsUnit();
         billchirdrenList = category.getChirdren();
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -76,11 +75,11 @@ public  class BillItemRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-      final  BillChirdrenEntity billchirdren = billchirdrenList.get(position);
+        final  BillChirdrenEntity billchirdren = billchirdrenList.get(position);
         holder.goodsUnit.setText("/"+goodsUnit);
-        holder.marketPrice.setText(billchirdren.getMarketPrice());
+        holder.marketPrice.setText(" ¥"+billchirdren.getMarketPrice());
 //        holder.shopPrice.setText(billchirdren.getShopPrice());
-        holder.goodsModel.setText(billchirdren.getGoodsModel());
+        holder.goodsModel.setText(" ¥"+billchirdren.getShopPrice()+"/"+billchirdren.getGoodsModel());
 //                holder.mView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

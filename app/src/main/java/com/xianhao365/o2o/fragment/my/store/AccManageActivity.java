@@ -28,8 +28,11 @@ import com.xianhao365.o2o.utils.view.GlideRoundTransform;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.FormBody;
 import okhttp3.RequestBody;
 
@@ -40,12 +43,17 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
     private Activity activity;
     private Handler hand;
     private UserInfoEntity userinfo;
+    @BindView(R.id.acc_manage_filesize_tv)
+    TextView filesizeTv;
+    @BindView(R.id.acc_manage_clear_rel)
+    RelativeLayout  clearRel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_acc_manage);
         Bundle bundle = this.getIntent().getExtras();
         userinfo =(UserInfoEntity)bundle.getParcelable("userinfo");
+        ButterKnife.bind(this);
         activity = this;
         initView();
         initData(userinfo);
@@ -64,7 +72,7 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         rel.setOnClickListener(this);
         RelativeLayout addacc = (RelativeLayout) findViewById(R.id.acc_manage_addson_rel);
         addacc.setOnClickListener(this);
-
+        clearRel.setOnClickListener(this);
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -86,6 +94,8 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 return true;
             }
         });
+        Long  filesize =   SXUtils.getInstance(activity).getFolderSize(new File(SXUtils.getInstance(activity).getSDPath()));
+        filesizeTv.setText(filesize+"kb");
     }
     private void  initData(UserInfoEntity usrnfo){
         if(usrnfo == null)
@@ -94,11 +104,12 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
         Glide.with(activity).load(usrnfo.getShopLogo()).placeholder(R.mipmap.default_head)
                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
         TextView tvname = (TextView) findViewById(R.id.acc_manage_name_tv);
-        if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("4") ){
+        if(AppClient.USERROLETAG.equals("64") || AppClient.USERROLETAG.equals("4") || AppClient.USERROLETAG.equals("16")){
             tvname.setText(usrnfo.getAcount()+"");
         }else{
             tvname.setText(usrnfo.getShopName()+"");
 //            addacc.setVisibility(View.VISIBLE);
+
         }
     }
     @Override
@@ -126,7 +137,10 @@ public class AccManageActivity extends BaseActivity implements View.OnClickListe
                 //添加子账号界面
                 Intent addacc = new Intent(activity,AddAccActivity.class);
                 startActivity(addacc);
-
+                break;
+            case R.id.acc_manage_clear_rel:
+                SXUtils.getInstance(activity).deleteDir(SXUtils.getInstance(activity).getSDPath());
+                SXUtils.getInstance(activity).ToastCenter("清除成功");
                 break;
         }
     }

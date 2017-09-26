@@ -2,6 +2,7 @@ package com.xianhao365.o2o.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,7 +71,7 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
 
         vh.mTextView.setText(categInfo.getGoodsName());
         vh.recyclerView.setLayoutManager(new LinearLayoutManager(vh.recyclerView.getContext()));
-//        vh.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        vh.recyclerView.setItemAnimator(new DefaultItemAnimator());
         BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(vh.recyclerView.getContext(), categInfo);
         vh.recyclerView.setAdapter(simpAdapter);
         SXUtils.getInstance(context).GlideSetImg(categInfo.getOriginalImg(),vh.mImageView);

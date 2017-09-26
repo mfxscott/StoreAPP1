@@ -257,7 +257,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="￥0"
+                                android:text="¥0"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 android:layout_centerVertical="true"
@@ -285,7 +285,7 @@
                                 android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="￥0"
+                                android:text="¥0"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 android:layout_centerVertical="true"
@@ -415,6 +415,7 @@
                     android:textColor="@color/col_333"
                     android:textSize="@dimen/ac_text_size_14"/>
                 <TextView
+                    android:id="@+id/partner_scan_tv"
                     android:padding="10dp"
                     android:textStyle="bold"
                     android:textColor="@color/white"

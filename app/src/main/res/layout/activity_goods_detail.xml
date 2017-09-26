@@ -13,7 +13,6 @@
         android:layout_height="fill_parent"
         android:fadingEdge="none"
         android:scrollbars="none"
-        android:layout_below="@+id/goods_detial_title_rel"
         android:layout_alignParentStart="true">
         <LinearLayout
             android:orientation="vertical"
@@ -27,6 +26,7 @@
                 android:visibility="visible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
+
                 <com.youth.banner.Banner
                     android:id="@+id/goods_detail_banner"
                     android:layout_width="wrap_content"
@@ -39,6 +39,17 @@
                     app:title_height="40dp"
                     >
                 </com.youth.banner.Banner>
+                <TextView
+                    android:visibility="gone"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/transparent"
+                    android:padding="10dp"
+                    android:gravity="right"
+                    android:textSize="@dimen/ac_text_size_12"
+                    android:textColor="@color/col_333"
+                    android:text="照片仅供参考 以实物为准"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
             <!-- =================商品参数=============-->
             <LinearLayout
@@ -46,15 +57,6 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-            <TextView
-                android:background="@color/white"
-                android:padding="10dp"
-                android:gravity="right"
-                android:textSize="@dimen/ac_text_size_12"
-                android:textColor="@color/col_333"
-                android:text="照片仅供参考 以实物为准"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
             <View
                 android:visibility="visible"
                 android:layout_width="match_parent"
@@ -238,7 +240,7 @@
                             android:textColor="@color/orange"
                             android:textSize="@dimen/ac_text_size_16"
                             android:textStyle="bold"
-                            android:text="￥8.80"
+                            android:text="¥8.80"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                         <TextView
@@ -627,7 +629,6 @@
     </RelativeLayout>
 <!-- 底部添加购物车列表-->
     <RelativeLayout
-
         android:id="@+id/goods_detail_bottom_rel"
         android:layout_alignParentBottom="true"
         android:background="@color/white"
@@ -668,14 +669,16 @@
                 android:text="合计："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
+
             <TextView
                 android:id="@+id/goods_detail_car_price_tv"
-                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¥0"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/ac_text_size_16"
-                android:text="￥0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textStyle="bold"/>
+
             <TextView
                 android:textColor="@color/col_999"
                 android:textSize="@dimen/ac_text_size_16"

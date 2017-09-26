@@ -168,8 +168,8 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
                 .setSubCalSize(18)//确定和取消文字大小
                 .setTitleSize(20)//标题文字大小
                 .setTitleColor(Color.BLACK)//标题文字颜色
-                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+                .setSubmitColor(Color.GREEN)//确定按钮文字颜色
+                .setCancelColor(Color.GREEN)//取消按钮文字颜色
                 .setTitleBgColor(Color.WHITE)//标题背景颜色 Night mode
                 .setBgColor(Color.WHITE)//滚轮背景颜色 Night mode
                 .setContentTextSize(18)//滚轮文字大小
@@ -183,11 +183,12 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
                 .build();
     }
     /**
-     * 获取收货地址
+     * 修改收货地址
      */
-    public void getUpdateAddress(String name,String phone,String addressInfo) {
+    public void getUpdateAddress(String name,String phone,String addressInf) {
         HttpParams httpp = new HttpParams();
         httpp.put("consignee",name);
+        httpp.put("id",addressInfo.getConsigneeId());
         httpp.put("mobile",phone);
         httpp.put("provinceCode",pCode);
         httpp.put("provinceName",provinceStr);
@@ -195,7 +196,7 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
         httpp.put("cityName",cityStr);
         httpp.put("districtCode",aCode);
         httpp.put("districtName",districtStr);
-        httpp.put("address",addressInfo);
+        httpp.put("address",addressInf);
         httpp.put("isDefault",isDefault);
         HttpUtils.getInstance(activity).requestPost(false,tag.equals("0") ?AppClient.ADDRESS_ADD:AppClient.ADDRESS_UPDATE, httpp, new HttpUtils.requestCallBack() {
             @Override

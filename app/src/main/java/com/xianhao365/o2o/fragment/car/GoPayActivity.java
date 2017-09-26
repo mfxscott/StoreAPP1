@@ -8,7 +8,9 @@ import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,17 +18,23 @@ import android.widget.TextView;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
+import com.xianhao365.o2o.adapter.CGOrderGoodsListRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.address.AddressInfoEntity;
 import com.xianhao365.o2o.entity.car.FromOrderEntity;
+import com.xianhao365.o2o.entity.car.OrderCouponsEntity;
 import com.xianhao365.o2o.entity.car.OrderLinesEntity;
-import com.xianhao365.o2o.entity.car.PayModelEntity;
+import com.xianhao365.o2o.entity.car.PayTypeEntity;
+import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.yhj.YHJActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
-import java.util.List;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -56,12 +64,19 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
     @BindView(R.id.gopay_online_rel)
     RelativeLayout onLineRely;
     @BindView(R.id.gopay_online_iv)
-    TextView  onlineTv;
+    ImageView onlineTv;
     @BindView(R.id.gopay_getto_iv)
-    TextView gottoTv;
+    ImageView gottoTv;
+    @BindView(R.id.go_pay_coupons_tv)
+    TextView  couponsTv;
+    @BindView(R.id.go_pay_goods_num_tv)
+    TextView  goodsNumTv;
+    @BindView(R.id.go_pay_order_detail_lin)
+    LinearLayout orderDetailLin;
     private int  REQUESTCODE=1000;
-    private List<OrderLinesEntity> orderList;
-    private PayModelEntity payModel;
+    private ArrayList<OrderLinesEntity> orderList;
+    private ArrayList<OrderCouponsEntity> couponsList;
+    private ArrayList<PayTypeEntity> payTypeList;
     private Handler hand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,18 +86,27 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         ButterKnife.bind(this);
         Bundle bundle = this.getIntent().getExtras();
         fromOrder = bundle.getParcelable("fromOrder");
-//        ArrayList list = bundle.getParcelableArrayList("orderList");
-//        orderList= (List<OrderLinesEntity>) list.get(0);
-//        Logs.i(orderList.size()+"=============");
+        ArrayList list = bundle.getParcelableArrayList("orderLine");
+        orderList= (ArrayList<OrderLinesEntity>) list.get(0);
+        ArrayList coupsonslist = bundle.getParcelableArrayList("coupsons");
+        couponsList= (ArrayList<OrderCouponsEntity>) coupsonslist.get(0);
+        ArrayList payTypelist = bundle.getParcelableArrayList("payType");
+        payTypeList= (ArrayList<PayTypeEntity>) payTypelist.get(0);
+
+
+
+        Logs.i(orderList.size()+"============="+couponsList.size());
         initView();
     }
     private void initView(){
-
-        totalPriceTv.setText(fromOrder.getTransactionAmount());
-        freightAmountTv.setText(fromOrder.getFreightAmount());
-        priceTv.setText(fromOrder.getTransactionAmount());
+        couponsTv.setText(payTypeList.size()+"张");
+        totalPriceTv.setText("¥"+fromOrder.getTransactionAmount());
+        freightAmountTv.setText("¥"+fromOrder.getFreightAmount());
+        priceTv.setText("¥"+fromOrder.getTransactionAmount());
+        goodsNumTv.setText("共"+orderList.size()+"类");
         onLineRely.setOnClickListener(this);
         getToPayRely.setOnClickListener(this);
+        orderDetailLin.setOnClickListener(this);
         LinearLayout  goback = (LinearLayout) findViewById(R.id.gopay_title_goback_linlay);
         goback.setOnClickListener(this);
         RelativeLayout reladdress = (RelativeLayout) findViewById(R.id.gopay_check_address_rel);
@@ -98,12 +122,18 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recycler.setLayoutManager(linearLayoutManager);
         recycler.setItemAnimator(new DefaultItemAnimator());
-//        CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(activity,orderList,1);
-//        recycler.setAdapter(simpAdapter);
+        CGOrderGoodsListRecyclerViewAdapter simpAdapter = new CGOrderGoodsListRecyclerViewAdapter(activity,orderList,1);
+        recycler.setAdapter(simpAdapter);
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+                        String orderNo = (String) msg.obj;
+                        Intent pay = new Intent(activity, TopUpActivity.class);
+                        pay.putExtra("payTag","1");
+                        pay.putExtra("paySum","1000");
+                        pay.putExtra("orderNo",orderNo);
+                        startActivity(pay);
                         break;
                     case 1001:
                         break;
@@ -157,6 +187,9 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
                 onlineTv.setVisibility(View.GONE);
                 gottoTv.setVisibility(View.VISIBLE);
                 break;
+            case R.id.go_pay_order_detail_lin:
+                //点击共多少类跳转订单详情
+                break;
         }
     }
 
@@ -166,6 +199,8 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         // RESULT_OK，判断另外一个activity已经结束数据输入功能，Standard activity result:
         // operation succeeded. 默认值是-1
         if (requestCode == REQUESTCODE) {
+            if(data == null)
+                return;
             Bundle bundle = data.getExtras();
             AddressInfoEntity address = (AddressInfoEntity) bundle.get("addressInfo");
             initData(address);
@@ -179,16 +214,23 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         httpp.put("couponNos","");//优化劵 用逗号隔开
         httpp.put("consigneeId",fromOrder.getDefaultAddress().getConsigneeId());//收货地址ID
         httpp.put("settlementMode","1");//支付方式
-        httpp.put("skuBarcodes","14500054");//优化劵 用逗号隔开
+        httpp.put("skuBarcodes",returnSkuCode());//优化劵 用逗号隔开
         HttpUtils.getInstance(activity).requestPost(false, AppClient.ORDER_SUBMIT, httpp, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("提交订单成功返回参数=======",jsonObject.toString());
+                Logs.i("提交订单成功返回参数======",jsonObject.toString());
+                String   orderNo ="";
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                    orderNo = jsonObject1.getString("orderNo");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 //                JSONObject jsonObject1 = null;
 //                FromOrderEntity orderFrom = (FromOrderEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),FromOrderEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;
-                msg.obj = "";
+                msg.obj = orderNo;
                 hand.sendMessage(msg);
             }
             @Override
@@ -201,4 +243,19 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
             }
         });
     }
+
+    /**
+     * 获取支付skucode
+     * @return
+     */
+    private String returnSkuCode(){
+        String skuStr = "";
+        for(int i=0;i<orderList.size();i++){
+            skuStr += orderList.get(i).getSkuBarcode()+",";
+        }
+        if(TextUtils.isEmpty(skuStr) || skuStr.equals(","))
+            return "";
+        return skuStr.substring(0,skuStr.length()-1);
+    }
+
 }

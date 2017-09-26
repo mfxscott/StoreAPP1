@@ -120,6 +120,7 @@
         </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/acc_manage_clear_rel"
         android:padding="15dp"
         android:background="@drawable/white_gray_selector"
         android:layout_width="match_parent"
@@ -143,6 +144,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/acc_manage_filesize_tv"
                 android:layout_gravity="center_vertical"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_999"

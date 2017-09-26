@@ -83,7 +83,7 @@ public class AccInfoActivity extends BaseActivity {
         Logs.i("=======json===" + json);
 
         initView();
-         PopViewPrick();
+        PopViewPrick();
     }
 
     private void initView() {
@@ -147,9 +147,16 @@ public class AccInfoActivity extends BaseActivity {
 //                SXUtils.getInstance(activity).ToastCenter(jsonBean.get(options1).getChildren().get(option2).getLabel());
 //                SXUtils.getInstance(activity).ToastCenter(jsonBean.get(options1).getChildren().get(option2).getChildren().get(options3).getLabel());
                 //返回的分别是三个级别的选中位置
-              String tx = jsonBean.get(options1).getLabel()
-                      + jsonBean.get(options1).getChildren().get(option2).getLabel()
-                      + jsonBean.get(options1).getChildren().get(option2).getChildren().get(options3).getLabel();
+                String tx="";
+                if(jsonBean.get(options1).getChildren().get(option2).getChildren() != null){
+                    tx = jsonBean.get(options1).getLabel()
+                            + jsonBean.get(options1).getChildren().get(option2).getLabel()
+                            + jsonBean.get(options1).getChildren().get(option2).getChildren().get(options3).getLabel();
+                }else{
+                    tx = jsonBean.get(options1).getLabel()
+                            + jsonBean.get(options1).getChildren().get(option2).getLabel();
+                }
+
 //              tvOptions.setText(tx);
                 storeAdd.setText(tx+"");
                 accInfoAddressEdt.setText(tx+"");

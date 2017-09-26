@@ -201,11 +201,19 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 //                        intent.putExtras(bundle);
                         Intent pay = new Intent(activity,GoPayActivity.class);
                         Bundle bundle = new Bundle();
+                        bundle.putParcelable("fromOrder",fromOrder);
                         ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
                         list.add(fromOrder.getOrderLines());
-                        bundle.putParcelable("fromOrder",fromOrder);
                         bundle.putParcelableArrayList("orderLine",list);
-                       Logs.i("++++++++++++++++"+fromOrder.getOrderLines().size());
+
+                        ArrayList couponslist = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                        couponslist.add(fromOrder.getOrderCoupons());
+                        bundle.putParcelableArrayList("coupsons",couponslist);
+
+
+                        ArrayList payTypelist = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                        payTypelist.add(fromOrder.getSettlementModes());
+                        bundle.putParcelableArrayList("payType",payTypelist);
                         pay.putExtras(bundle);
                         startActivity(pay);
                         break;
@@ -253,9 +261,12 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                     clearCarList();
                 }else{
                     String suk=  getCarTotalStrSkucode();
-                    if(!TextUtils.isEmpty(suk))
+                    if(!TextUtils.isEmpty(suk)) {
+                        SXUtils.showMyProgressDialog(activity,true);
                         getFromOrder(suk);
-
+                    }else{
+                        SXUtils.getInstance(activity).ToastCenter("请选择购买商品");
+                    }
                 }
                 break;
             case R.id.car_go_shop_lin:

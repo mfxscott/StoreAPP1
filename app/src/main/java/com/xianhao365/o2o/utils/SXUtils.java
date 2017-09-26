@@ -101,7 +101,6 @@ public class SXUtils {
             // 如果没有sd卡，则返回存储目录
             return Environment.getDownloadCacheDirectory().getPath()+"/sx";
     }
-
     /**
      * 创建文件夹
      * @return
@@ -111,6 +110,35 @@ public class SXUtils {
 //        System.out.println(f.exists());
 //
 //    }
+
+    /**
+     * 获取文件夹大小
+     * @param file File实例
+     * @return long
+     */
+    public  long getFolderSize(File file){
+
+        long size = 0;
+        try {
+            java.io.File[] fileList = file.listFiles();
+            for (int i = 0; i < fileList.length; i++)
+            {
+                if (fileList[i].isDirectory())
+                {
+                    size = size + getFolderSize(fileList[i]);
+
+                }else{
+                    size = size + fileList[i].length();
+
+                }
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //return size/1048576;
+        return size;
+    }
     //删除文件夹和文件夹里面的文件
     public  void deleteDir(final String pPath) {
         File dir = new File(pPath);
@@ -781,7 +809,6 @@ public class SXUtils {
              * 添加地区数据
              */
             options3Items.add(Province_AreaList);
-
         }
         pvOptions.setPicker(options1Items, options2Items, options3Items);//添加数据源
         pvOptions.show();

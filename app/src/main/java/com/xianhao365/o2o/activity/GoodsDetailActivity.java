@@ -8,8 +8,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.GoodsDetailInfoRecyclerViewAdapter;
@@ -105,8 +102,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         getHttpGoodsDetail();
     }
     private void initView(){
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+//        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
         LinearLayout   tabXXXXLin = (LinearLayout) findViewById(R.id.goods_detail_tab_xxxx_lin);
@@ -148,7 +145,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
                         goodsdetail = (GoodsDetailInfoEntity) msg.obj;
                         if(goodsdetail.getSkuList() != null && goodsdetail.getSkuList().size()>0) {
                             Logs.i("多规格商品数量========="+goodsdetail.getSkuList().size());
-                            goodsModelTv.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
+                            goodsModelTv.setText("/"+goodsdetail.getSkuList().get(0).getGoodsModel());
                             marketPriceTv.setText("¥ "+goodsdetail.getSkuList().get(0).getMarketPrice());
                             pfPriceTv.setText("¥ "+goodsdetail.getSkuList().get(0).getShopPrice());
                             goodsggModel.setText(goodsdetail.getSkuList().get(0).getGoodsModel());
@@ -203,8 +200,11 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
     private void setBanner(String [] bannerImg){
         banner = (Banner) findViewById(R.id.goods_detail_banner);
         List<String> images = new ArrayList<String>();
+        List<String> titlestr = new ArrayList<String>();
+
         for(int i=0;i<bannerImg.length;i++){
             images.add(bannerImg[i]);
+            titlestr.add("照片仅供参考 以实物为准");
         }
 //        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
 //        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
@@ -214,16 +214,25 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
 //        images.add(R.mipmap.img_dg);
 //        images.add(R.mipmap.img_dy);
 
-        List<String> titlestr = new ArrayList<String>();
-        titlestr.add("我是第一个图片");
-        titlestr.add("我是第2个图片");
-        titlestr.add("我是第3个图片");
+
+//        titlestr.add("我是第2个图片");
+//        titlestr.add("我是第3个图片");
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
 //        //显示标题样式水平显示
-        banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
+//        CIRCLE_INDICATOR 圆形
+//        BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE
+//        BannerConfig.CIRCLE_INDICATOR_TITLE
 //        //设置标题文本
-//        banner.setBannerTitles(titlestr);
+        banner.setBannerTitles(titlestr);
+//        banner.setBannerTitle();
+
+//        setBannerTitle(String[] titles)	设置轮播要显示的标题和图片对应（如果不传默认不显示标题）	1.3.3结束
+//        banner.setBannerTitleList(List titles);//	设置轮播要显示的标题和图片对应（如果不传默认不显示标题）	1.3.3结束
+//        setBannerTitles(List titles)
+
+
         //设置图片集合
         banner.setImages(images);
         //设置banner动画效果
@@ -239,7 +248,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             disTitleRel.setVisibility(View.VISIBLE);
             titleRelay.setVisibility(View.GONE);
             //40 为清单两段间距距离
-        } else if (y > 0 && y <= banner.getHeight()-disTitleRel.getHeight()) {
+        }
+        else if (y > 0 && y <= banner.getHeight()-disTitleRel.getHeight()) {
             titleRelay.setVisibility(View.GONE);
             disTitleRel.setVisibility(View.VISIBLE);
         } else {
@@ -316,7 +326,7 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
             carNum.setVisibility(View.VISIBLE);
             carNum.setText(goodsCar+"");
         }
-        totalPrice.setText(goodsCar*(Float.parseFloat(goodsdetail.getSkuList().get(0).getShopPrice()))+"");
+        totalPrice.setText("¥"+(goodsCar*(Float.parseFloat(goodsdetail.getSkuList().get(0).getShopPrice())))+"");
         SXUtils.getInstance(activity).AddOrUpdateCar(goodsdetail.getSkuList().get(0).getSkuBarcode(),"1");
     }
 
@@ -331,8 +341,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
              切记不要胡乱强转！
              */
             //Glide 加载图片简单用法
-            Glide.with(context).load(path).error(R.mipmap.default_head).into(imageView);
-
+//            Glide.with(context).load(path).error(R.mipmap.default_head).into(imageView);
+            SXUtils.getInstance(activity).GlideSetImg((String) path,imageView);
             //Picasso 加载图片简单用法
 //            Picasso.with(context).load(path).into(imageView);
 

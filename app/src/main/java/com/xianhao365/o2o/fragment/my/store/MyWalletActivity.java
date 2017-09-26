@@ -19,6 +19,7 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.BankCardListAdapter;
 import com.xianhao365.o2o.adapter.SRDetailListAdapter;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.wallet.TransLogEntity;
 import com.xianhao365.o2o.entity.wallet.WalletInfoEntity;
 import com.xianhao365.o2o.fragment.my.buyer.ExtractAddBankCardActivity;
@@ -30,6 +31,9 @@ import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,6 +79,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         ButterKnife.bind(this);
         walletTag = this.getIntent().getStringExtra("walletTag");
         activity = this;
+        EventBus.getDefault().register(this);
         initView();
         initData();
     }
@@ -134,9 +139,9 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
         walletYhjRel.setOnClickListener(this);
         LinearLayout banklay = (LinearLayout) findViewById(R.id.wallet_bank_card_lin);
         if(AppClient.USERROLETAG.equals("64")){
-            banklay.setVisibility(View.GONE);
+//            banklay.setVisibility(View.GONE);
         }else if(AppClient.USERROLETAG.equals("32")){
-            banklay.setVisibility(View.VISIBLE);
+//            banklay.setVisibility(View.VISIBLE);
         }
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
@@ -287,7 +292,7 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 Object obj=null;
                 try {
                     JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
-                     obj = jsonObject1.get("dataset");
+                    obj = jsonObject1.get("dataset");
                 } catch (JSONException e) {
                     Message msg = new Message();
                     msg.what = AppClient.ERRORCODE;
@@ -310,5 +315,16 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
 
             }
         });
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent){
+        if(messageEvent.getMessage().equals("wallet")||messageEvent.getTag()==1){
+            initData();
+        }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
