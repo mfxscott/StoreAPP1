@@ -147,7 +147,6 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                                 ActivityCompat.requestPermissions(Regis1Activity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                                         1000);//自定义的code
                             }
-
                         }
                         finish();
                         break;

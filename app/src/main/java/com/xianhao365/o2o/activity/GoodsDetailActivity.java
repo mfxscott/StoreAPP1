@@ -8,6 +8,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -102,8 +104,8 @@ public class GoodsDetailActivity extends BaseActivity implements ObservableScrol
         getHttpGoodsDetail();
     }
     private void initView(){
-//        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
-//        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
 
         LinearLayout   tabXXXXLin = (LinearLayout) findViewById(R.id.goods_detail_tab_xxxx_lin);

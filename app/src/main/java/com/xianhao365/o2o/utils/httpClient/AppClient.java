@@ -14,6 +14,10 @@ public class AppClient{
     public static final  int ERRORCODE = 4040;//非正常数据返回码
     public static final  int UPDATEVER = 1002;//版本升级返回码
     public static final  int ADDDELCAR = 2001;//添加或者删除购物车成功
+    /**
+     * EventBus 返回接收码说明
+     */
+    public static final  int COUPONS_RETRURN=3001;//提交订单进入优惠券选择返回劵couponsNo
     public static  String iv="";
     public static  String SecretKey="";
 
@@ -72,7 +76,7 @@ public class AppClient{
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
     public static String  WITHDRAWAPPLY="svc.user.withdraw.apply";//提现申请
     public static String  ADDBANKCARD="svc.user.wallet.addcard";//添加银行卡
-    public static String  UPDATE_STORE_INFO="svc.user.add.shop";//修改获取门店信息
+    public static String  UPDATE_STORE_INFO="svc.user.add.shop";//添加和修改获取门店信息
     public static String  GET_BANKLIST="svc.user.list.bank";//获取开户行
     public static String  GET_CITYAREA="svc.user.area";//获取省市区
 

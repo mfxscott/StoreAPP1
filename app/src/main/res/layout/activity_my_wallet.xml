@@ -167,6 +167,8 @@
                                 android:src="@mipmap/yhj_no_use"/>
 
                             <TextView
+                                android:visibility="gone"
+                                android:id="@+id/wallet_coupons_may_tv"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="right"
@@ -210,6 +212,8 @@
                                 android:src="@mipmap/yhj_use"/>
 
                             <TextView
+                                android:visibility="gone"
+                                android:id="@+id/wallet_coupons_no_tv"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="right"
@@ -252,6 +256,8 @@
                                 android:src="@mipmap/yhj_used"/>
 
                             <TextView
+                                android:visibility="gone"
+                                android:id="@+id/wallet_coupons_used_tv"
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:layout_gravity="right"
@@ -314,6 +320,7 @@
                     android:visibility="visible"/>
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:orientation="vertical"
                     android:id="@+id/wallet_banklist_lin"
                     android:layout_marginTop="10dp"

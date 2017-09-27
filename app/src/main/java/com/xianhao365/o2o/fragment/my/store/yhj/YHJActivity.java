@@ -8,13 +8,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidkun.xtablayout.XTabLayout;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.entity.YHJEneity;
 import com.xianhao365.o2o.entity.car.UserCouponEntity;
 import com.xianhao365.o2o.utils.Logs;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author mfx
  * @time  2017/7/7 14:32
  */
-public class YHJActivity extends AppCompatActivity {
+public class YHJActivity extends BaseActivity {
     ViewPager viewPager;
     private String yhjTag;
     private Handler hand;

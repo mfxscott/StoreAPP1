@@ -71,6 +71,12 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     LinearLayout walletCouponLin;
     @BindView(R.id.acc_manage_info_lin)
     LinearLayout  walletLin;
+    @BindView(R.id.wallet_coupons_may_tv)
+    TextView couponsMayTv;
+    @BindView(R.id.wallet_coupons_no_tv)
+    TextView couponsNoTv;
+    @BindView(R.id.wallet_coupons_used_tv)
+    TextView couponsUsedTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +157,9 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                         walletTotalAmt.setText(walletInfo.getTotalAmt()+"");
                         if(TextUtils.isEmpty(walletInfo.getAccNo()) || TextUtils.isEmpty(walletInfo.getIdNo())){
                             bankListLay.setVisibility(View.GONE);
+                        }else{
+                            gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
                         }
-                        gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
                         break;
                     case 1001:
                         List<TransLogEntity> transList = (List<TransLogEntity>) msg.obj;
@@ -239,13 +246,13 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 startActivity(yhj3);
                 break;
             case R.id.wallet_my_bank_rel:
-                if(bankListLay.getVisibility() == View.VISIBLE){
-                    bankListLay.setVisibility(View.GONE);
-                    myBankArrow.setBackgroundResource(R.mipmap.arrow_right);
-                }else{
-                    bankListLay.setVisibility(View.VISIBLE);
-                    myBankArrow.setBackgroundResource(R.mipmap.arrow_down);
-                }
+//                if(bankListLay.getVisibility() == View.VISIBLE){
+//                    bankListLay.setVisibility(View.GONE);
+//                    myBankArrow.setBackgroundResource(R.mipmap.arrow_right);
+//                }else{
+//                    bankListLay.setVisibility(View.VISIBLE);
+//                    myBankArrow.setBackgroundResource(R.mipmap.arrow_down);
+//                }
                 break;
             case R.id.wallet_add_bank_rel:
                 Intent intent = new Intent(activity,ExtractAddBankCardActivity.class);

@@ -418,7 +418,7 @@
                     <TextView
                         android:textSize="@dimen/ac_text_size_14"
                         android:textColor="@color/col_999"
-                        android:text="小计"
+                        android:text="交易金额"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView

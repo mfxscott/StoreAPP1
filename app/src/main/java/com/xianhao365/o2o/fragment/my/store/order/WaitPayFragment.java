@@ -134,6 +134,7 @@ public class WaitPayFragment extends Fragment {
         HttpUtils.getInstance(activity).requestPost(false, AppClient.TZ_ORDER_LIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
+                SXUtils.getInstance(activity).ToastCenter(jsonObject.toString()+"");
                 Logs.i("订单列表========",jsonObject.toString());
 
 //                CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);

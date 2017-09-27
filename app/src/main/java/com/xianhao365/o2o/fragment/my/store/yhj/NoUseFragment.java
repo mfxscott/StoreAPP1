@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 未使用可以使用的优惠券
  */
 public class NoUseFragment extends Fragment {
     private Activity activity;
@@ -77,9 +77,7 @@ public class NoUseFragment extends Fragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (getUserVisibleHint()) {
-            Logs.i("****************************");
         } else {
-            Logs.i("2222222222222222****************************");
 
         }
     }

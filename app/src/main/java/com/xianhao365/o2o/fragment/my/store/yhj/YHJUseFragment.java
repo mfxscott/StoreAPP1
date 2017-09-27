@@ -53,7 +53,7 @@ public class YHJUseFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SXUtils.getInstance(activity).ToastCenter("=="+position);
+//                SXUtils.getInstance(activity).ToastCenter("=="+position);
             }
         });
         hand = new Handler(new Handler.Callback() {

@@ -41,13 +41,17 @@ import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
 import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.StoreMapListAdapter;
+import com.xianhao365.o2o.entity.SearchHotWordEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.ListViewForScrollView;
 
 import java.util.ArrayList;
@@ -668,5 +672,39 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         }
         Toast.makeText(activity,infomation+"",Toast.LENGTH_LONG).show();
 
+    }
+
+    /**
+     * 获取到店铺信息及为店铺添加店铺地址
+     */
+    public void getStoreAddresshHttp() {
+        HttpParams httpParams = new HttpParams();
+        httpParams.put("id","");
+        httpParams.put("name","");
+        httpParams.put("province","");
+        httpParams.put("city","");
+        httpParams.put("district","");
+        httpParams.put("addr","");
+        httpParams.put("manager","");
+        httpParams.put("attachFiles","");
+        httpParams.put("pageIndex","");
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.UPDATE_STORE_INFO, httpParams, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("常用发送成功返回参数=======",jsonObject.toString());
+                List<SearchHotWordEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(jsonObject.toString(), SearchHotWordEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = goodsTypeList;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
     }
 }

@@ -356,8 +356,8 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMoonEvent(MessageEvent messageEvent){
-        //传递1or2 登录成功刷新购物车 和点击加入购物车商品 都刷新购物车
-        if(messageEvent.getTag()==1 ||messageEvent.getTag()==2){
+        //传递1or2 登录成功刷新购物车 和点击加入购物车商品 都刷新购物车||订单提交成功刷新购物车
+        if(messageEvent.getTag()==1 || messageEvent.getTag()==2){
             GetCarList();
         }else if(messageEvent.getTag() == 3){
             //购物车列表 点击商品checkBox调用改变购物车总价格
