@@ -1,6 +1,7 @@
 package com.xianhao365.o2o.entity.orderlist;
 
 /**
+ * 普通订单摊主订单列表
  * Created by NN on 2017/9/26.
  */
 

@@ -1,7 +1,5 @@
 package com.xianhao365.o2o.entity.orderlist;
 
-import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-
 import java.util.List;
 
 /**
@@ -10,7 +8,7 @@ import java.util.List;
 public class OrderDatasetEntity {
     private String total;
 
-    private List<CGListInfoEntity> rows;
+    private List<OrderInfoEntity> rows;
 
     public String getTotal() {
         return total;
@@ -20,12 +18,11 @@ public class OrderDatasetEntity {
         this.total = total;
     }
 
-    public List<CGListInfoEntity> getRows() {
+    public List<OrderInfoEntity> getRows() {
         return rows;
     }
 
-    public void setRows(List<CGListInfoEntity> rows) {
+    public void setRows(List<OrderInfoEntity> rows) {
         this.rows = rows;
     }
-
 }

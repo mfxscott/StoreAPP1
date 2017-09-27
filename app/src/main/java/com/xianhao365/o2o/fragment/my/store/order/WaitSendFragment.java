@@ -94,8 +94,8 @@ public class WaitSendFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),2);
-                            recyclerView.setAdapter(simpAdapter);
+//                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),2);
+//                            recyclerView.setAdapter(simpAdapter);
                         }
                         break;
                     case 1001:

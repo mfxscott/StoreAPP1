@@ -16,8 +16,8 @@ import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
-import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.entity.orderlist.OrderListEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -37,7 +37,7 @@ public class WaitPayFragment extends Fragment {
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
     private Handler hand;
-    private List<CGListInfoEntity> cgList = new ArrayList<>();//采购列表数据
+    private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
     private WaitPayRecyclerViewAdapter simpAdapter;
 
     @Override
@@ -75,7 +75,7 @@ public class WaitPayFragment extends Fragment {
                 switch (msg.what) {
                     case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                        List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
                         if(indexPage > 0 && gde.size()>0){
                             cgList.addAll(gde);
                         }else{
@@ -91,7 +91,7 @@ public class WaitPayFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-                             simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
+                             simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,1);
                             recyclerView.setAdapter(simpAdapter);
                         }
                         break;

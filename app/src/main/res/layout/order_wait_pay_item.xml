@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
+    android:background="@color/white"
+    android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <LinearLayout
@@ -12,6 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/order_wait_pay_shopname_tv"
                 android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
@@ -19,6 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_wait_pay_ordertime_tv"
                 android:layout_alignParentRight="true"
                 android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"
@@ -31,7 +34,23 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:scrollbars="none"
+                android:id="@+id/order_item_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/order_wait_pay_rel1"
             android:padding="10dp"
             android:layout_width="match_parent"
@@ -112,10 +131,12 @@
             </LinearLayout>
         </RelativeLayout>
         <View
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/order_wait_pay_rel2"
             android:padding="10dp"
             android:layout_width="match_parent"
@@ -203,6 +224,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/order_wait_pay_ordertotal_tv"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"

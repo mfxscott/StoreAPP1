@@ -3,6 +3,8 @@ package com.xianhao365.o2o.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -16,7 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
+import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -33,7 +35,7 @@ public  class WaitPayRecyclerViewAdapter
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
-    private List<GoodsInfoEntity> mValues;
+    private List<OrderInfoEntity> mValues;
     private Context context;
     private int tag;//标示订单类型进入显示不同按钮
 
@@ -42,32 +44,40 @@ public  class WaitPayRecyclerViewAdapter
         public final View mView;
         public final ImageView mImageView;
         public final ImageView mImageView1;
+        public final TextView  shopNameTv;
+        public final TextView orderTime;
+        public final TextView  orderTotal;
         public final TextView marketPrice;
         public final TextView  cancelOrder;
         public final TextView  takeOrder,cancelTv;
         public final RelativeLayout  rel1,rel2;
         public final LinearLayout  btnLin;
-
+         public final RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+
             mImageView = (ImageView) view.findViewById(R.id.order_wait_pay_item_iv);
             marketPrice = (TextView) view.findViewById(R.id.order_wait_pay_item_mp_tv);
             mImageView1 = (ImageView) view.findViewById(R.id.order_wait_pay_item_iv2);
+            shopNameTv = (TextView) view.findViewById(R.id.order_wait_pay_shopname_tv);
+            orderTime = (TextView) view.findViewById(R.id.order_wait_pay_ordertime_tv);
+            orderTotal = (TextView) view.findViewById(R.id.order_wait_pay_ordertotal_tv);
             cancelOrder = (TextView) view.findViewById(R.id.order_wait_pay_cancel_btn);
             takeOrder = (TextView) view.findViewById(R.id.order_wait_pay_take_btn);
             rel1 = (RelativeLayout) view.findViewById(R.id.order_wait_pay_rel1);
             rel2 = (RelativeLayout) view.findViewById(R.id.order_wait_pay_rel2);
             cancelTv = (TextView) view.findViewById(R.id.order_done_tv);
             btnLin = (LinearLayout) view.findViewById(R.id.order_btn_lin);
+            recyclerView = (RecyclerView) view.findViewById(R.id.order_item_recycler);
         }
         @Override
         public String toString() {
-            return super.toString() + " '" + marketPrice.getText();
+            return super.toString() + " '";
         }
     }
-    public WaitPayRecyclerViewAdapter(Context context, List<GoodsInfoEntity> items,int tag) {
+    public WaitPayRecyclerViewAdapter(Context context, List<OrderInfoEntity> items, int tag) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -84,6 +94,19 @@ public  class WaitPayRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        OrderInfoEntity orderInfo = mValues.get(position);
+
+        holder.shopNameTv.setText(orderInfo.getShopUserName()+"");
+        holder.orderTime.setText(orderInfo.getOrderTime()+"");
+        holder.orderTotal.setText("¥"+orderInfo.getGoodsTotalAmount());
+
+        holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
+        holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
+        final WaitPayGoodsRecyclerViewAdapter simpAdapter = new WaitPayGoodsRecyclerViewAdapter(context,orderInfo.getOrderLines());
+        holder.recyclerView.setAdapter(simpAdapter);
+
+
+
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
