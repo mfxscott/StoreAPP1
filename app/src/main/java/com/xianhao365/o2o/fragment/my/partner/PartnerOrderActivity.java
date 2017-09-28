@@ -1,4 +1,4 @@
-package com.xianhao365.o2o.fragment.my.store.order;
+package com.xianhao365.o2o.fragment.my.partner;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -24,7 +24,8 @@ import com.xianhao365.o2o.utils.httpClient.ResponseData;
 
 import java.util.ArrayList;
 import java.util.List;
-public class MyOrderActivity extends AppCompatActivity {
+
+public class PartnerOrderActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private String orderTag;
     private Activity activity;
@@ -55,14 +56,14 @@ public class MyOrderActivity extends AppCompatActivity {
 
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
-        titles.add("待支付");
+        titles.add("全部");
+        titles.add("待确认");
         titles.add("待发货");
         titles.add("待收货");
-        titles.add("已完成");
-        fragments.add(new WaitPayFragment());
-        fragments.add(new WaitSendFragment());
-        fragments.add(new WaitTakeFragment());
-        fragments.add(new WaitDoneFragment());
+        fragments.add(new PartnerAllOrderFragment());
+        fragments.add(new PartnerAllOrderFragment());
+        fragments.add(new PartnerAllOrderFragment());
+        fragments.add(new PartnerAllOrderFragment());
         FragmentAdapter adatper = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager = (ViewPager) findViewById(R.id.order_viewPager);
         viewPager.setAdapter(adatper);
@@ -77,6 +78,9 @@ public class MyOrderActivity extends AppCompatActivity {
         }
         else if(Integer.parseInt(orderTag) ==3){
             viewPager.setCurrentItem(2);
+        }
+        else if(Integer.parseInt(orderTag) ==4){
+            viewPager.setCurrentItem(3);
         }
 //        viewPager.setCurrentItem(1);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -121,18 +125,18 @@ public class MyOrderActivity extends AppCompatActivity {
     /**
      * 获取摊主订单列表
      * @param indexPage
-     * @param status 1 待支付，10待发货，30待收货，50完成 根据参数查询不同订单状态
+     * @param status 0待确认，10待发货，20 待收货，all 全部
      * @param hand
      */
-    public  void getOrderListHttp(int indexPage,final String status,final Handler hand) {
+    public  void getParetnerOrderListHttp(int indexPage,final String status,final Handler hand) {
         HttpParams params = new HttpParams();
         params.put("pageSize","10");
         params.put("pageIndex",indexPage);
         params.put("status",status);
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.TZ_ORDER_LIST, params, new HttpUtils.requestCallBack() {
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.HHR_ORDER_LIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i(status+"订单列表========",jsonObject.toString());
+                Logs.i(status+"合伙人订单列表========",jsonObject.toString());
                 OrderListEntity gde =  ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),OrderListEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;

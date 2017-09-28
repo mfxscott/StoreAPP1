@@ -12,17 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.cgListInfo.CGListInfoEntity;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
-import com.xianhao365.o2o.entity.orderlist.OrderListEntity;
-import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
@@ -36,7 +30,7 @@ public class WaitDoneFragment extends Fragment {
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
     private Handler hand;
-    private List<CGListInfoEntity> cgList = new ArrayList<>();//采购列表数据
+    private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
     private WaitPayRecyclerViewAdapter simpAdapter;
 
     @Override
@@ -44,7 +38,7 @@ public class WaitDoneFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_done, container, false);
         initView();
-        getOrderListHttp(indexPage);
+        new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
         return view;
     }
     private void initView(){
@@ -57,10 +51,10 @@ public class WaitDoneFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    getOrderListHttp(indexPage);
+                    new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
                 }else{
                     indexPage ++;
-                    getOrderListHttp(indexPage);
+                    new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
                 }
             }
         });
@@ -75,7 +69,7 @@ public class WaitDoneFragment extends Fragment {
                 switch (msg.what) {
                     case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                        List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
                         if(indexPage > 0 && gde.size()>0){
                             cgList.addAll(gde);
                         }else{
@@ -91,8 +85,8 @@ public class WaitDoneFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-//                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),4);
-//                            recyclerView.setAdapter(simpAdapter);
+                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,4);
+                            recyclerView.setAdapter(simpAdapter);
                         }
                         break;
                     case 1001:
@@ -106,45 +100,6 @@ public class WaitDoneFragment extends Fragment {
                     mSwipyRefreshLayout.setRefreshing(false);
                 }
                 return true;
-            }
-        });
-    }
-    /**
-     * @return
-     */
-    private ArrayList<GoodsInfoEntity> getBankData(){
-        ArrayList<GoodsInfoEntity> list = new ArrayList<>();
-
-        for(int i=0;i<5;i++){
-            GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsName("新鲜上市的西红柿"+i);
-            info.setShopPrice("￥10.00");
-            list.add(info);
-        }
-        return list;
-    }
-    public void getOrderListHttp(int indexPage) {
-        HttpParams params = new HttpParams();
-        params.put("pageSize","10");
-        params.put("pageIndex",indexPage);
-        params.put("status","50");
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.TZ_ORDER_LIST, params, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                Logs.i("订单列表========",jsonObject.toString());
-                //                CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
-                OrderListEntity gde =  ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),OrderListEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde.getDataset().getRows();
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
             }
         });
     }

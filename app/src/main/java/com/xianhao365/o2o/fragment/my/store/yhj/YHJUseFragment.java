@@ -60,6 +60,7 @@ public class YHJUseFragment extends Fragment {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
+                        view.findViewById(R.id.wallet_default_coupons_lin).setVisibility(View.GONE);
                         yhj = (ArrayList<UserCouponEntity>) msg.obj;
                         gridView.setAdapter(new YHJNoUseListAdapter(activity,yhj,2));
                         break;

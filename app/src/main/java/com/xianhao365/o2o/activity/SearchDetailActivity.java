@@ -109,6 +109,7 @@ private Activity activity;
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
 
                         }
+                        findViewById(R.id.wallet_default_search_lin).setVisibility(View.GONE);
                         TypeInfoRecyclerViewAdapter   simpAdapter = new TypeInfoRecyclerViewAdapter(activity,goodsDetaiLIst);
                         recyclerView.setAdapter(simpAdapter);
                         break;

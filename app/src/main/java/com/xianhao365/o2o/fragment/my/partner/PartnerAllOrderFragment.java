@@ -1,4 +1,4 @@
-package com.xianhao365.o2o.fragment.my.store.order;
+package com.xianhao365.o2o.fragment.my.partner;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -14,20 +14,16 @@ import android.view.ViewGroup;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
-import com.xianhao365.o2o.entity.UserInfoEntity;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WaitPayFragment extends Fragment {
+public class PartnerAllOrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private View view;
     private Activity activity;
@@ -40,13 +36,14 @@ public class WaitPayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_wait_pay, container, false);
+        view = inflater.inflate(R.layout.fragment_partner_all_order_list, container, false);
         initView();
-        new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+        new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"all",hand);
         return view;
     }
     private void initView(){
-        mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.order_list_wait_pay_swipe);
+
+        mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.partner_order_list_wait_done_swipe);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
         mSwipyRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
@@ -54,19 +51,19 @@ public class WaitPayFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"all",hand);
                 }else{
                     indexPage ++;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"all",hand);
                 }
             }
         });
-        recyclerView = (RecyclerView) view.findViewById(R.id.order_wait_pay_recycler);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.partner_order_wait_done_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-//        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
+//        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),4);
 //        recyclerView.setAdapter(simpAdapter);
-
         hand = new Handler(new Handler.Callback() {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
@@ -88,7 +85,7 @@ public class WaitPayFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-                             simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,1);
+                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,4);
                             recyclerView.setAdapter(simpAdapter);
                         }
                         break;
@@ -103,44 +100,6 @@ public class WaitPayFragment extends Fragment {
                     mSwipyRefreshLayout.setRefreshing(false);
                 }
                 return true;
-            }
-        });
-    }
-    /**
-     * @return
-     */
-    private ArrayList<GoodsInfoEntity> getBankData(){
-        ArrayList<GoodsInfoEntity> list = new ArrayList<>();
-
-        for(int i=0;i<2;i++){
-            GoodsInfoEntity  info = new GoodsInfoEntity();
-            info.setGoodsName("新鲜上市的西红柿");
-            info.setShopPrice("￥10.00");
-            list.add(info);
-        }
-        return list;
-    }
-
-    /**
-     * 获取普通用户订单
-     */
-    public void getUserOrderListHttp() {
-        HttpUtils.getInstance(activity).requestPost(false,AppClient.USER_ORDERS, null, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                UserInfoEntity gde = null;
-                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
-                Message msg = new Message();
-                msg.what = 1000;
-                msg.obj = gde;
-                hand.sendMessage(msg);
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
             }
         });
     }

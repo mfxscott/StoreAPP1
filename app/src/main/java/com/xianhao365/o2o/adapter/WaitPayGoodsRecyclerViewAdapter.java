@@ -81,6 +81,7 @@ public  class WaitPayGoodsRecyclerViewAdapter
     holder.skuPrice.setText(orderInfo.getSkuPrice());
         holder.num.setText("x "+orderInfo.getSkuNumber());
         holder.name.setText(orderInfo.getSkuName());
+        holder.unit.setText(orderInfo.getGoodsUnit());
         holder.skuTotal.setText((Float.parseFloat(orderInfo.getSkuNumber()))*Float.parseFloat(orderInfo.getSkuPrice())+"元");
         SXUtils.getInstance(context).GlideSetImg(orderInfo.getSkuImage(),holder.mImageView);
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );

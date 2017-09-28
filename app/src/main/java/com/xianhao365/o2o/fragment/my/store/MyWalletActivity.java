@@ -61,7 +61,6 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     private RelativeLayout walletMyBankRel;
     private RelativeLayout walletAddBankRel;
     private RelativeLayout walletSrDetailRel;
-    private LinearLayout bankListLay;
     private ImageView myBankArrow;
     private String walletTag;//判断个人充值还是商户提现
     private WalletInfoEntity walletInfo;
@@ -77,6 +76,8 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     TextView couponsNoTv;
     @BindView(R.id.wallet_coupons_used_tv)
     TextView couponsUsedTv;
+    @BindView(R.id.wallet_default_bank_lin)
+    LinearLayout defaultBankLin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,6 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
     }
     private void initView(){
 
-        bankListLay = (LinearLayout) findViewById(R.id.wallet_banklist_lin);
         myBankArrow = (ImageView) findViewById(R.id.wallet_mybank_arrow_iv);
 
         walletNoUseLin = (LinearLayout) findViewById(R.id.wallet_no_use_lin);
@@ -156,8 +156,10 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                         walletInfo = (WalletInfoEntity) msg.obj;
                         walletTotalAmt.setText(walletInfo.getTotalAmt()+"");
                         if(TextUtils.isEmpty(walletInfo.getAccNo()) || TextUtils.isEmpty(walletInfo.getIdNo())){
-                            bankListLay.setVisibility(View.GONE);
+                            defaultBankLin.setVisibility(View.VISIBLE);
+
                         }else{
+                            defaultBankLin.setVisibility(View.GONE);
                             gridView.setAdapter(new BankCardListAdapter(activity,getBankData()));
                         }
                         break;

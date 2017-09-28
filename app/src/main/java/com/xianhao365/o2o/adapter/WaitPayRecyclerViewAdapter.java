@@ -16,11 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
+import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;
 import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
@@ -94,7 +94,7 @@ public  class WaitPayRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        OrderInfoEntity orderInfo = mValues.get(position);
+       final OrderInfoEntity orderInfo = mValues.get(position);
 
         holder.shopNameTv.setText(orderInfo.getShopUserName()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
@@ -104,7 +104,6 @@ public  class WaitPayRecyclerViewAdapter
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
         final WaitPayGoodsRecyclerViewAdapter simpAdapter = new WaitPayGoodsRecyclerViewAdapter(context,orderInfo.getOrderLines());
         holder.recyclerView.setAdapter(simpAdapter);
-
 
 
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
@@ -117,8 +116,6 @@ public  class WaitPayRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-        Glide.with(holder.mImageView.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_gdy).into(holder.mImageView);
-        Glide.with(holder.mImageView1.getContext()).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.img_hlg).into(holder.mImageView1);
             switch (tag){
                 case 1:
                     holder.btnLin.setVisibility(View.VISIBLE);
@@ -144,7 +141,6 @@ public  class WaitPayRecyclerViewAdapter
         holder.takeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 switch (tag) {
                     case 1:
                         Intent pay = new Intent(context, TopUpActivity.class);
@@ -157,6 +153,7 @@ public  class WaitPayRecyclerViewAdapter
                         break;
                     case 3:
                         SXUtils.getInstance(context).ToastCenter("确认发货");
+                        new WaitTakeFragment().getOrderConfirmHttp(orderInfo.getOrderNo());
                         break;
                     case 4:
                         break;

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +39,7 @@ import butterknife.Unbinder;
 /**
  * 鲜好合伙人
  */
-public class PartnerFragment extends Fragment {
+public class PartnerFragment extends Fragment implements View.OnClickListener{
     private View view;
     private Unbinder unbinder;
     private Activity activity;
@@ -54,6 +55,16 @@ public class PartnerFragment extends Fragment {
     TextView name;
     @BindView(R.id.partner_scan_tv)
     TextView scanTv;
+    @BindView(R.id.partner_orderlsit_rely)
+    RelativeLayout  orderRel;
+    @BindView(R.id.partner_wait_get_lin)
+    LinearLayout  waitGetLin;
+    @BindView(R.id.partner_wait_send_lin)
+    LinearLayout  waitSendLin;
+    @BindView(R.id.partner_wait_confirm_lin)
+    LinearLayout  waitConfirmLin;
+    @BindView(R.id.partner_scan_lin)
+    LinearLayout  scanLin;
     private Handler hand;
     private UserInfoEntity userinfo;
     @Override
@@ -82,23 +93,16 @@ public class PartnerFragment extends Fragment {
         name.setText(userInfo.getUsername());
     }
     private void initView(){
-        scanTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(activity,
-                        Manifest.permission.CAMERA)
-                               != PackageManager.PERMISSION_GRANTED) {
-                                 ActivityCompat.requestPermissions((Activity) activity,
-                                                new String[]{Manifest.permission.CAMERA},
-                                                 1000);
-            } else {
-                //有权限，直接拍照
-                    Intent intent = new Intent(activity, BaseQRScanActivity.class);
-                    startActivity(intent);
-            }
-
-            }
-        });
+        orderRel.setOnClickListener(this);
+        scanTv.setOnClickListener(this);
+        waitGetLin.setOnClickListener(this);
+        waitSendLin.setOnClickListener(this);
+        waitConfirmLin.setOnClickListener(this);
+        if(AppClient.USERROLETAG.equals("8")){
+            scanLin.setVisibility(View.GONE);
+        }else{
+            scanLin.setVisibility(View.VISIBLE);
+        }
 //        swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -140,6 +144,7 @@ public class PartnerFragment extends Fragment {
         manage.putExtras(bundle);
         startActivity(manage);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -158,5 +163,44 @@ public class PartnerFragment extends Fragment {
             return;
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.partner_scan_tv:
+                if (ContextCompat.checkSelfPermission(activity,
+                        Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(activity,
+                            new String[]{Manifest.permission.CAMERA},
+                            1000);
+                } else {
+                    //有权限，直接拍照
+                    Intent intent = new Intent(activity, BaseQRScanActivity.class);
+                    startActivity(intent);
+                }
+                break;
+            case R.id.partner_orderlsit_rely:
+                Intent order = new Intent(activity,PartnerOrderActivity.class);
+                order.putExtra("orderTag","1");
+                startActivity(order);
+                break;
+            case R.id.partner_wait_confirm_lin:
+                Intent order2 = new Intent(activity,PartnerOrderActivity.class);
+                order2.putExtra("orderTag","2");
+                startActivity(order2);
+                break;
+            case R.id.partner_wait_send_lin:
+                Intent order3 = new Intent(activity,PartnerOrderActivity.class);
+                order3.putExtra("orderTag","3");
+                startActivity(order3);
+                break;
+            case R.id.partner_wait_get_lin:
+                Intent order4 = new Intent(activity,PartnerOrderActivity.class);
+                order4.putExtra("orderTag","4");
+                startActivity(order4);
+                break;
+        }
     }
 }

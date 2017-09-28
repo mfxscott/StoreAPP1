@@ -193,103 +193,115 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical"
                     android:background="@drawable/white_gray_selector"
-                    android:padding="15dp">
+                    android:orientation="vertical"
+                    >
 
                     <TextView
+                        android:padding="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="今日业绩"
                         android:textColor="@color/col_333"
                         android:textSize="@dimen/ac_text_size_14"/>
+
                     <LinearLayout
-                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
                         <LinearLayout
-                            android:layout_marginLeft="5dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/topup_button_selector"
                             android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:padding="10dp">
+
                             <TextView
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:text="今日订单数"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 />
+
                             <TextView
-                                android:layout_marginTop="5dp"
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="5dp"
                                 android:text="0单"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
+                                android:textSize="16sp"/>
                         </LinearLayout>
+
                         <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/topup_button_selector"
                             android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:padding="10dp">
+
                             <TextView
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:text="今日销售额"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 />
+
                             <TextView
-                                android:layout_marginTop="5dp"
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="5dp"
                                 android:text="¥0"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
+                                android:textSize="16sp"/>
                         </LinearLayout>
+
                         <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/topup_button_selector"
                             android:orientation="vertical"
-                            android:padding="10dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:padding="10dp">
+
                             <TextView
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:text="今日佣金额"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
                                 />
+
                             <TextView
-                                android:layout_marginTop="5dp"
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="5dp"
                                 android:text="¥0"
                                 android:textColor="@color/white"
-                                android:textSize="16sp"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true" />
+                                android:textSize="16sp"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -300,20 +312,39 @@
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
                     android:background="@drawable/white_gray_selector"
-                    android:padding="15dp">
-
-                    <TextView
+                    >
+                     <RelativeLayout
+                         android:id="@+id/partner_orderlsit_rely"
+                         android:padding="15dp"
+                         android:background="@drawable/white_gray_selector"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+                         <TextView
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:text="销售订单"
+                             android:textColor="@color/col_333"
+                             android:textSize="@dimen/ac_text_size_14"/>
+                         <ImageView
+                             android:layout_alignParentRight="true"
+                             android:src="@mipmap/arrow_right"
+                             android:layout_width="wrap_content"
+                             android:layout_height="wrap_content"/>
+                     </RelativeLayout>
+                    <View
+                        android:visibility="visible"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="销售订单"
-                        android:textColor="@color/col_333"
-                        android:textSize="@dimen/ac_text_size_14"/>
+                        android:layout_height="1dp"
+                        android:background="@color/line_bg" />
+
                     <LinearLayout
+                        android:layout_marginBottom="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <LinearLayout
-                            android:layout_marginLeft="5dp"
+                            android:id="@+id/partner_wait_confirm_lin"
+                            android:layout_marginLeft="10dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
                             android:background="@drawable/topup_button_selector"
@@ -343,6 +374,7 @@
                                 android:layout_alignParentEnd="true" />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/partner_wait_send_lin"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
@@ -371,8 +403,9 @@
                                 android:layout_alignParentEnd="true" />
                         </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/partner_wait_get_lin"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10dp"
                             android:layout_weight="1"
                             android:background="@drawable/topup_button_selector"
                             android:orientation="vertical"
@@ -401,6 +434,8 @@
                     </LinearLayout>
                 </LinearLayout>
             <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/partner_scan_lin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

@@ -76,7 +76,7 @@ public class AppClient{
     public static String  USER_WALLET="svc.get.user.wallet.info";//获取用户钱包信息
     public static String  WITHDRAWAPPLY="svc.user.withdraw.apply";//提现申请
     public static String  ADDBANKCARD="svc.user.wallet.addcard";//添加银行卡
-    public static String  UPDATE_STORE_INFO="svc.user.add.shop";//添加和修改获取门店信息
+    public static String  UPDATE_STORE_INFO="svc.user.add.shop";//添加修改获取门店信息
     public static String  GET_BANKLIST="svc.user.list.bank";//获取开户行
     public static String  GET_CITYAREA="svc.user.area";//获取省市区
 
@@ -100,6 +100,9 @@ public class AppClient{
     public static String CLEARCAR="svc.shoppingcart.empty";//清空购物车
     //摊主相关接口
     public static String TZ_ORDER_LIST="svc.shopowner.order.list";//摊主订单列表查询
+    public static String ORDER_CONFIRM="svc.shopowner.order.confirm";//确认订单到货
+    //合伙人
+    public static String HHR_ORDER_LIST="svc.partner.order.list";//合伙人订单列表
 
     public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";
 

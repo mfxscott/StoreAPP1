@@ -19,7 +19,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
     private String orderTag,orderId;
     private TextView takeOrder,cancelTv,cancelOrder;
     private LinearLayout  btnLin;
-    private Activity activity;
+    private  Activity activity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,4 +97,6 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
+
 }

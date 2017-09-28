@@ -39,7 +39,9 @@
     <!-- <uses-feature android:name="android.hardware.camera"/> -->
     <!-- <uses-feature android:name="android.hardware.camera.autofocus"/> -->
     <!--
- 13974941111 摊主账号  密码1
+    摊主账号
+    15507556959   123456
+ 13974941111 密码1
     供应商测试账号 帐号13129343614  密码 1
 
      个人18682136973  qwe123
@@ -185,6 +187,10 @@
             android:name=".utils.zxing.BaseQRScanActivity"
             android:screenOrientation="portrait">
         </activity>
+
+        <activity android:name=".fragment.my.partner.PartnerOrderActivity"
+                  android:theme="@style/Theme.DesignDemo"
+            />
         <activity android:name=".fragment.car.PayOrderDetailActivity"/>
         <activity android:name=".fragment.my.buyer.purchase.CGBillListActivity"/>
         <activity android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"/>

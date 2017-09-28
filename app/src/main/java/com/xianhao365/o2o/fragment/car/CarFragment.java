@@ -71,6 +71,7 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     private  List<GoodsInfoEntity> carlist;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private List<ShoppingListEntity> shopList = new ArrayList<>();//总购物车数量
+    private RelativeLayout carContentLin;//商品主内容UI
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +90,9 @@ public class CarFragment extends Fragment implements View.OnClickListener{
     }
 
     private void init(){
+        carContentLin = (RelativeLayout) view.findViewById(R.id.car_content_rely);
+
+
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.car_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -165,6 +169,13 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                             }
                             MainFragmentActivity.totalCarNum = 0;
                             MainFragmentActivity.totalCarNum = getCarTotalItem();
+                            if(shopList.size()>0){
+                                carContentLin.setVisibility(View.VISIBLE);
+                                editDelTv.setVisibility(View.VISIBLE);
+                            }else {
+                                carContentLin.setVisibility(View.GONE);
+                                editDelTv.setVisibility(View.GONE);
+                            }
                             storesimpAdapter = new CarStoreRecyclerViewAdapter(getActivity(),shopList,delNumTv);
                             recyclerView.setAdapter(storesimpAdapter);
                         }else{
@@ -179,6 +190,8 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                         break;
 
                     case 1001:
+                        carContentLin.setVisibility(View.GONE);
+                        editDelTv.setVisibility(View.GONE);
                         String clearcar = (String) msg.obj;
                         SXUtils.getInstance(activity).ToastCenter(clearcar+"");
                         //清除购物车成功
