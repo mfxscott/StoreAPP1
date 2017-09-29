@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.entity.UserRenderInfoEntity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -63,7 +65,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private Handler hand;
     private UserInfoEntity userinfo;//个人所有用户信息
     private SwipeRefreshLayout swipeRefreshLayout;
-    private TextView store_my_money;
+    private TextView store_my_money,couponsNum;
     private TextView name;
     private ImageView headimg;
     private TextView orderNum1,orderNum2,orderNum3;
@@ -96,6 +98,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         if(SXUtils.getInstance(activity).IsLogin()) {
             SXUtils.showMyProgressDialog(activity,false);
             getUserInfoHttp();
+            SXUtils.getInstance(activity).getUserNumberHttp(hand);
 //            GetOrderListHttp();
 //            GetUserWalletHttp();
         }else{
@@ -104,11 +107,28 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
             }
         }
     }
+    private void UserInfoNum(UserRenderInfoEntity userNum){
+        store_my_money.setText(userNum.getUserableAmount());
+        couponsNum.setText(userNum.getUserableCoupon());
+        if(!TextUtils.isEmpty(userNum.getToPayOrder())) {
+            orderNum1.setVisibility(View.VISIBLE);
+            orderNum1.setText(userNum.getToPayOrder() + "");
+        }
+        if(!TextUtils.isEmpty(userNum.getToDelivery())) {
+            orderNum2.setVisibility(View.VISIBLE);
+            orderNum2.setText(userNum.getToDelivery());
+        }
+        if(!TextUtils.isEmpty(userNum.getToReceive())) {
+            orderNum3.setVisibility(View.VISIBLE);
+            orderNum3.setText(userNum.getToReceive());
+        }}
     /**
      * 初始化
      */
     private void initView(){
         store_my_money = (TextView) view.findViewById(R.id.store_my_money);
+        couponsNum = (TextView) view.findViewById(R.id.store_my_coupons_tv);
+
         //订单状态订单数量
         orderNum1 = (TextView) view.findViewById(R.id.store_order_num1_tv);
         orderNum2 = (TextView) view.findViewById(R.id.store_order_num2_tv);
@@ -194,7 +214,9 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
                                 .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
                         break;
                     case 1001:
-                        //订单列表
+                        //用户数量信息
+                        UserRenderInfoEntity userNum = (UserRenderInfoEntity) msg.obj;
+                        UserInfoNum(userNum);
                         break;
                     case 1002:
                         //钱包

@@ -32,7 +32,7 @@
                 android:paddingBottom="5dp"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="￥44.00/袋（10斤）"
+                android:text="¥44.00/袋（10斤）"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <LinearLayout
@@ -58,7 +58,7 @@
                     android:layout_marginLeft="5dp"
                     android:textSize="@dimen/ac_text_size_12"
                     android:textColor="@color/col_999"
-                    android:text="￥6.8/斤"
+                    android:text="¥6.8/斤"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
             </LinearLayout>

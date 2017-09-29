@@ -29,7 +29,6 @@ public class WaitDoneFragment extends Fragment {
     private Activity activity;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
-    private Handler hand;
     private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
     private WaitPayRecyclerViewAdapter simpAdapter;
 
@@ -37,9 +36,14 @@ public class WaitDoneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_done, container, false);
+        activity = getActivity();
         initView();
-        new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
+        initData();
+        //注册事件
         return view;
+    }
+    public void initData(){
+        new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
     }
     private void initView(){
 
@@ -51,10 +55,10 @@ public class WaitDoneFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
+                    initData();
                 }else{
                     indexPage ++;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
+                    initData();
                 }
             }
         });
@@ -64,43 +68,44 @@ public class WaitDoneFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),4);
 //        recyclerView.setAdapter(simpAdapter);
-        hand = new Handler(new Handler.Callback() {
-            public boolean handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 1000:
-//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                        List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
-                        if(indexPage > 0 && gde.size()>0){
-                            cgList.addAll(gde);
-                        }else{
-                            cgList.clear();
-                            cgList.addAll(gde);
-                        }
-                        if(gde.size()>=10){
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-                        }else{
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
-                        }
-                        if(indexPage >=1){
-                            if(simpAdapter != null)
-                                simpAdapter.notifyDataSetChanged();
-                        }else{
-                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,4);
-                            recyclerView.setAdapter(simpAdapter);
-                        }
-                        break;
-                    case 1001:
-                        break;
-                    case AppClient.ERRORCODE:
-                        String msgs = (String) msg.obj;
-                        SXUtils.getInstance(activity).ToastCenter(msgs);
-                        break;
-                }
-                if(mSwipyRefreshLayout != null){
-                    mSwipyRefreshLayout.setRefreshing(false);
-                }
-                return true;
-            }
-        });
+
     }
+    public Handler   hand = new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1000:
+//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(indexPage > 0 && gde.size()>0){
+                        cgList.addAll(gde);
+                    }else{
+                        cgList.clear();
+                        cgList.addAll(gde);
+                    }
+                    if(gde.size()>=10){
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                    }else{
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+                    }
+                    if(indexPage >=1){
+                        if(simpAdapter != null)
+                            simpAdapter.notifyDataSetChanged();
+                    }else{
+                        simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,4);
+                        recyclerView.setAdapter(simpAdapter);
+                    }
+                    break;
+                case 1001:
+                    break;
+                case AppClient.ERRORCODE:
+                    String msgs = (String) msg.obj;
+                    SXUtils.getInstance(activity).ToastCenter(msgs);
+                    break;
+            }
+            if(mSwipyRefreshLayout != null){
+                mSwipyRefreshLayout.setRefreshing(false);
+            }
+            return true;
+        }
+    });
 }

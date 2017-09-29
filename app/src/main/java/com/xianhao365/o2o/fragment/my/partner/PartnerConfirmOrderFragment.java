@@ -23,14 +23,18 @@ import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartnerAllOrderFragment extends Fragment {
+/**
+ * 合伙人
+ * 待确认订单列表
+ */
+public class PartnerConfirmOrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private View view;
     private Activity activity;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
     private Handler hand;
-    private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
+    private List<OrderInfoEntity> cgList = new ArrayList<>();
     private PartnerOrderRecyclerViewAdapter simpAdapter;
 
     @Override
@@ -38,11 +42,10 @@ public class PartnerAllOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_partner_all_order_list, container, false);
         initView();
-        new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+        new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"0",hand);
         return view;
     }
     private void initView(){
-
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.partner_order_list_wait_done_swipe);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -51,10 +54,10 @@ public class PartnerAllOrderFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"0",hand);
                 }else{
                     indexPage ++;
-                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"0",hand);
                 }
             }
         });
@@ -85,7 +88,7 @@ public class PartnerAllOrderFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-                            simpAdapter = new PartnerOrderRecyclerViewAdapter(getActivity(),cgList,4);
+                            simpAdapter = new PartnerOrderRecyclerViewAdapter(getActivity(),cgList,1);
                             recyclerView.setAdapter(simpAdapter);
                         }
                         break;

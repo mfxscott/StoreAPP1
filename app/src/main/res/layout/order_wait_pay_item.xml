@@ -222,14 +222,22 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <TextView
-                android:id="@+id/order_wait_pay_ordertotal_tv"
+                android:layout_marginLeft="15dp"
+                android:id="@+id/order_item_total_tv"
                 android:layout_centerVertical="true"
-                android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="合计：29.00"
+                android:text="合计："
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_toRightOf="@+id/order_item_total_tv"
+                android:id="@+id/order_wait_pay_ordertotal_tv"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/ac_text_size_14"
+                android:textColor="@color/orange"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <LinearLayout

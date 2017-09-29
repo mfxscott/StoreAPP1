@@ -61,9 +61,9 @@ public class PartnerOrderActivity extends AppCompatActivity {
         titles.add("待发货");
         titles.add("待收货");
         fragments.add(new PartnerAllOrderFragment());
-        fragments.add(new PartnerAllOrderFragment());
-        fragments.add(new PartnerAllOrderFragment());
-        fragments.add(new PartnerAllOrderFragment());
+        fragments.add(new PartnerConfirmOrderFragment());
+        fragments.add(new PartnerSendOrderFragment());
+        fragments.add(new PartnerGetOrderFragment());
         FragmentAdapter adatper = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager = (ViewPager) findViewById(R.id.order_viewPager);
         viewPager.setAdapter(adatper);

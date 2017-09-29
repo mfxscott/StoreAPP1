@@ -44,6 +44,9 @@ public class AppClient{
     public static String GET_TOKEN = "svc.pull.token";//		拉取令牌
     public static String USER_INFO="svc.get.user.info";	//获取用户信息
     public static String USER_ISPPLY_NFO="svc.serch.supply.info";	//获取供货商用户信息
+    public static String USER_NUM_NFO="svc.user.center.render";//获取我的中 用户的订单数量
+    public static String USER_REMIND="svc.order.remind";//用户订单列表提醒发货
+    public static String USER_CANCEL_ORDER="svc.order.cancel";//用户取消订单
 //收货地址
     public static String ADDRESS_ADD="svc.add.shipping.address";//		添加收货地址
     public static String ADDRESS_UPDATE="svc.mod.shipping.address";//	修改收货地址

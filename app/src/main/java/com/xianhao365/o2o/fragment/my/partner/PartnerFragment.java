@@ -37,7 +37,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- * 鲜好合伙人
+ * 鲜好合伙人,联创中心
  */
 public class PartnerFragment extends Fragment implements View.OnClickListener{
     private View view;
@@ -79,6 +79,7 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
     }
     private void initData(){
         SXUtils.getInstance(activity).getUserInfoHttp(hand);
+        SXUtils.getInstance(activity).getUserNumberHttp(hand);
     }
 
 

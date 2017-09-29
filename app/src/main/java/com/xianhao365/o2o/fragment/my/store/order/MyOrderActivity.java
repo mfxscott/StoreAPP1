@@ -25,10 +25,9 @@ import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import java.util.ArrayList;
 import java.util.List;
 public class MyOrderActivity extends AppCompatActivity {
-    private ViewPager viewPager;
+    public ViewPager viewPager;
     private String orderTag;
     private Activity activity;
-    private Handler hand;
     private int indexPage=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -78,10 +78,10 @@ public  class WaitPayGoodsRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         OrderGoodsInfoEntity orderInfo = mValues.get(position);
 
-    holder.skuPrice.setText(orderInfo.getSkuPrice());
+    holder.skuPrice.setText("¥ "+orderInfo.getSkuPrice());
         holder.num.setText("x "+orderInfo.getSkuNumber());
         holder.name.setText(orderInfo.getSkuName());
-        holder.unit.setText(orderInfo.getGoodsUnit());
+        holder.unit.setText("/"+orderInfo.getGoodsUnit());
         holder.skuTotal.setText((Float.parseFloat(orderInfo.getSkuNumber()))*Float.parseFloat(orderInfo.getSkuPrice())+"元");
         SXUtils.getInstance(context).GlideSetImg(orderInfo.getSkuImage(),holder.mImageView);
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );

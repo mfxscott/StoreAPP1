@@ -36,7 +36,6 @@ public class WaitTakeFragment extends Fragment {
     private Activity activity;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
-    private Handler hand;
     private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
     private WaitPayRecyclerViewAdapter simpAdapter;
 
@@ -45,8 +44,12 @@ public class WaitTakeFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_take, container, false);
         initView();
-        new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
+
+        initData();
         return view;
+    }
+    private void initData(){
+        new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
     }
     private void initView(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.order_list_wait_take_swipe);
@@ -57,10 +60,10 @@ public class WaitTakeFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
+                    initData();
                 }else{
                     indexPage ++;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
+                    initData();
                 }
             }
         });
@@ -72,47 +75,50 @@ public class WaitTakeFragment extends Fragment {
 //        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),3);
 //        recyclerView.setAdapter(simpAdapter);
 
-        hand = new Handler(new Handler.Callback() {
-            public boolean handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 1000:
-//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                        List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
-                        if(indexPage > 0 && gde.size()>0){
-                            cgList.addAll(gde);
-                        }else{
-                            cgList.clear();
-                            cgList.addAll(gde);
-                        }
-                        if(gde.size()>=10){
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-                        }else{
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
-                        }
-                        if(indexPage >=1){
-                            if(simpAdapter != null)
-                                simpAdapter.notifyDataSetChanged();
-                        }else{
-                            simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,3);
-                            recyclerView.setAdapter(simpAdapter);
-                        }
-                        break;
-                    case 1001:
-                        //发货成功 重新查询列表
-                        new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
-                        break;
-                    case AppClient.ERRORCODE:
-                        String msgs = (String) msg.obj;
-                        SXUtils.getInstance(activity).ToastCenter(msgs);
-                        break;
-                }
-                if(mSwipyRefreshLayout != null){
-                    mSwipyRefreshLayout.setRefreshing(false);
-                }
-                return true;
-            }
-        });
+
     }
+  public Handler  hand = new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1000:
+//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(indexPage > 0 && gde.size()>0){
+                        cgList.addAll(gde);
+                    }else{
+                        cgList.clear();
+                        cgList.addAll(gde);
+                    }
+                    if(gde.size()>=10){
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                    }else{
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+                    }
+                    if(indexPage >=1){
+                        if(simpAdapter != null)
+                            simpAdapter.notifyDataSetChanged();
+                    }else{
+                        simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,3);
+                        recyclerView.setAdapter(simpAdapter);
+                    }
+                    break;
+                case 1001:
+                    new MyOrderActivity().getOrderListHttp(indexPage,"30",hand);
+                    break;
+                case 1004:
+                    initData();
+                    break;
+                case AppClient.ERRORCODE:
+                    String msgs = (String) msg.obj;
+                    SXUtils.getInstance(activity).ToastCenter(msgs);
+                    break;
+            }
+            if(mSwipyRefreshLayout != null){
+                mSwipyRefreshLayout.setRefreshing(false);
+            }
+            return true;
+        }
+    });
     /**
      * 确认收货
      * @param orderNo  订单ID

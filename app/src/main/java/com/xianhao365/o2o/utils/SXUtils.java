@@ -36,6 +36,7 @@ import com.xianhao365.o2o.activity.MyApplication;
 import com.xianhao365.o2o.activity.member.LoginNameActivity;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.entity.UserRenderInfoEntity;
 import com.xianhao365.o2o.entity.address.AddressProvinceEntity;
 import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
@@ -955,6 +956,33 @@ public class SXUtils {
                 gde = ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what =AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+
+    /**
+     * 获取用户我的里面相关订单等数量
+     * @param hand
+     */
+    public void getUserNumberHttp(final Handler hand) {
+        HttpUtils.getInstance(mContext).requestPost(false,AppClient.USER_NUM_NFO, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("获取用户订单数量========"+jsonObject.toString());
+                UserRenderInfoEntity gde = null;
+                gde = ResponseData.getInstance(mContext).parseJsonWithGson(jsonObject.toString(),UserRenderInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1001;
                 msg.obj = gde;
                 hand.sendMessage(msg);
             }

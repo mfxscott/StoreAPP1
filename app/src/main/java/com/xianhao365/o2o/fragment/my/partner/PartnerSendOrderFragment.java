@@ -23,7 +23,10 @@ import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PartnerAllOrderFragment extends Fragment {
+/**
+ * 待发货订单列表
+ */
+public class PartnerSendOrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private View view;
     private Activity activity;
@@ -38,7 +41,7 @@ public class PartnerAllOrderFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_partner_all_order_list, container, false);
         initView();
-        new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+        new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"10",hand);
         return view;
     }
     private void initView(){
@@ -51,10 +54,10 @@ public class PartnerAllOrderFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"10",hand);
                 }else{
                     indexPage ++;
-                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"",hand);
+                    new PartnerOrderActivity().getParetnerOrderListHttp(indexPage,"10",hand);
                 }
             }
         });
@@ -85,7 +88,7 @@ public class PartnerAllOrderFragment extends Fragment {
                             if(simpAdapter != null)
                                 simpAdapter.notifyDataSetChanged();
                         }else{
-                            simpAdapter = new PartnerOrderRecyclerViewAdapter(getActivity(),cgList,4);
+                            simpAdapter = new PartnerOrderRecyclerViewAdapter(getActivity(),cgList,2);
                             recyclerView.setAdapter(simpAdapter);
                         }
                         break;

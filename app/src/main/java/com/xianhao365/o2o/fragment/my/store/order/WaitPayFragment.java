@@ -12,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
+import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
@@ -33,7 +35,6 @@ public class WaitPayFragment extends Fragment {
     private Activity activity;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private int indexPage=0;
-    private Handler hand;
     private List<OrderInfoEntity> cgList = new ArrayList<>();//采购列表数据
     private WaitPayRecyclerViewAdapter simpAdapter;
 
@@ -41,9 +42,13 @@ public class WaitPayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_pay, container, false);
-        initView();
-        new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+//        initView();
+        initData();
         return view;
+    }
+    private void initData(){
+        initView();
+        new MyOrderActivity().getOrderListHttp(indexPage,"1",hand);
     }
     private void initView(){
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.order_list_wait_pay_swipe);
@@ -54,10 +59,10 @@ public class WaitPayFragment extends Fragment {
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
                     indexPage = 0;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+                    initData();
                 }else{
                     indexPage ++;
-                    new MyOrderActivity().getOrderListHttp(indexPage,"",hand);
+                    initData();
                 }
             }
         });
@@ -67,45 +72,46 @@ public class WaitPayFragment extends Fragment {
 //        final WaitPayRecyclerViewAdapter simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),getBankData(),1);
 //        recyclerView.setAdapter(simpAdapter);
 
-        hand = new Handler(new Handler.Callback() {
-            public boolean handleMessage(Message msg) {
-                switch (msg.what) {
-                    case 1000:
-//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                        List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
-                        if(indexPage > 0 && gde.size()>0){
-                            cgList.addAll(gde);
-                        }else{
-                            cgList.clear();
-                            cgList.addAll(gde);
-                        }
-                        if(gde.size()>=10){
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-                        }else{
-                            mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
-                        }
-                        if(indexPage >=1){
-                            if(simpAdapter != null)
-                                simpAdapter.notifyDataSetChanged();
-                        }else{
-                             simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,1);
-                            recyclerView.setAdapter(simpAdapter);
-                        }
-                        break;
-                    case 1001:
-                        break;
-                    case AppClient.ERRORCODE:
-                        String msgs = (String) msg.obj;
-                        SXUtils.getInstance(activity).ToastCenter(msgs);
-                        break;
-                }
-                if(mSwipyRefreshLayout != null){
-                    mSwipyRefreshLayout.setRefreshing(false);
-                }
-                return true;
-            }
-        });
+
     }
+    public Handler   hand = new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1000:
+//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(indexPage > 0 && gde.size()>0){
+                        cgList.addAll(gde);
+                    }else{
+                        cgList.clear();
+                        cgList.addAll(gde);
+                    }
+                    if(gde.size()>=10){
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
+                    }else{
+                        mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
+                    }
+                    if(indexPage >=1){
+                        if(simpAdapter != null)
+                            simpAdapter.notifyDataSetChanged();
+                    }else{
+                        simpAdapter = new WaitPayRecyclerViewAdapter(getActivity(),cgList,1);
+                        recyclerView.setAdapter(simpAdapter);
+                    }
+                    break;
+                case 1001:
+                    break;
+                case AppClient.ERRORCODE:
+                    String msgs = (String) msg.obj;
+                    SXUtils.getInstance(activity).ToastCenter(msgs);
+                    break;
+            }
+            if(mSwipyRefreshLayout != null){
+                mSwipyRefreshLayout.setRefreshing(false);
+            }
+            return true;
+        }
+    });
     /**
      * @return
      */
@@ -134,6 +140,28 @@ public class WaitPayFragment extends Fragment {
                 msg.what = 1000;
                 msg.obj = gde;
                 hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+    }
+    /**
+     * 用户取消订单
+     * @param orderNo  订单ID
+     */
+    public  void getCancelOrderHttp(String orderNo ,final Handler hand) {
+        HttpParams params = new HttpParams();
+        params.put("orderNo",orderNo);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.USER_CANCEL_ORDER, params, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("取消订单========",jsonObject.toString());
+                initData();
             }
             @Override
             public void onResponseError(String strError) {

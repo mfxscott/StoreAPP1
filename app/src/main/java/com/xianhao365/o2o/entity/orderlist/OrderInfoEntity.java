@@ -26,7 +26,17 @@ public class OrderInfoEntity {
     private String printExpressState;
     private String orderTime;
     private String orderAddress;
+    private String  tradeNo;
     private List<OrderGoodsInfoEntity> orderLines;
+    public String getTradeNo() {
+        return tradeNo;
+    }
+
+    public void setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
+    }
+
+
 
     public List<OrderGoodsInfoEntity> getOrderLines() {
         return orderLines;

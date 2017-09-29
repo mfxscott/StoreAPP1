@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,12 +27,12 @@ import com.xianhao365.o2o.utils.SXUtils;
 import java.util.List;
 
 /**
- *  摊主订单列表
+ * 合伙人订单列表
  * @author mfx
  * @time  2017/7/11 12:24
  */
-public  class WaitPayRecyclerViewAdapter
-        extends RecyclerView.Adapter<WaitPayRecyclerViewAdapter.ViewHolder> {
+public  class PartnerOrderRecyclerViewAdapter
+        extends RecyclerView.Adapter<PartnerOrderRecyclerViewAdapter.ViewHolder> {
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
@@ -44,8 +43,6 @@ public  class WaitPayRecyclerViewAdapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-        public final ImageView mImageView;
-        public final ImageView mImageView1;
         public final TextView  shopNameTv;
         public final TextView orderTime;
         public final TextView  orderTotal;
@@ -59,10 +56,7 @@ public  class WaitPayRecyclerViewAdapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
-
-            mImageView = (ImageView) view.findViewById(R.id.order_wait_pay_item_iv);
             marketPrice = (TextView) view.findViewById(R.id.order_wait_pay_item_mp_tv);
-            mImageView1 = (ImageView) view.findViewById(R.id.order_wait_pay_item_iv2);
             shopNameTv = (TextView) view.findViewById(R.id.order_wait_pay_shopname_tv);
             orderTime = (TextView) view.findViewById(R.id.order_wait_pay_ordertime_tv);
             orderTotal = (TextView) view.findViewById(R.id.order_wait_pay_ordertotal_tv);
@@ -79,7 +73,7 @@ public  class WaitPayRecyclerViewAdapter
             return super.toString() + " '";
         }
     }
-    public WaitPayRecyclerViewAdapter(Context context, List<OrderInfoEntity> items, int tag) {
+    public PartnerOrderRecyclerViewAdapter(Context context, List<OrderInfoEntity> items, int tag) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
         mValues = items;
@@ -98,9 +92,9 @@ public  class WaitPayRecyclerViewAdapter
     public void onBindViewHolder(final ViewHolder holder, final int position) {
        final OrderInfoEntity orderInfo = mValues.get(position);
 
-        holder.shopNameTv.setText(orderInfo.getOrderNo()+"");
+        holder.shopNameTv.setText(orderInfo.getShopUserName()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
-        holder.orderTotal.setText("¥"+orderInfo.getGoodsTotalAmount());
+        holder.orderTotal.setText("¥ "+orderInfo.getGoodsTotalAmount());
 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -118,19 +112,20 @@ public  class WaitPayRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-            switch (tag){
-                case 1:
+        int states= Integer.parseInt(orderInfo.getStates());
+            switch (states){
+                case 0:
                     holder.btnLin.setVisibility(View.VISIBLE);
-                    holder.takeOrder.setText("立刻付款");
+                    holder.takeOrder.setText("立刻确认");
                     holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
                     break;
-                case 2:
+                case 10:
                     holder.btnLin.setVisibility(View.VISIBLE);
                     holder.takeOrder.setText("提醒发货");
                     holder.takeOrder.setTextColor(context.getResources().getColor(R.color.orange));
                     holder.takeOrder.setBackgroundResource(R.drawable.cancel_order_selector);
                     break;
-                case 3:
+                case 20:
                     holder.btnLin.setVisibility(View.VISIBLE);
                     holder.takeOrder.setText("确定收货");
                     holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
@@ -138,6 +133,32 @@ public  class WaitPayRecyclerViewAdapter
                 case 4:
                     holder.btnLin.setVisibility(View.GONE);
                     holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("已挂起");
+                    break;
+                case 8:
+                    holder.btnLin.setVisibility(View.GONE);
+                    holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("已取消");
+                    break;
+                case 16:
+                    holder.btnLin.setVisibility(View.GONE);
+                    holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("订单修改");
+                    break;
+                case 32:
+                    holder.btnLin.setVisibility(View.GONE);
+                    holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("订单异常");
+                    break;
+                case 30:
+                    holder.btnLin.setVisibility(View.GONE);
+                    holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("待摊主收货");
+                    break;
+                case 50:
+                    holder.btnLin.setVisibility(View.GONE);
+                    holder.cancelTv.setVisibility(View.VISIBLE);
+                    holder.cancelTv.setText("摊主已领货");
                     break;
             }
         holder.takeOrder.setOnClickListener(new View.OnClickListener() {
