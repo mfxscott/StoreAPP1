@@ -187,10 +187,9 @@
             android:name=".utils.zxing.BaseQRScanActivity"
             android:screenOrientation="portrait">
         </activity>
-
-        <activity android:name=".fragment.my.partner.PartnerOrderActivity"
-                  android:theme="@style/Theme.DesignDemo"
-            />
+        <activity
+            android:name=".fragment.my.partner.PartnerOrderActivity"
+            android:theme="@style/Theme.DesignDemo"/>
         <activity android:name=".fragment.car.PayOrderDetailActivity"/>
         <activity android:name=".fragment.my.buyer.purchase.CGBillListActivity"/>
         <activity android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"/>
@@ -198,6 +197,10 @@
         <activity android:name=".fragment.my.store.yhj.AddAccActivity">
         </activity>
         <activity android:name=".fragment.my.store.yhj.GoPayCheckCouponsActivity">
+        </activity>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.partner.PartnerConfirmTakeActivity">
         </activity>
     </application>
 

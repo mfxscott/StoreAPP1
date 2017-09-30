@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.fragment.my.partner.PartnerConfirmTakeActivity;
 import com.xianhao365.o2o.utils.Logs;
-import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.zxing.camera.CameraManager;
 import com.xianhao365.o2o.utils.zxing.decoding.CaptureActivityHandler;
 import com.xianhao365.o2o.utils.zxing.decoding.DecodeFormatManager;
@@ -350,7 +350,11 @@ public class BaseQRScanActivity extends Activity
 	 */
 	protected void onScanSuccess(String qrCode){
 		Logs.i("扫码返回值============"+qrCode);
-		SXUtils.getInstance(this).ToastCenter("扫码获得"+qrCode);
+//		SXUtils.getInstance(this).ToastCenter("扫码获得"+qrCode);
+
+		Intent order = new Intent(BaseQRScanActivity.this,PartnerConfirmTakeActivity.class);
+		order.putExtra("result",qrCode);
+		startActivity(order);
 //		if (!qrCode.startsWith("https://www.sanxiapay.com/")) {
 ////			Toast.makeText(BaseQRScanActivity.this, "扫码结果"+qrCode, Toast.LENGTH_SHORT).show();
 ////			UXUtils.getInstance(BaseQRScanActivity.this).ToastCenter(BaseQRScanActivity.this,"无法识别此"+qrCode);

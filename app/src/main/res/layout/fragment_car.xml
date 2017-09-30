@@ -59,7 +59,7 @@
    </LinearLayout>
     <RelativeLayout
         android:id="@+id/car_content_rely"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_below="@+id/car_title_rely"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
