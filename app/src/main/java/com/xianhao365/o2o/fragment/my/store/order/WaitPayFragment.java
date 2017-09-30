@@ -12,19 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.adapter.WaitPayRecyclerViewAdapter;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.UserInfoEntity;
 import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
-import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +45,15 @@ public class WaitPayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_wait_pay, container, false);
-//        initView();
+
+        activity = getActivity();
+        initView();
+        //注册事件
+        EventBus.getDefault().register(this);
         initData();
         return view;
     }
     private void initData(){
-        initView();
         new MyOrderActivity().getOrderListHttp(indexPage,"1",hand);
     }
     private void initView(){
@@ -100,6 +106,7 @@ public class WaitPayFragment extends Fragment {
                     }
                     break;
                 case 1001:
+                    initData();
                     break;
                 case AppClient.ERRORCODE:
                     String msgs = (String) msg.obj;
@@ -126,7 +133,6 @@ public class WaitPayFragment extends Fragment {
         }
         return list;
     }
-
     /**
      * 获取普通用户订单
      */
@@ -150,26 +156,23 @@ public class WaitPayFragment extends Fragment {
             }
         });
     }
-    /**
-     * 用户取消订单
-     * @param orderNo  订单ID
-     */
-    public  void getCancelOrderHttp(String orderNo ,final Handler hand) {
-        HttpParams params = new HttpParams();
-        params.put("orderNo",orderNo);
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.USER_CANCEL_ORDER, params, new HttpUtils.requestCallBack() {
-            @Override
-            public void onResponse(Object jsonObject) {
-                Logs.i("取消订单========",jsonObject.toString());
-                initData();
-            }
-            @Override
-            public void onResponseError(String strError) {
-                Message msg = new Message();
-                msg.what = AppClient.ERRORCODE;
-                msg.obj = strError;
-                hand.sendMessage(msg);
-            }
-        });
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMoonEvent(MessageEvent messageEvent){
+        if(messageEvent.getTag()==1003 || messageEvent.getMessage().equals("waitpay")){Message msg = new Message();
+            msg.what = 1001;
+            msg.obj = "";
+            hand.sendMessage(msg);
+
+        }else if(messageEvent.getTag()==1004 || messageEvent.getMessage().equals("waitpay")){
+            Message msg = new Message();
+            msg.what = AppClient.ERRORCODE;
+            msg.obj = "请求异常";
+            hand.sendMessage(msg);
+        }
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        EventBus.getDefault().unregister(this);
     }
 }

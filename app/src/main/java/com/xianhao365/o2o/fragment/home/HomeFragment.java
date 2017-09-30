@@ -40,7 +40,6 @@ import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
@@ -72,7 +71,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private Handler hand;//接受请求返回
     private View view;
     private Activity activity;
-    private OKManager manager;//工具类
     private Button scanBtn;
     private RelativeLayout bannerLin;//广告位布局
     private ObservableScrollView scro;
@@ -96,7 +94,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, null);
         activity = getActivity();
-        manager = new OKManager(activity);
 //        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //        SXUtils.getInstance().setSysStatusBar(activity,R.color.dialog_btn);
 

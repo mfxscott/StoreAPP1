@@ -77,9 +77,11 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
         initData();
         return view;
     }
-    private void initData(){
-        SXUtils.getInstance(activity).getUserInfoHttp(hand);
-        SXUtils.getInstance(activity).getUserNumberHttp(hand);
+    private void initData() {
+        if (SXUtils.getInstance(activity).IsLogin()) {
+            SXUtils.getInstance(activity).getUserInfoHttp(hand);
+            SXUtils.getInstance(activity).getUserNumberHttp(hand);
+        }
     }
 
 

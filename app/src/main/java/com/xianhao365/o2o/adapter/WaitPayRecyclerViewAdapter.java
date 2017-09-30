@@ -16,14 +16,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
-import com.xianhao365.o2o.fragment.my.store.order.WaitPayFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitSendFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -120,6 +125,7 @@ public  class WaitPayRecyclerViewAdapter
         });
             switch (tag){
                 case 1:
+                    holder.cancelOrder.setVisibility(View.VISIBLE);
                     holder.btnLin.setVisibility(View.VISIBLE);
                     holder.takeOrder.setText("立刻付款");
                     holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
@@ -167,7 +173,7 @@ public  class WaitPayRecyclerViewAdapter
         holder.cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                      new WaitPayFragment().getCancelOrderHttp(orderInfo.getOrderNo(),new WaitPayFragment().hand);
+                     getCancelOrderHttp(orderInfo.getOrderNo());
             }
         });
 //        holder.rel1.setOnClickListener(new View.OnClickListener() {
@@ -198,5 +204,31 @@ public  class WaitPayRecyclerViewAdapter
         Log.i("========",position+"");
         return super.getItemViewType(position);
     }
-
+    /**
+     * 用户取消订单
+     * @param orderNo  订单ID
+     */
+    private  void getCancelOrderHttp(String orderNo) {
+        HttpParams params = new HttpParams();
+        params.put("orderNo",orderNo);
+        HttpUtils.getInstance(context).requestPost(false, AppClient.USER_CANCEL_ORDER, params, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                EventBus.getDefault().post(new MessageEvent(1003,"waitpay"));
+//                Logs.i("取消订单========",jsonObject.toString());
+//                Message msg = new Message();
+//                msg.what = 1001;
+//                msg.obj = "";
+//                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                EventBus.getDefault().post(new MessageEvent(1004,"waitpay"));
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                hand.sendMessage(msg);
+            }
+        });
+    }
 }

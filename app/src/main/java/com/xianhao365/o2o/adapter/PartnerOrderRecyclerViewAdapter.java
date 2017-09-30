@@ -19,7 +19,6 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
-import com.xianhao365.o2o.fragment.my.store.order.WaitPayFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitSendFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;
 import com.xianhao365.o2o.utils.SXUtils;
@@ -115,6 +114,7 @@ public  class PartnerOrderRecyclerViewAdapter
         int states= Integer.parseInt(orderInfo.getStates());
             switch (states){
                 case 0:
+                    holder.cancelOrder.setVisibility(View.VISIBLE);
                     holder.btnLin.setVisibility(View.VISIBLE);
                     holder.takeOrder.setText("立刻确认");
                     holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
@@ -188,7 +188,7 @@ public  class PartnerOrderRecyclerViewAdapter
         holder.cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                      new WaitPayFragment().getCancelOrderHttp(orderInfo.getOrderNo(),new WaitPayFragment().hand);
+//                      new WaitPayFragment().getCancelOrderHttp(orderInfo.getOrderNo(),new WaitPayFragment().hand);
             }
         });
 //        holder.rel1.setOnClickListener(new View.OnClickListener() {

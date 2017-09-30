@@ -82,9 +82,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
 
         //注册事件
         EventBus.getDefault().register(this);
-        if(SXUtils.getInstance(activity).IsLogin())
-            SXUtils.showMyProgressDialog(activity,false);
-        GetCarList();
+        if(SXUtils.getInstance(activity).IsLogin()) {
+            SXUtils.showMyProgressDialog(activity, false);
+            GetCarList();
+        }
 //        SXUtils.getInstance(activity).setSysStatusBar(activity,R.color.white);
         return view;
     }
