@@ -714,6 +714,22 @@ public class SXUtils {
         }
         return "";
     }
+
+    /**
+     * 获得购物车商品减去一个
+     * @param nowNum  当前购物车数量
+     * @param subNum  当前减去购物车数量
+     * @return
+     */
+    public String getCarNum(String nowNum,int subNum){
+        int setNum=0;
+        if(TextUtils.isEmpty(nowNum)){
+            return setNum+"";
+        }
+        int  nowNumInt = Integer.parseInt(nowNum);
+        setNum = nowNumInt-subNum;
+         return setNum+"";
+    }
     public Dialog tipDialog;
     public void MyDialogView(Context context,String title, String contentStr, View.OnClickListener onClickListener) {
         tipDialog = new AlertDialog.Builder(context).create();

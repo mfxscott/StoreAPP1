@@ -339,7 +339,7 @@ public  class CarStoreRecyclerViewAdapter
                 SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),"1");
             }else{
                 if(carTotalNum == 1){
-                    SXUtils.getInstance(context).MyDialogView(context,"温馨提示!", "是否删除商品信息?", new View.OnClickListener() {
+                    SXUtils.getInstance(context).MyDialogView(context,"温馨提示!", "是否删除此商品?", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             SXUtils.getInstance(context).tipDialog.dismiss();
@@ -348,7 +348,7 @@ public  class CarStoreRecyclerViewAdapter
                     });
                 }else {
                     textView.setText((carTotalNum - 1) + "");
-                    SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),"0");
+                    SXUtils.getInstance(context).AddOrUpdateCar(shopcar.getSkuBarcode(),SXUtils.getInstance(context).getCarNum(shopcar.getQuantity(),1));
                 }
             }
         }
@@ -368,6 +368,8 @@ public  class CarStoreRecyclerViewAdapter
                 Boolean value = goodsMap.get(key);
             }
         }
+
+
 //        //  删除数据
 //        public void removeData() {
 //            int i=0;
