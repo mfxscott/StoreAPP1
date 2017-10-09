@@ -1,5 +1,8 @@
 package com.xianhao365.o2o.entity.orderlist;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -7,7 +10,7 @@ import java.util.List;
  * Created by NN on 2017/9/27.
  */
 
-public class OrderInfoEntity {
+public class OrderInfoEntity implements Parcelable {
     private String orderNo;
     private String states;
     private String vehicleNo;
@@ -28,6 +31,69 @@ public class OrderInfoEntity {
     private String orderAddress;
     private String  tradeNo;
     private List<OrderGoodsInfoEntity> orderLines;
+
+    protected OrderInfoEntity(Parcel in) {
+        orderNo = in.readString();
+        states = in.readString();
+        vehicleNo = in.readString();
+        images = in.readString();
+        omsStatus = in.readString();
+        driverName = in.readString();
+        driverPhone = in.readString();
+        goodsTotalAmount = in.readString();
+        transactionAmount = in.readString();
+        partnerUserNo = in.readString();
+        partnerUserName = in.readString();
+        shopUserNo = in.readString();
+        shopUserName = in.readString();
+        remarks = in.readString();
+        printState = in.readString();
+        printExpressState = in.readString();
+        orderTime = in.readString();
+        orderAddress = in.readString();
+        tradeNo = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(orderNo);
+        dest.writeString(states);
+        dest.writeString(vehicleNo);
+        dest.writeString(images);
+        dest.writeString(omsStatus);
+        dest.writeString(driverName);
+        dest.writeString(driverPhone);
+        dest.writeString(goodsTotalAmount);
+        dest.writeString(transactionAmount);
+        dest.writeString(partnerUserNo);
+        dest.writeString(partnerUserName);
+        dest.writeString(shopUserNo);
+        dest.writeString(shopUserName);
+        dest.writeString(remarks);
+        dest.writeString(printState);
+        dest.writeString(printExpressState);
+        dest.writeString(orderTime);
+        dest.writeString(orderAddress);
+        dest.writeString(tradeNo);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<OrderInfoEntity> CREATOR = new Creator<OrderInfoEntity>() {
+        @Override
+        public OrderInfoEntity createFromParcel(Parcel in) {
+            return new OrderInfoEntity(in);
+        }
+
+        @Override
+        public OrderInfoEntity[] newArray(int size) {
+            return new OrderInfoEntity[size];
+        }
+    };
+
     public String getTradeNo() {
         return tradeNo;
     }

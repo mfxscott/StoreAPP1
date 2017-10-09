@@ -84,7 +84,6 @@ public  class PartnerOrderScanRecyclerViewAdapter
         holder.orderTotal.setText("¥ "+orderInfo.getGoodsTotalAmount());
 
 
-
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -19,19 +19,18 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.fragment.CommonWebViewMainActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
 
 public class Regis1Activity extends BaseActivity implements View.OnClickListener{
@@ -48,6 +47,8 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     private Activity activity;
     private Handler   hand;
     private String userTag; //64 个人 32 商户判断用户商户还是个人注册
+    private RelativeLayout relativeLayout;
+    private EditText registRefereesPhoneEdt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +61,11 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     private void initView(){
         registerBack();
         setTitle(getString(R.string.regist_str));
+        relativeLayout = (RelativeLayout) findViewById(R.id.regist_referees_rely);
+        if(userTag.equals("32")){
+            relativeLayout.setVisibility(View.VISIBLE);
+        }
+        registRefereesPhoneEdt = (EditText) findViewById(R.id.regist_referees_phone_edt);
         registRuleTv = (TextView) findViewById(R.id.regist_rule_tv);
         registRuleTv.setOnClickListener(this);
         sendCodeHintTv = (TextView) findViewById(R.id.regist_hint_send_code_tv);
@@ -201,8 +207,15 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
 //                }
                 String codemsg = registCodeEdt.getText().toString();
                 String psdstr = registInputPsdEdt.getText().toString();
+                String  refereesPhoneStr= registRefereesPhoneEdt.getText().toString();
+            if(userTag.equals("32")){
+                if(TextUtils.isEmpty(refereesPhoneStr)){
+                    SXUtils.getInstance(activity).ToastCenter("请输入推荐人手机号码");
+                    return;
+                }
+            }
                 SXUtils.showMyProgressDialog(activity,true);
-                RegistHttp(mobilestr,psdstr,codemsg);
+                RegistHttp(mobilestr,psdstr,codemsg,refereesPhoneStr);
 
                 break;
             case R.id.regist_getcode_tv:
@@ -256,16 +269,14 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
             registBtn.setBackgroundResource(R.drawable.login_button_selector);
         }
     }
-    public void RegistHttp(String mobile,String psdStr,String codeStr){
-        RequestBody requestBody = new FormBody.Builder()
-                .add("mobile", mobile)
-                .add("vcode", codeStr)
-                .add("registerType", "0")//0=手机,1=微信,2=QQ
-                .add("password", psdStr)
-                .add("tag",userTag)
-                .build();
-        Logs.i("注册请求字段===","=="+mobile+"=="+codeStr+"==="+psdStr+"===="+userTag);
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.USER_REGIST, new OKManager.Func4() {
+    public  void RegistHttp(String mobile,String psdStr,String codeStr,String majorAccount) {
+        HttpParams params = new HttpParams();
+         params.put("mobile", mobile);
+        params.put("vcode", codeStr);
+        params.put("registerType", "0");//0=手机,1=微信,2=QQ
+        params.put("password", psdStr);
+        params.put("tag",userTag);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.USER_REGIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("注册发送成功返回参数=======",jsonObject.toString());
@@ -283,5 +294,4 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
             }
         });
     }
-
 }

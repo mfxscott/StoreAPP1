@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -388,6 +389,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 switch (msg.what) {
                     case 1000:
                         String obj = (String) msg.obj;
+                       if(TextUtils.isEmpty(obj) || obj.equals("null"))
+                           return true;
                         List<BannerSlidEntity> goodsTypeList = (List<BannerSlidEntity>) ResponseData.getInstance(activity).parseJsonArray(obj.toString(), BannerSlidEntity.class);
                         setBanner(goodsTypeList);
                         break;

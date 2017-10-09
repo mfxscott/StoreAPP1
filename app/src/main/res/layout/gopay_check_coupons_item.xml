@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:padding="10dp"
-        android:background="@mipmap/pay_order_coupons"
+
         android:id="@+id/pay_coupons_item_bg_rel"
         android:layout_margin="10dp"
         android:layout_width="match_parent"
