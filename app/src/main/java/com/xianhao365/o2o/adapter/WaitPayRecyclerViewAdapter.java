@@ -20,11 +20,10 @@ import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
-import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
+import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 import com.xianhao365.o2o.fragment.my.store.order.WaitSendFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;
-import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
@@ -153,13 +152,12 @@ public  class WaitPayRecyclerViewAdapter
                     case 1:
                         Intent pay = new Intent(context, TopUpActivity.class);
                         pay.putExtra("payTag","1");
-                        pay.putExtra("paySum","1000");
+                        pay.putExtra("paySum",orderInfo.getGoodsTotalAmount());
                         context.startActivity(pay);
                         break;
                     case 2:
-                        SXUtils.getInstance(context).ToastCenter("提醒发货");
+//                        SXUtils.getInstance(context).ToastCenter("提醒发货");
                         new WaitSendFragment().getRemindHttp(orderInfo.getOrderNo(),orderInfo.getTradeNo());
-
                         break;
                     case 3:
 //                        SXUtils.getInstance(context).ToastCenter("确认发货");

@@ -101,8 +101,10 @@ public class CarFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-                    indexPage = 1;
-                    GetCarList();
+                    if(SXUtils.getInstance(activity).IsLogin()) {
+                        indexPage = 1;
+                        GetCarList();
+                    }
                 }else{
                     indexPage ++;
                     GetCarList();
@@ -376,6 +378,9 @@ public class CarFragment extends Fragment implements View.OnClickListener{
         }else if(messageEvent.getTag() == 3){
             //购物车列表 点击商品checkBox调用改变购物车总价格
             totalTv.setText("¥"+getCarTotalMoney());
+        }else if(messageEvent.getTag() == 4444){
+            storesimpAdapter.removeAllData();
+            MainFragmentActivity.getInstance().setBadgeNum(0);
         }
     }
     @Override

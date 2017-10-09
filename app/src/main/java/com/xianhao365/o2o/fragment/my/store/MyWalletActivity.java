@@ -24,6 +24,7 @@ import com.xianhao365.o2o.entity.wallet.TransLogEntity;
 import com.xianhao365.o2o.entity.wallet.WalletInfoEntity;
 import com.xianhao365.o2o.fragment.my.buyer.ExtractAddBankCardActivity;
 import com.xianhao365.o2o.fragment.my.buyer.ExtractDetailActivity;
+import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.yhj.YHJActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;

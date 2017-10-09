@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
-import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
+import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 
 

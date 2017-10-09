@@ -30,7 +30,6 @@
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
-
     <!-- 要求设备有摄像头 -->
     <!-- <uses-permission android:name="android.permission.CAMERA"/> -->
     <!-- <uses-permission android:name="android.permission.FLASHLIGHT"/> -->
@@ -40,7 +39,7 @@
     <!-- <uses-feature android:name="android.hardware.camera.autofocus"/> -->
     <!--
     摊主账号
-    15507556959   123456
+    15507556959   1
  13974941111 密码1
     供应商测试账号 帐号13129343614  密码 1
 
@@ -69,6 +68,27 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- alipay sdk begin -->
+
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+
+        <!-- alipay sdk end -->
+
+
         <activity
             android:name=".fragment.MainFragmentActivity"
             android:label="@string/app_name"
@@ -124,7 +144,7 @@
             android:label="@string/title_activity_my_wallet"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".fragment.my.store.TopUpActivity"
+            android:name=".fragment.my.pay.TopUpActivity"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".fragment.my.store.BankCardTopUpActivity"

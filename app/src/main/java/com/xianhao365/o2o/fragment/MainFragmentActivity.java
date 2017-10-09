@@ -167,7 +167,6 @@ public class MainFragmentActivity extends AppCompatActivity {
             badge1.setVisibility(View.GONE);
         }
     }
-
     /**
      * 获取购物车数量
      */

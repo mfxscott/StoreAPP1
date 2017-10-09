@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.car.OrderCouponsEntity;
+import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public  class PayCouponsRecyclerViewAdapter
         public final TextView price;
         public final TextView des;
         public final TextView time;
-        public final TextView  hs;
+//        public final TextView  hs;
         public final  RelativeLayout rel;
         public final CheckBox  checkbox;
 
@@ -50,7 +51,7 @@ public  class PayCouponsRecyclerViewAdapter
             price = (TextView) mView.findViewById(R.id.pay_coupons_item_price_tv);
             des = (TextView) mView.findViewById(R.id.pay_coupons_item_des_tv);
             time = (TextView) mView.findViewById(R.id.pay_coupons_item_time_tv);
-            hs = (TextView) mView.findViewById(R.id.pay_coupons_item_hs_tv);
+//            hs = (TextView) mView.findViewById(R.id.pay_coupons_item_hs_tv);
             checkbox = (CheckBox) mView.findViewById(R.id.pay_coupons_item_checkbox);
         }
         @Override
@@ -76,26 +77,32 @@ public  class PayCouponsRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        OrderCouponsEntity  couponInfo = mValues.get(position);
+      final  OrderCouponsEntity  couponInfo = mValues.get(position);
         holder.price.setText(couponInfo.getCouponMoney()+"");
         holder.des.setText(couponInfo.getCouponTerm());
         holder.time.setText(couponInfo.getCouponTime());
-        if(tag==2){
-            holder.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
-            holder.hs.setText("已经使用");
-        }else if(tag==3){
-            holder.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
-            holder.hs.setText("已经过期");
-        }else{
-            holder.rel.setBackgroundResource(R.mipmap.yhj_use_img);
-            holder.hs.setText("立刻使用");
-        }
+//        if(tag==2){
+//            holder.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
+//            holder.hs.setText("已经使用");
+//        }else if(tag==3){
+//            holder.rel.setBackgroundResource(R.mipmap.yhj_nouse_img);
+//            holder.hs.setText("已经过期");
+//        }else{
+//            holder.rel.setBackgroundResource(R.mipmap.yhj_use_img);
+//            holder.hs.setText("立刻使用");
+//        }
 
         holder.checkbox.setOnCheckedChangeListener(null);
         holder.checkbox.setChecked(couponsMap.get(position+""));
         holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(couponInfo.getIsExclusive().equals("1")){
+                    if(!getCouponsGetUse()){
+                        SXUtils.getInstance(context).ToastCenter("此优惠券不能与其他优惠券同时使用");
+                        return;
+                    }
+                }
                 couponsMap.put(position+"",isChecked);
                 notifyDataSetChanged();
             }
@@ -134,7 +141,7 @@ public  class PayCouponsRecyclerViewAdapter
      * 获取选中商品skucode 用于结算订单
      * @return
      */
-    public String getCarTotalStrSkucode(){
+    public String getCouponsStrCouponNo(){
         String skuCodestr = "";
         Iterator<String> iter = couponsMap.keySet().iterator();
         for(int i=0;i<mValues.size();i++){
@@ -150,5 +157,44 @@ public  class PayCouponsRecyclerViewAdapter
         if(TextUtils.isEmpty(skuCodestr) || skuCodestr.equals(","))
             return "";
         return skuCodestr.substring(0,skuCodestr.length()-1)+"";
+    }
+
+    /**
+     * 判断是否有选中其他优惠券
+     * 由于判断某些优惠券不可叠加使用
+     * @return  false  表示已选择其他优惠券  true 未选择其他优惠
+     */
+    public boolean getCouponsGetUse(){
+        Iterator<String> iter = couponsMap.keySet().iterator();
+        for(int i=0;i<mValues.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = couponsMap.get(key);
+                if(value){
+                    return false;
+                }
+            }
+        }
+        return true;
+
+    }
+    /**
+     * 获得选中优惠券的抵扣金额
+     * @return
+     */
+    public float getCouponsTotalPrice(){
+        float totalPrice = 0;
+        Iterator<String> iter = couponsMap.keySet().iterator();
+        for(int i=0;i<mValues.size();i++){
+            while (iter.hasNext()) {
+                String key = iter.next();
+                Boolean value = couponsMap.get(key);
+                if(value){
+                    int postions = Integer.parseInt(key);
+                    totalPrice += Float.parseFloat(mValues.get(postions).getCouponMoney());
+                }
+            }
+        }
+        return totalPrice;
     }
 }

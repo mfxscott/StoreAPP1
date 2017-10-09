@@ -110,18 +110,39 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private void UserInfoNum(UserRenderInfoEntity userNum){
         store_my_money.setText(userNum.getUserableAmount());
         couponsNum.setText(userNum.getUserableCoupon());
-        if(!TextUtils.isEmpty(userNum.getToPayOrder())) {
-            orderNum1.setVisibility(View.VISIBLE);
-            orderNum1.setText(userNum.getToPayOrder() + "");
+        if(!TextUtils.isEmpty(userNum.getToPayOrder()) ) {
+            if(!userNum.getToPayOrder().equals("0")) {
+                orderNum1.setVisibility(View.VISIBLE);
+                orderNum1.setText(userNum.getToPayOrder() + "");
+            }
         }
         if(!TextUtils.isEmpty(userNum.getToDelivery())) {
-            orderNum2.setVisibility(View.VISIBLE);
-            orderNum2.setText(userNum.getToDelivery());
+            if (!userNum.getToDelivery().equals("0")){
+                orderNum2.setVisibility(View.VISIBLE);
+                orderNum2.setText(userNum.getToDelivery());
+            }
         }
         if(!TextUtils.isEmpty(userNum.getToReceive())) {
-            orderNum3.setVisibility(View.VISIBLE);
-            orderNum3.setText(userNum.getToReceive());
+            if(userNum.getToReceive().equals("0")) {
+                orderNum3.setVisibility(View.VISIBLE);
+                orderNum3.setText(userNum.getToReceive());
+            }
         }}
+
+    /**
+     * 退出登录
+     * 制空用户数据
+     */
+    private void ExitUserInfoNull(){
+        store_my_money.setText("");
+        couponsNum.setText("");
+        orderNum1.setVisibility(View.GONE);
+        orderNum2.setVisibility(View.GONE);
+        orderNum3.setVisibility(View.GONE);
+        name.setText("未登录");
+        Glide.with(activity).load(R.mipmap.default_head).placeholder(R.mipmap.default_head)
+                .error(R.mipmap.default_head).transform(new GlideRoundTransform(activity)).into(headimg);
+    }
     /**
      * 初始化
      */
@@ -239,80 +260,14 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
     @Override
     public void onClick(View v) {
-//        if(!SXUtils.getInstance(activity).IsLogin())
-//            return ;
+        if(!SXUtils.getInstance(activity).IsLogin())
+            return ;
         switch (v.getId()){
             case R.id.my_per_wallet:
                 Intent wall = new Intent(activity,MyWalletActivity.class);
                 startActivity(wall);
                 break;
             case R.id.my_acc_mamage_tv:
-//                String json = SXUtils.getInstance(activity).getFromAssets("areas.json");
-//                List<AddressProvinceEntity> jsonBean = ResponseData.getInstance(activity).parseJsonArray(json.toString(), AddressProvinceEntity.class);
-
-//                ArrayList<String>  jsoList = new ArrayList<>();
-//                for (int c = 0; c < jsonBean.size(); c++) {//遍历该省份的所有城市
-//                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
-//                    jsoList.add(CityName);//添加城市
-//                }
-//
-//                options1Items = jsoList;
-//                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-//                ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
-//                ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
-//                for (int c = 0; c < jsonBean.get(0).getChildren().size(); c++) {//遍历该省份的所有城市
-//                    String CityName = jsonBean.get(0).getChildren().get(c).getLabel();
-//                    CityList.add(CityName);//添加城市
-//
-//                    Province_AreaList.add(City_AreaList);//添加该省所有地区数据
-//                }
-//                for (int d = 0; d <jsonBean.get(0).getChildren().get(0).getChildren().size(); d++) {//该城市对应地区所有数据
-//                    String AreaName = jsonBean.get(0).getChildren().get(0).getChildren().get(d).getLabel();
-//                    City_AreaList.add(AreaName);//添加该城市所有地区数据
-//                }
-//                /**
-//                 * 添加城市数据 shide
-//                 */
-//                options2Items.add(CityList);
-//
-//                /**
-//                 * 添加地区数据OK
-//                 */
-//                options3Items.add(Province_AreaList);
-//                //shide
-//                //时间选择器
-//                OptionsPickerView pvOptions = new  OptionsPickerView.Builder(activity, new OptionsPickerView.OnOptionsSelectListener() {
-//                    @Override
-//                    public void onOptionsSelect(int options1, int option2, int options3 ,View v) {
-//                        //返回的分别是三个级别的选中位置
-////                        String tx = options1Items.get(options1).getPickerViewText()
-////                                + options2Items.get(options1).get(option2)
-////                                + options3Items.get(options1).get(option2).get(options3).getPickerViewText();
-////                        tvOptions.setText(tx);
-//                    }
-//                })
-//
-//                        .setSubmitText("确定")//确定按钮文字
-//                        .setCancelText("取消")//取消按钮文字
-//                        .setTitleText("选择城市")//标题
-//                        .setSubCalSize(18)//确定和取消文字大小
-//                        .setTitleSize(20)//标题文字大小
-//                        .setTitleColor(Color.BLACK)//标题文字颜色
-//                        .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-//                        .setCancelColor(Color.BLUE)//取消按钮文字颜色
-//                        .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
-//                        .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
-//                        .setContentTextSize(18)//滚轮文字大小
-//                        .setLinkage(true)//设置是否联动，默认true
-//                        .setLabels("省", "市", "区")//设置选择的三级单位
-//                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-//                        .setCyclic(false, false, false)//循环与否
-//                        .setSelectOptions(1, 1, 1)  //设置默认选中项
-//                        .setOutSideCancelable(false)//点击外部dismiss default true
-//                        .isDialog(false)//是否显示为对话框样式
-//                        .build();
-//                pvOptions.setPicker(options1Items, options2Items, options3Items);//添加数据源
-//                pvOptions.show();
                 Intent accm = new Intent(activity,AccManageActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("userinfo",userinfo);
@@ -477,7 +432,7 @@ public class StoreMyFragment extends Fragment implements View.OnClickListener{
         if(messageEvent.getTag()==1){
             LoadData();
         }else if(messageEvent.getTag() == 4444){
-            name.setText("未登录");
+            ExitUserInfoNull();
         }
 
     }

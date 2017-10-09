@@ -22,6 +22,7 @@
 
     </RelativeLayout>
     <LinearLayout
+        android:visibility="gone"
         android:layout_gravity="center_vertical"
         android:id="@+id/wallet_default_coupons_lin"
         android:orientation="vertical"

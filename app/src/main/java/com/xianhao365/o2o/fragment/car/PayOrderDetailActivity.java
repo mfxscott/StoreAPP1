@@ -48,7 +48,7 @@ public class PayOrderDetailActivity extends BaseActivity {
     private void initView(){
         registerBack();
         setTitle("商品详情");
-        nameTv.setText(fromOrder.getSettlementAmount()+"鲜好");
+//        nameTv.setText(fromOrder.getSettlementAmount()+"鲜好");
         totalTv.setText("总价："+fromOrder.getTransactionAmount()+"元");
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());

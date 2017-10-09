@@ -41,6 +41,8 @@ public  class WaitPayGoodsRecyclerViewAdapter
         public final TextView   num;
         public final TextView unit;
         public final  TextView name;
+        public final  TextView  modelPrice;
+        public final TextView model;
 
         public ViewHolder(View view) {
             super(view);
@@ -53,6 +55,8 @@ public  class WaitPayGoodsRecyclerViewAdapter
             skuTotal = (TextView) view.findViewById(R.id.order_wait_pay_goods_total_tv);
             num = (TextView) view.findViewById(R.id.order_wait_pay_num_tv);
             name = (TextView) view.findViewById(R.id.order_wait_pay_goods_name_tv);
+            modelPrice = (TextView) view.findViewById(R.id.order_wait_pay_goods_model_price_tv);
+            model = (TextView) view.findViewById(R.id.order_wait_pay_goods_model_tv);
         }
         @Override
         public String toString() {
@@ -82,6 +86,7 @@ public  class WaitPayGoodsRecyclerViewAdapter
         holder.num.setText("x "+orderInfo.getSkuNumber());
         holder.name.setText(orderInfo.getSkuName());
         holder.unit.setText("/"+orderInfo.getGoodsUnit());
+        holder.modelPrice.setText("¥ "+orderInfo.getSkuPrice());
         holder.skuTotal.setText((Float.parseFloat(orderInfo.getSkuNumber()))*Float.parseFloat(orderInfo.getSkuPrice())+"元");
         SXUtils.getInstance(context).GlideSetImg(orderInfo.getSkuImage(),holder.mImageView);
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );

@@ -83,6 +83,9 @@ public class WaitTakeFragment extends Fragment {
                 case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
                     List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(gde == null || gde.size() <=0){
+                        view.findViewById(R.id.buy_order_list_take_lin).setVisibility(View.VISIBLE);
+                    }
                     if(indexPage > 0 && gde.size()>0){
                         cgList.addAll(gde);
                     }else{

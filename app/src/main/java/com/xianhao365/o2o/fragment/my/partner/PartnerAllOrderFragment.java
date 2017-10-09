@@ -23,6 +23,9 @@ import com.xianhao365.o2o.utils.view.SwipyRefreshLayoutDirection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 合伙人所有订单
+ */
 public class PartnerAllOrderFragment extends Fragment {
     private RecyclerView recyclerView;
     private View view;

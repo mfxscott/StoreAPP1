@@ -71,6 +71,7 @@ public class ExtractDetailActivity extends BaseActivity implements View.OnClickL
                 switch (msg.what) {
                     case 1000:
                         SXUtils.getInstance(activity).ToastCenter("提现申请成功");
+                        finish();
                         break;
                     case AppClient.ERRORCODE:
                         String errormsg = (String) msg.obj;
@@ -103,7 +104,7 @@ public class ExtractDetailActivity extends BaseActivity implements View.OnClickL
                     SXUtils.getInstance(activity).ToastCenter("输入金额有误，请重新输入");
                     return;
                 }
-                getWithdrawApply(inputpay+"");
+                getWithdrawApply(inputpay);
                 break;
             case R.id.extract_add_bank_card_btn:
                 //检测没有添加过银行卡，提现添加银行卡
@@ -119,10 +120,10 @@ public class ExtractDetailActivity extends BaseActivity implements View.OnClickL
     /**
      * 发起提现申请
      */
-    public void getWithdrawApply(String applySum) {
+    public void getWithdrawApply(float applySum) {
         HttpParams params = new HttpParams();
         params.put("applySum",applySum);
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.WITHDRAWAPPLY, null, new HttpUtils.requestCallBack() {
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.WITHDRAWAPPLY, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
 //                UserInfoEntity gde = null;
@@ -149,9 +150,9 @@ public class ExtractDetailActivity extends BaseActivity implements View.OnClickL
      * @return
      */
     private boolean checkPriceNum(String priceNum){
-           if(priceNum.substring(0,1).equals(".")){
-               return true;
-           }
-           return false;
+        if(priceNum.substring(0,1).equals(".")){
+            return true;
+        }
+        return false;
     }
 }

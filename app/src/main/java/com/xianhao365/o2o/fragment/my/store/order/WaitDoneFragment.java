@@ -46,7 +46,6 @@ public class WaitDoneFragment extends Fragment {
         new MyOrderActivity().getOrderListHttp(indexPage,"50",hand);
     }
     private void initView(){
-
         mSwipyRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.order_list_wait_done_swipe);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -62,7 +61,6 @@ public class WaitDoneFragment extends Fragment {
                 }
             }
         });
-
         recyclerView = (RecyclerView) view.findViewById(R.id.order_wait_done_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -76,6 +74,9 @@ public class WaitDoneFragment extends Fragment {
                 case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
                     List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(gde == null || gde.size() <=0){
+                        view.findViewById(R.id.buy_order_list_done_lin).setVisibility(View.VISIBLE);
+                    }
                     if(indexPage > 0 && gde.size()>0){
                         cgList.addAll(gde);
                     }else{

@@ -25,8 +25,8 @@ import com.xianhao365.o2o.entity.car.FromOrderEntity;
 import com.xianhao365.o2o.entity.car.OrderCouponsEntity;
 import com.xianhao365.o2o.entity.car.OrderLinesEntity;
 import com.xianhao365.o2o.entity.car.PayTypeEntity;
-import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
-import com.xianhao365.o2o.fragment.my.store.yhj.GoPayCheckCouponsActivity;
+import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
+import com.xianhao365.o2o.fragment.my.store.yhj.YHJActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -43,7 +43,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.xianhao365.o2o.R.id.gopay_use_yhj_rel;
+
 /**
+ * 购物车选择商品跳转到此界面
  * 商品预下单成功去支付界面
  */
 public class GoPayActivity extends BaseActivity implements View.OnClickListener{
@@ -75,9 +78,12 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
     TextView  couponsTv;
     @BindView(R.id.go_pay_goods_num_tv)
     TextView  goodsNumTv;
+    @BindView(R.id.go_pay_coupons_price_tv)
+    TextView  couponPriceTv;
     @BindView(R.id.go_pay_order_detail_lin)
     LinearLayout orderDetailLin;
-    private int  REQUESTCODE=1000;
+    private int  REQUESTCODE=1000;//接收选择地址返回
+    private int  REQUESTCOUPONSCODE=1001;//接收优惠券选择返回
     private String couponNos="";//优惠劵数量
     private String PayModel="1";//支付方式
     FromOrderEntity fromOrder;
@@ -105,7 +111,7 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         initView();
     }
     private void initView(){
-        couponsTv.setText(payTypeList.size()+"张");
+        couponsTv.setText(couponsList.size()+"张");
         totalPriceTv.setText("¥"+fromOrder.getTransactionAmount());
         freightAmountTv.setText("¥"+fromOrder.getFreightAmount());
         priceTv.setText("¥"+fromOrder.getTransactionAmount());
@@ -117,7 +123,7 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         goback.setOnClickListener(this);
         RelativeLayout reladdress = (RelativeLayout) findViewById(R.id.gopay_check_address_rel);
         reladdress.setOnClickListener(this);
-        RelativeLayout useYhj = (RelativeLayout) findViewById(R.id.gopay_use_yhj_rel);
+        RelativeLayout useYhj = (RelativeLayout) findViewById(gopay_use_yhj_rel);
         useYhj.setOnClickListener(this);
         TextView paytv = (TextView) findViewById(R.id.gopay_btn);
         paytv.setOnClickListener(this);
@@ -139,9 +145,10 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
                         String orderNo = (String) msg.obj;
                         Intent pay = new Intent(activity, TopUpActivity.class);
                         pay.putExtra("payTag","1");
-                        pay.putExtra("paySum","1000");
+                        pay.putExtra("paySum",totalPriceTv.getText().toString()+"");
                         pay.putExtra("orderNo",orderNo);
                         startActivity(pay);
+                        finish();
                         break;
                     case 1001:
                         break;
@@ -174,10 +181,18 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
                 startActivityForResult(address, REQUESTCODE);
                 // 意图实现activity的跳转
                 break;
-            case R.id.gopay_use_yhj_rel:
-                Intent intent = new Intent(activity, GoPayCheckCouponsActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+            case gopay_use_yhj_rel:
+//                Intent intent = new Intent(activity, GoPayCheckCouponsActivity.class);
+//                intent.putExtras(bundle);
+//                startActivity(intent);
+                if(couponsList == null || couponsList.size() <=0){
+                    SXUtils.getInstance(activity).ToastCenter("暂无可使用优惠券");
+                    return;
+                }
+                Intent yhj = new Intent(activity,YHJActivity.class);
+                yhj.putExtra("yhjTag","4");
+                yhj.putExtras(bundle);
+                startActivityForResult(yhj, REQUESTCOUPONSCODE);
                 break;
             case R.id.gopay_btn:
                 SXUtils.showMyProgressDialog(activity,false);
@@ -216,6 +231,15 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
             Bundle bundle = data.getExtras();
             AddressInfoEntity address = (AddressInfoEntity) bundle.get("addressInfo");
             initData(address);
+        }else if(requestCode == REQUESTCOUPONSCODE){
+            if(data == null)
+                return;
+            Bundle bundle = data.getExtras();
+            couponNos = bundle.getString("couponNo");
+            float  price = bundle.getFloat("couponPrice");
+            totalPriceTv.setText("¥ "+(Float.parseFloat(fromOrder.getTransactionAmount())-price));
+            couponPriceTv.setText("-¥"+price);
+//            priceTv.setText("¥"+(Float.parseFloat(fromOrder.getTransactionAmount())-price));
         }
     }
     /**
@@ -225,7 +249,7 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         HttpParams httpp = new HttpParams();
         httpp.put("couponNos",couponNos);//优化劵 用逗号隔开
         httpp.put("consigneeId",fromOrder.getDefaultAddress().getConsigneeId());//收货地址ID
-        httpp.put("settlementMode",PayModel);//支付方式
+        httpp.put("settlementMode","2");//PayModel支付方式 1 货到付款 2 在线支付
         httpp.put("skuBarcodes",returnSkuCode());//优化劵 用逗号隔开
         HttpUtils.getInstance(activity).requestPost(false, AppClient.ORDER_SUBMIT, httpp, new HttpUtils.requestCallBack() {
             @Override

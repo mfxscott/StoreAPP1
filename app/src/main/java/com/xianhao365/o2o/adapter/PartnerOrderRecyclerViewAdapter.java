@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
-import com.xianhao365.o2o.fragment.my.store.TopUpActivity;
+import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 import com.xianhao365.o2o.fragment.my.store.order.WaitSendFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;

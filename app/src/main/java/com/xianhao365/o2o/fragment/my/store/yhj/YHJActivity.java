@@ -15,8 +15,7 @@ import android.widget.TextView;
 import com.androidkun.xtablayout.XTabLayout;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
-import com.xianhao365.o2o.entity.YHJEneity;
-import com.xianhao365.o2o.entity.car.UserCouponEntity;
+import com.xianhao365.o2o.entity.car.OrderCouponsEntity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -34,12 +33,17 @@ public class YHJActivity extends BaseActivity {
     private String yhjTag;
     private Handler hand;
     private Activity activity;
-    private List<UserCouponEntity> couponsuse;
+    public static ArrayList<OrderCouponsEntity> couponsList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_yhj);
         yhjTag = this.getIntent().getStringExtra("yhjTag");
+        Bundle bundle = this.getIntent().getExtras();
+        ArrayList list = bundle.getParcelableArrayList("coupsons");
+        if (list != null){
+            couponsList = (ArrayList<OrderCouponsEntity>) list.get(0);
+        }
         activity = this;
 
         initView();
@@ -51,7 +55,6 @@ public class YHJActivity extends BaseActivity {
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                       couponsuse = (List<UserCouponEntity>) msg.obj;
                         initViewPager();
                         break;
                     case 1001:
@@ -65,57 +68,6 @@ public class YHJActivity extends BaseActivity {
                 return true;
             }
         });
-    }
-    /**
-     * 已使用数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getYSYBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("已使用");
-            map.setState("1");
-            map.setTime("201708-201708");
-            list.add(map);
-        }
-        return list;
-    }
-    /**
-     * 未使用数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("未使用");
-            map.setState("2");
-            map.setTime("201708-201708");
-            list.add(map);
-        }
-        return list;
-    }
-    /**
-     * 封装模拟银行卡数据
-     * @return
-     */
-    private ArrayList<YHJEneity> getYGQBankData(){
-        ArrayList<YHJEneity> list = new ArrayList<>();
-
-        for(int i=0;i<10;i++){
-            YHJEneity  map = new YHJEneity();
-            map.setPrice("10"+i);
-            map.setDes("我是过期的");
-            map.setState("3");
-            map.setTime("201702-201706");
-            list.add(map);
-        }
-        return list;
     }
     private void initViewPager() {
         LinearLayout allTitleGobackLinlay = (LinearLayout) findViewById(R.id.all_title_goback_linlay);
@@ -133,14 +85,17 @@ public class YHJActivity extends BaseActivity {
         titles.add("未使用");
         titles.add("已使用");
         titles.add("已过期");
-//        Logs.i(couponsuse.size()+"================>>>>>");
-        fragments.add(new NoUseFragment());
+        if(Integer.parseInt(yhjTag) ==4){
+            fragments.add(new PayOrderUseFragment());
+        }else {
+            fragments.add(new NoUseFragment());
+        }
         fragments.add(new YHJUseFragment());
         fragments.add(new YHJUsedFragment());
         FragmentAdapter adatper = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
-         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(adatper);
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(1);
         //将TabLayout和ViewPager关联起来。
         XTabLayout tabLayout = (XTabLayout) findViewById(R.id.xTablayout);
         tabLayout.setupWithViewPager(viewPager);

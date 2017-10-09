@@ -74,12 +74,15 @@ public class WaitSendFragment extends Fragment {
 //        recyclerView.setAdapter(simpAdapter);
 
     }
-  public Handler  hand = new Handler(new Handler.Callback() {
+    public Handler  hand = new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
                     List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+                    if(gde == null || gde.size() <=0){
+                        view.findViewById(R.id.buy_order_list_send_lin).setVisibility(View.VISIBLE);
+                    }
                     if(indexPage > 0 && gde.size()>0){
                         cgList.addAll(gde);
                     }else{
@@ -100,7 +103,7 @@ public class WaitSendFragment extends Fragment {
                     }
                     break;
                 case 1001:
-
+                    SXUtils.getInstance(activity).ToastCenter("提醒发货成功");
                     break;
                 case 1004:
                     initData();
@@ -124,6 +127,7 @@ public class WaitSendFragment extends Fragment {
         HttpParams params = new HttpParams();
         params.put("orderNo",orderNo);
         params.put("tradeNo",tradeNo);
+        params.put("contents","给我发货");
         HttpUtils.getInstance(activity).requestPost(false, AppClient.USER_REMIND, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {

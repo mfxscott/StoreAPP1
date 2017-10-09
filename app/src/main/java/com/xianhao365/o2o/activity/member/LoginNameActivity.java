@@ -97,6 +97,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
                 switch (msg.what) {
                     //登录成功
                     case 1000:
+                        SXUtils.DialogDismiss();
                         SXUtils.getInstance(activity).ToastCenter("登录成功");
                         if(MainFragmentActivity.homeRb == null ) {
                             Intent mainintent = new Intent(activity, MainFragmentActivity.class);
@@ -123,7 +124,7 @@ public class LoginNameActivity extends BaseActivity implements View.OnClickListe
             case R.id.login_acc_next:
                 String phone = loginAccPhoneEdt.getText().toString();
                 String psd = loginAccPsdEdt.getText().toString();
-                SXUtils.showMyProgressDialog(this,false);
+                SXUtils.showMyProgressDialog(activity,false);
 //                psdLoginHttp(phone,psd);
                 SXUtils.getInstance(activity).psdLoginHttp(hand,phone,psd);
                 break;

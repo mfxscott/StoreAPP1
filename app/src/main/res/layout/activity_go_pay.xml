@@ -228,11 +228,12 @@
                         android:layout_height="wrap_content"/>
                 </RelativeLayout>
                 <View
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/line_bg" />
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/gopay_getto_rel"
                     android:background="@drawable/white_gray_selector"
                     android:padding="15dp"
@@ -366,6 +367,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                     <TextView
+                        android:id="@+id/go_pay_coupons_price_tv"
                         android:layout_alignParentRight="true"
                         android:textSize="@dimen/ac_text_size_14"
                         android:textColor="@color/col_333"
