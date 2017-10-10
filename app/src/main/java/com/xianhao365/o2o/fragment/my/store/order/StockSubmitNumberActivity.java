@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 /**
  * 用户订单列表缺货少货上报界面
  */
-
 public class StockSubmitNumberActivity extends BaseActivity{
     private Activity activity;
     @BindView(R.id.stock_submit_recyclerv)
@@ -59,12 +58,13 @@ public class StockSubmitNumberActivity extends BaseActivity{
         orderNoTv.setText(orderNoStr+"");
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-          simpAdapter = new StockSubmitRecyclerViewAdapter(activity,orderLines);
+        simpAdapter = new StockSubmitRecyclerViewAdapter(activity,orderLines);
         recyclerView.setAdapter(simpAdapter);
         submitTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SXUtils.getInstance(activity).ToastCenter(simpAdapter.getInputNum()+"====");
+                SXUtils.showMyProgressDialog(activity,false);
                 geStockSubmitHttp(simpAdapter.getInputNum());
             }
         });
@@ -82,6 +82,7 @@ public class StockSubmitNumberActivity extends BaseActivity{
                         SXUtils.getInstance(activity).ToastCenter(msgs);
                         break;
                 }
+                SXUtils.DialogDismiss();
                 return true;
             }
         });

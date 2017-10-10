@@ -31,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
-
         <LinearLayout
             android:layout_margin="10dp"
             android:orientation="vertical"
@@ -71,6 +70,7 @@
                 android:layout_height="1dp"
                 android:background="@color/line_bg" />
             <android.support.v7.widget.RecyclerView
+                android:layout_marginTop="10dp"
                 android:scrollbars="none"
                 android:id="@+id/stock_submit_recyclerv"
                 android:layout_width="match_parent"

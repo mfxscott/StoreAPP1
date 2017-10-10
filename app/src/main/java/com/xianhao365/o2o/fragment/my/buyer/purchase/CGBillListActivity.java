@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 
@@ -46,6 +47,7 @@ public class CGBillListActivity extends BaseActivity {
         activity = this;
         receiveStateStr = this.getIntent().getStringExtra("state");
         initView();
+        SXUtils.showMyProgressDialog(activity,false);
         GetGYSBillListHttp(indexPage,receiveStateStr);
     }
 
@@ -69,9 +71,6 @@ public class CGBillListActivity extends BaseActivity {
         else{
             setTitle("采购清单列表");
         }
-
-
-
         mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.cg_list_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
@@ -88,6 +87,7 @@ public class CGBillListActivity extends BaseActivity {
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.cg_order_list_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         hand = new Handler(new Handler.Callback() {
@@ -103,7 +103,6 @@ public class CGBillListActivity extends BaseActivity {
                         }
                         if(gde.size()>=10){
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);
-
                         }else{
                             mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.TOP);
                         }
@@ -125,6 +124,7 @@ public class CGBillListActivity extends BaseActivity {
                 if(mSwipyRefreshLayout != null){
                     mSwipyRefreshLayout.setRefreshing(false);
                 }
+                SXUtils.DialogDismiss();
                 return true;
             }
         });
@@ -154,7 +154,7 @@ public class CGBillListActivity extends BaseActivity {
         HttpUtils.getInstance(activity).requestPost(false,AppClient.GYS_BILLLIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                CGBillListEntity gde = (CGBillListEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
+                CGBillListEntity gde =  ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),CGBillListEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;
                 msg.obj = gde.getDataset();

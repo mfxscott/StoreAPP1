@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
     android:orientation="vertical"
     >
     <LinearLayout
@@ -13,10 +12,13 @@
     </LinearLayout>
     <LinearLayout
         android:orientation="vertical"
-        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
+        <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
+            android:id="@+id/cg_list_swipyrefreshlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/cg_order_list_recycler"
             android:layout_width="match_parent"
@@ -29,10 +31,6 @@
             android:scrollbars="none"
             android:stretchMode="columnWidth" />
 
-        <com.xianhao365.o2o.utils.view.SwipyRefreshLayout
-            android:id="@+id/cg_list_swipyrefreshlayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            ></com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
+        </com.xianhao365.o2o.utils.view.SwipyRefreshLayout>
     </LinearLayout>
 </LinearLayout>
