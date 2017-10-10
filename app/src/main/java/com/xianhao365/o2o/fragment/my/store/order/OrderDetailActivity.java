@@ -3,6 +3,8 @@ package com.xianhao365.o2o.fragment.my.store.order;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -11,8 +13,15 @@ import android.widget.TextView;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
+import com.xianhao365.o2o.entity.UserInfoEntity;
+import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+import com.xianhao365.o2o.utils.httpClient.ResponseData;
+
+import java.util.List;
 
 
 public class OrderDetailActivity extends BaseActivity implements View.OnClickListener {
@@ -28,6 +37,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
         orderTag = this.getIntent().getStringExtra("orderTag");
         orderId = this.getIntent().getStringExtra("orderId");
         initView();
+        getOrderDetailHttp();
     }
     private void initView(){
 
@@ -97,6 +107,46 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+    public Handler hand = new Handler(new Handler.Callback() {
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1000:
+//                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
+                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
 
+                    break;
+                case 1001:
+                    break;
+                case AppClient.ERRORCODE:
+                    String msgs = (String) msg.obj;
+                    SXUtils.getInstance(activity).ToastCenter(msgs);
+                    break;
+            }
+            return true;
+        }
+    });
+    /**
+     * 获取订单详情
+     */
+    public void getOrderDetailHttp() {
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.ORDER_DETAIL, null, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                UserInfoEntity gde = null;
+                gde = ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),UserInfoEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = gde;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+    }
 
 }

@@ -1,5 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@color/app_bg"
@@ -122,6 +122,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
+        <FrameLayout
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="5dp"
+            android:id="@+id/search_goods_detial_car_num_liny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:padding="5dp"
+                android:src="@mipmap/car_img"
+                android:layout_width="40dp"
+                android:layout_height="40dp"/>
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/search_goods_detail_car_num_tv"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_gravity="right"
+                android:background="@drawable/my_msg_shap"
+                android:textColor="@color/white"
+                android:text="0"
+                android:textSize="@dimen/ac_text_size_12"
+                android:layout_width="20dp"
+                android:layout_height="20dp"/>
+        </FrameLayout>
     </RelativeLayout>
 
 </LinearLayout>

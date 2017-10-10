@@ -3,6 +3,7 @@ package com.xianhao365.o2o.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +23,7 @@ import com.xianhao365.o2o.entity.MessageEvent;
 import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
 import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
+import com.xianhao365.o2o.fragment.my.store.order.StockSubmitNumberActivity;
 import com.xianhao365.o2o.fragment.my.store.order.WaitSendFragment;
 import com.xianhao365.o2o.fragment.my.store.order.WaitTakeFragment;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -29,6 +31,7 @@ import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,13 +55,14 @@ public  class WaitPayRecyclerViewAdapter
         public final ImageView mImageView1;
         public final TextView  shopNameTv;
         public final TextView orderTime;
+        public final TextView  orderTv;
         public final TextView  orderTotal;
         public final TextView marketPrice;
         public final TextView  cancelOrder;
         public final TextView  takeOrder,cancelTv;
         public final RelativeLayout  rel1,rel2;
         public final LinearLayout  btnLin;
-         public final RecyclerView recyclerView;
+        public final RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,6 +81,7 @@ public  class WaitPayRecyclerViewAdapter
             cancelTv = (TextView) view.findViewById(R.id.order_done_tv);
             btnLin = (LinearLayout) view.findViewById(R.id.order_btn_lin);
             recyclerView = (RecyclerView) view.findViewById(R.id.order_item_recycler);
+            orderTv = (TextView) view.findViewById(R.id.order_item_total_tv);
         }
         @Override
         public String toString() {
@@ -100,9 +105,9 @@ public  class WaitPayRecyclerViewAdapter
     }
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-       final OrderInfoEntity orderInfo = mValues.get(position);
+        final OrderInfoEntity orderInfo = mValues.get(position);
 
-        holder.shopNameTv.setText(orderInfo.getOrderNo()+"");
+        holder.shopNameTv.setText("订单号："+orderInfo.getOrderNo()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
         holder.orderTotal.setText("¥"+orderInfo.getGoodsTotalAmount());
 
@@ -118,33 +123,38 @@ public  class WaitPayRecyclerViewAdapter
             public void onClick(View v) {
                 Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
                 intent.putExtra("orderTag",tag+"");
-                intent.putExtra("orderId","123456");
+                intent.putExtra("orderId",orderInfo.getOrderNo());
                 holder.mView.getContext().startActivity(intent);
             }
         });
-            switch (tag){
-                case 1:
-                    holder.cancelOrder.setVisibility(View.VISIBLE);
-                    holder.btnLin.setVisibility(View.VISIBLE);
-                    holder.takeOrder.setText("立刻付款");
-                    holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
-                    break;
-                case 2:
-                    holder.btnLin.setVisibility(View.VISIBLE);
-                    holder.takeOrder.setText("提醒发货");
-                    holder.takeOrder.setTextColor(context.getResources().getColor(R.color.orange));
-                    holder.takeOrder.setBackgroundResource(R.drawable.cancel_order_selector);
-                    break;
-                case 3:
-                    holder.btnLin.setVisibility(View.VISIBLE);
-                    holder.takeOrder.setText("确定收货");
-                    holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
-                    break;
-                case 4:
-                    holder.btnLin.setVisibility(View.GONE);
-                    holder.cancelTv.setVisibility(View.VISIBLE);
-                    break;
-            }
+        switch (tag){
+            case 1:
+                holder.cancelOrder.setVisibility(View.VISIBLE);
+                holder.btnLin.setVisibility(View.VISIBLE);
+                holder.takeOrder.setText("立即付款");
+                holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
+                break;
+            case 2:
+                holder.btnLin.setVisibility(View.VISIBLE);
+                holder.takeOrder.setText("提醒发货");
+                holder.takeOrder.setTextColor(context.getResources().getColor(R.color.orange));
+                holder.takeOrder.setBackgroundResource(R.drawable.cancel_order_selector);
+                break;
+            case 3:
+                holder.btnLin.setVisibility(View.VISIBLE);
+                holder.takeOrder.setText("确定收货");
+                holder.takeOrder.setBackgroundResource(R.drawable.comfirm_take_selector);
+                break;
+            case 4:
+//                    holder.btnLin.setVisibility(View.GONE);
+//                    holder.cancelTv.setVisibility(View.VISIBLE);
+
+                holder.btnLin.setVisibility(View.VISIBLE);
+                holder.takeOrder.setText("缺货少货上报");
+                holder.orderTv.setText("状态：");
+                holder.orderTotal.setText("已完成");
+                break;
+        }
         holder.takeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +174,22 @@ public  class WaitPayRecyclerViewAdapter
                         new WaitTakeFragment().getOrderConfirmHttp(orderInfo.getOrderNo());
                         break;
                     case 4:
+//                        Intent intent = new Intent(context, StockSubmitNumberActivity.class);
+//                        intent.putExtra("orderId",orderInfo.getOrderNo());
+//                        context.startActivity(intent);
+
+                        Intent intent = new Intent(context, StockSubmitNumberActivity.class);
+                        Bundle bundle = new Bundle();
+                        ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                        list.add(orderInfo.getOrderLines());
+                        bundle.putParcelableArrayList("orderLines",list);
+                        intent.putExtra("orderNo",orderInfo.getOrderNo());
+                        intent.putExtras(bundle);
+                        context.startActivity(intent);
+
+
+
+                        //已完成，缺货少货上报
                         break;
                 }
             }
@@ -171,7 +197,7 @@ public  class WaitPayRecyclerViewAdapter
         holder.cancelOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                     getCancelOrderHttp(orderInfo.getOrderNo());
+                getCancelOrderHttp(orderInfo.getOrderNo());
             }
         });
 //        holder.rel1.setOnClickListener(new View.OnClickListener() {

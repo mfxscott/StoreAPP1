@@ -34,7 +34,7 @@ public class RequestHttpData {
     /**
      * 首页轮播图
      */
-    public void RequestHttp(HttpParams httpParams, String url,final Handler hand,final int handCOde) {
+    public void ChannelRequestHttp(HttpParams httpParams, String url,final Handler hand,final int handCOde) {
         HttpUtils.getInstance(mContext).requestPost(false, url, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {

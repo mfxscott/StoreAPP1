@@ -213,8 +213,6 @@ public  class CarStoreRecyclerViewAdapter
 
 
     //*********店铺商品中的item****************************************************************************************
-
-
     public  class CarRecyclerViewAdapter
             extends RecyclerView.Adapter<CarRecyclerViewAdapter.GoodsViewHolder> {
         private FoodActionCallback callback;

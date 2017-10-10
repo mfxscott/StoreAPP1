@@ -1,7 +1,7 @@
 package com.xianhao365.o2o.activity;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,7 +12,7 @@ import com.xianhao365.o2o.R;
  * Created by mfx-t224 on 2017/6/29.
  */
 
-public class BaseActivity extends FragmentActivity {
+public class BaseActivity extends AppCompatActivity {
     private MyApplication application;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

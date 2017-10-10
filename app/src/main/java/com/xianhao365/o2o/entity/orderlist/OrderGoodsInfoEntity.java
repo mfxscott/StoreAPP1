@@ -1,11 +1,14 @@
 package com.xianhao365.o2o.entity.orderlist;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * 订单中的商品信息
  * Created by NN on 2017/9/27.
  */
 
-public class OrderGoodsInfoEntity {
+public class OrderGoodsInfoEntity implements Parcelable {
     private String id;
     private String goodsCode;
     private String skuCode;
@@ -18,6 +21,33 @@ public class OrderGoodsInfoEntity {
     private String removable;
     private String editable;
     private String addiable;
+
+    protected OrderGoodsInfoEntity(Parcel in) {
+        id = in.readString();
+        goodsCode = in.readString();
+        skuCode = in.readString();
+        skuName = in.readString();
+        skuImage = in.readString();
+        skuPrice = in.readString();
+        skuNumber = in.readString();
+        totalAmount = in.readString();
+        goodsUnit = in.readString();
+        removable = in.readString();
+        editable = in.readString();
+        addiable = in.readString();
+    }
+
+    public static final Creator<OrderGoodsInfoEntity> CREATOR = new Creator<OrderGoodsInfoEntity>() {
+        @Override
+        public OrderGoodsInfoEntity createFromParcel(Parcel in) {
+            return new OrderGoodsInfoEntity(in);
+        }
+
+        @Override
+        public OrderGoodsInfoEntity[] newArray(int size) {
+            return new OrderGoodsInfoEntity[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -113,5 +143,26 @@ public class OrderGoodsInfoEntity {
 
     public void setAddiable(String addiable) {
         this.addiable = addiable;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(goodsCode);
+        dest.writeString(skuCode);
+        dest.writeString(skuName);
+        dest.writeString(skuImage);
+        dest.writeString(skuPrice);
+        dest.writeString(skuNumber);
+        dest.writeString(totalAmount);
+        dest.writeString(goodsUnit);
+        dest.writeString(removable);
+        dest.writeString(editable);
+        dest.writeString(addiable);
     }
 }

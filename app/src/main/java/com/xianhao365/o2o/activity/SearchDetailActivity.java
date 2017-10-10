@@ -40,6 +40,7 @@ private Activity activity;
     private String searchValueStr;
     private SwipyRefreshLayout mSwipyRefreshLayout;
     private Handler hand;
+    private int indexPage=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +58,15 @@ private Activity activity;
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 if(direction == SwipyRefreshLayoutDirection.TOP){
-//                    indexPage = 1;
+                    indexPage = 1;
 //                    hand.sendEmptyMessage(1);
-////                    HttpLiveSp(indexPage);
-//                }else{
+                    GetGoodsTypeInfoHttp(searchValueStr+"");
+//                    HttpLiveSp(indexPage);
+                }else{
 //                    hand.sendEmptyMessage(1);
-//                    indexPage ++;
-////                    HttpLiveSp(indexPage);
+                    indexPage ++;
+                    GetGoodsTypeInfoHttp(searchValueStr+"");
+//                    HttpLiveSp(indexPage);
                 }
             }
         });

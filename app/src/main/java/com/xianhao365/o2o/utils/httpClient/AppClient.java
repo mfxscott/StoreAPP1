@@ -104,6 +104,7 @@ public class AppClient{
     //摊主相关接口
     public static String TZ_ORDER_LIST="svc.shopowner.order.list";//摊主订单列表查询
     public static String ORDER_CONFIRM="svc.shopowner.order.confirm";//确认订单到货
+    public static String STOCK_SUBMIT="svc.order.lessGoodsApply";//摊主缺货少货上报
     //合伙人
     public static String HHR_ORDER_LIST="svc.partner.order.list";//合伙人订单列表
 

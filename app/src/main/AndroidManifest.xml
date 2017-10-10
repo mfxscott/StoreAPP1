@@ -95,55 +95,68 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.CommonWebViewMainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity android:name=".utils.checkPermission.PermissionsActivity"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.Regis1Activity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.LoginCodeActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.LoginNameActivity"
             android:label="@string/title_activity_login_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.ForGetPsdActivity"
             android:label="@string/title_activity_for_get_psd"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.StoreMapActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.member.RegistCheckActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.AccManageActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.AccInfoActivity"
             android:label="@string/title_activity_acc_info"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.AccSecurityActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.MessageActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.MyWalletActivity"
             android:label="@string/title_activity_my_wallet"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.pay.TopUpActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -163,6 +176,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.car.GoPayActivity"
             android:screenOrientation="portrait"/>
         <activity
@@ -174,6 +188,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".activity.GoodsFeedbackActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|stateUnchanged"/>
@@ -182,16 +197,20 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.store.order.OrderDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
+
             android:name=".activity.SearchDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.DesignDemo"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.buyer.ExtractDetailActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.buyer.ExtractAddBankCardActivity"
             android:screenOrientation="portrait"/>
 
@@ -210,14 +229,31 @@
         <activity
             android:name=".fragment.my.partner.PartnerOrderActivity"
             android:theme="@style/Theme.DesignDemo"/>
-        <activity android:name=".fragment.car.PayOrderDetailActivity"/>
-        <activity android:name=".fragment.my.buyer.purchase.CGBillListActivity"/>
-        <activity android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"/>
-        <activity android:name=".fragment.my.buyer.purchase.CGOrderDeliveActivity"/>
-        <activity android:name=".fragment.my.store.yhj.AddAccActivity">
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.car.PayOrderDetailActivity"/>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.buyer.purchase.CGBillListActivity"/>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.buyer.purchase.CGOrderDetailActivity"/>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.buyer.purchase.CGOrderDeliveActivity"/>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.store.yhj.AddAccActivity">
         </activity>
-        <activity android:name=".fragment.my.store.yhj.GoPayCheckCouponsActivity">
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.store.yhj.GoPayCheckCouponsActivity">
         </activity>
+        <activity
+            android:theme="@style/Theme.DesignDemo"
+            android:name=".fragment.my.store.order.StockSubmitNumberActivity">
+        </activity>
+
         <activity
             android:theme="@style/Theme.DesignDemo"
             android:name=".fragment.my.partner.PartnerConfirmTakeActivity">

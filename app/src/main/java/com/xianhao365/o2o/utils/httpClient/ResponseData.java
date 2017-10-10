@@ -220,20 +220,25 @@ public class ResponseData {
      * @return
      */
     public  <T> List<T> parseJsonArray(String strByJson,Class<T> type) {
-        //拿到本地JSON 并转成String
-        //Json的解析类对象
-        JsonParser parser = new JsonParser();
-        //将JSON的String 转成一个JsonArray对象
-        JsonArray jsonArray = parser.parse(strByJson).getAsJsonArray();
-
-        Gson gson = new Gson();
         List<T> userBeanList = new ArrayList<>();
+        try {
+            //拿到本地JSON 并转成String
+            //Json的解析类对象
+            JsonParser parser = new JsonParser();
+            //将JSON的String 转成一个JsonArray对象
+            JsonArray jsonArray = parser.parse(strByJson).getAsJsonArray();
 
-        //加强for循环遍历JsonArray
-        for (JsonElement user : jsonArray) {
-            //使用GSON，直接转成Bean对象
-            T userBean = gson.fromJson(user, type);
-            userBeanList.add(userBean);
+            Gson gson = new Gson();
+
+
+            //加强for循环遍历JsonArray
+            for (JsonElement user : jsonArray) {
+                //使用GSON，直接转成Bean对象
+                T userBean = gson.fromJson(user, type);
+                userBeanList.add(userBean);
+            }
+        }catch (Exception e){
+            return userBeanList;
         }
         return userBeanList;
     }

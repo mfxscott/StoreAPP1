@@ -129,14 +129,12 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                 SXUtils.getInstance(activity).ToastCenter("==-=="+position);
             }
         });
-
         walletTopupBtn = (TextView) findViewById(R.id.wallet_topup_btn);
 
         if(AppClient.USERROLETAG.equals("64")){
             walletTopupBtn.setText("充值");
         }else{
             walletTopupBtn.setText("提现");
-
         }
         if(AppClient.USERROLETAG.equals("32")||AppClient.USERROLETAG.equals("64")){
             walletCouponLin.setVisibility(View.VISIBLE);

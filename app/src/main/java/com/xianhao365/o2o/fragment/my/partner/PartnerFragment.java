@@ -65,6 +65,8 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
     LinearLayout  waitConfirmLin;
     @BindView(R.id.partner_scan_lin)
     LinearLayout  scanLin;
+    @BindView(R.id.partner_buyer_topup_btn)
+    TextView partnerWalletTv;
     private Handler hand;
     private UserInfoEntity userinfo;
     @Override
@@ -83,8 +85,6 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
             SXUtils.getInstance(activity).getUserNumberHttp(hand);
         }
     }
-
-
     /**
      * 用户信息
      * @param userInfo
@@ -101,6 +101,7 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
         waitGetLin.setOnClickListener(this);
         waitSendLin.setOnClickListener(this);
         waitConfirmLin.setOnClickListener(this);
+        partnerWalletTv.setOnClickListener(this);
         if(AppClient.USERROLETAG.equals("8")){
             scanLin.setVisibility(View.GONE);
         }else{
@@ -203,6 +204,11 @@ public class PartnerFragment extends Fragment implements View.OnClickListener{
                 Intent order4 = new Intent(activity,PartnerOrderActivity.class);
                 order4.putExtra("orderTag","4");
                 startActivity(order4);
+                break;
+            case R.id.partner_buyer_topup_btn:
+                Intent wall = new Intent(activity,MyWalletActivity.class);
+                wall.putExtra("walletTag","1");
+                startActivity(wall);
                 break;
         }
     }
