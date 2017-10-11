@@ -106,7 +106,6 @@ public  class WaitPayRecyclerViewAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final OrderInfoEntity orderInfo = mValues.get(position);
-
         holder.shopNameTv.setText("订单号："+orderInfo.getOrderNo()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
         holder.orderTotal.setText("¥"+orderInfo.getTransactionAmount());

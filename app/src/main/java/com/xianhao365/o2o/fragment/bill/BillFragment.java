@@ -126,7 +126,7 @@ public class BillFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.main_bill_gridv);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
+Logs.i("==============");
 //
 //        billInfoAdapter= new HomeBillRecyclerViewAdapter(activity,getTypeInfoData());
 //        gridView.setAdapter(billInfoAdapter);
