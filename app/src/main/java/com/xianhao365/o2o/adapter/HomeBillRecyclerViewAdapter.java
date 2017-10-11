@@ -40,7 +40,7 @@ public  class HomeBillRecyclerViewAdapter
         public final ImageView mImageView;
         public final ImageView delImageView;
         public final TextView mTextView;
-//        public final TextView addcar1,addcar2;
+        //        public final TextView addcar1,addcar2;
         public final RecyclerView recyclerView;
 
         public ViewHolder(View view) {
@@ -83,8 +83,8 @@ public  class HomeBillRecyclerViewAdapter
         holder.mTextView.setText(categInfo.getGoodsName());
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
-            BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(holder.recyclerView.getContext(), categInfo);
-            holder.recyclerView.setAdapter(simpAdapter);
+        BillItemRecyclerViewAdapter simpAdapter = new BillItemRecyclerViewAdapter(holder.recyclerView.getContext(), categInfo);
+        holder.recyclerView.setAdapter(simpAdapter);
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

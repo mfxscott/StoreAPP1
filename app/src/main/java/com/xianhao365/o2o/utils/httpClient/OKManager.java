@@ -38,7 +38,7 @@ public class OKManager {
     //    private String  HttpUrl= "http://139.224.60.232:8080/xianhao365/rest/mobile/13800138000/type/1";
     //    private Handler handler;
     //提交json数据
-    private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+    private static final MediaType JSON = MediaType.parse("application/json");
     public OKManager(Activity context) {
         activity = context;
         client = new OkHttpClient.Builder()
@@ -153,6 +153,73 @@ public class OKManager {
                 Logs.i("==", "code : " + clone.code());
                 Logs.i("==", "head : " + clone.headers());
                 Logs.i("==", "protocol : " + clone.protocol());
+                if (response != null && response.isSuccessful()) {
+                    Object result = response.body().string();
+                    onSuccessJsonObjectMethod(result.toString(),rspMsgName,callBack);
+                }
+            }
+        });
+    }
+    /**
+     * 向服务器提交String请求
+     * @param requestBody  请求参数
+     * @param rspMsgName  方法名
+     * @param callBack 回调
+     */
+    public void sendStringByPostMethod(String requestBody, final String rspMsgName , final Func4 callBack) {
+        Logs.i("请求地址参数======",requestBody+"=");
+        Request request = new Request.Builder().url(SXUtils.getInstance(activity).getApp().getHttpUrl())
+                .addHeader("X-App-Key","xianhao365")
+                .addHeader("X-Method",rspMsgName)
+                .addHeader("X-Timestamp", SXUtils.getInstance(activity).GetNowDateTime())
+                .addHeader("X-Version","1.0")
+                .addHeader("X-User-ID", TextUtils.isEmpty(AppClient.USER_ID) ? "" : AppClient.USER_ID)
+                .addHeader("X-User-Session",TextUtils.isEmpty(AppClient.USER_SESSION) ? "" : AppClient.USER_SESSION)
+                .addHeader("X-OS","Android")
+                .addHeader("X-OS-Version", SXUtils.getInstance(activity).getClientDeviceInfo())
+                .addHeader("X-App-Version",SXUtils.getInstance(activity).getVersionName())
+                .addHeader("X-UDID", SXUtils.getInstance(activity).getDeviceId())
+                .addHeader("X-Nonce",getReqsn())
+                //签名值（动态设值，获取方法 EBT.sign 见第2节）
+//                .addHeader("X-Sign" MD5Utils.encrypt("123"))
+                //签名方法（静态设值为：md5）
+//                .addHeader("X-Sign-Method" MD5Utils.encrypt("123"))
+//                .tag(activity)
+                .post(RequestBody.create(JSON,requestBody)).build();
+        Logs.i("请求数据==================start=============================");
+        Headers headers = request.headers();
+//        Logs.i("==", "method : " + request.method());
+//        Logs.i("==", "url : " + HttpUrl);
+//        if (headers != null && headers.size() > 0) {
+//            Log.e("==", "headers : \n");
+//            Log.e("===", headers.toString());
+//        }
+        Logs.i("请求数据==================end=============================");
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Logs.i(rspMsgName+"连接服务器异常日志=======",e.toString()+"");
+                client = new OkHttpClient.Builder()
+//                        .hostnameVerifier(new HostnameVerifier() {
+//                    @Override
+//                    public boolean verify(String hostname, SSLSession session) {
+//                        Logs.i("域名验证111==========="+hostname);
+//                        if(hostname.equals("www.sanxiapay.com")){
+//                            return true;
+//                        }
+//                        Logs.i("域名验证false222=============="+hostname);
+//                        return false;
+//                    }
+//                })
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .build();
+                callBack.onResponseError("无法连接到服务器，请检查网络连接");
+            }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Response.Builder builder = response.newBuilder();
+                Response clone = builder.build();
                 if (response != null && response.isSuccessful()) {
                     Object result = response.body().string();
                     onSuccessJsonObjectMethod(result.toString(),rspMsgName,callBack);

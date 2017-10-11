@@ -25,11 +25,14 @@
             android:orientation="vertical">
 
             <RelativeLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <include layout="@layout/layout_no_info"/>
-                <LinearLayout
+                <include
                     android:visibility="gone"
+                    layout="@layout/layout_no_info"/>
+                <LinearLayout
+                    android:visibility="visible"
                     android:id="@+id/acc_manage_info_lin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

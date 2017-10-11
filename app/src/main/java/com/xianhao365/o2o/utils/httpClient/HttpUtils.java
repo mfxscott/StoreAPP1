@@ -117,6 +117,75 @@ public class HttpUtils{
                 });
     }
     /**
+     * 封装请求和返回参数数据
+     * @param method  方法名
+     * @param httpParams 请求参数  没有参数传Null
+     * @param callBack  结果回调
+     * @param  isAll   是否返回所有数据
+     */
+//    RequestBody.create(JSON);
+    public void requestStringPost(final boolean isAll,final String method,String httpParams,final requestCallBack callBack){
+        addHttpHeadData(method);
+//        HttpParams httpP =null;
+//        if(httpParams == null){
+//            httpP = new HttpParams();
+//        }else{
+//            httpP = httpParams;
+            Logs.i(method+"==request=======",httpParams.toString());
+//        }
+        OkHttpUtils.post(SXUtils.getInstance(mContext).getApp().getHttpUrl())
+                .tag(this)
+//                .params(httpP)
+//                .requestBody(RequestBody.create(JSON,httpParams))
+//                .mediaType(MediaType.parse("application/json; charset=utf-8"))
+//                .upString(httpParams)
+                .upJson(httpParams)
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(String s, Call call, Response response) {
+                        Logs.i(method+"==success=======",s.toString());
+                        String data="";
+                        try {
+                            JSONObject jsonObject = new JSONObject(s);
+                            String resultCode = jsonObject.getString("responseCode");
+                            String resultText = jsonObject.getString("responseText");
+                            data = jsonObject.getString("responseData");
+                            if(TextUtils.isEmpty(data)){
+                                callBack.onResponseError("未查询到相关数据");
+                                return;
+                            }
+                            if(TextUtils.isEmpty(resultCode) || !resultCode.equals("10000")){
+//                                if(resultCode.equals("10002")){
+//                                    callBack.onResponseError("未登录");
+//                                    return;
+//                                }
+                                callBack.onResponseError(resultText);
+                                return;
+                            }
+                        } catch (JSONException e) {
+                            callBack.onResponseError("解析数据异常"+s.toString());
+                            return;
+                        }
+                        if(isAll){
+                            callBack.onResponse(s);
+                        }else{
+                            callBack.onResponse(data);
+                        }
+//                        SXUtils.DialogDismiss();
+                    }
+                    @Override
+                    public void onError(Call call, Response response, Exception e) {
+                        super.onError(call, response, e);
+                        callBack.onResponseError(e.toString());
+                    }
+                    @Override
+                    public void upProgress(long currentSize, long totalSize, float progress, long networkSpeed) {
+                        Logs.i(progress+"=====upProgress===");
+                        super.upProgress(currentSize, totalSize, progress, networkSpeed);
+                    }
+                });
+    }
+    /**
      * 请求带文字和图片接口上传
      * @param method  方法名
      * @param httpParams 请求参数  没有参数传Null

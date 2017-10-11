@@ -70,8 +70,6 @@ public class CGBillListActivity extends BaseActivity {
             setTitle("采购清单列表");
         }
 
-
-
         mSwipyRefreshLayout = (SwipyRefreshLayout) findViewById(R.id.cg_list_swipyrefreshlayout);
         SXUtils.getInstance(activity).setColorSchemeResources(mSwipyRefreshLayout);
         mSwipyRefreshLayout.setDirection(SwipyRefreshLayoutDirection.BOTH);

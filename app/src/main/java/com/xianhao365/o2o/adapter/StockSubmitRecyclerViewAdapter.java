@@ -3,6 +3,7 @@ package com.xianhao365.o2o.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -113,7 +114,7 @@ public class StockSubmitRecyclerViewAdapter
     public int getItemViewType(int position) {
         return super.getItemViewType(position);
     }
-    public String getInputNum(){
+    public JSONArray getInputNum(){
         String inputNum = "";
         JSONArray jsonArray = new JSONArray();
         Iterator<String> iter = editNumMap.keySet().iterator();
@@ -121,6 +122,9 @@ public class StockSubmitRecyclerViewAdapter
             while (iter.hasNext()) {
                 String key = iter.next();
                 inputNum = editNumMap.get(key);
+                if(TextUtils.isEmpty(inputNum)){
+                    return null;
+                }
                 JSONObject jsonObjct = new JSONObject();
                 try {
                     jsonObjct.put("id",mValues.get(i).getId());
@@ -131,6 +135,6 @@ public class StockSubmitRecyclerViewAdapter
                 jsonArray.put(jsonObjct);
             }
         }
-        return jsonArray.toString()+"";
+        return jsonArray;
     }
 }

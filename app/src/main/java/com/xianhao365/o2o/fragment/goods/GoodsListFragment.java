@@ -69,6 +69,7 @@ public class GoodsListFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_goods, null);
         activity = getActivity();
         initView();
+        SXUtils.getInstance(activity).showMyProgressDialog(activity,false);
         GetGoodsType();
 //        GetGoodsTypeInfoHttp();
 //        HttpUtil();
@@ -170,6 +171,7 @@ public class GoodsListFragment extends Fragment {
                 if(mSwipyRefreshLayout != null){
                     mSwipyRefreshLayout.setRefreshing(false);
                 }
+                if(progressBar != null)
                 progressBar.setVisibility(View.GONE);
                 SXUtils.DialogDismiss();
                 return true;

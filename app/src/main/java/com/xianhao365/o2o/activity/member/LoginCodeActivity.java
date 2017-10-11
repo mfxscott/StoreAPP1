@@ -230,5 +230,6 @@ public class LoginCodeActivity extends BaseActivity implements OnClickListener{
             }
         });
     }
+
 }
 

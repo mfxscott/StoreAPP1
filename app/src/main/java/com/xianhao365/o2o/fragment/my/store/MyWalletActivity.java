@@ -223,13 +223,18 @@ public class MyWalletActivity extends BaseActivity implements View.OnClickListen
                     intent.putExtra("paySum","0");
                     startActivity(intent);
                 }else{
+                    if(walletInfo == null){
+                        SXUtils.getInstance(activity).ToastCenter("请绑定银行卡");
+                        Intent intent = new Intent(activity,ExtractAddBankCardActivity.class);
+                        startActivity(intent);
+                        return ;
+                    }
                     Intent intent = new Intent(activity,ExtractDetailActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("walletInfo",walletInfo);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
-
                 break;
             case R.id.wallet_yhj_rel:case R.id.wallet_no_use_lin:
                 Intent yhj = new Intent(activity,YHJActivity.class);

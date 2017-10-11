@@ -109,7 +109,7 @@ public  class WaitPayRecyclerViewAdapter
 
         holder.shopNameTv.setText("订单号："+orderInfo.getOrderNo()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
-        holder.orderTotal.setText("¥"+orderInfo.getGoodsTotalAmount());
+        holder.orderTotal.setText("¥"+orderInfo.getTransactionAmount());
 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(holder.recyclerView.getContext()));
         holder.recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -162,6 +162,7 @@ public  class WaitPayRecyclerViewAdapter
                     case 1:
                         Intent pay = new Intent(context, TopUpActivity.class);
                         pay.putExtra("payTag","1");
+                        pay.putExtra("orderNo",orderInfo.getOrderNo());
                         pay.putExtra("paySum",orderInfo.getGoodsTotalAmount());
                         context.startActivity(pay);
                         break;
@@ -200,24 +201,24 @@ public  class WaitPayRecyclerViewAdapter
                 getCancelOrderHttp(orderInfo.getOrderNo());
             }
         });
-//        holder.rel1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, GoodsDetailActivity.class);
-//                holder.mView.getContext().startActivity(intent);
-//            }
-//        });
-//        holder.rel2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent( context, GoodsDetailActivity.class);
-//                holder.mView.getContext().startActivity(intent);
-//            }
-//        });
-//        Glide.with(holder.mImageView.getContext())
-//                .load("http://img4.imgtn.bdimg.com/it/u=3071322373,3354763627&fm=28&gp=0.jpg")
-//                .fitCenter()
-//                .into(holder.mImageView);
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, OrderDetailActivity.class);
+                Bundle bundle = new Bundle();
+                ArrayList list = new ArrayList(); //这个list用于在budnle中传递 需要传递的ArrayList<Object>
+                list.add(orderInfo.getOrderLines());
+                bundle.putParcelableArrayList("orderDetail",list);
+                bundle.putString("orderNo",orderInfo.getOrderNo());
+                bundle.putString("orderAddress",orderInfo.getOrderAddress());
+                bundle.putString("orderTime",orderInfo.getOrderTime());
+                bundle.putString("name",orderInfo.getShopUserName());
+                bundle.putString("total",orderInfo.getTransactionAmount());
+                intent.putExtras(bundle);
+                intent.putExtra("orderTag",tag+"");
+                context.startActivity(intent);
+            }
+        });
     }
     @Override
     public int getItemCount() {

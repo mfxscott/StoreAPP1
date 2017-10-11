@@ -17,9 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.fragment.my.store.BankCardTopUpActivity;
+import com.xianhao365.o2o.utils.Logs;
+import com.xianhao365.o2o.utils.SXUtils;
+import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -41,6 +49,7 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
     private EditText sumEdit;
     private String orderNo;
     private static final int SDK_PAY_FLAG = 116;
+    private Handler hand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +79,7 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toast.makeText(activity, "支付失败", Toast.LENGTH_SHORT).show();
                     }
+                    Logs.i("支付宝返回错误信息================"+resultInfo);
                     break;
             }
         }
@@ -84,7 +94,7 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
         }else{
             setTitle("支付");
             hintTv.setText("金额(元)");
-            sumEdit.setText(paySum+"");
+            sumEdit.setText(paySum.indexOf("¥") ==-1 ?"¥"+paySum:paySum+"");
             sumEdit.setEnabled(false);
         }
 //         if(!TextUtils.isEmpty(orderNo)){
@@ -101,6 +111,51 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
         topupWxpayRel.setOnClickListener(this);
         topupZfbpayRel.setOnClickListener(this);
         topupYhkpayRel.setOnClickListener(this);
+
+        hand = new Handler(new Handler.Callback() {
+            public boolean handleMessage(Message msg) {
+                switch (msg.what) {
+                    case 1000:
+                        switch (payTag){
+                            case 1:
+                                break;
+                            case 2:
+
+                                final  String orderInfo = (String) msg.obj;
+                                Runnable payRunnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PayTask alipay = new PayTask(activity);
+                                        Map<String, String> result = alipay.payV2(orderInfo, true);
+                                        Log.i("msp", result.toString());
+
+                                        Message msg = new Message();
+                                        msg.what = SDK_PAY_FLAG;
+                                        msg.obj = result;
+                                        handler.sendMessage(msg);
+                                    }
+                                };
+
+                                Thread payThread = new Thread(payRunnable);
+                                payThread.start();
+                                break;
+                            case 3:
+                                Intent intent = new Intent(activity,BankCardTopUpActivity.class);
+                                startActivity(intent);
+                                break;
+                        }
+                        break;
+                    case 1001:
+                        break;
+                    case AppClient.ERRORCODE:
+                        String msgs = (String) msg.obj;
+                        SXUtils.getInstance(activity).ToastCenter(msgs);
+                        break;
+                }
+                SXUtils.DialogDismiss();
+                return true;
+            }
+        });
     }
 
     @Override
@@ -125,32 +180,11 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
                 payTag = 3;
                 break;
             case R.id.topup_btn:
-                switch (payTag){
-                    case 1:
-                        break;
-                    case 2:
-                      final  String orderInfo = "";
-                        Runnable payRunnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                PayTask alipay = new PayTask(activity);
-                                Map<String, String> result = alipay.payV2(orderInfo, true);
-                                Log.i("msp", result.toString());
-
-                                Message msg = new Message();
-                                msg.what = SDK_PAY_FLAG;
-                                msg.obj = result;
-                                handler.sendMessage(msg);
-                            }
-                        };
-
-                        Thread payThread = new Thread(payRunnable);
-                        payThread.start();
-                        break;
-                    case 3:
-                        Intent intent = new Intent(activity,BankCardTopUpActivity.class);
-                        startActivity(intent);
-                        break;
+                if(payTag==1){
+                    PayOrder("WE_CHAT");
+                }else
+                {
+                    PayOrder("ALIPAY");
                 }
 
                 break;
@@ -158,4 +192,40 @@ public class TopUpActivity extends BaseActivity implements OnClickListener {
         }
 
     }
+    /**
+     * 支付订单
+     */
+    public void PayOrder(String payType) {
+        HttpParams httpp = new HttpParams();
+        httpp.put("payload",orderNo);
+        httpp.put("paymentMode",payType);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.PAY, httpp, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("支付宝返回参数======",jsonObject.toString());
+                String   payStr ="";
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                    payStr = jsonObject1.getString("payArgs");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+//                JSONObject jsonObject1 = null;
+//                FromOrderEntity orderFrom = (FromOrderEntity) ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),FromOrderEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = payStr;
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+
+            }
+        });
+    }
+
 }

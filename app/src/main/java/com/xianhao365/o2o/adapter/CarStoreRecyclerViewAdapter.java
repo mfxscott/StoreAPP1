@@ -233,6 +233,7 @@ public  class CarStoreRecyclerViewAdapter
             public final TextView  number;
             public final TextView  add;
             public final TextView modelTv;
+            public final  TextView marketPrice;
 
             public GoodsViewHolder(View view) {
                 super(view);
@@ -244,6 +245,7 @@ public  class CarStoreRecyclerViewAdapter
                 number = (TextView) view.findViewById(R.id.car_item_num_edt);
                 add = (TextView) view.findViewById(R.id.car_item_add_tv);
                 modelTv = (TextView) view.findViewById(R.id.car_item_model_tv);
+                marketPrice = (TextView) view.findViewById(R.id.type_info_price_tv);
             }
             @Override
             public String toString() {
@@ -270,8 +272,9 @@ public  class CarStoreRecyclerViewAdapter
         public void onBindViewHolder(final GoodsViewHolder holder, final int position) {
           final  ShoppingCartLinesEntity shopCarinfo = mValues.get(position);
             holder.nameTv.setText(shopCarinfo.getGoodsName());
-            holder.modelTv.setText("￥"+shopCarinfo.getSkuPrice()+"/"+shopCarinfo.getGoodsModel());
+            holder.modelTv.setText("¥ "+shopCarinfo.getSkuPrice()+"/"+shopCarinfo.getGoodsModel());
             holder.number.setText(shopCarinfo.getQuantity()+"");
+            holder.marketPrice.setText("¥ "+shopCarinfo.getSkuPrice()+"/"+shopCarinfo.getGoodsModel());
             MainFragmentActivity.totalCarNum += Integer.parseInt(shopCarinfo.getQuantity());
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override

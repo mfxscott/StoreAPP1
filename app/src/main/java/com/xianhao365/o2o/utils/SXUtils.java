@@ -42,7 +42,6 @@ import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
 import com.xianhao365.o2o.utils.dncry.wsc.AESEDncryption;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-import com.xianhao365.o2o.utils.httpClient.OKManager;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.SwipyRefreshLayout;
 
@@ -58,9 +57,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import okhttp3.FormBody;
-import okhttp3.RequestBody;
 
 import static com.xianhao365.o2o.utils.httpClient.RequestReqMsgData.getReqsn;
 
@@ -494,12 +490,49 @@ public class SXUtils {
      * @param type     (1=登录,2=注册,3=忘记密码,4=安全密码)
      * @param handler  回调
      */
-    public void getCodeMsgHttp(Activity activity, String mobile, String type, final Handler handler) {
-        RequestBody requestBody = new FormBody.Builder()
-                .add("mobile", mobile)
-                .add("type", type)//拉取类型(1=登录,2=注册,3=忘记密码,4=安全密码)
-                .build();
-        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GET_CODEMSG, new OKManager.Func4() {
+//    public void getCodeMsgHttp(Activity activity, String mobile, String type, final Handler handler) {
+//        RequestBody requestBody = new FormBody.Builder()
+//                .add("mobile", mobile)
+//                .add("type", type)//拉取类型(1=登录,2=注册,3=忘记密码,4=安全密码)
+//                .build();
+//        new OKManager(activity).sendStringByPostMethod(requestBody, AppClient.GET_CODEMSG, new OKManager.Func4() {
+//            @Override
+//            public void onResponse(Object jsonObject) {
+//                String secs="";
+//                try {
+//                    JSONObject jsonO = new JSONObject(jsonObject.toString());
+//                    secs = jsonO.getString("secs");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                Message msg = new Message();
+//                msg.what = AppClient.GETCODEMSG;
+//                msg.obj = secs+ "";
+//                handler.sendMessage(msg);
+//            }
+//
+//            @Override
+//            public void onResponseError(String strError) {
+//                Message msg = new Message();
+//                msg.what = AppClient.ERRORCODE;
+//                msg.obj = strError;
+//                handler.sendMessage(msg);
+//            }
+//        });
+
+    /**
+     * 获取短信验证码
+     *
+     * @param activity 上下文
+     * @param mobile   手机号
+     * @param type     (1=登录,2=注册,3=忘记密码,4=安全密码)
+     * @param handler  回调
+     */
+    public void getCodeMsgHttp(Activity activity,String mobile, String type, final Handler handler) {
+        HttpParams params = new HttpParams();
+        params.put("mobile",mobile);
+        params.put("type",type);//拉取类型(1=登录,2=注册,3=忘记密码,4=安全密码)
+        HttpUtils.getInstance(activity).requestPost(false,AppClient.GET_CODEMSG, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 String secs="";
@@ -514,15 +547,16 @@ public class SXUtils {
                 msg.obj = secs+ "";
                 handler.sendMessage(msg);
             }
-
             @Override
             public void onResponseError(String strError) {
                 Message msg = new Message();
                 msg.what = AppClient.ERRORCODE;
                 msg.obj = strError;
                 handler.sendMessage(msg);
+
             }
         });
+    }
 //        HttpParams params = new HttpParams();
 //        params.put("mobile", mobile);
 //        params.put("type", type);//拉取类型(1=登录,2=注册,3=忘记密码,4=安全密码)
@@ -547,7 +581,7 @@ public class SXUtils {
 
 
 
-    }
+//}
 
     /**
      * 公共fragment 跳转
@@ -641,7 +675,7 @@ public class SXUtils {
         headers.put("X-OS", "Android");
         headers.put("X-OS-Version", SXUtils.getInstance(mContext).getClientDeviceInfo());
         headers.put("X-App-Version", SXUtils.getInstance(mContext).getVersionName());
-        headers.put("X-UDID", SXUtils.getInstance(mContext).getDeviceId());
+        headers.put("X-UDID", SXUtils.getInstance(mContext).getDeviceId()+"");
         headers.put("X-Nonce", getReqsn());
         return headers;
     }
@@ -728,7 +762,7 @@ public class SXUtils {
         }
         int  nowNumInt = Integer.parseInt(nowNum);
         setNum = nowNumInt-subNum;
-         return setNum+"";
+        return setNum+"";
     }
     public Dialog tipDialog;
     public void MyDialogView(Context context,String title, String contentStr, View.OnClickListener onClickListener) {
@@ -766,7 +800,7 @@ public class SXUtils {
     public ArrayList<AddressProvinceEntity>  getAddress(){
         String json = SXUtils.getInstance(mContext).getFromAssets("areas.json");
         ArrayList<AddressProvinceEntity>   jsonBean = (ArrayList<AddressProvinceEntity>) ResponseData.getInstance(mContext).parseJsonArray(json.toString(), AddressProvinceEntity.class);
-                return jsonBean;
+        return jsonBean;
     }
     private ArrayList<String> options1Items = new ArrayList<>();
     private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();

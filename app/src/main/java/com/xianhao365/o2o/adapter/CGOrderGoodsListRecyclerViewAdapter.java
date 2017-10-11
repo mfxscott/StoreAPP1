@@ -57,11 +57,10 @@ public class CGOrderGoodsListRecyclerViewAdapter
     public CGOrderGoodsListRecyclerViewAdapter(Context context, List<OrderLinesEntity> items, int tag) {
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        orderLinesList = items;
+            orderLinesList = items;
         this.context = context;
         this.tag = tag;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -80,20 +79,19 @@ public class CGOrderGoodsListRecyclerViewAdapter
             OrderLinesEntity orderlines = orderLinesList.get(position);
             SXUtils.getInstance(context).GlideSetImg(orderlines.getGoodsImage(),holder.itemImg);
         }
-
     }
 
     @Override
     public int getItemCount() {
         if (tag == 0) {
             return mValues.size();
-        } else {
+        }else {
             return orderLinesList.size();
         }
     }
-        @Override
-        public int getItemViewType(int position) {
-            return super.getItemViewType(position);
-        }
-
+    @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
     }
+
+}

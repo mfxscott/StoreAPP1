@@ -25,7 +25,7 @@
                 android:id="@+id/pay_order_detail_name"
                 android:textSize="@dimen/ac_text_size_16"
                 android:textColor="@color/col_333"
-                android:text="鲜好店铺"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView

@@ -402,13 +402,12 @@ public class CarFragment extends Fragment implements View.OnClickListener{
                 Boolean value = storesimpAdapter.simpAdapter.goodsMap.get(key);
                 if(value){
                     int postions = Integer.parseInt(key);
-                    priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSkuPrice());
+                    priceTotal += Float.parseFloat(shopList.get(i).getShoppingCartLines().get(postions).getSubTotal());
                 }
             }
         }
         return priceTotal+"";
     }
-
     /**
      * 获取选中商品skucode 用于结算订单
      * @return

@@ -5,41 +5,87 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.activity.GoodsDetailActivity;
+import com.xianhao365.o2o.adapter.WaitPayGoodsRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.UserInfoEntity;
-import com.xianhao365.o2o.entity.orderlist.OrderInfoEntity;
+import com.xianhao365.o2o.entity.orderlist.OrderGoodsInfoEntity;
 import com.xianhao365.o2o.fragment.my.pay.TopUpActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class OrderDetailActivity extends BaseActivity implements View.OnClickListener {
-    private String orderTag,orderId;
+    private String orderTag,orderId,orderAddress,orderTime,orderTotal,name;
     private TextView takeOrder,cancelTv,cancelOrder;
     private LinearLayout  btnLin;
     private  Activity activity;
+    private RecyclerView recyclerView;
+    private List<OrderGoodsInfoEntity> orderGoodsList;
+    @BindView(R.id.order_detail_name_tv)
+    TextView nameTv;
+    @BindView(R.id.order_detail_total_tv)
+    TextView orderTotalTv;
+    @BindView(R.id.order_detail_no_tv)
+    TextView orderNoTv;
+    @BindView(R.id.order_detail_time_tv)
+    TextView orderTimeTv;
+    @BindView(R.id.order_detail_paytype_tv)
+    TextView orderPayTypeTv;
+    @BindView(R.id.order_detail_address_tv)
+    TextView orderAddressTv;
+    @BindView(R.id.order_detail_pay_total_tv)
+    TextView payTotalTv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
         activity = this;
+        ButterKnife.bind(activity);
         orderTag = this.getIntent().getStringExtra("orderTag");
-        orderId = this.getIntent().getStringExtra("orderId");
+//        orderId = this.getIntent().getStringExtra("orderId");
+        Bundle bundle = this.getIntent().getExtras();
+        ArrayList list = bundle.getParcelableArrayList("orderDetail");
+        orderId = bundle.getString("orderNo");
+        orderAddress = bundle.getString("orderAddress");
+        orderTime = bundle.getString("orderTime");
+        name = bundle.getString("name");
+        orderTotal = bundle.getString("total");
+        orderGoodsList= (List<OrderGoodsInfoEntity>) list.get(0);//强转成你自己定义的list，这样list2就是你传过来的那个list了。
         initView();
         getOrderDetailHttp();
     }
     private void initView(){
+        nameTv.setText(name);
+        orderTotalTv.setText("总价："+orderTotal);
+        orderTimeTv.setText(orderTime);
+        orderNoTv.setText(orderId);
+        orderPayTypeTv.setText("");
+        orderAddressTv.setText(orderAddress);
+        payTotalTv.setText("合计："+orderTotal);
+        recyclerView = (RecyclerView) findViewById(R.id.order_detail_item_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        final WaitPayGoodsRecyclerViewAdapter simpAdapter = new WaitPayGoodsRecyclerViewAdapter(activity,orderGoodsList);
+        recyclerView.setAdapter(simpAdapter);
 
         takeOrder = (TextView) findViewById(R.id.order_detail_wait_pay_take_btn);
         takeOrder.setOnClickListener(this);
@@ -112,7 +158,7 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
             switch (msg.what) {
                 case 1000:
 //                        List<CGListInfoEntity> gde = (List<CGListInfoEntity>) msg.obj;
-                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
+//                    List<OrderInfoEntity> gde = (List<OrderInfoEntity>) msg.obj;
 
                     break;
                 case 1001:
@@ -129,7 +175,9 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
      * 获取订单详情
      */
     public void getOrderDetailHttp() {
-        HttpUtils.getInstance(activity).requestPost(false, AppClient.ORDER_DETAIL, null, new HttpUtils.requestCallBack() {
+        HttpParams params = new HttpParams();
+        params.put("orderNo",orderId);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.ORDER_DETAIL, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 UserInfoEntity gde = null;
@@ -148,5 +196,4 @@ public class OrderDetailActivity extends BaseActivity implements View.OnClickLis
             }
         });
     }
-
 }

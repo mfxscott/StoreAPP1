@@ -2,6 +2,7 @@ package com.xianhao365.o2o.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
@@ -78,8 +79,10 @@ public  class BillItemRecyclerViewAdapter
         final  BillChirdrenEntity billchirdren = billchirdrenList.get(position);
         holder.goodsUnit.setText("/"+goodsUnit);
         holder.marketPrice.setText(" ¥"+billchirdren.getMarketPrice());
+
 //        holder.shopPrice.setText(billchirdren.getShopPrice());
-        holder.goodsModel.setText(" ¥"+billchirdren.getShopPrice()+"/"+billchirdren.getGoodsModel());
+        holder.goodsModel.setText(" ¥"+billchirdren.getShopPrice()+"/"+goodsUnit);
+        holder.goodsModel.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG ); //中间横线
 //                holder.mView.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

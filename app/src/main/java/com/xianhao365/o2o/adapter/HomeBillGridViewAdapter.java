@@ -60,8 +60,8 @@ public class HomeBillGridViewAdapter extends BaseAdapter implements View.OnClick
             vh.mImageView = (ImageView) view.findViewById(R.id.main_bill_item_iv);
             vh.mTextView = (TextView) view.findViewById(R.id.main_bill_item_name);
             vh.delImageView = (ImageView) view.findViewById(R.id.main_bill_item_del_iv);
-            vh.addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
-            vh.addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
+//            vh.addcar1 = (TextView) view.findViewById(R.id.main_bill_addcar_tv);
+//            vh.addcar2 = (TextView) view.findViewById(R.id.main_bill_addcar_tv2);
             vh.recyclerView = (RecyclerView) view.findViewById(R.id.bill_item_recycler);
             vh.liny = (LinearLayout) view.findViewById(R.id.home_bill_item_liny);
             view.setTag(vh);

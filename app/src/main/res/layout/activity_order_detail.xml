@@ -26,18 +26,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/order_detail_name_tv"
                 android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="鲜好商店"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_detail_total_tv"
                 android:layout_alignParentRight="true"
                 android:padding="15dp"
                 android:textSize="@dimen/ac_text_size_14"
                 android:textColor="@color/col_333"
-                android:text="总价：1000"
+                android:text="总价："
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </RelativeLayout>
@@ -45,7 +47,23 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:scrollbars="none"
+                android:id="@+id/order_detail_item_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+
+
+
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/order_detail_wait_pay_rel1"
             android:background="@drawable/white_gray_selector"
             android:padding="10dp"
@@ -127,10 +145,12 @@
             </LinearLayout>
         </RelativeLayout>
         <View
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/line_bg" />
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/order_detail_wait_pay_rel2"
             android:background="@drawable/white_gray_selector"
             android:padding="10dp"
@@ -229,10 +249,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_detail_no_tv"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/col_333"
                 android:textSize="@dimen/ac_text_size_14"
-                android:text="123456790"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -251,10 +272,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_detail_time_tv"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/col_333"
                 android:textSize="@dimen/ac_text_size_14"
-                android:text="2017-06-05-25 09:45"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -273,10 +295,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_detail_paytype_tv"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/col_333"
                 android:textSize="@dimen/ac_text_size_14"
-                android:text="银行卡支付"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -295,10 +318,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <TextView
+                android:id="@+id/order_detail_address_tv"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/col_333"
                 android:textSize="@dimen/ac_text_size_14"
-                android:text="深圳市福田区冰河大道"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
@@ -314,6 +338,7 @@
         android:layout_alignParentStart="true">
 
         <TextView
+            android:id="@+id/order_detail_pay_total_tv"
             android:layout_centerVertical="true"
             android:padding="15dp"
             android:textSize="@dimen/ac_text_size_14"

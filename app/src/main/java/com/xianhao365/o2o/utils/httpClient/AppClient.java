@@ -110,6 +110,7 @@ public class AppClient{
 
     public static String headImg  = "http://e.hiphotos.baidu.com/zhidao/wh%3D450%2C600/sign=0197b59000087bf47db95fedc7e37b1a/38dbb6fd5266d016152614f3952bd40735fa3529.jpg";
 
+    public static String PAY = "svc.settlement.order";//支付接口
 
     public static int  fullWidth; //屏幕宽，高
     public static int  fullHigh;

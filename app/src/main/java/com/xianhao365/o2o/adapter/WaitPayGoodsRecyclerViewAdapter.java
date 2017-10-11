@@ -1,7 +1,6 @@
 package com.xianhao365.o2o.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.entity.orderlist.OrderGoodsInfoEntity;
-import com.xianhao365.o2o.fragment.my.store.order.OrderDetailActivity;
 import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
@@ -92,15 +90,15 @@ public  class WaitPayGoodsRecyclerViewAdapter
         SXUtils.getInstance(context).GlideSetImg(orderInfo.getSkuImage(),holder.mImageView);
         holder.marketPrice.setText("¥ "+orderInfo.getSkuPrice()+"/"+orderInfo.getGoodsUnit());
         holder.marketPrice.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG );
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
-                intent.putExtra("orderTag",tag+"");
-                intent.putExtra("orderId","123456");
-                holder.mView.getContext().startActivity(intent);
-            }
-        });
+//        holder.mView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent( holder.mView.getContext(), OrderDetailActivity.class);
+//                intent.putExtra("orderTag",tag+"");
+//                intent.putExtra("orderId","123456");
+//                holder.mView.getContext().startActivity(intent);
+//            }
+//        });
     }
     @Override
     public int getItemCount() {
