@@ -11,7 +11,6 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
@@ -46,12 +45,7 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         public TextView cgOrderGetTimeItemTv;
         public TextView cgOrderAddressItemTv;
         public TextView cgOrderTakeItemTv;
-        public TextView cgOrderDelBtn;
         public TextView cgOrderFeedbackBtn;
-        public TextView cgOrderPayBtn;
-        public LinearLayout orderBtnLin;
-        public TextView orderDoneTv;
-
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -63,7 +57,6 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
             cgOrderAddressItemTv  =  (TextView) view.findViewById(R.id.cg_order_address_item_tv);
             cgOrderTakeItemTv =  (TextView) view.findViewById(R.id.cg_order_take_item_tv);
             cgOrderFeedbackBtn =  (TextView) view.findViewById(R.id.cg_order_feedback_btn);
-
         }
         @Override
         public String toString() {
@@ -77,7 +70,6 @@ public  class CGOrderListRecyclerViewAdapter extends RecyclerView.Adapter<CGOrde
         this.context = context;
         this.tag = tag;
     }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

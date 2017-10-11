@@ -10,18 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.lzy.okhttputils.model.HttpParams;
 import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.StockSubmitRecyclerViewAdapter;
 import com.xianhao365.o2o.entity.orderlist.OrderGoodsInfoEntity;
-import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +56,7 @@ public class StockSubmitNumberActivity extends BaseActivity{
     private void initView(){
         registerBack();
         setTitle("缺货少货上报");
-        orderNoTv.setText("订单号："+orderNoStr+"");
+        orderNoTv.setText(orderNoStr+"");
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
           simpAdapter = new StockSubmitRecyclerViewAdapter(activity,orderLines);
@@ -68,12 +64,7 @@ public class StockSubmitNumberActivity extends BaseActivity{
         submitTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                SXUtils.getInstance(activity).ToastCenter(simpAdapter.getInputNum()+"====");
-                Logs.i("上报少货======================>>"+simpAdapter.getInputNum()+"");
-                   if(simpAdapter.getInputNum() == null){
-                       SXUtils.getInstance(activity).ToastCenter("请输入商品实际收货数量");
-                           return ;
-                   }
+                SXUtils.getInstance(activity).ToastCenter(simpAdapter.getInputNum()+"====");
                 geStockSubmitHttp(simpAdapter.getInputNum());
             }
         });
@@ -95,21 +86,11 @@ public class StockSubmitNumberActivity extends BaseActivity{
             }
         });
     }
-
-    /**
-     * 缺货少货上报
-     * @param orderLines
-     */
-    public  void geStockSubmitHttp(JSONArray orderLines) {
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("orderNo",orderNoStr);
-            jsonObject.put("orderLines",orderLines);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        HttpUtils.getInstance(activity).requestStringPost(false, AppClient.STOCK_SUBMIT, jsonObject.toString(), new HttpUtils.requestCallBack() {
+    public  void geStockSubmitHttp(String orderLines) {
+        HttpParams params = new HttpParams();
+        params.put("orderNo",orderNoStr);
+        params.put("orderLines",orderLines);
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.STOCK_SUBMIT, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
 //                OrderListEntity gde =  ResponseData.getInstance(activity).parseJsonWithGson(jsonObject.toString(),OrderListEntity.class);
@@ -127,6 +108,5 @@ public class StockSubmitNumberActivity extends BaseActivity{
             }
         });
     }
-
 
 }

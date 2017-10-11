@@ -120,7 +120,7 @@ public class MyOrderActivity extends AppCompatActivity {
     /**
      * 获取摊主订单列表
      * @param indexPage
-     * @param status 1 待支付，10待发货，30待收货，50完成 根据参数查询不同订单状态
+     * @param status 1 待支付，10待发货，30待收货，50完成 32已取消 根据参数查询不同订单状态
      * @param hand
      */
     public  void getOrderListHttp(int indexPage,final String status,final Handler hand) {
