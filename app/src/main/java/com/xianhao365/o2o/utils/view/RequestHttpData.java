@@ -38,7 +38,6 @@ public class RequestHttpData {
         HttpUtils.getInstance(mContext).requestPost(false, url, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-
                 Message msg = new Message();
                 if(handCOde == 0)
                     msg.what = 1000;

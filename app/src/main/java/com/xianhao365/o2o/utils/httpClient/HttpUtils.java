@@ -131,7 +131,7 @@ public class HttpUtils{
 //            httpP = new HttpParams();
 //        }else{
 //            httpP = httpParams;
-            Logs.i(method+"==request=======",httpParams.toString());
+        Logs.i(method+"==request=======",httpParams.toString());
 //        }
         OkHttpUtils.post(SXUtils.getInstance(mContext).getApp().getHttpUrl())
                 .tag(this)

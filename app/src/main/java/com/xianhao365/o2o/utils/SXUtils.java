@@ -897,6 +897,7 @@ public class SXUtils {
 //                msg.what = AppClient.ERRORCODE;
 //                msg.obj = strError;
 //                hand.sendMessage(msg);
+
             }
         });
     }

@@ -32,8 +32,9 @@ import com.xianhao365.o2o.adapter.HomeBillGridViewAdapter;
 import com.xianhao365.o2o.adapter.HomeGridViewAdapter;
 import com.xianhao365.o2o.entity.FoodActionCallback;
 import com.xianhao365.o2o.entity.bill.BillDataSetEntity;
-import com.xianhao365.o2o.entity.goodsinfo.GoodsInfoEntity;
 import com.xianhao365.o2o.entity.main.BannerSlidEntity;
+import com.xianhao365.o2o.entity.main.ButtonsEntity;
+import com.xianhao365.o2o.entity.main.SpecialsEntity;
 import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.fragment.my.store.MyWalletActivity;
 import com.xianhao365.o2o.fragment.my.store.order.MyOrderActivity;
@@ -41,10 +42,10 @@ import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.ObservableScrollView;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
+import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 import com.xianhao365.o2o.utils.httpClient.ResponseData;
 import com.xianhao365.o2o.utils.view.MyGridView;
 import com.xianhao365.o2o.utils.view.NXHooldeView;
-import com.xianhao365.o2o.utils.view.RequestHttpData;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -54,11 +55,11 @@ import com.youth.banner.loader.ImageLoader;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.xianhao365.o2o.fragment.MainFragmentActivity.badge1;
 
@@ -89,6 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
     private SwipeRefreshLayout swipeRefreshLayout;
     private HomeBillGridViewAdapter billsimpAdapter;
     private  List<BillDataSetEntity> billlist;
+    private  List<ButtonsEntity> buttonsList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,46 +111,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
      * 初始化接口数据
      */
     private void initData(){
-        HttpParams httpParams = new HttpParams();
-        httpParams.put("position", "1");//1 首页
-        RequestHttpData.getInstance(activity).ChannelRequestHttp(httpParams, AppClient.APP_SWIPER,hand,1000);
-        if(SXUtils.getInstance(activity).IsLogin())
-        SXUtils.getInstance(activity).getBill(hand);
+        getHomeData();
+//        HttpParams httpParams = new HttpParams();
+//        httpParams.put("position", "1");//1 首页
+//        RequestHttpData.getInstance(activity).ChannelRequestHttp(httpParams, AppClient.APP_SWIPER,hand,1000);
+//        if(SXUtils.getInstance(activity).IsLogin())
+//            SXUtils.getInstance(activity).getBill(hand);
         //文件下载 版本升级
 //        DownloadOkHttpUtils.DownFile(activity);
     }
-    /**
-     * 首页九宫格
-     * @return
-     */
-    private List<Map<String,String>> getGrideData(){
-        List<Map<String,String>> list = new ArrayList<>();
 
-        for(int i=0;i<4;i++){
-            Map<String,String>  map = new HashMap<>();
-            switch (i){
-                case 0:
-                    map.put("name","开始购买");
-                    map.put("imageUrl","http://pic.qiantucdn.com/58pic/11/72/82/37I58PICgk5.jpg");
-                    break;
-                case 1:
-                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                    map.put("name","常购清单");
-                    break;
-                case 2:
-                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                    map.put("name","我的红包");
-                    break;
-                case 3:
-                    map.put("imageUrl"," http://pic2.cxtuku.com/00/07/42/b701b8c89bc8.jpg");
-                    map.put("name","我的订单");
-                    break;
-            }
-            map.put("state",""+i);
-            list.add(map);
-        }
-        return list;
-    }
 
 
     @Override
@@ -217,8 +189,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         }
     }
 
-    private void initViewPager(final List<BillDataSetEntity> billlist,XTabLayout tabLayout) {
-
+    private void initViewPager(XTabLayout tabLayout) {
+        tabLayout.removeAllTabs();
         for(int i=0;i<billlist.size();i++){
             tabLayout.addTab(tabLayout.newTab().setText(billlist.get(i).getCategoryName()));
         }
@@ -254,12 +226,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                     homebillRv.setAdapter(null);
                 }
             }
-
             @Override
             public void onTabUnselected(XTabLayout.Tab tab) {
                 Logs.i("tab===============222222222="+ tab.getPosition());
             }
-
             @Override
             public void onTabReselected(XTabLayout.Tab tab) {
                 Logs.i("tab===============3333333333="+ tab.getPosition());
@@ -267,39 +237,59 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         });
 
     }
-    /**
-     * 首页常用清单
-     * @return
-     */
-    private List<GoodsInfoEntity> getTypeInfoData()
-    {
-        List<GoodsInfoEntity> typeList=new ArrayList<>();
-        for(int i=0;i<10;i++){
-            GoodsInfoEntity type = new GoodsInfoEntity();
-            switch (i){
-                case 0:
-                    type.getGoodsName();
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                default:
-
-            }
-            type.setGoodsName("我是商品标题"+i);
-            typeList.add(type);
-
+    private void DisplayinitViewPager(XTabLayout tabLayout) {
+        tabLayout.removeAllTabs();
+        for(int i=0;i<billlist.size();i++){
+            tabLayout.addTab(tabLayout.newTab().setText(billlist.get(i).getCategoryName()));
         }
-        return typeList;
+//        tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.addTab(tabLayout.newTab().setText("肉禽类"));
+//        tabLayout.addTab(tabLayout.newTab().setText("新鲜蔬菜"));
+//        tabLayout.addTab(tabLayout.newTab().setText("米面粮油"));
+//        tabLayout.addTab(tabLayout.newTab().setText("水产冻货"));
+//        tabLayout.addTab(tabLayout.newTab().setText("休闲酒饮"));
+//        tabLayout.addTab(tabLayout.newTab().setText("面食面粉"));
+        tabLayout.setOnTabSelectedListener(new XTabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(XTabLayout.Tab tab) {
+                if(billlist.get(tab.getPosition()).getCategoryList() != null && billlist.get(tab.getPosition()).getCategoryList().size()>0){
+                    billsimpAdapter = new HomeBillGridViewAdapter(getActivity(),billlist.get(tab.getPosition()).getCategoryList(),new FoodActionCallback(){
+                        @Override
+                        public void addAction(View view) {
+                            NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                            int position[] = new int[2];
+                            view.getLocationInWindow(position);
+                            nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                            ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                            rootView.addView(nxHooldeView);
+                            int endPosition[] = new int[2];
+                            badge1.getLocationInWindow(endPosition);
+                            nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                            nxHooldeView.startBeizerAnimation();
+                            MainFragmentActivity.getInstance().setBadge(true,1);
+                        }
+                    });
+                    homebillRv.setAdapter(billsimpAdapter);
+                }else{
+                    homebillRv.setAdapter(null);
+                }
+            }
+            @Override
+            public void onTabUnselected(XTabLayout.Tab tab) {
+                Logs.i("tab===============222222222="+ tab.getPosition());
+            }
+            @Override
+            public void onTabReselected(XTabLayout.Tab tab) {
+                Logs.i("tab===============3333333333="+ tab.getPosition());
+            }
+        });
+
     }
+
+
     private void initView(View view) {
         banner = (Banner) view.findViewById(R.id.banner);
-
+        channelBanner = (Banner) view.findViewById(R.id.channel);
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_swipe_container);
         swipeRefreshLayout.setColorSchemeResources( R.color.qblue, R.color.red, R.color.btn_gray);
@@ -342,21 +332,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 
 
         gridView = (MyGridView) view.findViewById(R.id.main_gridv);
-        gridView.setAdapter(new HomeGridViewAdapter(activity,getGrideData()));
+
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
+                int action = Integer.parseInt(buttonsList.get(position).getAction());
+                switch (action){
+                    case 1:
                         MainFragmentActivity.goodsRb.setChecked(true);
                         break;
-                    case 1:
+                    case 2:
                         MainFragmentActivity.billRb.setChecked(true);
                         break;
-                    case 2:
+                    case 3:
                         MainFragmentActivity.myRb.setChecked(true);
                         break;
-                    case 3:
+                    case 4:
                         Intent order = new Intent(activity,MyOrderActivity.class);
                         order.putExtra("orderTag","1");
                         startActivity(order);
@@ -388,41 +379,42 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             public boolean handleMessage(Message msg) {
                 switch (msg.what) {
                     case 1000:
-                        String obj = (String) msg.obj;
-                       if(TextUtils.isEmpty(obj) || obj.equals("null"))
-                           return true;
-                        List<BannerSlidEntity> goodsTypeList = (List<BannerSlidEntity>) ResponseData.getInstance(activity).parseJsonArray(obj.toString(), BannerSlidEntity.class);
-                        setBanner(goodsTypeList);
-                        break;
-                    case 1009:
-                        billlist = (List<BillDataSetEntity>) msg.obj;
-                        if(billlist == null || billlist.size()<=0) {
-                            break;
+                        String objs = (String) msg.obj;
+                        Object commonsjs=null;
+                        Object swipersOj = null;
+                        Object buttonsOj = null;
+                        Object specialsOj = null;
+                        try {
+                            JSONObject jsobj = new JSONObject(objs.toString());
+                            commonsjs = jsobj.get("commons");
+                            swipersOj = jsobj.get("swipers");
+                            buttonsOj = jsobj.get("buttons");
+                            specialsOj = jsobj.get("specials");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        billsimpAdapter = new HomeBillGridViewAdapter(getActivity(),billlist.get(0).getCategoryList(),new FoodActionCallback(){
-                            @Override
-                            public void addAction(View view) {
-                                NXHooldeView nxHooldeView = new NXHooldeView(activity);
-                                int position[] = new int[2];
-                                view.getLocationInWindow(position);
-                                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
-                                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
-                                rootView.addView(nxHooldeView);
-                                int endPosition[] = new int[2];
-                                badge1.getLocationInWindow(endPosition);
-                                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
-                                nxHooldeView.startBeizerAnimation();
-                                MainFragmentActivity.getInstance().setBadge(true,1);
-                            }
-                        });
-                        homebillRv.setAdapter(billsimpAdapter);
-                        initViewPager(billlist,scrollXtablayout);
-                        initViewPager(billlist,tabLayout);
-//                        initViewPager(billlist);
+                        Logs.i("专题页面====="+specialsOj);
+                        List<SpecialsEntity> specialsList = ResponseData.getInstance(activity).parseJsonArray(specialsOj.toString(), SpecialsEntity.class);
+                        setChannel(specialsList);
+
+                        Logs.i("九宫格数据====="+buttonsOj.toString());
+                        buttonsList = ResponseData.getInstance(activity).parseJsonArray(buttonsOj.toString(), ButtonsEntity.class);
+                        gridView.setAdapter(new HomeGridViewAdapter(activity,buttonsList));
+
+                        //首页轮播广告
+                        if(!TextUtils.isEmpty(swipersOj.toString()) || !swipersOj.toString().equals("null")) {
+                            List<BannerSlidEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(swipersOj.toString(), BannerSlidEntity.class);
+                            setBanner(goodsTypeList);
+                        }
+                        //常用清单
+                        if(billlist != null){
+                            billlist.clear();
+                        }
+                        billlist = ResponseData.getInstance(activity).parseJsonArray(commonsjs.toString(), BillDataSetEntity.class);
+                        setBill(billlist);
                         break;
                     case AppClient.ERRORCODE:
                         String str = (String) msg.obj;
-
                         SXUtils.getInstance(activity).ToastCenter(str);
                         break;
                     case AppClient.UPDATEVER:
@@ -436,8 +428,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
             }
         });
 //        setBanner();
-        setChannel();
+//        setChannel();
     }
+
+    /**
+     * 设置首页常用清单数据
+     */
+    private void setBill(List<BillDataSetEntity> billlist){
+        if(billlist == null || billlist.size()<=0) {
+            return;
+        }
+        billsimpAdapter = new HomeBillGridViewAdapter(getActivity(),billlist.get(0).getCategoryList(),new FoodActionCallback(){
+            public void addAction(View view) {
+                NXHooldeView nxHooldeView = new NXHooldeView(activity);
+                int position[] = new int[2];
+                view.getLocationInWindow(position);
+                nxHooldeView.setStartPosition(new Point(position[0], position[1]));
+                ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+                rootView.addView(nxHooldeView);
+                int endPosition[] = new int[2];
+                badge1.getLocationInWindow(endPosition);
+                nxHooldeView.setEndPosition(new Point(endPosition[0], endPosition[1]));
+                nxHooldeView.startBeizerAnimation();
+                MainFragmentActivity.getInstance().setBadge(true,1);
+            }
+        });
+        homebillRv.setAdapter(billsimpAdapter);
+        initViewPager(scrollXtablayout);
+        DisplayinitViewPager(tabLayout);
+    }
+
+    /**
+     * 首页轮播图
+     * @param goodsTypeList
+     */
     private void setBanner(final List<BannerSlidEntity> goodsTypeList){
 
 //        List<String> images = new ArrayList<String>();
@@ -519,8 +543,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         //banner设置方法全部调用完毕时最后调用
         banner.start();
     }
-    private void setChannel(){
-        channelBanner = (Banner) view.findViewById(R.id.channel);
+    private void setChannel( List<SpecialsEntity> specialsList){
+
         channelBanner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
@@ -528,8 +552,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
                 startActivity(intent);
             }
         });
-        List<Integer> images = new ArrayList<Integer>();
-        images.add(R.mipmap.banner22);
+//        List<Integer> images = new ArrayList<Integer>();
+        List<String> images = new ArrayList<String>();
+        for(int i=0;i<specialsList.size();i++){
+            images.add(specialsList.get(i).getImgUrl()+"");
+        }
+//        images.add(R.mipmap.banner22);
 //        images.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1497598051&di=136b6c564a6d8d59e77ce349616996e9&imgtype=jpg&er=1&src=http%3A%2F%2Fm.qqzhi.com%2Fupload%2Fimg_0_72213646D1378690088_23.jpg");
 //        images.add("https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3145185115,3541103163&fm=26&gp=0.jpg");
 //        images.add("https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=4280343775,3437702687&fm=26&gp=0.jpg");
@@ -541,7 +569,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
 //        //设置标题文本
 //        banner.setBannerTitles(titlestr);
         channelBanner.isAutoPlay(true);
-
+        //设置图片集合
         //设置图片集合
         channelBanner.setImages(images);
         //设置banner动画效果
@@ -551,7 +579,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener,Obser
         channelBanner.start();
     }
     //接收线程回调
-
+    public void getHomeData() {
+        HttpParams httpParams = new HttpParams();
+        HttpUtils.getInstance(activity).requestPost(false, AppClient.HOME_DATA, httpParams, new HttpUtils.requestCallBack() {
+            @Override
+            public void onResponse(Object jsonObject) {
+                Logs.i("首页发送成功返回参数=======",jsonObject.toString());
+//                List<BillDataSetEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(jsonObject.toString(), BillDataSetEntity.class);
+                Message msg = new Message();
+                msg.what = 1000;
+                msg.obj = jsonObject.toString();
+                hand.sendMessage(msg);
+            }
+            @Override
+            public void onResponseError(String strError) {
+                Message msg = new Message();
+                msg.what = AppClient.ERRORCODE;
+                msg.obj = strError;
+                hand.sendMessage(msg);
+            }
+        });
+    }
     /**
      * NAIN UI主线程
      BACKGROUND 后台线程

@@ -106,6 +106,7 @@ public  class WaitPayRecyclerViewAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final OrderInfoEntity orderInfo = mValues.get(position);
+
         holder.shopNameTv.setText("订单号："+orderInfo.getOrderNo()+"");
         holder.orderTime.setText(orderInfo.getOrderTime()+"");
         holder.orderTotal.setText("¥"+orderInfo.getTransactionAmount());
@@ -126,7 +127,6 @@ public  class WaitPayRecyclerViewAdapter
                 holder.mView.getContext().startActivity(intent);
             }
         });
-        tag = Integer.parseInt(orderInfo.getStates());
         switch (tag){
             case 1:
                 holder.cancelOrder.setVisibility(View.VISIBLE);
@@ -148,16 +148,11 @@ public  class WaitPayRecyclerViewAdapter
             case 4:
 //                    holder.btnLin.setVisibility(View.GONE);
 //                    holder.cancelTv.setVisibility(View.VISIBLE);
+
                 holder.btnLin.setVisibility(View.VISIBLE);
                 holder.takeOrder.setText("缺货少货上报");
                 holder.orderTv.setText("状态：");
                 holder.orderTotal.setText("已完成");
-                break;
-            case 32:
-                holder.btnLin.setVisibility(View.VISIBLE);
-                holder.takeOrder.setVisibility(View.GONE);
-                holder.orderTv.setText("状态：");
-                holder.orderTotal.setText("已取消");
                 break;
         }
         holder.takeOrder.setOnClickListener(new View.OnClickListener() {

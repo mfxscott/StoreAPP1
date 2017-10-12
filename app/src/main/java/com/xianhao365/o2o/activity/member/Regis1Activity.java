@@ -32,6 +32,9 @@ import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
 import com.xianhao365.o2o.utils.httpClient.HttpUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class Regis1Activity extends BaseActivity implements View.OnClickListener{
     private EditText registInputPhoneEdt;
@@ -152,11 +155,15 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                                 //申请WRITE_EXTERNAL_STORAGE权限
                                 ActivityCompat.requestPermissions(Regis1Activity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                                         1000);//自定义的code
+                            }else{
+                                String userid = (String) msg.obj;
+                                Intent aa = new Intent(activity, StoreMapActivity.class);
+                                aa.putExtra("userID",userid);
+                                activity.startActivity(aa);
                             }
                         }
-                        finish();
+//                        finish();
                         break;
-
                     case AppClient.GETCODEMSG:
                         //验证码发送成功
                         int secs = Integer.parseInt((String)msg.obj);
@@ -208,12 +215,12 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
                 String codemsg = registCodeEdt.getText().toString();
                 String psdstr = registInputPsdEdt.getText().toString();
                 String  refereesPhoneStr= registRefereesPhoneEdt.getText().toString();
-            if(userTag.equals("32")){
-                if(TextUtils.isEmpty(refereesPhoneStr)){
-                    SXUtils.getInstance(activity).ToastCenter("请输入推荐人手机号码");
-                    return;
+                if(userTag.equals("32")){
+                    if(TextUtils.isEmpty(refereesPhoneStr)){
+                        SXUtils.getInstance(activity).ToastCenter("请输入推荐人手机号码");
+                        return;
+                    }
                 }
-            }
                 SXUtils.showMyProgressDialog(activity,true);
                 RegistHttp(mobilestr,psdstr,codemsg,refereesPhoneStr);
 
@@ -271,18 +278,26 @@ public class Regis1Activity extends BaseActivity implements View.OnClickListener
     }
     public  void RegistHttp(String mobile,String psdStr,String codeStr,String majorAccount) {
         HttpParams params = new HttpParams();
-         params.put("mobile", mobile);
+        params.put("mobile", mobile);
         params.put("vcode", codeStr);
         params.put("registerType", "0");//0=手机,1=微信,2=QQ
         params.put("password", psdStr);
+        params.put("majorAccount",majorAccount);
         params.put("tag",userTag);
         HttpUtils.getInstance(activity).requestPost(false, AppClient.USER_REGIST, params, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
                 Logs.i("注册发送成功返回参数=======",jsonObject.toString());
+                String userId = "";
+                try {
+                    JSONObject jsonObject1 = new JSONObject(jsonObject.toString());
+                    userId =  jsonObject1.getString("userId");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 Message msg = new Message();
                 msg.what = 1000;
-                msg.obj = "";
+                msg.obj = userId;
                 hand.sendMessage(msg);
             }
             @Override

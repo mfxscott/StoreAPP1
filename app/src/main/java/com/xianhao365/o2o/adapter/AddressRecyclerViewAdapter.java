@@ -39,11 +39,11 @@ public  class AddressRecyclerViewAdapter
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final View mView;
-        public  TextView namePhone;
-        public  TextView cityStreet;
-        public  CheckBox  isDefaultCb;
-        public   TextView editTv;
-        public   TextView  delTv;
+        public final TextView namePhone;
+        public final TextView cityStreet;
+        public final CheckBox  isDefaultCb;
+        public final  TextView editTv;
+        public final  TextView  delTv;
 
         public ViewHolder(View view) {
             super(view);

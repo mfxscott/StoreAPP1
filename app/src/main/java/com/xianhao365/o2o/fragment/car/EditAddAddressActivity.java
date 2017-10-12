@@ -188,7 +188,7 @@ public class EditAddAddressActivity extends BaseActivity implements View.OnClick
     public void getUpdateAddress(String name,String phone,String addressInf) {
         HttpParams httpp = new HttpParams();
         httpp.put("consignee",name);
-        httpp.put("id",addressInfo==null?"":addressInfo.getConsigneeId());
+        httpp.put("id",addressInfo.getConsigneeId());
         httpp.put("mobile",phone);
         httpp.put("provinceCode",pCode);
         httpp.put("provinceName",provinceStr);

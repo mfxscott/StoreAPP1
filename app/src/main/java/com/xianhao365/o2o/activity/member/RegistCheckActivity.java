@@ -23,12 +23,12 @@ public class RegistCheckActivity extends Activity {
         sell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent aa = new Intent(RegistCheckActivity.this, StoreMapActivity.class);
-                startActivity(aa);
-//                Intent sellregist = new Intent(RegistCheckActivity.this, Regis1Activity.class);
-//                sellregist.putExtra("registRole","32");
-//                startActivity(sellregist);
-//                finish();
+//                Intent aa = new Intent(RegistCheckActivity.this, StoreMapActivity.class);
+//                startActivity(aa);
+                Intent sellregist = new Intent(RegistCheckActivity.this, Regis1Activity.class);
+                sellregist.putExtra("registRole","32");
+                startActivity(sellregist);
+                finish();
             }
         });
         pay.setOnClickListener(new View.OnClickListener() {

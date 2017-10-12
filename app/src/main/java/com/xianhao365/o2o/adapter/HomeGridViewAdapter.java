@@ -9,9 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xianhao365.o2o.R;
+import com.xianhao365.o2o.entity.main.ButtonsEntity;
+import com.xianhao365.o2o.utils.SXUtils;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 首页九宫格
@@ -19,10 +20,10 @@ import java.util.Map;
  * @time  2017/7/10 10:13
  */
 public class HomeGridViewAdapter extends BaseAdapter {
-    private List<Map<String,String>> result;
+    private List<ButtonsEntity> result;
     private final LayoutInflater mLayoutInflater;
     private Activity context;
-    public HomeGridViewAdapter(Activity context, List<Map<String,String>> result) {
+    public HomeGridViewAdapter(Activity context, List<ButtonsEntity> result) {
         mLayoutInflater = LayoutInflater.from(context);
         this.result = result;
         this.context = context;
@@ -37,7 +38,7 @@ public class HomeGridViewAdapter extends BaseAdapter {
         return position;
     }
     public View getView(int position, View convertView, ViewGroup parent) {
-        Map<String,String> gridvlist = result.get(position);
+        ButtonsEntity gridvlist = result.get(position);
         LifeViewHolder vh;
         if (convertView == null) {
             vh = new LifeViewHolder();
@@ -48,26 +49,27 @@ public class HomeGridViewAdapter extends BaseAdapter {
         } else {
             vh = (LifeViewHolder) convertView.getTag();
         }
-        switch(position){
-            case 0:
-                vh.imgv.setImageResource(R.mipmap.start__pay);
-//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.start__pay).into(vh.imgv);
-                break;
-            case 1:
-                vh.imgv.setImageResource(R.mipmap.use_bill);
-//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.use_bill).into(vh.imgv);
-                break;
-            case 2:
-                vh.imgv.setImageResource(R.mipmap.my_hb);
-//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_hb).into(vh.imgv);
-                break;
-            case 3:
-                vh.imgv.setImageResource(R.mipmap.my_order);
-//                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_order).into(vh.imgv);
-                break;
-        }
+//        switch(position){
+//            case 0:
+//                vh.imgv.setImageResource(R.mipmap.start__pay);
+////                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.start__pay).into(vh.imgv);
+//                break;
+//            case 1:
+//                vh.imgv.setImageResource(R.mipmap.use_bill);
+////                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.use_bill).into(vh.imgv);
+//                break;
+//            case 2:
+//                vh.imgv.setImageResource(R.mipmap.my_hb);
+////                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_hb).into(vh.imgv);
+//                break;
+//            case 3:
+//                vh.imgv.setImageResource(R.mipmap.my_order);
+////                Glide.with(context).load("android.resource://com.xianhao365.o2o/mipmap/"+R.mipmap.my_order).into(vh.imgv);
+//                break;
+//        }
 //        Glide.with(context).load(gridvlist.get("imageUrl")).centerCrop().into(vh.imgv);
-        vh.name.setText(gridvlist.get("name"));
+        SXUtils.getInstance(context).GlideSetImg(gridvlist.getUrl(),vh.imgv);
+        vh.name.setText(gridvlist.getName());
         return convertView;
     }
     class LifeViewHolder{

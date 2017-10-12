@@ -123,7 +123,7 @@ public class GoPayActivity extends BaseActivity implements View.OnClickListener{
         goback.setOnClickListener(this);
         RelativeLayout reladdress = (RelativeLayout) findViewById(R.id.gopay_check_address_rel);
         reladdress.setOnClickListener(this);
-        RelativeLayout useYhj = (RelativeLayout) findViewById(gopay_use_yhj_rel);
+        RelativeLayout useYhj = (RelativeLayout) findViewById(R.id.gopay_use_yhj_rel);
         useYhj.setOnClickListener(this);
         TextView paytv = (TextView) findViewById(R.id.gopay_btn);
         paytv.setOnClickListener(this);

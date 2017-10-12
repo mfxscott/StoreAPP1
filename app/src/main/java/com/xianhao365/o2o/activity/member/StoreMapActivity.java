@@ -1,7 +1,6 @@
 package com.xianhao365.o2o.activity.member;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -46,7 +45,6 @@ import com.xianhao365.o2o.R;
 import com.xianhao365.o2o.activity.BaseActivity;
 import com.xianhao365.o2o.adapter.StoreMapListAdapter;
 import com.xianhao365.o2o.entity.SearchHotWordEntity;
-import com.xianhao365.o2o.fragment.MainFragmentActivity;
 import com.xianhao365.o2o.utils.Logs;
 import com.xianhao365.o2o.utils.SXUtils;
 import com.xianhao365.o2o.utils.httpClient.AppClient;
@@ -77,6 +75,7 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
     private ProgressBar proBar;
     private List<PoiItem> poItem;//每次移动地图，获取中心点周边店铺信息
     private EditText inputInfo;//输入门店信息
+    private String userId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +84,7 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
         //必须要写
         mapView.onCreate(savedInstanceState);
         activity = this;
-
+        userId = this.getIntent().getStringExtra("userId");
         //这里以ACCESS_COARSE_LOCATION为例
 //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
 //                != PackageManager.PERMISSION_GRANTED) {
@@ -403,8 +402,12 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
                     //选择店铺和输入同时输入了详细信息
                     PoiItem    map = poItem.get(storeMapListAdapter.mSelect);
                     String storeName = map.getTitle();
-                    String addressStr =map.getProvinceName().toString().trim()+map.getCityName().toString().trim()+map.getAdName().toString().trim()+map.getSnippet().toString().trim()+"";
-                    checkInfo = addressStr;
+                    checkInfo =map.getTitle()+","
+                            +map.getProvinceName().toString().trim()+","+
+                            map.getCityName().toString().trim()+","+
+                            map.getAdName().toString().trim()+","+
+                            map.getSnippet().toString().trim()+"";
+
                 }else if(TextUtils.isEmpty(InfoStr) &&  poItem == null ){
                     SXUtils.getInstance(activity).ToastshowDialogView(activity,"温馨提示","请选择或者输入店铺信息");
                     return;
@@ -412,11 +415,18 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
                     checkInfo = InfoStr;
                 }else if(storeMapListAdapter != null && storeMapListAdapter.mSelect != -1){
                     PoiItem    map = poItem.get(storeMapListAdapter.mSelect);
-                    checkInfo =map.getProvinceName().toString().trim()+map.getCityName().toString().trim()+map.getAdName().toString().trim()+map.getSnippet().toString().trim()+"";
+
+                    checkInfo =map.getTitle()+","
+                            +map.getProvinceName().toString().trim()+","+
+                            map.getCityName().toString().trim()+","+
+                            map.getAdName().toString().trim()+","+
+                            map.getSnippet().toString().trim()+"";
                 }
-                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
-                startActivity(mainintent);
-                finish();
+                Logs.i("地图获取店铺地址================"+checkInfo);
+                getStoreAddresshHttp(checkInfo);
+//                Intent mainintent = new Intent(activity, MainFragmentActivity.class);
+//                startActivity(mainintent);
+//                finish();
                 break;
         }
     }
@@ -671,27 +681,28 @@ public class StoreMapActivity extends BaseActivity implements AMap.OnMyLocationC
                     + cities.get(i).getAdCode() + "\n";
         }
         Toast.makeText(activity,infomation+"",Toast.LENGTH_LONG).show();
-
     }
 
     /**
      * 获取到店铺信息及为店铺添加店铺地址
      */
-    public void getStoreAddresshHttp() {
+    public void getStoreAddresshHttp(String Str){
+        String [] strs = Str.split(",");
         HttpParams httpParams = new HttpParams();
         httpParams.put("id","");
-        httpParams.put("name","");
-        httpParams.put("province","");
-        httpParams.put("city","");
-        httpParams.put("district","");
-        httpParams.put("addr","");
-        httpParams.put("manager","");
+        httpParams.put("name",strs[0]);
+        httpParams.put("province",strs[1]);
+        httpParams.put("city",strs[2]);
+        httpParams.put("district",strs[3]);
+        httpParams.put("addr",strs[4]);
+        httpParams.put("manager","我是店主");
+        httpParams.put("userId",userId);
         httpParams.put("attachFiles","");
-        httpParams.put("pageIndex","");
+        httpParams.put("pageIndex","0");
         HttpUtils.getInstance(activity).requestPost(false, AppClient.UPDATE_STORE_INFO, httpParams, new HttpUtils.requestCallBack() {
             @Override
             public void onResponse(Object jsonObject) {
-                Logs.i("常用发送成功返回参数=======",jsonObject.toString());
+                Logs.i("店铺选择店铺名成功返回参数=======",jsonObject.toString());
                 List<SearchHotWordEntity> goodsTypeList = ResponseData.getInstance(activity).parseJsonArray(jsonObject.toString(), SearchHotWordEntity.class);
                 Message msg = new Message();
                 msg.what = 1000;

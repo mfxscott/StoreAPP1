@@ -190,6 +190,7 @@
                         android:paddingTop="15dp"
                         android:textColor="@color/col_333"
                         android:textColorHint="@color/col_hint"
+                        android:text="18165719379"
                         android:textSize="@dimen/ac_text_size_16" />
                 </RelativeLayout>
             </LinearLayout>
