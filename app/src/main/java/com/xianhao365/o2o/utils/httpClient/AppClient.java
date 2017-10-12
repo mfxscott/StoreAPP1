@@ -34,6 +34,7 @@ public class AppClient{
 
 
     /**
+     *
      * 用户相关接口
      */
     public static String FORGET_PSD1 = "svc.forget.password1";//忘记密码步骤1
@@ -53,7 +54,7 @@ public class AppClient{
     public static String ADDRESS_UPDATE="svc.mod.shipping.address";//	修改收货地址
     public static String ADDRESS_DEL="svc.del.shipping.address";//		删除收货地址
     public static String ADDRESS_SELECT="svc.my.shipping.address";//		我的收货地址
-    //优惠券
+    //优惠券劵
 
     public static String COUPONS_USE="svc.usable.coupons";//未使用优惠券
     public static String COUPONS_NOUSE="svc.used.coupons";//已使用优惠券
